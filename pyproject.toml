@@ -3,10 +3,10 @@ requires = ['hatchling']
 build-backend = 'hatchling.build'
 
 [tool.hatch.version]
-path = 'pydantic_extra/__init__.py'
+path = 'pydantic_extra_types/__init__.py'
 
 [project]
-name = 'pydantic-extra'
+name = 'pydantic-extra-types'
 description = 'Extra Pydantic types.'
 authors = [
     {name = 'Samuel Colvin', email = 's@muelcolvin.com'},
@@ -41,9 +41,9 @@ dependencies = [
 dynamic = ['version']
 
 [project.urls]
-Homepage = 'https://github.com/pydantic/pydantic-extra'
-Source = 'https://github.com/pydantic/pydantic-extra'
-Changelog = 'https://github.com/pydantic/pydantic-extra/releases'
+Homepage = 'https://github.com/pydantic/pydantic-extra-types'
+Source = 'https://github.com/pydantic/pydantic-extra-types'
+Changelog = 'https://github.com/pydantic/pydantic-extra-types/releases'
 # TODO: Documentation
 
 [tool.pytest.ini_options]
@@ -60,7 +60,7 @@ multiline_quotes = 'double'
 ignore = ['E203', 'W503']
 
 [tool.coverage.run]
-source = ['pydantic_extra']
+source = ['pydantic_extra_types']
 branch = true
 context = '${CONTEXT}'
 
@@ -77,7 +77,7 @@ exclude_lines = [
 
 [tool.coverage.paths]
 source = [
-    'pydantic_extra/',
+    'pydantic_extra_types/',
 ]
 
 [tool.black]
@@ -88,7 +88,7 @@ skip-string-normalization = true
 
 [tool.isort]
 line_length = 120
-known_first_party = 'pydantic_extra'
+known_first_party = 'pydantic_extra_types'
 known_third_party = 'pydantic'
 multi_line_output = 3
 include_trailing_comma = true
