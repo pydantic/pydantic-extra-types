@@ -10,6 +10,7 @@ name = 'pydantic-extra-types'
 description = 'Extra Pydantic types.'
 authors = [
     {name = 'Samuel Colvin', email = 's@muelcolvin.com'},
+    {name = 'Yasser Tahiri', email = 'hello@yezz.me'},
 ]
 license = 'MIT'
 readme = 'README.md'
@@ -37,6 +38,7 @@ classifiers = [
 requires-python = '>=3.7'
 dependencies = [
     'pydantic',
+    'pydantic_core',
 ]
 dynamic = ['version']
 
@@ -46,82 +48,69 @@ Source = 'https://github.com/pydantic/pydantic-extra-types'
 Changelog = 'https://github.com/pydantic/pydantic-extra-types/releases'
 # TODO: Documentation
 
-[tool.pytest.ini_options]
-testpaths = 'tests'
-filterwarnings = [
-    'error',
+[project.optional-dependencies]
+lint = [
+    "pre-commit==3.0.4",
+    "mypy==0.991",
+]
+test = [
+    "pytest==7.2.1",
+    "pytest-asyncio == 0.20.3",
+    "codecov==2.1.12",
+    "pytest-cov==4.0.0",
+    "pytest-pretty==1.1.0"
 ]
 
-[tool.flake8]
-max_line_length = 120
-max_complexity = 14
-inline_quotes = 'single'
-multiline_quotes = 'double'
-ignore = ['E203', 'W503']
-
-[tool.coverage.run]
-source = ['pydantic_extra_types']
-branch = true
-context = '${CONTEXT}'
-
-[tool.coverage.report]
-precision = 2
-exclude_lines = [
-    'pragma: no cover',
-    'raise NotImplementedError',
-    'raise NotImplemented',
-    'if TYPE_CHECKING:',
-    '@overload',
-]
-
-
-[tool.coverage.paths]
-source = [
-    'pydantic_extra_types/',
-]
-
-[tool.black]
-color = true
-line-length = 120
-target-version = ['py310']
-skip-string-normalization = true
 
 [tool.isort]
-line_length = 120
-known_first_party = 'pydantic_extra_types'
-known_third_party = 'pydantic'
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-combine_as_imports = true
+profile = "black"
+known_third_party = ["pydantic",  "typing_extensions"]
+
+[tool.ruff]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+]
+ignore = [
+    "E501",  # line too long, handled by black
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.ruff.isort]
+known-third-party = ["pydantic", "typing_extensions"]
 
 [tool.mypy]
-python_version = '3.10'
-show_error_codes = true
-follow_imports = 'silent'
+plugins = "pydantic.mypy"
+follow_imports = "silent"
 strict_optional = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 disallow_any_generics = true
 check_untyped_defs = true
-no_implicit_reexport = true
-warn_unused_configs = true
-disallow_subclassing_any = true
-disallow_incomplete_defs = true
-disallow_untyped_decorators = true
-disallow_untyped_calls = true
-
-# for strict mypy: (this is the tricky one :-))
+ignore_missing_imports = true
 disallow_untyped_defs = true
 
-# remaining arguments from `mypy --strict` which cause errors
-# no_implicit_optional = true
-# warn_return_any = true
-
-# ansi2html and devtools are required to avoid the need to install these packages when running linting,
-# they're used in the docs build script
-[[tool.mypy.overrides]]
-module = [
-    'dotenv.*',
+[tool.coverage.report]
+precision = 2
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "raise NotImplemented",
+    "@overload",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
 ]
-ignore_missing_imports = true
+
+[tool.pytest]
+testpaths = "tests/"
+log_cli = "1"
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format= "%Y-%m-%d %H:%M:%S"
+asyncio_mode= "auto"
