@@ -1,4 +1,3 @@
--r ./pyproject-all.txtg
 -r ./linting.txt
 -r ./testing.txt
 -r ./testing-extra.txt
