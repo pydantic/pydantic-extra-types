@@ -9,13 +9,11 @@ from typing import Any
 
 import typing_extensions
 
-from pydantic_extra_types._internal import _typing_extra
+from pydantic_extra_types.internal import typing_extra
 
 if typing.TYPE_CHECKING:
     ReprArgs = typing.Iterable[tuple[str | None, Any]]
-    RichReprResult = typing.Iterable[
-        Any | tuple[Any] | tuple[str, Any] | tuple[str, Any, Any]
-    ]
+    RichReprResult = typing.Iterable[Any | tuple[Any] | tuple[str, Any] | tuple[str, Any, Any]]
 
 
 class PlainRepr(str):
@@ -35,7 +33,7 @@ class Representation:
     # (this is not a docstring to avoid adding a docstring to classes which inherit from Representation)
 
     # we don't want to use a type annotation here as it can break get_type_hints
-    __slots__ = ()  # type: typing.Collection[str]
+    __slots__ = tuple()  # type: typing.Collection[str]
 
     def __repr_args__(self) -> ReprArgs:
         """
@@ -46,7 +44,7 @@ class Representation:
         * or, just values, e.g.: `[(None, 'foo'), (None, ['b', 'a', 'r'])]`
         """
         attrs_names = self.__slots__
-        if not attrs_names and hasattr(self, "__dict__"):
+        if not attrs_names and hasattr(self, '__dict__'):
             attrs_names = self.__dict__.keys()
         attrs = ((s, getattr(self, s)) for s in attrs_names)
         return [(a, v) for a, v in attrs if v is not None]
@@ -58,34 +56,30 @@ class Representation:
         return self.__class__.__name__
 
     def __repr_str__(self, join_str: str) -> str:
-        return join_str.join(
-            repr(v) if a is None else f"{a}={v!r}" for a, v in self.__repr_args__()
-        )
+        return join_str.join(repr(v) if a is None else f'{a}={v!r}' for a, v in self.__repr_args__())
 
-    def __pretty__(
-        self, fmt: typing.Callable[[Any], Any], **kwargs: Any
-    ) -> typing.Generator[Any, None, None]:
+    def __pretty__(self, fmt: typing.Callable[[Any], Any], **kwargs: Any) -> typing.Generator[Any, None, None]:
         """
         Used by devtools (https://python-devtools.helpmanual.io/) to provide a human-readable representations of objects
         """
-        yield self.__repr_name__() + "("
+        yield self.__repr_name__() + '('
         yield 1
         for name, value in self.__repr_args__():
             if name is not None:
-                yield name + "="
+                yield name + '='
             yield fmt(value)
-            yield ","
+            yield ','
             yield 0
         yield -1
-        yield ")"
+        yield ')'
 
     def __str__(self) -> str:
-        return self.__repr_str__(" ")
+        return self.__repr_str__(' ')
 
     def __repr__(self) -> str:
         return f'{self.__repr_name__()}({self.__repr_str__(", ")})'
 
-    def __rich_repr__(self) -> "RichReprResult":
+    def __rich_repr__(self) -> 'RichReprResult':
         """Get fields for Rich library"""
         for name, field_repr in self.__repr_args__():
             if name is None:
@@ -103,22 +97,20 @@ def display_as_type(obj: Any) -> str:
     if isinstance(obj, types.FunctionType):
         return obj.__name__
     elif obj is ...:
-        return "..."
+        return '...'
     elif isinstance(obj, Representation):
         return repr(obj)
 
-    if not isinstance(
-        obj, (_typing_extra.typing_base, _typing_extra.WithArgsTypes, type)
-    ):
+    if not isinstance(obj, (typing_extra.typing_base, typing_extra.WithArgsTypes, type)):
         obj = obj.__class__
 
-    if _typing_extra.origin_is_union(typing_extensions.get_origin(obj)):
-        args = ", ".join(map(display_as_type, typing_extensions.get_args(obj)))
-        return f"Union[{args}]"
-    elif isinstance(obj, _typing_extra.WithArgsTypes):
-        args = ", ".join(map(display_as_type, typing_extensions.get_args(obj)))
-        return f"{obj.__qualname__}[{args}]"
+    if typing_extra.origin_is_union(typing_extensions.get_origin(obj)):
+        args = ', '.join(map(display_as_type, typing_extensions.get_args(obj)))
+        return f'Union[{args}]'
+    elif isinstance(obj, typing_extra.WithArgsTypes):
+        args = ', '.join(map(display_as_type, typing_extensions.get_args(obj)))
+        return f'{obj.__qualname__}[{args}]'
     elif isinstance(obj, type):
         return obj.__qualname__
     else:
-        return repr(obj).replace("typing.", "").replace("typing_extensions.", "")
+        return repr(obj).replace('typing.', '').replace('typing_extensions.', '')

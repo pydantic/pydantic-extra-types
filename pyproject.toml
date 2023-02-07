@@ -54,6 +54,8 @@ lint = [
     "mypy==0.991",
 ]
 test = [
+    "dirty-equals==0.5.0",
+    "coverage[toml]==7.1.0",
     "pytest==7.2.1",
     "pytest-asyncio == 0.20.3",
     "codecov==2.1.12",
@@ -62,50 +64,64 @@ test = [
 ]
 
 
-[tool.isort]
-profile = "black"
-known_third_party = ["pydantic",  "typing_extensions"]
-
 [tool.ruff]
-select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # pyflakes
-    "I",  # isort
-    "C",  # flake8-comprehensions
-    "B",  # flake8-bugbear
-]
-ignore = [
-    "E501",  # line too long, handled by black
-]
+line-length = 120
+extend-select = ['Q', 'RUF100', 'C90']
+flake8-quotes = {inline-quotes = 'single', multiline-quotes = 'double'}
+mccabe = { max-complexity = 14 }
 
 [tool.ruff.per-file-ignores]
-"__init__.py" = ["F401"]
+'pydantic_extra_types/__init__.py' = ['F405', 'F403']
 
-[tool.ruff.isort]
-known-third-party = ["pydantic", "typing_extensions"]
+[tool.coverage.run]
+source = ['pydantic_extra_types']
+branch = true
+context = '${CONTEXT}'
+
+[tool.coverage.report]
+precision = 2
+exclude_lines = [
+    'pragma: no cover',
+    'raise NotImplementedError',
+    'if TYPE_CHECKING:',
+    '@overload',
+]
+
+[tool.black]
+color = true
+line-length = 120
+target-version = ['py310']
+skip-string-normalization = true
+
+[tool.isort]
+line_length = 120
+known_first_party = 'pydantic'
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+combine_as_imports = true
 
 [tool.mypy]
-plugins = "pydantic.mypy"
-follow_imports = "silent"
+exclude = 'pydantic_extra_types/__init__.py'
+plugins = 'pydantic.mypy'
+python_version = '3.10'
+show_error_codes = true
+follow_imports = 'silent'
 strict_optional = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 disallow_any_generics = true
 check_untyped_defs = true
-ignore_missing_imports = true
+no_implicit_reexport = true
+warn_unused_configs = true
+disallow_subclassing_any = true
+disallow_incomplete_defs = true
+disallow_untyped_decorators = true
+disallow_untyped_calls = true
 disallow_untyped_defs = true
+implicit_optional = true
 
-[tool.coverage.report]
-precision = 2
-exclude_lines = [
-    "pragma: no cover",
-    "raise NotImplementedError",
-    "raise NotImplemented",
-    "@overload",
-    "if TYPE_CHECKING:",
-    "if __name__ == .__main__.:",
-]
+
 
 [tool.pytest]
 testpaths = "tests/"

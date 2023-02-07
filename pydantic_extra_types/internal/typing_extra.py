@@ -12,23 +12,23 @@ from typing import Any
 from typing_extensions import Annotated, Final, Literal, get_args, get_origin
 
 __all__ = (
-    "NoneType",
-    "is_none_type",
-    "is_callable_type",
-    "is_literal_type",
-    "all_literal_values",
-    "is_annotated",
-    "is_namedtuple",
-    "is_new_type",
-    "is_classvar",
-    "is_finalvar",
-    "WithArgsTypes",
-    "typing_base",
-    "origin_is_union",
-    "NotRequired",
-    "Required",
-    "parent_frame_namespace",
-    "get_type_hints",
+    'NoneType',
+    'is_none_type',
+    'is_callable_type',
+    'is_literal_type',
+    'all_literal_values',
+    'is_annotated',
+    'is_namedtuple',
+    'is_new_type',
+    'is_classvar',
+    'is_finalvar',
+    'WithArgsTypes',
+    'typing_base',
+    'origin_is_union',
+    'NotRequired',
+    'Required',
+    'parent_frame_namespace',
+    'get_type_hints',
 )
 
 try:
@@ -131,7 +131,7 @@ def all_literal_values(type_: type[Any]) -> tuple[Any, ...]:
 
 
 def is_annotated(ann_type: Any) -> bool:
-    from ._utils import lenient_issubclass
+    from pydantic_extra_types.internal.utils import lenient_issubclass
 
     origin = get_origin(ann_type)
     return origin is not None and lenient_issubclass(origin, Annotated)
@@ -142,12 +142,12 @@ def is_namedtuple(type_: type[Any]) -> bool:
     Check if a given class is a named tuple.
     It can be either a `typing.NamedTuple` or `collections.namedtuple`
     """
-    from ._utils import lenient_issubclass
+    from pydantic_extra_types.internal.utils import lenient_issubclass
 
-    return lenient_issubclass(type_, tuple) and hasattr(type_, "_fields")
+    return lenient_issubclass(type_, tuple) and hasattr(type_, '_fields')
 
 
-test_new_type = typing.NewType("test_new_type", str)
+test_new_type = typing.NewType('test_new_type', str)
 
 
 def is_new_type(type_: type[Any]) -> bool:
@@ -156,17 +156,14 @@ def is_new_type(type_: type[Any]) -> bool:
 
     Can't use isinstance because it fails <3.10.
     """
-    return isinstance(type_, test_new_type.__class__) and hasattr(type_, "__supertype__")  # type: ignore[arg-type]
+    return isinstance(type_, test_new_type.__class__) and hasattr(type_, '__supertype__')  # type: ignore[arg-type]
 
 
 def _check_classvar(v: type[Any] | None) -> bool:
     if v is None:
         return False
 
-    return (
-        v.__class__ == typing.ClassVar.__class__
-        and getattr(v, "_name", None) == "ClassVar"
-    )
+    return v.__class__ == typing.ClassVar.__class__ and getattr(v, '_name', None) == 'ClassVar'
 
 
 def is_classvar(ann_type: type[Any]) -> bool:
@@ -175,9 +172,7 @@ def is_classvar(ann_type: type[Any]) -> bool:
 
     # this is an ugly workaround for class vars that contain forward references and are therefore themselves
     # forward references, see #3679
-    if ann_type.__class__ == typing.ForwardRef and ann_type.__forward_arg__.startswith(
-        "ClassVar["
-    ):
+    if ann_type.__class__ == typing.ForwardRef and ann_type.__forward_arg__.startswith('ClassVar['):
         return True
 
     return False
@@ -190,9 +185,7 @@ def _check_finalvar(v: type[Any] | None) -> bool:
     if v is None:
         return False
 
-    return v.__class__ == Final.__class__ and (
-        sys.version_info < (3, 8) or getattr(v, "_name", None) == "Final"
-    )
+    return v.__class__ == Final.__class__ and (sys.version_info < (3, 8) or getattr(v, '_name', None) == 'Final')
 
 
 def is_finalvar(ann_type: type[Any]) -> bool:
@@ -230,9 +223,7 @@ else:
     """
     fr_has_is_class = True
 
-    def ForwardRefWrapper(
-        arg: Any, is_argument: bool = True, *, is_class: bool = False
-    ) -> typing.ForwardRef:
+    def ForwardRefWrapper(arg: Any, is_argument: bool = True, *, is_class: bool = False) -> typing.ForwardRef:
         """
         Wrapper for ForwardRef that accounts for the `is_class` argument missing in older versions.
         The `module` argument is omitted as it breaks <3.9 and isn't used in the calls below.
@@ -302,19 +293,17 @@ else:
           locals, respectively.
         """
 
-        if getattr(obj, "__no_type_check__", None):
+        if getattr(obj, '__no_type_check__', None):
             return {}
         # Classes require a special treatment.
         if isinstance(obj, type):
             hints = {}
             for base in reversed(obj.__mro__):
                 if globalns is None:
-                    base_globals = getattr(
-                        sys.modules.get(base.__module__, None), "__dict__", {}
-                    )
+                    base_globals = getattr(sys.modules.get(base.__module__, None), '__dict__', {})
                 else:
                     base_globals = globalns
-                ann = base.__dict__.get("__annotations__", {})
+                ann = base.__dict__.get('__annotations__', {})
                 if isinstance(ann, types.GetSetDescriptorType):
                     ann = {}
                 base_locals = dict(vars(base)) if localns is None else localns
@@ -331,17 +320,11 @@ else:
                         value = type(None)
                     if isinstance(value, str):
                         # CHANGED IN PYDANTIC, using ForwardRefWrapper
-                        value = ForwardRefWrapper(
-                            value, is_argument=False, is_class=True
-                        )
+                        value = ForwardRefWrapper(value, is_argument=False, is_class=True)
 
                     value = typing._eval_type(value, base_globals, base_locals)
                     hints[name] = value
-            return (
-                hints
-                if include_extras
-                else {k: typing._strip_annotations(t) for k, t in hints.items()}
-            )
+            return hints if include_extras else {k: typing._strip_annotations(t) for k, t in hints.items()}
 
         if globalns is None:
             if isinstance(obj, types.ModuleType):
@@ -349,22 +332,20 @@ else:
             else:
                 nsobj = obj
                 # Find globalns for the unwrapped object.
-                while hasattr(nsobj, "__wrapped__"):
+                while hasattr(nsobj, '__wrapped__'):
                     nsobj = nsobj.__wrapped__
-                globalns = getattr(nsobj, "__globals__", {})
+                globalns = getattr(nsobj, '__globals__', {})
             if localns is None:
                 localns = globalns
         elif localns is None:
             localns = globalns
-        hints = getattr(obj, "__annotations__", None)
+        hints = getattr(obj, '__annotations__', None)
         if hints is None:
             # Return empty annotations for something that _could_ have them.
             if isinstance(obj, typing._allowed_types):
                 return {}
             else:
-                raise TypeError(
-                    "{!r} is not a module, class, method, " "or function.".format(obj)
-                )
+                raise TypeError('{!r} is not a module, class, method, ' 'or function.'.format(obj))
         defaults = typing._get_defaults(obj)
         hints = dict(hints)
         for name, value in hints.items():
@@ -384,8 +365,4 @@ else:
             if name in defaults and defaults[name] is None:
                 value = typing.Optional[value]
             hints[name] = value
-        return (
-            hints
-            if include_extras
-            else {k: typing._strip_annotations(t) for k, t in hints.items()}
-        )
+        return hints if include_extras else {k: typing._strip_annotations(t) for k, t in hints.items()}

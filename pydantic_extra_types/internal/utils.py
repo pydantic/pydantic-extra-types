@@ -11,17 +11,10 @@ import weakref
 from collections import OrderedDict, defaultdict, deque
 from copy import deepcopy
 from itertools import zip_longest
-from types import (
-    BuiltinFunctionType,
-    CodeType,
-    FunctionType,
-    GeneratorType,
-    LambdaType,
-    ModuleType,
-)
+from types import BuiltinFunctionType, CodeType, FunctionType, GeneratorType, LambdaType, ModuleType
 from typing import Any, TypeVar
 
-from pydantic_extra_types._internal import _repr, _typing_extra
+from pydantic_extra_types.internal import representation, typing_extra
 
 if typing.TYPE_CHECKING:
     from pydantic import BaseModel
@@ -31,26 +24,26 @@ if typing.TYPE_CHECKING:
     AbstractSetIntStr = typing.AbstractSet[int | str]
 
 __all__ = (
-    "sequence_like",
-    "lenient_isinstance",
-    "lenient_issubclass",
-    "is_valid_identifier",
-    "deep_update",
-    "update_not_none",
-    "almost_equal_floats",
-    "get_model",
-    "to_camel",
-    "smart_deepcopy",
-    "ValueItems",
-    "ClassAttribute",
-    "ROOT_KEY",
-    "LimitedDict",
-    "dict_not_none",
-    "AbstractSetIntStr",
-    "MappingIntStrAny",
+    'sequence_like',
+    'lenient_isinstance',
+    'lenient_issubclass',
+    'is_valid_identifier',
+    'deep_update',
+    'update_not_none',
+    'almost_equal_floats',
+    'get_model',
+    'to_camel',
+    'smart_deepcopy',
+    'ValueItems',
+    'ClassAttribute',
+    'ROOT_KEY',
+    'LimitedDict',
+    'dict_not_none',
+    'AbstractSetIntStr',
+    'MappingIntStrAny',
 )
 
-ROOT_KEY = "__root__"
+ROOT_KEY = '__root__'
 # these are types that are returned unchanged by deepcopy
 IMMUTABLE_NON_COLLECTIONS_TYPES: set[type[Any]] = {
     int,
@@ -60,7 +53,7 @@ IMMUTABLE_NON_COLLECTIONS_TYPES: set[type[Any]] = {
     bool,
     bytes,
     type,
-    _typing_extra.NoneType,
+    typing_extra.NoneType,
     FunctionType,
     BuiltinFunctionType,
     LambdaType,
@@ -91,9 +84,7 @@ def sequence_like(v: Any) -> bool:
     return isinstance(v, (list, tuple, set, frozenset, GeneratorType, deque))
 
 
-def lenient_isinstance(
-    o: Any, class_or_tuple: type[Any] | tuple[type[Any], ...] | None
-) -> bool:
+def lenient_isinstance(o: Any, class_or_tuple: type[Any] | tuple[type[Any], ...] | None) -> bool:
     try:
         return isinstance(o, class_or_tuple)  # type: ignore[arg-type]
     except TypeError:
@@ -104,7 +95,7 @@ def lenient_issubclass(cls: Any, class_or_tuple: Any) -> bool:
     try:
         return isinstance(cls, type) and issubclass(cls, class_or_tuple)
     except TypeError:
-        if isinstance(cls, _typing_extra.WithArgsTypes):
+        if isinstance(cls, typing_extra.WithArgsTypes):
             return False
         raise  # pragma: no cover
 
@@ -118,20 +109,14 @@ def is_valid_identifier(identifier: str) -> bool:
     return identifier.isidentifier() and not keyword.iskeyword(identifier)
 
 
-KeyType = TypeVar("KeyType")
+KeyType = TypeVar('KeyType')
 
 
-def deep_update(
-    mapping: dict[KeyType, Any], *updating_mappings: dict[KeyType, Any]
-) -> dict[KeyType, Any]:
+def deep_update(mapping: dict[KeyType, Any], *updating_mappings: dict[KeyType, Any]) -> dict[KeyType, Any]:
     updated_mapping = mapping.copy()
     for updating_mapping in updating_mappings:
         for k, v in updating_mapping.items():
-            if (
-                k in updated_mapping
-                and isinstance(updated_mapping[k], dict)
-                and isinstance(v, dict)
-            ):
+            if k in updated_mapping and isinstance(updated_mapping[k], dict) and isinstance(v, dict):
                 updated_mapping[k] = deep_update(updated_mapping[k], v)
             else:
                 updated_mapping[k] = v
@@ -162,22 +147,22 @@ def get_model(obj: type[BaseModel] | type[Dataclass]) -> type[BaseModel]:
         model_cls = obj
 
     if not issubclass(model_cls, BaseModel):
-        raise TypeError("Unsupported type, must be either BaseModel or dataclass")
+        raise TypeError('Unsupported type, must be either BaseModel or dataclass')
     return model_cls
 
 
 def to_camel(string: str) -> str:
-    return "".join(word.capitalize() for word in string.split("_"))
+    return ''.join(word.capitalize() for word in string.split('_'))
 
 
 def to_lower_camel(string: str) -> str:
-    if string:
+    if len(string) >= 1:
         pascal_string = to_camel(string)
         return pascal_string[0].lower() + pascal_string[1:]
     return string.lower()
 
 
-T = TypeVar("T")
+T = TypeVar('T')
 
 
 def unique_list(
@@ -203,12 +188,12 @@ def unique_list(
     return result
 
 
-class ValueItems(_repr.Representation):
+class ValueItems(representation.Representation):
     """
     Class for more convenient calculation of excluded or included fields on values.
     """
 
-    __slots__ = ("_items", "_type")
+    __slots__ = ('_items', '_type')
 
     def __init__(self, value: Any, items: AbstractSetIntStr | MappingIntStrAny) -> None:
         items = self._coerce_items(items)
@@ -241,11 +226,9 @@ class ValueItems(_repr.Representation):
         """
 
         item = self._items.get(e)
-        return None if self.is_true(item) else item
+        return item if not self.is_true(item) else None
 
-    def _normalize_indexes(
-        self, items: MappingIntStrAny, v_length: int
-    ) -> dict[int | str, Any]:
+    def _normalize_indexes(self, items: MappingIntStrAny, v_length: int) -> dict[int | str, Any]:
         """
         :param items: dict or set of indexes which will be normalized
         :param v_length: length of sequence indexes of which will be
@@ -259,24 +242,18 @@ class ValueItems(_repr.Representation):
         normalized_items: dict[int | str, Any] = {}
         all_items = None
         for i, v in items.items():
-            if not (
-                isinstance(v, (typing.Mapping, typing.AbstractSet)) or self.is_true(v)
-            ):
-                raise TypeError(
-                    f'Unexpected type of exclude value for index "{i}" {v.__class__}'
-                )
-            if i == "__all__":
+            if not (isinstance(v, typing.Mapping) or isinstance(v, typing.AbstractSet) or self.is_true(v)):
+                raise TypeError(f'Unexpected type of exclude value for index "{i}" {v.__class__}')
+            if i == '__all__':
                 all_items = self._coerce_value(v)
                 continue
             if not isinstance(i, int):
                 raise TypeError(
-                    "Excluding fields from a sequence of sub-models or dicts must be performed index-wise: "
+                    'Excluding fields from a sequence of sub-models or dicts must be performed index-wise: '
                     'expected integer keys or keyword "__all__"'
                 )
             normalized_i = v_length + i if i < 0 else i
-            normalized_items[normalized_i] = self.merge(
-                v, normalized_items.get(normalized_i)
-            )
+            normalized_items[normalized_i] = self.merge(v, normalized_items.get(normalized_i))
 
         if not all_items:
             return normalized_items
@@ -317,9 +294,7 @@ class ValueItems(_repr.Representation):
 
         # intersection or union of keys while preserving ordering:
         if intersect:
-            merge_keys = [k for k in base if k in override] + [
-                k for k in override if k in base
-            ]
+            merge_keys = [k for k in base if k in override] + [k for k in override if k in base]
         else:
             merge_keys = list(base) + [k for k in override if k not in base]
 
@@ -338,8 +313,8 @@ class ValueItems(_repr.Representation):
         elif isinstance(items, typing.AbstractSet):
             items = dict.fromkeys(items, ...)
         else:
-            class_name = getattr(items, "__class__", "???")
-            raise TypeError(f"Unexpected type of exclude value {class_name}")
+            class_name = getattr(items, '__class__', '???')
+            raise TypeError(f'Unexpected type of exclude value {class_name}')
         return items
 
     @classmethod
@@ -352,7 +327,7 @@ class ValueItems(_repr.Representation):
     def is_true(v: Any) -> bool:
         return v is True or v is ...
 
-    def __repr_args__(self) -> _repr.ReprArgs:
+    def _representation_args__(self) -> representation.ReprArgs:
         return [(None, self._items)]
 
 
@@ -368,7 +343,7 @@ else:
         Hide class attribute from its instances
         """
 
-        __slots__ = "name", "value"
+        __slots__ = 'name', 'value'
 
         def __init__(self, name: str, value: Any) -> None:
             self.name = name
@@ -377,12 +352,10 @@ else:
         def __get__(self, instance: Any, owner: type[Any]) -> None:
             if instance is None:
                 return self.value
-            raise AttributeError(
-                f"{self.name!r} attribute of {owner.__name__!r} is class-only"
-            )
+            raise AttributeError(f'{self.name!r} attribute of {owner.__name__!r} is class-only')
 
 
-Obj = TypeVar("Obj")
+Obj = TypeVar('Obj')
 
 
 def smart_deepcopy(obj: Obj) -> Obj:
@@ -419,16 +392,16 @@ def all_identical(left: typing.Iterable[Any], right: typing.Iterable[Any]) -> bo
     >>> all_identical([a, b, [a]], [a, b, [a]])  # new list object, while "equal" is not "identical"
     False
     """
-    return all(
-        left_item is right_item
-        for left_item, right_item in zip_longest(left, right, fillvalue=_EMPTY)
-    )
+    for left_item, right_item in zip_longest(left, right, fillvalue=_EMPTY):
+        if left_item is not right_item:
+            return False
+    return True
 
 
 if typing.TYPE_CHECKING:
     # define like this to work with older python
-    KT = TypeVar("KT")
-    VT = TypeVar("VT")
+    KT = TypeVar('KT')
+    VT = TypeVar('VT')
 
     class LimitedDict(dict[KT, VT]):
         def __init__(self, size_limit: int = 1000):

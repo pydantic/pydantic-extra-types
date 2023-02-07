@@ -3,16 +3,14 @@ from typing import Any, ClassVar, Union
 
 from pydantic_core import PydanticCustomError, core_schema
 
-__all__ = ["PaymentCardBrand", "PaymentCardNumber"]
-
 
 class PaymentCardBrand(str, Enum):
     # If you add another card type, please also add it to the
     # Hypothesis strategy in `pydantic._hypothesis_plugin`.
-    amex = "American Express"
-    mastercard = "Mastercard"
-    visa = "Visa"
-    other = "other"
+    amex = 'American Express'
+    mastercard = 'Mastercard'
+    visa = 'Visa'
+    other = 'other'
 
     def __str__(self) -> str:
         return self.value
@@ -51,7 +49,7 @@ class PaymentCardNumber(str):
         )
 
     @classmethod
-    def validate(cls, __input_value: str, **_kwargs: Any) -> "PaymentCardNumber":
+    def validate(cls, __input_value: str, **_kwargs: Any) -> 'PaymentCardNumber':
         return cls(__input_value)
 
     @property
@@ -62,9 +60,7 @@ class PaymentCardNumber(str):
     @classmethod
     def validate_digits(cls, card_number: str) -> None:
         if not card_number.isdigit():
-            raise PydanticCustomError(
-                "payment_card_number_digits", "Card number is not all digits"
-            )
+            raise PydanticCustomError('payment_card_number_digits', 'Card number is not all digits')
 
     @classmethod
     def validate_luhn_check_digit(cls, card_number: str) -> str:
@@ -83,9 +79,7 @@ class PaymentCardNumber(str):
             sum_ += digit
         valid = sum_ % 10 == 0
         if not valid:
-            raise PydanticCustomError(
-                "payment_card_number_luhn", "Card number is not luhn valid"
-            )
+            raise PydanticCustomError('payment_card_number_luhn', 'Card number is not luhn valid')
         return card_number
 
     @staticmethod
@@ -94,11 +88,11 @@ class PaymentCardNumber(str):
         Validate length based on BIN for major brands:
         https://en.wikipedia.org/wiki/Payment_card_number#Issuer_identification_number_(IIN)
         """
-        if card_number[0] == "4":
+        if card_number[0] == '4':
             brand = PaymentCardBrand.visa
         elif 51 <= int(card_number[:2]) <= 55:
             brand = PaymentCardBrand.mastercard
-        elif card_number[:2] in {"34", "37"}:
+        elif card_number[:2] in {'34', '37'}:
             brand = PaymentCardBrand.amex
         else:
             brand = PaymentCardBrand.other
@@ -108,7 +102,7 @@ class PaymentCardNumber(str):
             required_length = 16
             valid = len(card_number) == required_length
         elif brand == PaymentCardBrand.visa:
-            required_length = "13, 16 or 19"
+            required_length = '13, 16 or 19'
             valid = len(card_number) in {13, 16, 19}
         elif brand == PaymentCardBrand.amex:
             required_length = 15
@@ -118,8 +112,8 @@ class PaymentCardNumber(str):
 
         if not valid:
             raise PydanticCustomError(
-                "payment_card_number_brand",
-                "Length for a {brand} card must be {required_length}",
-                {"brand": brand, "required_length": required_length},
+                'payment_card_number_brand',
+                'Length for a {brand} card must be {required_length}',
+                {'brand': brand, 'required_length': required_length},
             )
         return brand
