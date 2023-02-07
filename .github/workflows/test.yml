@@ -31,7 +31,7 @@ jobs:
           python -m pip install --upgrade pip
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: /
+        run: |
           pip install -e .[test] && make install
       - name: Test with pytest
         run: bash scripts/test.sh
