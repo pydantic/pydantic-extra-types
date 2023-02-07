@@ -23,7 +23,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install Dependencies
         run: /
-          pip install -e .[lint] &&
-          pip install -r requirements/all.txt
+          pip install -e .[lint] && make install
       - name: Lint and Format
         run: make pre-commit

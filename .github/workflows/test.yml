@@ -32,8 +32,7 @@ jobs:
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: /
-          pip install -e .[test] &&
-          pip install -r requirements/all.txt
+          pip install -e .[test] && make install
       - name: Test with pytest
         run: bash scripts/test.sh
       # - name: Upload coverage
