@@ -52,6 +52,12 @@ Changelog = 'https://github.com/pydantic/pydantic-extra-types/releases'
 lint = [
     "pre-commit==3.0.4",
     "mypy==0.991",
+    "annotated-types",
+    "black",
+    "isort",
+    "pyupgrade",
+    "ruff",
+
 ]
 test = [
     "dirty-equals==0.5.0",
@@ -60,7 +66,9 @@ test = [
     "pytest-asyncio == 0.20.3",
     "codecov==2.1.12",
     "pytest-cov==4.0.0",
-    "pytest-pretty==1.1.0"
+    "pytest-pretty==1.1.0",
+    "pytest-mock==3.10.0",
+
 ]
 
 

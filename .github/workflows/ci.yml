@@ -32,7 +32,7 @@ jobs:
 
       - name: install
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pip install -r requirements/linting.txt
+        run: pip install -e ."[lint]"
 
       - uses: pre-commit/action@v3.0.0
         with:
@@ -65,13 +65,11 @@ jobs:
             py
             ${{ runner.os }}
             ${{ env.pythonLocation }}
-            ${{ hashFiles('requirements/pyproject.txt') }}
             ${{ hashFiles('pyproject.toml') }}
 
-      - run: pip install -r requirements/all.txt
+      - run: pip install -e ."[test]"
         if: steps.cache-py.outputs.cache-hit != 'true'
 
-      - run: pip install -e .
       - run: pip freeze
       - run: pytest
 
