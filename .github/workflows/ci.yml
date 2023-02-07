@@ -68,7 +68,7 @@ jobs:
             ${{ hashFiles('requirements/pyproject.txt') }}
             ${{ hashFiles('pyproject.toml') }}
 
-      - run: pip install -r requirements/pyproject.txt
+      - run: pip install -r requirements/all.txt
         if: steps.cache-py.outputs.cache-hit != 'true'
 
       - run: pip install -e .
