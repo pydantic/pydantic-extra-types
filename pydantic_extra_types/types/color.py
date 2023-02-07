@@ -14,7 +14,7 @@ from typing import Any, Dict, Optional, Tuple, Union, cast
 
 from pydantic_core import PydanticCustomError, core_schema
 
-from pydantic_extra_types.internal import representation, utils
+from pydantic._internal import _repr, _utils
 
 ColorTuple = Union[Tuple[int, int, int], Tuple[int, int, int, float]]
 ColorType = Union[ColorTuple, str]
@@ -62,7 +62,7 @@ repeat_colors = {int(c * 2, 16) for c in '0123456789abcdef'}
 rads = 2 * math.pi
 
 
-class Color(representation.Representation):
+class Color(_repr.Representation):
     __slots__ = '_original', '_rgba'
 
     def __init__(self, value: ColorType) -> None:
@@ -203,7 +203,7 @@ class Color(representation.Representation):
     def __str__(self) -> str:
         return self.as_named(fallback=True)
 
-    def __repr_args__(self) -> 'representation.ReprArgs':
+    def __repr_args__(self) -> '_repr.ReprArgs':
         return [(None, self.as_named(fallback=True))] + [('rgb', self.as_rgb_tuple())]
 
     def __eq__(self, other: Any) -> bool:
@@ -312,7 +312,7 @@ def parse_float_alpha(value: Union[None, str, float, int]) -> Optional[float]:
     except ValueError:
         raise PydanticCustomError('color_error', 'value is not a valid color: alpha values must be a valid float')
 
-    if utils.almost_equal_floats(alpha, 1):
+    if _utils.almost_equal_floats(alpha, 1):
         return None
     elif 0 <= alpha <= 1:
         return alpha

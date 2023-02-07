@@ -111,14 +111,12 @@ def test_get_brand(card_number: str, brand: PaymentCardBrand):
     assert PaymentCardNumber.validate_brand(card_number) == brand
 
 
-@pytest.mark.skip(reason='AttributeError: str  object has no attribute masked')
 def test_valid(PaymentCard):
     card = PaymentCard(card_number=VALID_VISA_16)
     assert str(card.card_number) == VALID_VISA_16
     assert card.card_number.masked == '405000******0001'
 
 
-@pytest.mark.skip(reason='Failed: DID NOT RAISE <class pydantic.error_wrappers.ValidationError>')
 @pytest.mark.parametrize(
     'card_number, error_message',
     [

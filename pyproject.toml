@@ -37,10 +37,12 @@ classifiers = [
 ]
 requires-python = '>=3.7'
 dependencies = [
-    'pydantic',
-    'pydantic_core',
+    'pydantic@git+https://github.com/pydantic/pydantic.git@main',
 ]
 dynamic = ['version']
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [project.urls]
 Homepage = 'https://github.com/pydantic/pydantic-extra-types'

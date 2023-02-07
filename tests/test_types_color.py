@@ -116,10 +116,6 @@ def test_color_fail(color):
     assert exc_info.value.type == 'color_error'
 
 
-@pytest.mark.skip(
-    reason="RuntimeError: no validator found for <class 'pydantic_extra_types.types.color.Color'>",
-)
-# "see `arbitrary_types_allowed` in Config",
 def test_model_validation():
     class Model(BaseModel):
         color: Color
