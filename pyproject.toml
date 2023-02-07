@@ -50,30 +50,6 @@ Source = 'https://github.com/pydantic/pydantic-extra-types'
 Changelog = 'https://github.com/pydantic/pydantic-extra-types/releases'
 # TODO: Documentation
 
-[project.optional-dependencies]
-lint = [
-    "pre-commit==3.0.4",
-    "mypy==0.991",
-    "annotated-types",
-    "black",
-    "isort",
-    "pyupgrade",
-    "ruff",
-
-]
-test = [
-    "dirty-equals==0.5.0",
-    "coverage[toml]==7.1.0",
-    "pytest==7.2.1",
-    "pytest-asyncio == 0.20.3",
-    "codecov==2.1.12",
-    "pytest-cov==4.0.0",
-    "pytest-pretty==1.1.0",
-    "pytest-mock==3.10.0",
-
-]
-
-
 [tool.ruff]
 line-length = 120
 extend-select = ['Q', 'RUF100', 'C90']
@@ -135,6 +111,13 @@ disallow_untyped_decorators = true
 disallow_untyped_calls = true
 disallow_untyped_defs = true
 implicit_optional = true
+
+
+[[tool.mypy.overrides]]
+module = [
+    'dotenv.*',
+]
+ignore_missing_imports = true
 
 
 [tool.pytest.ini_options]
