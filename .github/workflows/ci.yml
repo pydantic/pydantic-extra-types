@@ -28,12 +28,14 @@ jobs:
             lint
             ${{ runner.os }}
             ${{ env.pythonLocation }}
-            ${{ hashFiles('requirements/all.txt') }}
+            ${{ hashFiles('requirements/pyproject.txt') }}
+            ${{ hashFiles('requirements/linting.txt') }}
             ${{ hashFiles('pyproject.toml') }}
 
       - name: install
         if: steps.cache-py.outputs.cache-hit != 'true'
-        run: pip install -r requirements/all.txt
+        run: /
+          pip install -r requirements/pyproject.txt && pip install -r requirements/linting.txt
 
       - uses: pre-commit/action@v3.0.0
         with:
@@ -66,14 +68,16 @@ jobs:
             py
             ${{ runner.os }}
             ${{ env.pythonLocation }}
-            ${{ hashFiles('requirements/all.txt') }}
+            ${{ hashFiles('requirements/pyproject.txt') }}
+            ${{ hashFiles('requirements/testing.txt') }}
             ${{ hashFiles('pyproject.toml') }}
 
-      - run: pip install -r requirements/all.txt
+      - run: /
+          pip install -r requirements/pyproject.txt && pip install -r requirements/testing.txt
         if: steps.cache-py.outputs.cache-hit != 'true'
 
       - run: pip freeze
-      - run: pytest
+      - run: make test
 
   # https://github.com/marketplace/actions/alls-green#why used for branch protection checks
   check:
