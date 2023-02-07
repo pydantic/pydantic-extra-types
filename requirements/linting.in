@@ -1,0 +1,7 @@
+pre-commit
+mypy
+annotated-types
+black
+isort
+pyupgrade
+ruff

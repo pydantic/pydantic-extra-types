@@ -1,0 +1,8 @@
+dirty-equals
+coverage[toml]
+pytest
+pytest-asyncio
+codecov
+pytest-cov
+pytest-pretty
+pytest-mock
