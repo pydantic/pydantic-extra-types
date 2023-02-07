@@ -14,7 +14,7 @@ refresh-lockfiles:
 	pip-compile -q --resolver backtracking -o requirements/linting.txt requirements/linting.in
 	pip-compile -q --resolver backtracking -o requirements/testing.txt requirements/testing.in
 	pip-compile -q --resolver backtracking -o requirements/testing-extra.txt requirements/testing-extra.in
-	pip-compile -q --resolver backtracking -o requirements/pyproject-min.txt pyproject.toml
+	pip-compile -q --resolver backtracking -o requirements/pyproject.txt pyproject.toml
 	pip install --dry-run -r requirements/all.txt
 
 .PHONY: format
