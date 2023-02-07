@@ -34,7 +34,7 @@ jobs:
 
       - name: install
         if: steps.cache-py.outputs.cache-hit != 'true'
-        run: /
+        run: |
           pip install -r requirements/pyproject.txt && pip install -r requirements/linting.txt
 
       - uses: pre-commit/action@v3.0.0
@@ -72,7 +72,7 @@ jobs:
             ${{ hashFiles('requirements/testing.txt') }}
             ${{ hashFiles('pyproject.toml') }}
 
-      - run: /
+      - run: |
           pip install -r requirements/pyproject.txt && pip install -r requirements/testing.txt
         if: steps.cache-py.outputs.cache-hit != 'true'
 
