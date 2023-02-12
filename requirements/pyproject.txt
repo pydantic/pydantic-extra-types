@@ -10,6 +10,8 @@ pydantic @ git+https://github.com/pydantic/pydantic.git@main
     # via pydantic-extra-types (pyproject.toml)
 pydantic-core==0.9.0
     # via pydantic
+pyotp==2.8.0
+    # via pydantic-extra-types (pyproject.toml)
 typing-extensions==4.4.0
     # via
     #   pydantic

@@ -1,43 +1,29 @@
-from typing import Any, ClassVar
+from typing import Any
 
-from pydantic_core import PydanticCustomError, core_schema
-
-# Default OTP Number of Digits
-OTP_ALPHABET = '0123456789'
+import pyotp
+from pydantic_core import PydanticCustomError
 
 
-class OTP(str):
+class OTPToken(str):
+    """A one-time password token.
+
+    This is a custom type that can be used to validate a one-time password token
+    against a secret key. The secret key is passed in the context argument of
+    the model_validate method.
+
+    The type also has a custom JSON encoder that returns the current one-time
+    password token for the secret key.
     """
-    One-time password
-    """
 
-    strip_whitespace: ClassVar[bool] = True
-    min_length: ClassVar[int] = 6
-    max_length: ClassVar[int] = 6
-
-    def __init__(self, otp: str):
-        self.validate_digits(otp)
-        self.validate_length(otp)
+    @staticmethod
+    def model_validate(value: Any, *, context: Any) -> Any:
+        if not pyotp.TOTP(context['otp_secret']).verify(value):
+            raise PydanticCustomError('Invalid one-time password', value)
+        return value
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
-        return core_schema.function_after_schema(
-            core_schema.str_schema(
-                min_length=cls.min_length, max_length=cls.max_length, strip_whitespace=cls.strip_whitespace
-            ),
-            cls.validate,
-        )
+    def get_validators(cls) -> Any:
+        yield cls.model_validate
 
-    @classmethod
-    def validate(cls, __input_value: str, **_kwargs: Any) -> 'OTP':
-        return cls(__input_value)
-
-    @classmethod
-    def validate_digits(cls, otp: str) -> None:
-        if not otp.isdigit():
-            raise PydanticCustomError('otp_digits', 'OTP is not all digits')
-
-    @classmethod
-    def validate_length(cls, otp: str) -> None:
-        if len(otp) != cls.max_length:
-            raise PydanticCustomError('otp_length', 'OTP must be {length} digits', {'length': cls.max_length})
+    class Config:
+        json_encoders = {pyotp.TOTP: lambda v: v.now()}
