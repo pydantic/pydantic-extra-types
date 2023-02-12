@@ -68,6 +68,7 @@ clean:
 	rm -rf build
 	rm -rf dist
 	rm -rf coverage.xml
+	rm -rf .ruff_cache
 
 .PHONY: pre-commit
 pre-commit:
