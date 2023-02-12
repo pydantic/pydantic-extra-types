@@ -6,8 +6,7 @@ from pydantic_extra_types.types.country import (
     CountryOfficialName,
     CountryShortName,
 )
-from pydantic_extra_types.types.otp import OTP, OTP_ALPHABET
-
+from pydantic_extra_types.types.otp import OTPToken
 from pydantic_extra_types.types.payment import PaymentCardBrand, PaymentCardNumber
 from pydantic_extra_types.types.phone_numbers import PhoneNumber
 from pydantic_extra_types.types.routing_number import ABARoutingNumber
@@ -23,6 +22,6 @@ __all__ = (
     'CountryNumericCode',
     'CountryOfficialName',
     'PhoneNumber',
-    'OTP',
-    'OTP_ALPHABET'
+    'OTPToken',
 )
+

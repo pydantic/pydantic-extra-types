@@ -1,30 +1,35 @@
+import pyotp
 import pytest
 from pydantic_core import PydanticCustomError
 
-from pydantic_extra_types import OTP
+from pydantic_extra_types import OTPToken
 
 
-def test_otp():
-    # Test successful validation
-    valid_otp = OTP.validate('123456')
-    assert isinstance(valid_otp, OTP)
+def test_model_validate():
+    secret = 'JBSWY3DPEHPK3PXP'
+    totp = pyotp.TOTP(secret)
+    value = totp.now()
+    context = {'otp_secret': secret}
+    # Test a valid OTP token
+    result = OTPToken.model_validate(value, context=context)
+    assert result == value
 
-    # Test validation error for non-digit characters
-    with pytest.raises(PydanticCustomError) as excinfo:
-        OTP.validate('1A2345')
-    assert str(excinfo.value) == 'OTP is not all digits'
+    # Test an invalid OTP token
+    with pytest.raises(PydanticCustomError, match='Invalid one-time password'):
+        OTPToken.model_validate('Invalid one-time password', context=context)
 
-    # Test validation error for length less than 6
-    with pytest.raises(PydanticCustomError) as excinfo:
-        OTP.validate('12345')
-    assert str(excinfo.value) == 'OTP must be 6 digits'
 
-    # Test validation error for length greater than 6
-    with pytest.raises(PydanticCustomError) as excinfo:
-        OTP.validate('1234567')
-    assert str(excinfo.value) == 'OTP must be 6 digits'
+def test_json_encoder():
+    secret = 'JBSWY3DPEHPK3PXP'
+    totp = pyotp.TOTP(secret)
+    value = totp.now()
 
-    # Test validation error for empty string
-    with pytest.raises(PydanticCustomError) as excinfo:
-        OTP.validate('')
-    assert str(excinfo.value) == 'OTP is not all digits'
+    # Test the custom JSON encoder
+    json_encoded_value = OTPToken.Config.json_encoders[pyotp.TOTP](totp)
+    assert json_encoded_value == value
+
+
+def test_get_validators():
+    # Test the get_validators method
+    validators = list(OTPToken.get_validators())
+    assert validators == [OTPToken.model_validate]

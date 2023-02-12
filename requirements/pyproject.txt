@@ -14,3 +14,5 @@ pydantic-core==0.38.0
     # via pydantic
 typing-extensions==4.6.3
     # via pydantic
+pyotp==2.8.0
+    # via pydantic-extra-types (pyproject.toml)
