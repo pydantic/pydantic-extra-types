@@ -18,7 +18,7 @@ filelock==3.9.0
     # via virtualenv
 identify==2.5.17
     # via pre-commit
-isort==5.11.4
+isort==5.12.0
     # via -r requirements/linting.in
 mypy==1.0.0
     # via -r requirements/linting.in
@@ -32,7 +32,7 @@ packaging==23.0
     # via black
 pathspec==0.11.0
     # via black
-platformdirs==2.6.2
+platformdirs==3.0.0
     # via
     #   black
     #   virtualenv
@@ -42,7 +42,7 @@ pyupgrade==3.3.1
     # via -r requirements/linting.in
 pyyaml==6.0
     # via pre-commit
-ruff==0.0.243
+ruff==0.0.245
     # via -r requirements/linting.in
 tokenize-rt==5.0.0
     # via pyupgrade
@@ -52,7 +52,7 @@ tomli==2.0.1
     #   mypy
 typing-extensions==4.4.0
     # via mypy
-virtualenv==20.18.0
+virtualenv==20.19.0
     # via pre-commit
 
 # The following packages are considered to be unsafe in a requirements file:

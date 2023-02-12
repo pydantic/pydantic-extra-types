@@ -8,7 +8,7 @@ annotated-types==0.4.0
     # via pydantic
 pydantic @ git+https://github.com/pydantic/pydantic.git@main
     # via pydantic-extra-types (pyproject.toml)
-pydantic-core==0.8.2
+pydantic-core==0.9.0
     # via pydantic
 typing-extensions==4.4.0
     # via
