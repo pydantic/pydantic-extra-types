@@ -2,7 +2,7 @@ import pytest
 from pydantic import BaseModel
 from pydantic_core import PydanticCustomError
 
-from pydantic_extra_types import CountryCode
+from pydantic_extra_types import Country
 
 
 @pytest.mark.parametrize(
@@ -54,7 +54,7 @@ from pydantic_extra_types import CountryCode
     ],
 )
 def test_code_success(code, country_data):
-    country = CountryCode(code)
+    country = Country(code)
     assert country.country_name == country_data[0]
     assert country.official_name == country_data[1]
     assert country.alpha2_code == country_data[2]
@@ -84,13 +84,13 @@ def test_code_success(code, country_data):
 )
 def test_code_fail(code):
     with pytest.raises(PydanticCustomError) as error:
-        CountryCode(code)
+        Country(code)
     assert error.value.type == 'country_code_error'
 
 
 def test_model_validation():
     class Model(BaseModel):
-        country: CountryCode
+        country: Country
 
     assert Model(country="US").country.alpha3_code == "USA"
     assert Model(country="USA").country.alpha2_code == "US"
@@ -99,18 +99,18 @@ def test_model_validation():
 
 
 def test_str_repr():
-    assert str(CountryCode("US")) == str(CountryCode("us")) == "country_name='United States of America' official_name='The United States of America' alpha2_code='US' alpha3_code='USA' numeric_code='840'"
-    assert repr(CountryCode("US")) == repr(CountryCode("us")) == "CountryCode('US', country_name='United States of America', official_name='The United States of America', alpha3_code='USA', numeric_code='840')"
+    assert str(Country("US")) == str(Country("us")) == "country_name='United States of America' official_name='The United States of America' alpha2_code='US' alpha3_code='USA' numeric_code='840'"
+    assert repr(Country("US")) == repr(Country("us")) == "Country('US', country_name='United States of America', official_name='The United States of America', alpha3_code='USA', numeric_code='840')"
 
 
 def test_eq():
-    assert CountryCode('us') == CountryCode('us')
-    assert CountryCode('us') != CountryCode('france')
-    assert CountryCode('us') != 'us'
+    assert Country('us') == Country('us')
+    assert Country('us') != Country('france')
+    assert Country('us') != 'us'
 
-    assert CountryCode('US') == CountryCode("USA") == CountryCode("840") == CountryCode("United States of America")
+    assert Country('US') == Country("USA") == Country("840") == Country("United States of America")
 
 
 def test_hash():
-    assert hash(CountryCode('US')) == hash(CountryCode("USA")) == hash(CountryCode("840")) == hash(CountryCode("United States of America"))
+    assert hash(Country('US')) == hash(Country("USA")) == hash(Country("840")) == hash(Country("United States of America"))
     assert hash("US") != hash("FR")

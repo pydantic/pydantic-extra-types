@@ -40,7 +40,7 @@ class CodeType(int, Enum):
     country_name = 4
 
 
-class CountryCode(_repr.Representation):
+class Country(_repr.Representation):
     _name: str
     _official_name: str
     _alpha2_code: constr(min_length=2, max_length=2)
@@ -91,7 +91,7 @@ class CountryCode(_repr.Representation):
         if len(value) >= 3:
             if len(value) == 3:
                 return CodeType.alpha3, BY_ALPHA3.get(value if sensitive else value.upper())
-            return CodeType.country_name, BY_COUNTRY.get(value if sensitive else CountryCode.__clean_country_name(value))
+            return CodeType.country_name, BY_COUNTRY.get(value if sensitive else Country.__clean_country_name(value))
         return CodeType.alpha2, value if sensitive else value.upper()
 
     @classmethod
@@ -99,7 +99,7 @@ class CountryCode(_repr.Representation):
         return core_schema.function_plain_schema(cls._validate, serialization=core_schema.to_string_ser_schema())
 
     @classmethod
-    def _validate(cls, __input_value: Any, **_kwargs: Any) -> 'CountryCode':
+    def _validate(cls, __input_value: Any, **_kwargs: Any) -> 'Country':
         return cls(__input_value)
 
     @property
@@ -131,7 +131,7 @@ class CountryCode(_repr.Representation):
                 ('alpha3_code', self.alpha3_code), ('numeric_code', self.numeric_code)]
 
     def __eq__(self, other):
-        return isinstance(other, CountryCode) and other.alpha2_code == self.alpha2_code
+        return isinstance(other, Country) and other.alpha2_code == self.alpha2_code
 
     def __ne__(self, other):
         return not self.__eq__(other)
