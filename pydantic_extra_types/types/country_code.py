@@ -64,7 +64,7 @@ class CountryCode(_repr.Representation):
         if len(value) >= 3:
             if len(value) == 3:
                 return CodeType.alpha3, BY_ALPHA3.get(value if sensitive else value.upper())
-            return CodeType.country_name, BY_COUNTRY.get(value if sensitive else value.capitalize())
+            return CodeType.country_name, BY_COUNTRY.get(value if sensitive else ' '.join([w.capitalize() for w in value.split()]))
         return CodeType.alpha2, value if sensitive else value.upper()
 
     @property
