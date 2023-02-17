@@ -1088,7 +1088,7 @@ class Country(_repr.Representation):
         return country_name
 
     @staticmethod
-    def __get_type_and_alpha2(value: str, sensitive: bool) -> tuple[CodeType, Optional[str]]:
+    def __get_type_and_alpha2(value: str, sensitive: bool) -> Tuple[CodeType, Optional[str]]:
         if not isinstance(value, str):
             raise PydanticCustomError(
                 'country_code_error', f'"{value}" is not a valid ISO 3166-1 type. Must be a string.'
