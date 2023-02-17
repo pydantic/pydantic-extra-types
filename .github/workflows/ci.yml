@@ -20,20 +20,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      - uses: actions/cache@v3
-        id: cache
-        with:
-          path: ${{ env.pythonLocation }}
-          key: >
-            lint
-            ${{ runner.os }}
-            ${{ env.pythonLocation }}
-            ${{ hashFiles('requirements/pyproject.txt') }}
-            ${{ hashFiles('requirements/linting.txt') }}
-            ${{ hashFiles('pyproject.toml') }}
-
       - name: install
-        if: steps.cache-py.outputs.cache-hit != 'true'
         run: |
           pip install -r requirements/pyproject.txt && pip install -r requirements/linting.txt
 
@@ -59,22 +46,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - id: cache-py
-        name: cache python
-        uses: actions/cache@v3
-        with:
-          path: ${{ env.pythonLocation }}
-          key: >
-            py
-            ${{ runner.os }}
-            ${{ env.pythonLocation }}
-            ${{ hashFiles('requirements/pyproject.txt') }}
-            ${{ hashFiles('requirements/testing.txt') }}
-            ${{ hashFiles('pyproject.toml') }}
-
       - run: |
           pip install -r requirements/pyproject.txt && pip install -r requirements/testing.txt
-        if: steps.cache-py.outputs.cache-hit != 'true'
 
       - run: pip freeze
       - run: make test
