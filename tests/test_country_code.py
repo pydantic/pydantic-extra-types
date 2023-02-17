@@ -1,7 +1,7 @@
 import pytest
-from pydantic import BaseModel
 from pydantic_core import PydanticCustomError
 
+from pydantic import BaseModel
 from pydantic_extra_types import Country
 
 
@@ -16,9 +16,8 @@ from pydantic_extra_types import Country
         ('YE', ('Yemen', 'The Republic of Yemen', 'YE', 'YEM', '887')),
         ('ZM', ('Zambia', 'The Republic of Zambia', 'ZM', 'ZMB', '894')),
         ('IL', ('Israel', 'The State of Israel', 'IL', 'ISR', '376')),
-        ('ZW', ('Zimbabwe', 'The Republic of Zimbabwe', 'ZW',  'ZWE', '716')),
-        ('CY', ('Cyprus', 'The Republic of Cyprus', 'CY',  'CYP', '196')),
-
+        ('ZW', ('Zimbabwe', 'The Republic of Zimbabwe', 'ZW', 'ZWE', '716')),
+        ('CY', ('Cyprus', 'The Republic of Cyprus', 'CY', 'CYP', '196')),
         ('AFG', ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004')),
         ('ALA', ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
         ('ALB', ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
@@ -29,7 +28,6 @@ from pydantic_extra_types import Country
         ('ISR', ('Israel', 'The State of Israel', 'IL', 'ISR', '376')),
         ('ZWE', ('Zimbabwe', 'The Republic of Zimbabwe', 'ZW', 'ZWE', '716')),
         ('CYP', ('Cyprus', 'The Republic of Cyprus', 'CY', 'CYP', '196')),
-
         ('004', ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004')),
         ('248', ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
         ('008', ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
@@ -40,7 +38,6 @@ from pydantic_extra_types import Country
         ('376', ('Israel', 'The State of Israel', 'IL', 'ISR', '376')),
         ('716', ('Zimbabwe', 'The Republic of Zimbabwe', 'ZW', 'ZWE', '716')),
         ('196', ('Cyprus', 'The Republic of Cyprus', 'CY', 'CYP', '196')),
-
         ('Afghanistan', ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004')),
         ('Åland Islands', ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
         ('Albania', ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
@@ -65,16 +62,16 @@ def test_code_success(code, country_data):
 @pytest.mark.parametrize(
     'code',
     [
-        "lala lend",
-        "IamHungry",
-        "PO",
-        "ZN",
-        "AES",
-        "RSA",
-        "0",
-        "00",
-        "000",
-        "111",
+        'lala lend',
+        'IamHungry',
+        'PO',
+        'ZN',
+        'AES',
+        'RSA',
+        '0',
+        '00',
+        '000',
+        '111',
         1,
         2,
         [1, 1, 1],
@@ -92,15 +89,24 @@ def test_model_validation():
     class Model(BaseModel):
         country: Country
 
-    assert Model(country="US").country.alpha3_code == "USA"
-    assert Model(country="USA").country.alpha2_code == "US"
-    assert Model(country="united states of america").country.alpha2_code == "US"
-    assert Model(country="840").country.alpha2_code == "US"
+    assert Model(country='US').country.alpha3_code == 'USA'
+    assert Model(country='USA').country.alpha2_code == 'US'
+    assert Model(country='united states of america').country.alpha2_code == 'US'
+    assert Model(country='840').country.alpha2_code == 'US'
 
 
 def test_str_repr():
-    assert str(Country("US")) == str(Country("us")) == "country_name='United States of America' official_name='The United States of America' alpha2_code='US' alpha3_code='USA' numeric_code='840'"
-    assert repr(Country("US")) == repr(Country("us")) == "Country('US', country_name='United States of America', official_name='The United States of America', alpha3_code='USA', numeric_code='840')"
+    assert (
+        str(Country('US')) == str(Country('us')) == 'country_name="United States of America" official_name="The '
+        'United States of America" alpha2_code="US" alpha3_code="USA" '
+        'numeric_code="840"'
+    )
+
+    assert (
+        repr(Country('US')) == repr(Country('us')) == "Country('US', country_name='United States of America', "
+        "official_name='The United States of America', "
+        "alpha3_code='USA', numeric_code='840')"
+    )
 
 
 def test_eq():
@@ -108,9 +114,11 @@ def test_eq():
     assert Country('us') != Country('france')
     assert Country('us') != 'us'
 
-    assert Country('US') == Country("USA") == Country("840") == Country("United States of America")
+    assert Country('US') == Country('USA') == Country('840') == Country('United States of America')
 
 
 def test_hash():
-    assert hash(Country('US')) == hash(Country("USA")) == hash(Country("840")) == hash(Country("United States of America"))
-    assert hash("US") != hash("FR")
+    assert (
+        hash(Country('US')) == hash(Country('USA')) == hash(Country('840')) == hash(Country('United States of America'))
+    )
+    assert hash('US') != hash('FR')
