@@ -1062,7 +1062,7 @@ class Country(_repr.Representation):
         args should be one of the following:
             * args:str => (US/United States/840)
             * args:tuple(str, bool) => (US, True)
-            * args: dict(str, Union(str, Optional[bool])) => {'value': 'US', 'sensitive': False}
+            * args:dict(str, Union(str, Optional[bool])) => {'value': 'US', 'sensitive': False}
 
         if sensitive isn't activated the code will automatically ignore brackets:
         United States of America (the) -> United States of America
@@ -1083,7 +1083,8 @@ class Country(_repr.Representation):
             value, sensitive = args.get('value', None), args.get('sensitive', False)
         else:
             raise PydanticCustomError(
-                'country_code_error', f'"{type(args).__name__}" is not a valid ISO 3166-1 type. Must be a string/tuple.'
+                'country_code_error',
+                f'"{type(args).__name__}" is not a valid ISO 3166-1 type. Must be a string/tuple/dict.'
             )
 
         if not isinstance(value, str):
