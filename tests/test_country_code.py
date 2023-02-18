@@ -48,6 +48,24 @@ from pydantic_extra_types import Country
         ('Israel', ('Israel', 'The State of Israel', 'IL', 'ISR', '376')),
         ('Zimbabwe', ('Zimbabwe', 'The Republic of Zimbabwe', 'ZW', 'ZWE', '716')),
         ('Cyprus', ('Cyprus', 'The Republic of Cyprus', 'CY', 'CYP', '196')),
+        (('AF', True), ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004')),
+        (('AX', True), ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
+        (('AL', True), ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
+        (
+            {'value': 'AF', 'sensitive': True},
+            ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004'),
+        ),
+        ({'value': 'AX', 'sensitive': True}, ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
+        ({'value': 'AL', 'sensitive': True}, ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
+        (('AF', False), ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004')),
+        (('AX', False), ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
+        (('AL', False), ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
+        (
+            {'value': 'AF', 'sensitive': False},
+            ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004'),
+        ),
+        ({'value': 'AX', 'sensitive': False}, ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
+        ({'value': 'AL', 'sensitive': False}, ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
     ],
 )
 def test_code_success(code, country_data):
@@ -77,6 +95,14 @@ def test_code_success(code, country_data):
         [1, 1, 1],
         int,
         str,
+        ('us', True),
+        ('usa', True),
+        ('isr', True),
+        ('ZN', True),
+        ('ZN', False),
+        {'value': 'us', 'sensitive': True},
+        {'value': 'isr', 'sensitive': True},
+        {'value': 'usa', 'sensitive': True},
     ],
 )
 def test_code_fail(code):
