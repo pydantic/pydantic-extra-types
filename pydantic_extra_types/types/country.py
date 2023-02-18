@@ -1068,20 +1068,35 @@ class Country(_repr.Representation):
         United States of America (the) -> United States of America
         besides, it will capitalize the words to fit the country name pattern
         """
+        sensitive = False
         if isinstance(args, str):
-            value, sensitive = args, False
+            value = args
 
         elif isinstance(args, tuple):
             if len(args) != 2:
-                raise TypeError('__init__ method has one/two parameters only')
+                raise TypeError('__init__ method has two parameters only as a tuple')
             value, sensitive = args
 
         elif isinstance(args, dict):
-            value, sensitive = args.get('value', ''), args.get('sensitive', False)
+            if 'value' not in args:
+                raise PydanticCustomError('country_code_error', "args parameter must include 'value' key")
+            value, sensitive = args.get('value', None), args.get('sensitive', False)
         else:
             raise PydanticCustomError(
                 'country_code_error', f'"{type(args).__name__}" is not a valid ISO 3166-1 type. Must be a string/tuple.'
             )
+
+        if not isinstance(value, str):
+            raise PydanticCustomError(
+                'country_code_error', f'"{type(value).__name__}" is not a valid type for "value". Must be a string.'
+            )
+
+        if not isinstance(sensitive, bool):
+            raise PydanticCustomError(
+                'country_code_error',
+                f'"{type(sensitive).__name__}" is not a valid type for "sensitive". Must be a boolean.',
+            )
+
         source, self._alpha2_code = self.__get_type_and_alpha2(value, sensitive)
         country_data = BY_ALPHA2.get(self.alpha2_code)
 
