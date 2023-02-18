@@ -1084,7 +1084,7 @@ class Country(_repr.Representation):
         else:
             raise PydanticCustomError(
                 'country_code_error',
-                f'"{type(args).__name__}" is not a valid ISO 3166-1 type. Must be a string/tuple/dict.'
+                f'"{type(args).__name__}" is not a valid ISO 3166-1 type. Must be a string/tuple/dict.',
             )
 
         if not isinstance(value, str):
