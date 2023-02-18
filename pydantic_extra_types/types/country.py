@@ -1120,8 +1120,8 @@ class Country(_repr.Representation):
         return core_schema.function_plain_schema(cls._validate, serialization=core_schema.to_string_ser_schema())
 
     @classmethod
-    def _validate(cls, *__input_values: Any, **_kwargs: Any) -> 'Country':
-        return cls(*__input_values)
+    def _validate(cls, __input_values: Any, **_kwargs: Any) -> 'Country':
+        return cls(__input_values)
 
     @property
     def country_name(self) -> str:
