@@ -4,7 +4,7 @@ Based on: https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
 """
 import re
 from enum import Enum
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple, Union
 
 from pydantic_core import PydanticCustomError, core_schema
 
@@ -1057,18 +1057,36 @@ class Country(_repr.Representation):
     _alpha3_code: constr(min_length=3, max_length=3)  # type: ignore
     _numeric: constr(min_length=3, max_length=3)  # type: ignore
 
-    def __init__(self, value: str, sensitive: bool = False):
+    def __init__(self, args: Union[str, Union[Tuple[str, bool], Dict[str, Any]]]):
         """
+        args should be one of the following:
+            * args:str => (US/United States/840)
+            * args:tuple(str, bool) => (US, True)
+            * args: dict(str, Union(str, Optional[bool])) => {'value': 'US', 'sensitive': False}
+
         if sensitive isn't activated the code will automatically ignore brackets:
-            United States of America (the) -> United States of America
+        United States of America (the) -> United States of America
         besides, it will capitalize the words to fit the country name pattern
         """
+        if isinstance(args, str):
+            value, sensitive = args, False
+
+        elif isinstance(args, tuple):
+            if len(args) != 2:
+                raise TypeError('__init__ method has one/two parameters only')
+            value, sensitive = args
+
+        elif isinstance(args, dict):
+            value, sensitive = args.get('value', ''), args.get('sensitive', False)
+        else:
+            raise PydanticCustomError(
+                'country_code_error', f'"{type(args).__name__}" is not a valid ISO 3166-1 type. Must be a string/tuple.'
+            )
         source, self._alpha2_code = self.__get_type_and_alpha2(value, sensitive)
         country_data = BY_ALPHA2.get(self.alpha2_code)
 
         if country_data is None:
             raise PydanticCustomError('country_code_error', f'"{value}" is not a valid {source.name} ISO 3166-1 value')
-        assert len(country_data) == 4, 'Country data should be with length of 4'
         self._name, self._official_name, self._alpha3_code, self._numeric_code = country_data
 
     @staticmethod
@@ -1089,11 +1107,6 @@ class Country(_repr.Representation):
 
     @staticmethod
     def __get_type_and_alpha2(value: str, sensitive: bool) -> Tuple[CodeType, Optional[str]]:
-        if not isinstance(value, str):
-            raise PydanticCustomError(
-                'country_code_error', f'"{value}" is not a valid ISO 3166-1 type. Must be a string.'
-            )
-
         if value.isnumeric():
             return CodeType.numeric_code, BY_NUMERIC.get(value)
         if len(value) >= 3:
@@ -1107,8 +1120,8 @@ class Country(_repr.Representation):
         return core_schema.function_plain_schema(cls._validate, serialization=core_schema.to_string_ser_schema())
 
     @classmethod
-    def _validate(cls, __input_value: Any, **_kwargs: Any) -> 'Country':
-        return cls(__input_value)
+    def _validate(cls, *__input_values: Any, **_kwargs: Any) -> 'Country':
+        return cls(*__input_values)
 
     @property
     def country_name(self) -> str:
