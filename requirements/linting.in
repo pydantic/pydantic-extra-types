@@ -5,3 +5,4 @@ black
 isort
 pyupgrade
 ruff
+types-zxcvbn

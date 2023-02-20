@@ -16,11 +16,11 @@ distlib==0.3.6
     # via virtualenv
 filelock==3.9.0
     # via virtualenv
-identify==2.5.17
+identify==2.5.18
     # via pre-commit
 isort==5.12.0
     # via -r requirements/linting.in
-mypy==1.0.0
+mypy==1.0.1
     # via -r requirements/linting.in
 mypy-extensions==1.0.0
     # via
@@ -42,7 +42,7 @@ pyupgrade==3.3.1
     # via -r requirements/linting.in
 pyyaml==6.0
     # via pre-commit
-ruff==0.0.245
+ruff==0.0.249
     # via -r requirements/linting.in
 tokenize-rt==5.0.0
     # via pyupgrade
@@ -50,7 +50,9 @@ tomli==2.0.1
     # via
     #   black
     #   mypy
-typing-extensions==4.4.0
+types-zxcvbn==4.4.1.3
+    # via -r requirements/linting.in
+typing-extensions==4.5.0
     # via mypy
 virtualenv==20.19.0
     # via pre-commit
