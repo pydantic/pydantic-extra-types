@@ -1,150 +1,153 @@
+from string import printable
+
 import pytest
-from pydantic_core import PydanticCustomError
 
-from pydantic import BaseModel
-from pydantic_extra_types import Country
+from pydantic import BaseModel, ValidationError
+from pydantic_extra_types import CountryAlpha2, CountryAlpha3, CountryNumericCode, CountryOfficialName, CountryShortName
+from pydantic_extra_types.types.country import (
+    CountryInfo,
+    _index_by_alpha2,
+    _index_by_alpha3,
+    _index_by_numeric_code,
+    _index_by_official_name,
+    _index_by_short_name,
+)
+
+PARAMS_AMOUNT = 20
+
+
+@pytest.fixture(scope='module', name='ProductAlpha2')
+def product_alpha2_fixture():
+    class Product(BaseModel):
+        made_in: CountryAlpha2
+
+    return Product
+
+
+@pytest.fixture(scope='module', name='ProductAlpha3')
+def product_alpha3_fixture():
+    class Product(BaseModel):
+        made_in: CountryAlpha3
+
+    return Product
+
+
+@pytest.fixture(scope='module', name='ProductShortName')
+def product_short_name_fixture():
+    class Product(BaseModel):
+        made_in: CountryShortName
+
+    return Product
+
+
+@pytest.fixture(scope='module', name='ProductNumericCode')
+def product_numeric_code_fixture():
+    class Product(BaseModel):
+        made_in: CountryNumericCode
+
+    return Product
+
+
+@pytest.fixture(scope='module', name='ProductOfficialName')
+def product_official_name_fixture():
+    class Product(BaseModel):
+        made_in: CountryOfficialName
+
+    return Product
 
 
 @pytest.mark.parametrize(
-    'code, country_data',
-    [
-        ('AF', ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004')),
-        ('AX', ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
-        ('AL', ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
-        ('DZ', ('Algeria', "The People's Democratic Republic of Algeria", 'DZ', 'DZA', '012')),
-        ('EH', ('Western Sahara', 'The Sahrawi Arab Democratic Republic', 'EH', 'ESH', '732')),
-        ('YE', ('Yemen', 'The Republic of Yemen', 'YE', 'YEM', '887')),
-        ('ZM', ('Zambia', 'The Republic of Zambia', 'ZM', 'ZMB', '894')),
-        ('IL', ('Israel', 'The State of Israel', 'IL', 'ISR', '376')),
-        ('ZW', ('Zimbabwe', 'The Republic of Zimbabwe', 'ZW', 'ZWE', '716')),
-        ('CY', ('Cyprus', 'The Republic of Cyprus', 'CY', 'CYP', '196')),
-        ('AFG', ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004')),
-        ('ALA', ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
-        ('ALB', ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
-        ('DZA', ('Algeria', "The People's Democratic Republic of Algeria", 'DZ', 'DZA', '012')),
-        ('ESH', ('Western Sahara', 'The Sahrawi Arab Democratic Republic', 'EH', 'ESH', '732')),
-        ('YEM', ('Yemen', 'The Republic of Yemen', 'YE', 'YEM', '887')),
-        ('ZMB', ('Zambia', 'The Republic of Zambia', 'ZM', 'ZMB', '894')),
-        ('ISR', ('Israel', 'The State of Israel', 'IL', 'ISR', '376')),
-        ('ZWE', ('Zimbabwe', 'The Republic of Zimbabwe', 'ZW', 'ZWE', '716')),
-        ('CYP', ('Cyprus', 'The Republic of Cyprus', 'CY', 'CYP', '196')),
-        ('004', ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004')),
-        ('248', ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
-        ('008', ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
-        ('012', ('Algeria', "The People's Democratic Republic of Algeria", 'DZ', 'DZA', '012')),
-        ('732', ('Western Sahara', 'The Sahrawi Arab Democratic Republic', 'EH', 'ESH', '732')),
-        ('887', ('Yemen', 'The Republic of Yemen', 'YE', 'YEM', '887')),
-        ('894', ('Zambia', 'The Republic of Zambia', 'ZM', 'ZMB', '894')),
-        ('376', ('Israel', 'The State of Israel', 'IL', 'ISR', '376')),
-        ('716', ('Zimbabwe', 'The Republic of Zimbabwe', 'ZW', 'ZWE', '716')),
-        ('196', ('Cyprus', 'The Republic of Cyprus', 'CY', 'CYP', '196')),
-        ('Afghanistan', ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004')),
-        ('Åland Islands', ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
-        ('Albania', ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
-        ('Algeria', ('Algeria', "The People's Democratic Republic of Algeria", 'DZ', 'DZA', '012')),
-        ('Western Sahara', ('Western Sahara', 'The Sahrawi Arab Democratic Republic', 'EH', 'ESH', '732')),
-        ('Yemen', ('Yemen', 'The Republic of Yemen', 'YE', 'YEM', '887')),
-        ('Zambia', ('Zambia', 'The Republic of Zambia', 'ZM', 'ZMB', '894')),
-        ('Israel', ('Israel', 'The State of Israel', 'IL', 'ISR', '376')),
-        ('Zimbabwe', ('Zimbabwe', 'The Republic of Zimbabwe', 'ZW', 'ZWE', '716')),
-        ('Cyprus', ('Cyprus', 'The Republic of Cyprus', 'CY', 'CYP', '196')),
-        (('AF', True), ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004')),
-        (('AX', True), ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
-        (('AL', True), ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
-        (
-            {'value': 'AF', 'sensitive': True},
-            ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004'),
-        ),
-        ({'value': 'AX', 'sensitive': True}, ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
-        ({'value': 'AL', 'sensitive': True}, ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
-        (('AF', False), ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004')),
-        (('AX', False), ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
-        (('AL', False), ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
-        (
-            {'value': 'AF', 'sensitive': False},
-            ('Afghanistan', 'The Islamic Republic of Afghanistan', 'AF', 'AFG', '004'),
-        ),
-        ({'value': 'AX', 'sensitive': False}, ('Åland Islands', 'Åland', 'AX', 'ALA', '248')),
-        ({'value': 'AL', 'sensitive': False}, ('Albania', 'The Republic of Albania', 'AL', 'ALB', '008')),
-    ],
+    'alpha2, country_data',
+    [(alpha2, country_data) for alpha2, country_data in _index_by_alpha2().items()][:PARAMS_AMOUNT],
 )
-def test_code_success(code, country_data):
-    country = Country(code)
-    assert country.country_name == country_data[0]
-    assert country.official_name == country_data[1]
-    assert country.alpha2_code == country_data[2]
-    assert country.alpha3_code == country_data[3]
-    assert country.numeric_code == country_data[4]
+def test_valid_alpha2(alpha2: str, country_data: CountryInfo, ProductAlpha2):
+    banana = ProductAlpha2(made_in=alpha2)
+    assert banana.made_in == country_data.alpha2
+    assert banana.made_in.alpha3 == country_data.alpha3
+    assert banana.made_in.numeric_code == country_data.numeric_code
+    assert banana.made_in.short_name == country_data.short_name
+    assert banana.made_in.official_name == country_data.official_name
+
+
+@pytest.mark.parametrize('alpha2', list(printable))
+def test_invalid_alpha2(alpha2: str, ProductAlpha2):
+    with pytest.raises(ValidationError, match='Invalid country alpha2 code'):
+        ProductAlpha2(made_in=alpha2)
 
 
 @pytest.mark.parametrize(
-    'code',
-    [
-        'lala lend',
-        'IamHungry',
-        'PO',
-        'ZN',
-        'AES',
-        'RSA',
-        '0',
-        '00',
-        '000',
-        '111',
-        1,
-        2,
-        [1, 1, 1],
-        int,
-        str,
-        ('us', True),
-        ('usa', True),
-        ('isr', True),
-        ('ZN', True),
-        ('ZN', False),
-        {'value': 'us', 'sensitive': True},
-        {'value': 'isr', 'sensitive': True},
-        {'value': 'usa', 'sensitive': True},
+    'alpha3, country_data',
+    [(alpha3, country_data) for alpha3, country_data in _index_by_alpha3().items()][:PARAMS_AMOUNT],
+)
+def test_valid_alpha3(alpha3: str, country_data: CountryInfo, ProductAlpha3):
+    banana = ProductAlpha3(made_in=alpha3)
+    assert banana.made_in == country_data.alpha3
+    assert banana.made_in.alpha2 == country_data.alpha2
+    assert banana.made_in.numeric_code == country_data.numeric_code
+    assert banana.made_in.short_name == country_data.short_name
+    assert banana.made_in.official_name == country_data.official_name
+
+
+@pytest.mark.parametrize('alpha3', list(printable))
+def test_invalid_alpha3(alpha3: str, ProductAlpha3):
+    with pytest.raises(ValidationError, match='Invalid country alpha3 code'):
+        ProductAlpha3(made_in=alpha3)
+
+
+@pytest.mark.parametrize(
+    'short_name, country_data',
+    [(short_name, country_data) for short_name, country_data in _index_by_short_name().items()][:PARAMS_AMOUNT],
+)
+def test_valid_short_name(short_name: str, country_data: CountryInfo, ProductShortName):
+    banana = ProductShortName(made_in=short_name)
+    assert banana.made_in == country_data.short_name
+    assert banana.made_in.alpha2 == country_data.alpha2
+    assert banana.made_in.alpha3 == country_data.alpha3
+    assert banana.made_in.numeric_code == country_data.numeric_code
+    assert banana.made_in.official_name == country_data.official_name
+
+
+@pytest.mark.parametrize('short_name', list(printable))
+def test_invalid_short_name(short_name: str, ProductShortName):
+    with pytest.raises(ValidationError, match='Invalid country short name'):
+        ProductShortName(made_in=short_name)
+
+
+@pytest.mark.parametrize(
+    'official_name, country_data',
+    [(official_name, country_data) for official_name, country_data in _index_by_official_name().items()][
+        :PARAMS_AMOUNT
     ],
 )
-def test_code_fail(code):
-    with pytest.raises(PydanticCustomError) as error:
-        Country(code)
-    assert error.value.type == 'country_code_error'
+def test_valid_official_name(official_name: str, country_data: CountryInfo, ProductOfficialName):
+    banana = ProductOfficialName(made_in=official_name)
+    assert banana.made_in == country_data.official_name
+    assert banana.made_in.alpha2 == country_data.alpha2
+    assert banana.made_in.alpha3 == country_data.alpha3
+    assert banana.made_in.short_name == country_data.short_name
+    assert banana.made_in.numeric_code == country_data.numeric_code
 
 
-def test_model_validation():
-    class Model(BaseModel):
-        country: Country
-
-    assert Model(country='US').country.alpha3_code == 'USA'
-    assert Model(country='USA').country.alpha2_code == 'US'
-    assert Model(country='united states of america').country.alpha2_code == 'US'
-    assert Model(country='840').country.alpha2_code == 'US'
+@pytest.mark.parametrize('official_name', list(printable))
+def test_invalid_official_name(official_name: str, ProductOfficialName):
+    with pytest.raises(ValidationError, match='Invalid country official name'):
+        ProductOfficialName(made_in=official_name)
 
 
-def test_str_repr():
-    assert (
-        str(Country('US')) == str(Country('us')) == 'country_name="United States of America" official_name="The '
-        'United States of America" alpha2_code="US" alpha3_code="USA" '
-        'numeric_code="840"'
-    )
-
-    assert (
-        repr(Country('US')) == repr(Country('us')) == "Country('US', country_name='United States of America', "
-        "official_name='The United States of America', "
-        "alpha3_code='USA', numeric_code='840')"
-    )
-
-
-def test_eq():
-    assert Country('us') == Country('us')
-    assert Country('us') != Country('france')
-    assert Country('us') != 'us'
-
-    assert Country('US') == Country('USA') == Country('840') == Country('United States of America')
+@pytest.mark.parametrize(
+    'numeric_code, country_data',
+    [(numeric_code, country_data) for numeric_code, country_data in _index_by_numeric_code().items()][:PARAMS_AMOUNT],
+)
+def test_valid_numeric_code(numeric_code: str, country_data: CountryInfo, ProductNumericCode):
+    banana = ProductNumericCode(made_in=numeric_code)
+    assert banana.made_in == country_data.numeric_code
+    assert banana.made_in.alpha2 == country_data.alpha2
+    assert banana.made_in.alpha3 == country_data.alpha3
+    assert banana.made_in.short_name == country_data.short_name
+    assert banana.made_in.official_name == country_data.official_name
 
 
-def test_hash():
-    assert (
-        hash(Country('US')) == hash(Country('USA')) == hash(Country('840')) == hash(Country('United States of America'))
-    )
-    assert hash('US') != hash('FR')
+@pytest.mark.parametrize('numeric_code', list(printable))
+def test_invalid_numeric_code(numeric_code: str, ProductNumericCode):
+    with pytest.raises(ValidationError, match='Invalid country numeric code'):
+        ProductNumericCode(made_in=numeric_code)
