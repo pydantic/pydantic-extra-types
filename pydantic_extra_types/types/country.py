@@ -1247,3 +1247,123 @@ class CountryAlpha2(str):
     @property
     def official_name(self) -> str:
         return _index_by_alpha2()[self].official_name
+
+
+class CountryAlpha3(str):
+    @classmethod
+    def _validate(cls, __input_value: str, **kwargs: Any) -> 'CountryAlpha3':
+        if __input_value not in _index_by_alpha3():
+            raise PydanticCustomError('country_alpha3', 'Invalid country alpha3 code')
+        return cls(__input_value)
+
+    @classmethod
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
+        return core_schema.function_after_schema(
+            core_schema.str_schema(to_upper=True), cls._validate, serialization=core_schema.to_string_ser_schema()
+        )
+
+    @property
+    def alpha2(self) -> str:
+        return _index_by_alpha3()[self].alpha2
+
+    @property
+    def numeric_code(self) -> str:
+        return _index_by_alpha3()[self].numeric_code
+
+    @property
+    def short_name(self) -> str:
+        return _index_by_alpha3()[self].short_name
+
+    @property
+    def official_name(self) -> str:
+        return _index_by_alpha3()[self].official_name
+
+
+class CountryNumericCode(str):
+    @classmethod
+    def _validate(cls, __input_value: str, **kwargs: Any) -> 'CountryNumericCode':
+        if __input_value not in _index_by_numeric_code():
+            raise PydanticCustomError('country_numeric_code', 'Invalid country numeric code')
+        return cls(__input_value)
+
+    @classmethod
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
+        return core_schema.function_after_schema(
+            core_schema.str_schema(to_upper=True), cls._validate, serialization=core_schema.to_string_ser_schema()
+        )
+
+    @property
+    def alpha2(self) -> str:
+        return _index_by_numeric_code()[self].alpha2
+
+    @property
+    def alpha3(self) -> str:
+        return _index_by_numeric_code()[self].alpha3
+
+    @property
+    def short_name(self) -> str:
+        return _index_by_numeric_code()[self].short_name
+
+    @property
+    def official_name(self) -> str:
+        return _index_by_numeric_code()[self].official_name
+
+
+class CountryShortName(str):
+    @classmethod
+    def _validate(cls, __input_value: str, **kwargs: Any) -> 'CountryShortName':
+        if __input_value not in _index_by_short_name():
+            raise PydanticCustomError('country_short_name', 'Invalid country short name')
+        return cls(__input_value)
+
+    @classmethod
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
+        return core_schema.function_after_schema(
+            core_schema.str_schema(), cls._validate, serialization=core_schema.to_string_ser_schema()
+        )
+
+    @property
+    def alpha2(self) -> str:
+        return _index_by_short_name()[self].alpha2
+
+    @property
+    def alpha3(self) -> str:
+        return _index_by_short_name()[self].alpha3
+
+    @property
+    def numeric_code(self) -> str:
+        return _index_by_short_name()[self].numeric_code
+
+    @property
+    def official_name(self) -> str:
+        return _index_by_short_name()[self].official_name
+
+
+class CountryOfficialName(str):
+    @classmethod
+    def _validate(cls, __input_value: str, **kwargs: Any) -> 'CountryOfficialName':
+        if __input_value not in _index_by_official_name():
+            raise PydanticCustomError('country_numeric_code', 'Invalid country official name')
+        return cls(__input_value)
+
+    @classmethod
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
+        return core_schema.function_after_schema(
+            core_schema.str_schema(), cls._validate, serialization=core_schema.to_string_ser_schema()
+        )
+
+    @property
+    def alpha2(self) -> str:
+        return _index_by_official_name()[self].alpha2
+
+    @property
+    def alpha3(self) -> str:
+        return _index_by_official_name()[self].alpha3
+
+    @property
+    def numeric_code(self) -> str:
+        return _index_by_official_name()[self].numeric_code
+
+    @property
+    def short_name(self) -> str:
+        return _index_by_official_name()[self].short_name
