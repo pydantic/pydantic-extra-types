@@ -219,3 +219,15 @@ def test_color_hashable():
     assert hash(Color('red')) != hash(Color('blue'))
     assert hash(Color('red')) == hash(Color((255, 0, 0)))
     assert hash(Color('red')) != hash(Color((255, 0, 0, 0.5)))
+
+
+def test_schema():
+    class Model(BaseModel):
+        color: Color
+
+    assert Model.model_json_schema() == {
+        'properties': {'color': {'format': 'color', 'title': 'Color', 'type': 'string'}},
+        'required': ['color'],
+        'title': 'Model',
+        'type': 'object',
+    }
