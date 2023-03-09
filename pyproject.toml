@@ -40,7 +40,7 @@ requires-python = '>=3.7'
 dependencies = [
     'pydantic@git+https://github.com/pydantic/pydantic.git@main',
     'phonenumbers',
-    'zxcvbn',
+    'zxcvbn >=4.4.25,<4.4.28',
 ]
 dynamic = ['version']
 

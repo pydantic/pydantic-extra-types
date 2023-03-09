@@ -16,5 +16,5 @@ typing-extensions==4.5.0
     # via
     #   pydantic
     #   pydantic-core
-zxcvbn==4.4.28
+zxcvbn==4.4.27
     # via pydantic-extra-types (pyproject.toml)
