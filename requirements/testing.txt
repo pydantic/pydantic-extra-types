@@ -10,7 +10,11 @@ charset-normalizer==3.1.0
     # via requests
 codecov==2.1.13
     # via -r requirements/testing.in
+<<<<<<< HEAD
 coverage[toml]==7.2.7
+=======
+coverage[toml]==7.2.1
+>>>>>>> bf80d52 (switch `get_validators` to `__get_pydantic_core_schema__`)
     # via
     #   -r requirements/testing.in
     #   codecov
@@ -31,7 +35,11 @@ pluggy==1.0.0
     # via pytest
 pygments==2.15.1
     # via rich
+<<<<<<< HEAD
 pytest==7.3.1
+=======
+pytest==7.2.2
+>>>>>>> bf80d52 (switch `get_validators` to `__get_pydantic_core_schema__`)
     # via
     #   -r requirements/testing.in
     #   pytest-asyncio
@@ -50,7 +58,19 @@ pytz==2023.3
     # via dirty-equals
 requests==2.31.0
     # via codecov
+<<<<<<< HEAD
 rich==13.4.1
     # via pytest-pretty
 urllib3==2.0.2
+=======
+rich==13.3.2
+    # via pytest-pretty
+tomli==2.0.1
+    # via
+    #   coverage
+    #   pytest
+typing-extensions==4.5.0
+    # via dirty-equals
+urllib3==1.26.14
+>>>>>>> bf80d52 (switch `get_validators` to `__get_pydantic_core_schema__`)
     # via requests

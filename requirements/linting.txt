@@ -16,11 +16,19 @@ distlib==0.3.6
     # via virtualenv
 filelock==3.12.0
     # via virtualenv
+<<<<<<< HEAD
 identify==2.5.24
     # via pre-commit
 isort==5.12.0
     # via -r requirements/linting.in
 mypy==1.3.0
+=======
+identify==2.5.19
+    # via pre-commit
+isort==5.12.0
+    # via -r requirements/linting.in
+mypy==1.1.1
+>>>>>>> bf80d52 (switch `get_validators` to `__get_pydantic_core_schema__`)
     # via -r requirements/linting.in
 mypy-extensions==1.0.0
     # via
@@ -32,16 +40,25 @@ packaging==23.1
     # via black
 pathspec==0.11.1
     # via black
+<<<<<<< HEAD
 platformdirs==3.5.1
     # via
     #   black
     #   virtualenv
 pre-commit==3.3.2
+=======
+platformdirs==3.1.0
+    # via
+    #   black
+    #   virtualenv
+pre-commit==3.1.1
+>>>>>>> bf80d52 (switch `get_validators` to `__get_pydantic_core_schema__`)
     # via -r requirements/linting.in
 pyupgrade==3.4.0
     # via -r requirements/linting.in
 pyyaml==6.0
     # via pre-commit
+<<<<<<< HEAD
 ruff==0.0.270
     # via -r requirements/linting.in
 tokenize-rt==5.0.0
@@ -49,6 +66,19 @@ tokenize-rt==5.0.0
 typing-extensions==4.6.3
     # via mypy
 virtualenv==20.23.0
+=======
+ruff==0.0.254
+    # via -r requirements/linting.in
+tokenize-rt==5.0.0
+    # via pyupgrade
+tomli==2.0.1
+    # via
+    #   black
+    #   mypy
+typing-extensions==4.5.0
+    # via mypy
+virtualenv==20.20.0
+>>>>>>> bf80d52 (switch `get_validators` to `__get_pydantic_core_schema__`)
     # via pre-commit
 
 # The following packages are considered to be unsafe in a requirements file:
