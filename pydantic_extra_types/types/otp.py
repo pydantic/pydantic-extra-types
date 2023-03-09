@@ -22,7 +22,7 @@ class OTPToken(str):
         return value
 
     @classmethod
-    def get_validators(cls) -> Any:
+    def __get_pydantic_core_schema__(cls) -> Any:
         yield cls.model_validate
 
     class Config:

@@ -29,7 +29,7 @@ def test_json_encoder():
     assert json_encoded_value == value
 
 
-def test_get_validators():
+def test___get_pydantic_core_schema__():
     # Test the get_validators method
-    validators = list(OTPToken.get_validators())
+    validators = list(OTPToken.__get_pydantic_core_schema__())
     assert validators == [OTPToken.model_validate]
