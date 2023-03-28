@@ -6,7 +6,7 @@ from pydantic import BaseModel, ValidationError
 from pydantic_extra_types import CurrencyCode, CurrencyDisplayName, CurrencyNumericCode
 from pydantic_extra_types.types.money import Currency, _index_by_code, _index_by_display_name, _index_by_numeric_code
 
-PARAMS_AMOUNT = 1
+PARAMS_AMOUNT = 10
 
 
 def random_int():

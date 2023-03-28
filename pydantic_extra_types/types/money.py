@@ -1324,16 +1324,14 @@ def _index_by_sub_unit() -> Dict[int, Currency]:
 
 class CurrencyCode(str):
     @classmethod
-    def _validate(cls, __input_value: str, **kwargs: Any) -> 'CurrencyCode':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'CurrencyCode':
         if __input_value not in _index_by_code():
             raise PydanticCustomError('code', 'invalid currency code')
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
-        return core_schema.function_after_schema(
-            core_schema.str_schema(to_upper=True), cls._validate, serialization=core_schema.to_string_ser_schema()
-        )
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+        return core_schema.general_after_validator_function(cls._validate, core_schema.str_schema(to_upper=True))
 
     @property
     def display_name(self) -> str:
@@ -1354,15 +1352,16 @@ class CurrencyCode(str):
 
 class CurrencyDisplayName(str):
     @classmethod
-    def _validate(cls, __input_value: str, **kwargs: Any) -> 'CurrencyDisplayName':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'CurrencyDisplayName':
         if __input_value not in _index_by_display_name():
             raise PydanticCustomError('currency_display_name', 'invalid currency display name')
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
-        return core_schema.function_after_schema(
-            core_schema.str_schema(), cls._validate, serialization=core_schema.to_string_ser_schema()
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+        return core_schema.general_after_validator_function(
+            cls._validate,
+            core_schema.str_schema(),
         )
 
     @property
@@ -1384,16 +1383,14 @@ class CurrencyDisplayName(str):
 
 class CurrencyNumericCode(int):
     @classmethod
-    def _validate(cls, __input_value: int, **kwargs: Any) -> 'CurrencyNumericCode':
+    def _validate(cls, __input_value: int, _: core_schema.ValidationInfo) -> 'CurrencyNumericCode':
         if __input_value not in _index_by_numeric_code():
             raise PydanticCustomError('currency_numeric_code', 'invalid currency numeric code')
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
-        return core_schema.function_after_schema(
-            core_schema.int_schema(), cls._validate, serialization=core_schema.to_string_ser_schema()
-        )
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+        return core_schema.general_after_validator_function(cls._validate, core_schema.int_schema())
 
     @property
     def code(self) -> str:
@@ -1414,16 +1411,14 @@ class CurrencyNumericCode(int):
 
 class CurrencyDefaultFractionDigits(int):
     @classmethod
-    def _validate(cls, __input_value: int, **kwargs: Any) -> 'CurrencyDefaultFractionDigits':
+    def _validate(cls, __input_value: int, _: core_schema.ValidationInfo) -> 'CurrencyDefaultFractionDigits':
         if __input_value not in _index_by_default_fraction_digits():
             raise PydanticCustomError('currency_default_fraction_digits', 'invalid currency default fraction digits')
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
-        return core_schema.function_after_schema(
-            core_schema.int_schema(), cls._validate, serialization=core_schema.to_string_ser_schema()
-        )
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+        return core_schema.general_after_validator_function(cls._validate, core_schema.int_schema())
 
     @property
     def code(self) -> str:
@@ -1444,15 +1439,16 @@ class CurrencyDefaultFractionDigits(int):
 
 class CurrencySubUnit(int):
     @classmethod
-    def _validate(cls, __input_value: int, **kwargs: Any) -> 'CurrencySubUnit':
+    def _validate(cls, __input_value: int, _: core_schema.ValidationInfo) -> 'CurrencySubUnit':
         if __input_value not in _index_by_sub_unit():
             raise PydanticCustomError('currency_sub_unit', 'invalid currency sub unit')
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
-        return core_schema.function_after_schema(
-            core_schema.int_schema(), cls._validate, serialization=core_schema.to_string_ser_schema()
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+        return core_schema.general_after_validator_function(
+            cls._validate,
+            core_schema.int_schema(),
         )
 
     @property
