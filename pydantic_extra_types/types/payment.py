@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, ClassVar, Union
+from typing import Any, ClassVar
 
 from pydantic_core import PydanticCustomError, core_schema
 
@@ -38,18 +38,16 @@ class PaymentCardNumber(str):
         self.brand = self.validate_brand(card_number)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
-        return core_schema.function_after_schema(
-            core_schema.str_schema(
-                min_length=cls.min_length,
-                max_length=cls.max_length,
-                strip_whitespace=cls.strip_whitespace,
-            ),
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+        return core_schema.general_after_validator_function(
             cls.validate,
+            core_schema.str_schema(
+                min_length=cls.min_length, max_length=cls.max_length, strip_whitespace=cls.strip_whitespace
+            ),
         )
 
     @classmethod
-    def validate(cls, __input_value: str, **_kwargs: Any) -> 'PaymentCardNumber':
+    def validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'PaymentCardNumber':
         return cls(__input_value)
 
     @property
@@ -97,7 +95,7 @@ class PaymentCardNumber(str):
         else:
             brand = PaymentCardBrand.other
 
-        required_length: Union[None, int, str] = None
+        required_length: None | int | str = None
         if brand in PaymentCardBrand.mastercard:
             required_length = 16
             valid = len(card_number) == required_length
