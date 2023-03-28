@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from pydantic_core import PydanticCustomError, core_schema
 
@@ -17,7 +17,7 @@ class Currency:
 
 
 @lru_cache()
-def _currency() -> list[Currency]:
+def _currency() -> List[Currency]:
     """Get currency by code"""
     return [
         Currency(

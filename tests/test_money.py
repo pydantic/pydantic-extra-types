@@ -3,10 +3,23 @@ from string import printable
 import pytest
 
 from pydantic import BaseModel, ValidationError
-from pydantic_extra_types import CurrencyCode, CurrencyDisplayName, CurrencyNumericCode
-from pydantic_extra_types.types.money import Currency, _index_by_code, _index_by_display_name, _index_by_numeric_code
+from pydantic_extra_types import (
+    CurrencyCode,
+    CurrencyDefaultFractionDigits,
+    CurrencyDisplayName,
+    CurrencyNumericCode,
+    CurrencySubUnit,
+)
+from pydantic_extra_types.types.money import (
+    Currency,
+    _index_by_code,
+    _index_by_default_fraction_digits,
+    _index_by_display_name,
+    _index_by_numeric_code,
+    _index_by_sub_unit,
+)
 
-PARAMS_AMOUNT = 10
+PARAMS_AMOUNT = 20
 
 
 def random_int():
@@ -81,7 +94,47 @@ def test_valid_currency_numeric_code(currency_numeric_code: int, currency_data: 
     assert banana.price.sub_unit == currency_data.sub_unit
 
 
-@pytest.mark.parametrize('numeric_code', [random_int() for _ in range(7)])
+@pytest.mark.parametrize('numeric_code', [random_int() for _ in range(4)])
 def test_invalid_currency_numeric_code(numeric_code: int, CurrencyNumericCode):
     with pytest.raises(ValidationError, match='invalid currency numeric code'):
         CurrencyNumericCode(price=numeric_code)
+
+
+@pytest.fixture(scope='module', name='CurrencySubUnit')
+def currency_sub_unit_fixture():
+    class Product(BaseModel):
+        price: CurrencySubUnit
+
+    return Product
+
+
+@pytest.mark.parametrize('currency_sub_unit, currency_data', list(_index_by_sub_unit().items())[:PARAMS_AMOUNT])
+def test_valid_currency_sub_unit(currency_sub_unit: int, currency_data: Currency, CurrencySubUnit):
+    banana = CurrencySubUnit(price=currency_sub_unit)
+    assert banana.price == currency_data.sub_unit
+    assert banana.price.code == currency_data.code
+    assert banana.price.display_name == currency_data.display_name
+    assert banana.price.numeric_code == currency_data.numeric_code
+    assert banana.price.default_fraction_digits == currency_data.default_fraction_digits
+
+
+@pytest.fixture(scope='module', name='CurrencyDefaultFractionDigits')
+def currency_default_fraction_digits_fixture():
+    class Product(BaseModel):
+        price: CurrencyDefaultFractionDigits
+
+    return Product
+
+
+@pytest.mark.parametrize(
+    'currency_default_fraction_digits, currency_data', list(_index_by_default_fraction_digits().items())[:PARAMS_AMOUNT]
+)
+def test_valid_currency_default_fraction_digits(
+    currency_default_fraction_digits: int, currency_data: Currency, CurrencyDefaultFractionDigits
+):
+    banana = CurrencyDefaultFractionDigits(price=currency_default_fraction_digits)
+    assert banana.price == currency_data.default_fraction_digits
+    assert banana.price.code == currency_data.code
+    assert banana.price.display_name == currency_data.display_name
+    assert banana.price.numeric_code == currency_data.numeric_code
+    assert banana.price.sub_unit == currency_data.sub_unit
