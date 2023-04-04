@@ -45,6 +45,7 @@ platformdirs==3.5.1
     # via
     #   black
     #   virtualenv
+<<<<<<< HEAD
 pre-commit==3.3.2
 =======
 platformdirs==3.1.0
@@ -53,11 +54,15 @@ platformdirs==3.1.0
     #   virtualenv
 pre-commit==3.1.1
 >>>>>>> bf80d52 (switch `get_validators` to `__get_pydantic_core_schema__`)
+=======
+pre-commit==3.2.2
+>>>>>>> b905b36 (update requirements)
     # via -r requirements/linting.in
 pyupgrade==3.4.0
     # via -r requirements/linting.in
 pyyaml==6.0
     # via pre-commit
+<<<<<<< HEAD
 <<<<<<< HEAD
 ruff==0.0.270
     # via -r requirements/linting.in
@@ -68,6 +73,9 @@ typing-extensions==4.6.3
 virtualenv==20.23.0
 =======
 ruff==0.0.254
+=======
+ruff==0.0.260
+>>>>>>> b905b36 (update requirements)
     # via -r requirements/linting.in
 tokenize-rt==5.0.0
     # via pyupgrade
