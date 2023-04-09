@@ -31,13 +31,13 @@
             "settings": {
                 "editor.formatOnSave": true,
                 "files.trimTrailingWhitespace": true,
-                "python.defaultInterpreterPath": "/workspaces/pydantic-extra-types/.venv/bin/python",
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
                 "python.formatting.provider": "black",
                 "python.formatting.blackArgs": [
                     "--no-color"
                 ],
                 "python.linting.mypyEnabled": true,
-                "python.linting.mypyPath": "/usr/local/py-utils/bin/dmypy",
+                "python.linting.mypyPath": "/home/vscode/.local/bin/dmypy",
                 "python.linting.mypyArgs": [
                     "run",
                     "--",
@@ -59,7 +59,7 @@
                 },
                 "autoDocstring.customTemplatePath": ".vscode/autodocstring.mustache",
                 "ruff.path": [
-                    "/workspaces/pydantic-extra-types/.venv/bin/ruff"
+                    "/home/vscode/.local/bin/ruff"
                 ]
             },
             "git.branchProtection": [
