@@ -12,6 +12,7 @@ class PhoneNumber(str):
     An international phone number
     """
     default_region_code: str | None = None
+    format: str = "RFC3966"
     min_length: int = 7
     max_length: int = 64
 
@@ -35,6 +36,12 @@ class PhoneNumber(str):
             raise PhoneNumberError from exc
         if not phonenumbers.is_valid_number(parsed_number):
             raise PhoneNumberError
+
+
+
+        return phonenumbers.format_number(
+            parsed_number, getattr(phonenumbers.PhoneNumberFormat, cls.format)
+        )
 
 
 class USPhoneNumber(PhoneNumber):
