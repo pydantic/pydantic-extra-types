@@ -39,6 +39,7 @@ classifiers = [
 requires-python = '>=3.7'
 dependencies = [
     'pydantic@git+https://github.com/pydantic/pydantic.git@main',
+    'phonenumbers'
 ]
 dynamic = ['version']
 
