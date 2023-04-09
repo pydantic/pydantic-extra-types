@@ -1,0 +1,82 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+    "name": "pydantic-extra-types",
+    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    // Features to add to the dev container. More info: https://containers.dev/features.
+    // "features": {},
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+    // Use 'postCreateCommand' to run commands after the container is created.
+    "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
+    "postStartCommand": "bash .devcontainer/postStartCommand.sh",
+    // Configure tool-specific properties.
+    // "customizations": {},
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    // "remoteUser": "root",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "tamasfe.even-better-toml",
+                "njpwerner.autodocstring",
+                "mhutchie.git-graph",
+                "eamodio.gitlens",
+                "charliermarsh.ruff",
+                "ms-azuretools.vscode-docker"
+            ],
+            "settings": {
+                "editor.formatOnSave": true,
+                "files.trimTrailingWhitespace": true,
+                "python.defaultInterpreterPath": "/workspaces/pydantic-extra-types/.venv/bin/python",
+                "python.formatting.provider": "black",
+                "python.formatting.blackArgs": [
+                    "--no-color"
+                ],
+                "python.linting.mypyEnabled": true,
+                "python.linting.mypyPath": "/usr/local/py-utils/bin/dmypy",
+                "python.linting.mypyArgs": [
+                    "run",
+                    "--",
+                    "--ignore-missing-imports",
+                    "--show-column-numbers",
+                    "--no-pretty",
+                    "--follow-imports=normal"
+                ],
+                "python.testing.pytestArgs": [
+                    "tests"
+                ],
+                "python.testing.unittestEnabled": false,
+                "python.testing.pytestEnabled": true,
+                "python.analysis.autoImportCompletions": true,
+                "python.analysis.indexing": true,
+                "python.linting.flake8Enabled": false,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": true
+                },
+                "autoDocstring.customTemplatePath": ".vscode/autodocstring.mustache",
+                "ruff.path": [
+                    "/workspaces/pydantic-extra-types/.venv/bin/ruff"
+                ]
+            },
+            "git.branchProtection": [
+                "main",
+                "master"
+            ]
+        }
+    },
+    "features": {
+        "ghcr.io/devcontainers-contrib/features/poetry:2": {
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    },
+    // mount the .venv directory as a named volume for performance reasons
+    "mounts": [
+        "source=${localWorkspaceFolderBasename}-venv,target=${containerWorkspaceFolder}/.venv,type=volume"
+    ],
+    "workspaceFolder": "/workspaces/pydantic-extra-types"
+}

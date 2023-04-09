@@ -9,8 +9,8 @@ path = 'pydantic_extra_types/__init__.py'
 name = 'pydantic-extra-types'
 description = 'Extra Pydantic types.'
 authors = [
-    {name = 'Samuel Colvin', email = 's@muelcolvin.com'},
-    {name = 'Yasser Tahiri', email = 'hello@yezz.me'},
+    { name = 'Samuel Colvin', email = 's@muelcolvin.com' },
+    { name = 'Yasser Tahiri', email = 'hello@yezz.me' },
 ]
 license = 'MIT'
 readme = 'README.md'
@@ -39,6 +39,7 @@ classifiers = [
 requires-python = '>=3.7'
 dependencies = [
     'pydantic@git+https://github.com/pydantic/pydantic.git@main',
+    'phonenumbers',
 ]
 dynamic = ['version']
 
@@ -54,7 +55,7 @@ Changelog = 'https://github.com/pydantic/pydantic-extra-types/releases'
 [tool.ruff]
 line-length = 120
 extend-select = ['Q', 'RUF100', 'C90']
-flake8-quotes = {inline-quotes = 'single', multiline-quotes = 'double'}
+flake8-quotes = { inline-quotes = 'single', multiline-quotes = 'double' }
 mccabe = { max-complexity = 14 }
 
 [tool.ruff.per-file-ignores]
@@ -66,9 +67,7 @@ branch = true
 context = '${CONTEXT}'
 
 [tool.coverage.paths]
-source = [
-    'pydantic_extra_types/',
-]
+source = ['pydantic_extra_types/']
 
 [tool.coverage.report]
 precision = 2
@@ -93,6 +92,9 @@ include_trailing_comma = true
 force_grid_wrap = 0
 combine_as_imports = true
 
+[tool.ruff.isort]
+known-first-party = ['pydantic']
+
 [tool.mypy]
 exclude = 'pydantic_extra_types/__init__.py'
 plugins = 'pydantic.mypy'
@@ -115,9 +117,7 @@ implicit_optional = true
 
 
 [[tool.mypy.overrides]]
-module = [
-    'dotenv.*',
-]
+module = ['dotenv.*']
 ignore_missing_imports = true
 
 
@@ -126,8 +126,6 @@ testpaths = 'tests'
 log_cli = "1"
 log_cli_level = "INFO"
 log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
-log_cli_date_format= "%Y-%m-%d %H:%M:%S"
-asyncio_mode= "auto"
-filterwarnings = [
-    'error',
-]
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+asyncio_mode = "auto"
+filterwarnings = ['error']
