@@ -74,9 +74,5 @@
         },
         "ghcr.io/devcontainers/features/docker-in-docker:2": {}
     },
-    // mount the .venv directory as a named volume for performance reasons
-    "mounts": [
-        "source=${localWorkspaceFolderBasename}-venv,target=${containerWorkspaceFolder}/.venv,type=volume"
-    ],
     "workspaceFolder": "/workspaces/pydantic-extra-types"
 }
