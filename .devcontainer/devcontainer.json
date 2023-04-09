@@ -68,11 +68,5 @@
             ]
         }
     },
-    "features": {
-        "ghcr.io/devcontainers-contrib/features/poetry:2": {
-            "version": "latest"
-        },
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
-    },
     "workspaceFolder": "/workspaces/pydantic-extra-types"
 }
