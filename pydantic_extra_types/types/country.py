@@ -1221,15 +1221,16 @@ def _index_by_official_name() -> Dict[str, CountryInfo]:
 
 class CountryAlpha2(str):
     @classmethod
-    def _validate(cls, __input_value: str, **kwargs: Any) -> 'CountryAlpha2':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'CountryAlpha2':
         if __input_value not in _index_by_alpha2():
             raise PydanticCustomError('country_alpha2', 'Invalid country alpha2 code')
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
-        return core_schema.function_after_schema(
-            core_schema.str_schema(to_upper=True), cls._validate, serialization=core_schema.to_string_ser_schema()
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+        return core_schema.general_after_validator_function(
+            cls._validate,
+            core_schema.str_schema(to_upper=True),  # type: ignore
         )
 
     @property
@@ -1251,15 +1252,17 @@ class CountryAlpha2(str):
 
 class CountryAlpha3(str):
     @classmethod
-    def _validate(cls, __input_value: str, **kwargs: Any) -> 'CountryAlpha3':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'CountryAlpha3':
         if __input_value not in _index_by_alpha3():
             raise PydanticCustomError('country_alpha3', 'Invalid country alpha3 code')
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
-        return core_schema.function_after_schema(
-            core_schema.str_schema(to_upper=True), cls._validate, serialization=core_schema.to_string_ser_schema()
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+        return core_schema.general_after_validator_function(
+            cls._validate,
+            core_schema.str_schema(to_upper=True),  # type: ignore
+            serialization=core_schema.to_string_ser_schema(),
         )
 
     @property
@@ -1281,15 +1284,17 @@ class CountryAlpha3(str):
 
 class CountryNumericCode(str):
     @classmethod
-    def _validate(cls, __input_value: str, **kwargs: Any) -> 'CountryNumericCode':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'CountryNumericCode':
         if __input_value not in _index_by_numeric_code():
             raise PydanticCustomError('country_numeric_code', 'Invalid country numeric code')
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
-        return core_schema.function_after_schema(
-            core_schema.str_schema(to_upper=True), cls._validate, serialization=core_schema.to_string_ser_schema()
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+        return core_schema.general_after_validator_function(
+            cls._validate,
+            core_schema.str_schema(to_upper=True),  # type: ignore
+            serialization=core_schema.to_string_ser_schema(),
         )
 
     @property
@@ -1311,15 +1316,15 @@ class CountryNumericCode(str):
 
 class CountryShortName(str):
     @classmethod
-    def _validate(cls, __input_value: str, **kwargs: Any) -> 'CountryShortName':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'CountryShortName':
         if __input_value not in _index_by_short_name():
             raise PydanticCustomError('country_short_name', 'Invalid country short name')
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
-        return core_schema.function_after_schema(
-            core_schema.str_schema(), cls._validate, serialization=core_schema.to_string_ser_schema()
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+        return core_schema.general_after_validator_function(
+            cls._validate, core_schema.str_schema(), serialization=core_schema.to_string_ser_schema()  # type: ignore
         )
 
     @property
@@ -1341,15 +1346,15 @@ class CountryShortName(str):
 
 class CountryOfficialName(str):
     @classmethod
-    def _validate(cls, __input_value: str, **kwargs: Any) -> 'CountryOfficialName':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'CountryOfficialName':
         if __input_value not in _index_by_official_name():
             raise PydanticCustomError('country_numeric_code', 'Invalid country official name')
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.FunctionSchema:
-        return core_schema.function_after_schema(
-            core_schema.str_schema(), cls._validate, serialization=core_schema.to_string_ser_schema()
+    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+        return core_schema.general_after_validator_function(
+            cls._validate, core_schema.str_schema(), serialization=core_schema.to_string_ser_schema()  # type: ignore
         )
 
     @property
