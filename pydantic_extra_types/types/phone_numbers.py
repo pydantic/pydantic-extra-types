@@ -26,11 +26,6 @@ class PhoneNumber(str):
         )
 
     @classmethod
-    def __get_validators__(cls) -> GeneratorCallableStr:
-        # yield str_validator
-        yield cls.validate
-
-    @classmethod
     def validate(cls, phone_number: str, _: core_schema.ValidationInfo) -> None:
         import phonenumbers
 
