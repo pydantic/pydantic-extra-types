@@ -43,8 +43,8 @@ class PaymentCardNumber(str):
             cls.validate,
             core_schema.str_schema(
                 min_length=cls.min_length, max_length=cls.max_length, strip_whitespace=cls.strip_whitespace
-            ),
-        ) # type: ignore
+            ),  # type: ignore
+        )
 
     @classmethod
     def validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'PaymentCardNumber':
