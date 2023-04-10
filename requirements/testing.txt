@@ -31,7 +31,7 @@ packaging==23.0
     # via pytest
 pluggy==1.0.0
     # via pytest
-pygments==2.14.0
+pygments==2.15.0
     # via rich
 pytest==7.3.0
     # via
