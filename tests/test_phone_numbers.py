@@ -3,7 +3,7 @@ from typing import Any
 import pytest
 
 from pydantic import BaseModel, ValidationError
-from pydantic_extra_types.types.phone_numbers import PhoneNumber, USPhoneNumber
+from pydantic_extra_types import PhoneNumber
 
 
 class TestPhoneNumber:
@@ -37,9 +37,38 @@ class TestPhoneNumber:
         assert 'to_string' not in PhoneNumber.supported_formats
 
 
-class TestUSPhoneNumber:
-    def test_defaults_to_us(self) -> None:
-        class Something(BaseModel):
-            phone_number: USPhoneNumber
+PARAMS_AMOUNT = 10
 
-        Something(phone_number='(901) 555-1212')
+
+@pytest.fixture(scope='module', name='PhoneNumbers')
+def phone_numbers_fixture():
+    class PhoneNumbers(BaseModel):
+        phone_number: PhoneNumber
+
+    return PhoneNumbers
+
+
+@pytest.mark.parametrize(
+    'phone_number',
+    [
+        '+1 901 555 1212',
+        '+1 901 555 1212;ext=12533',
+    ][:PARAMS_AMOUNT],
+)
+def test_valid_phone_number(phone_number: str, PhoneNumbers) -> None:
+    PhoneNumbers(phone_number=phone_number)
+
+
+@pytest.mark.parametrize(
+    'phone_number',
+    [
+        '',
+        '123',
+        12,
+        None,
+        object(),
+    ],
+)
+def test_invalid_phone_number(phone_number: Any, PhoneNumbers) -> None:
+    with pytest.raises(ValidationError):
+        PhoneNumbers(phone_number=phone_number)
