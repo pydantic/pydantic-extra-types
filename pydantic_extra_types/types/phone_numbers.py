@@ -2,12 +2,10 @@ from __future__ import annotations
 
 from typing import Any, Callable, Generator
 
+import phonenumbers
 from pydantic_core import PydanticCustomError, core_schema
 
 GeneratorCallableStr = Generator[Callable[..., str], None, None]
-
-
-PhoneNumberError = PydanticCustomError('value_error', 'value is not a valid phone number')
 
 
 class PhoneNumber(str):
@@ -16,8 +14,6 @@ class PhoneNumber(str):
     """
 
     try:
-        import phonenumbers
-
         supported_regions: list[str] = sorted(phonenumbers.SUPPORTED_REGIONS)
         supported_formats: list[str] = sorted(
             [f for f in phonenumbers.PhoneNumberFormat.__dict__.keys() if f.isupper()]
@@ -40,21 +36,11 @@ class PhoneNumber(str):
 
     @classmethod
     def validate(cls, phone_number: str, _: core_schema.ValidationInfo) -> str:
-        import phonenumbers
-
         try:
             parsed_number = phonenumbers.parse(phone_number, cls.default_region_code)
         except phonenumbers.phonenumberutil.NumberParseException as exc:
-            raise PhoneNumberError from exc
+            raise PydanticCustomError('value_error', 'value is not a valid phone number') from exc
         if not phonenumbers.is_valid_number(parsed_number):
-            raise PhoneNumberError
+            raise PydanticCustomError('value_error', 'value is not a valid phone number')
 
         return phonenumbers.format_number(parsed_number, getattr(phonenumbers.PhoneNumberFormat, cls.phone_format))
-
-
-class USPhoneNumber(PhoneNumber):
-    """
-    A phone number that defaults to the US
-    """
-
-    default_region_code = 'US'
