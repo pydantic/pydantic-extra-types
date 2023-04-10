@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import cached_property
 from typing import Any, Callable, Generator
 
 from pydantic_core import PydanticCustomError, core_schema
@@ -11,24 +10,21 @@ GeneratorCallableStr = Generator[Callable[..., str], None, None]
 PhoneNumberError = PydanticCustomError('value_error', 'value is not a valid phone number')
 
 
-class PhoneMeta(type):
-    @property
-    def supported_regions(cls) -> list[str]:
-        import phonenumbers
-
-        return sorted(phonenumbers.SUPPORTED_REGIONS)
-
-    @property
-    def supported_formats(cls) -> list[str]:
-        import phonenumbers
-
-        return sorted([f for f in phonenumbers.PhoneNumberFormat.__dict__.keys() if f.isupper()])
-
-
-class PhoneNumber(str, metaclass=PhoneMeta):
+class PhoneNumber(str):
     """
     An international phone number
     """
+
+    try:
+        import phonenumbers
+
+        supported_regions: list[str] = sorted(phonenumbers.SUPPORTED_REGIONS)
+        supported_formats: list[str] = sorted(
+            [f for f in phonenumbers.PhoneNumberFormat.__dict__.keys() if f.isupper()]
+        )
+    except ImportError:
+        supported_regions = []
+        supported_formats = []
 
     default_region_code: str | None = None
     phone_format: str = 'RFC3966'
