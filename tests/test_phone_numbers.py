@@ -1,8 +1,8 @@
 from typing import Any
 
 import pytest
-
 from pydantic import BaseModel, ValidationError
+
 from pydantic_extra_types.types.phone_numbers import PhoneNumber, USPhoneNumber
 
 
@@ -22,9 +22,19 @@ class TestPhoneNumber:
         with pytest.raises(ValidationError):
             TestPhoneNumber.Something(phone_number='55 1212')
 
-    def test_formats_phone_number(self):
+    def test_formats_phone_number(self) -> None:
         result = TestPhoneNumber.Something(phone_number='+1 901 555 1212 ext 12533')
         assert result.phone_number == 'tel:+1-901-555-1212;ext=12533'
+
+    def test_supported_regions(self) -> None:
+        assert 'US' in PhoneNumber.supported_regions
+        assert 'GB' in PhoneNumber.supported_regions
+
+    def test_supported_formats(self) -> None:
+        assert 'E164' in PhoneNumber.supported_formats
+        assert 'RFC3966' in PhoneNumber.supported_formats
+        assert '__dict__' not in PhoneNumber.supported_formats
+        assert 'to_string' not in PhoneNumber.supported_formats
 
 
 class TestUSPhoneNumber:
