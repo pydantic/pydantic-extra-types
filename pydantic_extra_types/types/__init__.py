@@ -7,6 +7,7 @@ from pydantic_extra_types.types.country import (
     CountryShortName,
 )
 from pydantic_extra_types.types.payment import PaymentCardBrand, PaymentCardNumber
+from pydantic_extra_types.types.phone_numbers import PhoneNumber
 
 __all__ = (
     'Color',
@@ -17,4 +18,5 @@ __all__ = (
     'CountryShortName',
     'CountryNumericCode',
     'CountryOfficialName',
+    'PhoneNumber',
 )
