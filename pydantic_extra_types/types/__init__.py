@@ -1,3 +1,4 @@
+from pydantic_extra_types.types.bank import ABARoutingNumber
 from pydantic_extra_types.types.color import Color
 from pydantic_extra_types.types.country import (
     CountryAlpha2,
@@ -10,6 +11,7 @@ from pydantic_extra_types.types.payment import PaymentCardBrand, PaymentCardNumb
 from pydantic_extra_types.types.phone_numbers import PhoneNumber
 
 __all__ = (
+    'ABARoutingNumber',
     'Color',
     'PaymentCardNumber',
     'PaymentCardBrand',
