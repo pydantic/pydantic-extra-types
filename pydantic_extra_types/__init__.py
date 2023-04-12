@@ -1,6 +1,7 @@
 __version__ = '0.0.1'
 
 from pydantic_extra_types.types import (
+    ABARoutingNumber,
     Color,
     CountryAlpha2,
     CountryAlpha3,
@@ -13,6 +14,7 @@ from pydantic_extra_types.types import (
 )
 
 __all__ = (
+    'ABARoutingNumber',
     'Color',
     'PaymentCardNumber',
     'PaymentCardBrand',

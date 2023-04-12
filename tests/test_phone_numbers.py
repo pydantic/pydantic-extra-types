@@ -17,10 +17,10 @@ class TestPhoneNumber:
     def test_when_extension_provided(self) -> None:
         TestPhoneNumber.Something(phone_number='+1 901 555 1212 ext 12533')
 
-    @pytest.mark.parametrize('invalid_number', ['', '123', 12, None, object()])
+    @pytest.mark.parametrize('invalid_number', ['', '123', 12, None, object(), '55 121'])
     def test_invalid_phone_number(self, invalid_number: Any) -> None:
         with pytest.raises(ValidationError):
-            TestPhoneNumber.Something(phone_number='55 1212')
+            TestPhoneNumber.Something(phone_number=invalid_number)
 
     def test_formats_phone_number(self) -> None:
         result = TestPhoneNumber.Something(phone_number='+1 901 555 1212 ext 12533')
