@@ -8,7 +8,7 @@ certifi==2022.12.7
     # via requests
 charset-normalizer==3.1.0
     # via requests
-codecov==2.1.12
+codecov==2.1.13
     # via -r requirements/testing.in
 coverage[toml]==7.2.3
     # via
@@ -27,13 +27,13 @@ markdown-it-py==2.2.0
     # via rich
 mdurl==0.1.2
     # via markdown-it-py
-packaging==23.0
+packaging==23.1
     # via pytest
 pluggy==1.0.0
     # via pytest
-pygments==2.15.0
+pygments==2.15.1
     # via rich
-pytest==7.3.0
+pytest==7.3.1
     # via
     #   -r requirements/testing.in
     #   pytest-asyncio
@@ -52,7 +52,7 @@ pytz==2023.3
     # via dirty-equals
 requests==2.28.2
     # via codecov
-rich==13.3.3
+rich==13.3.4
     # via pytest-pretty
 tomli==2.0.1
     # via
