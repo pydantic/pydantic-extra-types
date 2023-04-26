@@ -60,6 +60,7 @@ mccabe = { max-complexity = 14 }
 
 [tool.ruff.per-file-ignores]
 'pydantic_extra_types/__init__.py' = ['F405', 'F403']
+'pydantic_extra_types/types/country.py' = ['Q000']
 
 [tool.coverage.run]
 source = ['pydantic_extra_types']
