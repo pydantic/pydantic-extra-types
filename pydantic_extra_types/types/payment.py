@@ -3,6 +3,8 @@ from typing import Any, ClassVar
 
 from pydantic_core import PydanticCustomError, core_schema
 
+from pydantic.annotated import GetCoreSchemaHandler
+
 
 class PaymentCardBrand(str, Enum):
     # If you add another card type, please also add it to the
@@ -38,12 +40,12 @@ class PaymentCardNumber(str):
         self.brand = self.validate_brand(card_number)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.general_after_validator_function(
             cls.validate,
             core_schema.str_schema(
                 min_length=cls.min_length, max_length=cls.max_length, strip_whitespace=cls.strip_whitespace
-            ),  # type: ignore
+            ),
         )
 
     @classmethod

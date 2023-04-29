@@ -8,6 +8,8 @@ from typing import Any, Dict, List
 
 from pydantic_core import PydanticCustomError, core_schema
 
+from pydantic.annotated import GetCoreSchemaHandler
+
 
 @dataclass
 class CountryInfo:
@@ -1807,10 +1809,12 @@ class CountryAlpha2(str):
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+    def __get_pydantic_core_schema__(
+        cls, source: type[Any], handler: GetCoreSchemaHandler
+    ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,
-            core_schema.str_schema(to_upper=True),  # type: ignore
+            core_schema.str_schema(to_upper=True),
         )
 
     @property
@@ -1838,10 +1842,12 @@ class CountryAlpha3(str):
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+    def __get_pydantic_core_schema__(
+        cls, source: type[Any], handler: GetCoreSchemaHandler
+    ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,
-            core_schema.str_schema(to_upper=True),  # type: ignore
+            core_schema.str_schema(to_upper=True),
             serialization=core_schema.to_string_ser_schema(),
         )
 
@@ -1870,10 +1876,12 @@ class CountryNumericCode(str):
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+    def __get_pydantic_core_schema__(
+        cls, source: type[Any], handler: GetCoreSchemaHandler
+    ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,
-            core_schema.str_schema(to_upper=True),  # type: ignore
+            core_schema.str_schema(to_upper=True),
             serialization=core_schema.to_string_ser_schema(),
         )
 
@@ -1902,9 +1910,11 @@ class CountryShortName(str):
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+    def __get_pydantic_core_schema__(
+        cls, source: type[Any], handler: GetCoreSchemaHandler
+    ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
-            cls._validate, core_schema.str_schema(), serialization=core_schema.to_string_ser_schema()  # type: ignore
+            cls._validate, core_schema.str_schema(), serialization=core_schema.to_string_ser_schema()
         )
 
     @property
@@ -1932,9 +1942,11 @@ class CountryOfficialName(str):
         return cls(__input_value)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+    def __get_pydantic_core_schema__(
+        cls, source: type[Any], handler: GetCoreSchemaHandler
+    ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
-            cls._validate, core_schema.str_schema(), serialization=core_schema.to_string_ser_schema()  # type: ignore
+            cls._validate, core_schema.str_schema(), serialization=core_schema.to_string_ser_schema()
         )
 
     @property

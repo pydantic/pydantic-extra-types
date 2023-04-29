@@ -2,6 +2,8 @@ from typing import Any, ClassVar
 
 from pydantic_core import PydanticCustomError, core_schema
 
+from pydantic.annotated import GetCoreSchemaHandler
+
 
 class ABARoutingNumber(str):
     strip_whitespace: ClassVar[bool] = True
@@ -13,7 +15,9 @@ class ABARoutingNumber(str):
         self._routing_number = self.validate_routing_number(routing_number)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, **_kwargs: Any) -> core_schema.AfterValidatorFunctionSchema:
+    def __get_pydantic_core_schema__(
+        cls, source: type[Any], handler: GetCoreSchemaHandler
+    ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls.validate,
             core_schema.str_schema(
@@ -21,7 +25,7 @@ class ABARoutingNumber(str):
                 max_length=cls.max_length,
                 strip_whitespace=cls.strip_whitespace,
                 strict=False,
-            ),  # type: ignore
+            ),
         )
 
     @classmethod
