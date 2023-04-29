@@ -1,8 +1,10 @@
-from typing import Any, ClassVar
+from typing import ClassVar, Type, TypeVar
 
 from pydantic_core import PydanticCustomError, core_schema
 
 from pydantic.annotated import GetCoreSchemaHandler
+
+T = TypeVar('T')
 
 
 class ABARoutingNumber(str):
@@ -16,7 +18,7 @@ class ABARoutingNumber(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
+        cls, source: Type[T], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls.validate,

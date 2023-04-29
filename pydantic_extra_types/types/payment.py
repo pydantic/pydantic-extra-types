@@ -1,9 +1,11 @@
 from enum import Enum
-from typing import Any, ClassVar
+from typing import ClassVar, Type, TypeVar
 
 from pydantic_core import PydanticCustomError, core_schema
 
 from pydantic.annotated import GetCoreSchemaHandler
+
+T = TypeVar('T')
 
 
 class PaymentCardBrand(str, Enum):
@@ -40,7 +42,7 @@ class PaymentCardNumber(str):
         self.brand = self.validate_brand(card_number)
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: Type[T], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.general_after_validator_function(
             cls.validate,
             core_schema.str_schema(
