@@ -26,3 +26,4 @@ repos:
     entry: pyupgrade --py37-plus
     types: [python]
     language: system
+    exclude: "pydantic_extra_types/types/phone_numbers.py"
