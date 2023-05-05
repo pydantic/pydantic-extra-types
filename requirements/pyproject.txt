@@ -8,6 +8,8 @@ annotated-types==0.5.0
     # via pydantic
 phonenumbers==8.13.13
     # via pydantic-extra-types (pyproject.toml)
+pycountry @ git+https://github.com/yezz123/pycountry.git@main
+    # via pydantic-extra-types (pyproject.toml)
 pydantic @ git+https://github.com/pydantic/pydantic.git@main
     # via pydantic-extra-types (pyproject.toml)
 pydantic-core==0.38.0
