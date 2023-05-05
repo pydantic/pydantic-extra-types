@@ -93,9 +93,7 @@ class Color(_repr.Representation):
     def __get_pydantic_json_schema__(
         cls, core_schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> JsonSchemaValue:
-        field_schema = {}  # type: ignore
-        field_schema.update(type='string', format='color')
-        return field_schema
+        return {'type': 'string', 'format': 'color'}
 
     def original(self) -> ColorType:
         """

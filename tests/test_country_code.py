@@ -113,6 +113,9 @@ def test_invalid_short_name(short_name: str, ProductShortName):
         ProductShortName(made_in=short_name)
 
 
+# Sometimes we have a country without an official name
+# (e.g. Kosovo, Taiwan, etc.), so we can't test all the countries
+# (see https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population)
 @pytest.mark.parametrize(
     'official_name, country_data',
     [(official_name, country_data) for official_name, country_data in _index_by_official_name().items()][
