@@ -4,12 +4,14 @@ Based on: https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
 """
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional, Type, TypeVar
 
 import pycountry
 from pydantic_core import PydanticCustomError, core_schema
 
 from pydantic import GetCoreSchemaHandler
+
+T = TypeVar('T')
 
 
 @dataclass
@@ -70,7 +72,7 @@ class CountryAlpha2(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
+        cls, source: Type[T], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,
@@ -104,7 +106,7 @@ class CountryAlpha3(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
+        cls, source: Type[T], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,
@@ -139,7 +141,7 @@ class CountryNumericCode(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
+        cls, source: Type[T], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,
@@ -174,7 +176,7 @@ class CountryShortName(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
+        cls, source: Type[T], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,
@@ -209,7 +211,7 @@ class CountryOfficialName(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
+        cls, source: Type[T], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,

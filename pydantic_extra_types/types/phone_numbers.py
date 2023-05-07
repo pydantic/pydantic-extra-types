@@ -1,12 +1,15 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Generator
+from typing import Callable, Generator, Type, TypeVar
 
 from pydantic_core import PydanticCustomError, core_schema
 
 from pydantic import GetCoreSchemaHandler
 
 GeneratorCallableStr = Generator[Callable[..., str], None, None]
+
+
+T = TypeVar('T')
 
 
 class PhoneNumber(str):
@@ -31,7 +34,7 @@ class PhoneNumber(str):
     max_length: int = 64
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: Type[T], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.general_after_validator_function(
             cls.validate, core_schema.str_schema(min_length=cls.min_length, max_length=cls.max_length)
         )
