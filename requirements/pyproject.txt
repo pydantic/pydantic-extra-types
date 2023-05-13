@@ -10,9 +10,7 @@ phonenumbers==8.13.11
     # via pydantic-extra-types (pyproject.toml)
 pydantic @ git+https://github.com/pydantic/pydantic.git@main
     # via pydantic-extra-types (pyproject.toml)
-pydantic-core==0.27.0
+pydantic-core==0.31.0
     # via pydantic
 typing-extensions==4.5.0
-    # via
-    #   pydantic
-    #   pydantic-core
+    # via pydantic
