@@ -12,6 +12,7 @@ class PaymentCardBrand(str, Enum):
     amex = 'American Express'
     mastercard = 'Mastercard'
     visa = 'Visa'
+    mir = 'Mir'
     other = 'other'
 
     def __str__(self) -> str:
@@ -94,6 +95,8 @@ class PaymentCardNumber(str):
             brand = PaymentCardBrand.mastercard
         elif card_number[:2] in {'34', '37'}:
             brand = PaymentCardBrand.amex
+        elif 2200 <= int(card_number[:4]) <= 2204:
+            brand = PaymentCardBrand.mir
         else:
             brand = PaymentCardBrand.other
 
@@ -107,6 +110,9 @@ class PaymentCardNumber(str):
         elif brand == PaymentCardBrand.amex:
             required_length = 15
             valid = len(card_number) == required_length
+        elif brand == PaymentCardBrand.mir:
+            required_length = 'in range from 16 to 19'
+            valid = len(card_number) in range(16, 20)
         else:
             valid = True
 
