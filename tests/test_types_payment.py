@@ -12,6 +12,10 @@ VALID_MC = '5100000000000003'
 VALID_VISA_13 = '4050000000001'
 VALID_VISA_16 = '4050000000000001'
 VALID_VISA_19 = '4050000000000000001'
+VALID_MIR_16 = '2200000000000004'
+VALID_MIR_17 = '22000000000000004'
+VALID_MIR_18 = '220000000000000004'
+VALID_MIR_19 = '2200000000000000004'
 VALID_OTHER = '2000000000000000008'
 LUHN_INVALID = '4000000000000000'
 LEN_INVALID = '40000000000000006'
@@ -84,6 +88,10 @@ def test_validate_luhn_check_digit(card_number: str, valid: bool):
         (VALID_VISA_19, PaymentCardBrand.visa, True),
         (VALID_MC, PaymentCardBrand.mastercard, True),
         (VALID_AMEX, PaymentCardBrand.amex, True),
+        (VALID_MIR_16, PaymentCardBrand.mir, True),
+        (VALID_MIR_17, PaymentCardBrand.mir, True),
+        (VALID_MIR_18, PaymentCardBrand.mir, True),
+        (VALID_MIR_19, PaymentCardBrand.mir, True),
         (VALID_OTHER, PaymentCardBrand.other, True),
         (LEN_INVALID, PaymentCardBrand.visa, False),
     ],
@@ -104,6 +112,7 @@ def test_length_for_brand(card_number: str, brand: PaymentCardBrand, valid: bool
         (VALID_AMEX, PaymentCardBrand.amex),
         (VALID_MC, PaymentCardBrand.mastercard),
         (VALID_VISA_16, PaymentCardBrand.visa),
+        (VALID_MIR_16, PaymentCardBrand.mir),
         (VALID_OTHER, PaymentCardBrand.other),
     ],
 )
