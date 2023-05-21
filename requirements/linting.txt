@@ -16,33 +16,33 @@ distlib==0.3.6
     # via virtualenv
 filelock==3.12.0
     # via virtualenv
-identify==2.5.23
+identify==2.5.24
     # via pre-commit
 isort==5.12.0
     # via -r requirements/linting.in
-mypy==1.2.0
+mypy==1.3.0
     # via -r requirements/linting.in
 mypy-extensions==1.0.0
     # via
     #   black
     #   mypy
-nodeenv==1.7.0
+nodeenv==1.8.0
     # via pre-commit
 packaging==23.1
     # via black
 pathspec==0.11.1
     # via black
-platformdirs==3.5.0
+platformdirs==3.5.1
     # via
     #   black
     #   virtualenv
-pre-commit==3.2.2
+pre-commit==3.3.2
     # via -r requirements/linting.in
-pyupgrade==3.3.2
+pyupgrade==3.4.0
     # via -r requirements/linting.in
 pyyaml==6.0
     # via pre-commit
-ruff==0.0.263
+ruff==0.0.269
     # via -r requirements/linting.in
 tokenize-rt==5.0.0
     # via pyupgrade
