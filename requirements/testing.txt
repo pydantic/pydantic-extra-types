@@ -4,13 +4,13 @@
 #
 #    pip-compile --output-file=requirements/testing.txt --resolver=backtracking requirements/testing.in
 #
-certifi==2022.12.7
+certifi==2023.5.7
     # via requests
 charset-normalizer==3.1.0
     # via requests
 codecov==2.1.13
     # via -r requirements/testing.in
-coverage[toml]==7.2.4
+coverage[toml]==7.2.5
     # via
     #   -r requirements/testing.in
     #   codecov
@@ -50,7 +50,7 @@ pytest-pretty==1.2.0
     # via -r requirements/testing.in
 pytz==2023.3
     # via dirty-equals
-requests==2.29.0
+requests==2.30.0
     # via codecov
 rich==13.3.5
     # via pytest-pretty
@@ -58,5 +58,5 @@ tomli==2.0.1
     # via
     #   coverage
     #   pytest
-urllib3==1.26.15
+urllib3==2.0.2
     # via requests
