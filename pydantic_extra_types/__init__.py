@@ -3,6 +3,7 @@ __version__ = '0.0.1'
 from pydantic_extra_types.types import (
     ABARoutingNumber,
     Color,
+    PasswordStr,
     CountryAlpha2,
     CountryAlpha3,
     CountryNumericCode,
@@ -25,4 +26,5 @@ __all__ = (
     'CountryNumericCode',
     'CountryOfficialName',
     'PhoneNumber',
+    'PasswordStr',
 )
