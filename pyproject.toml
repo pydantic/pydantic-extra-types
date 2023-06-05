@@ -73,6 +73,8 @@ context = '${CONTEXT}'
 [tool.coverage.paths]
 source = [
     'pydantic_extra_types/',
+    '/Users/runner/work/pydantic-extra-types/pydantic-extra-types/pydantic_extra_types/',
+    'D:\a\pydantic-extra-types\pydantic-extra-types\pydantic_extra_types',
 ]
 
 [tool.coverage.report]
