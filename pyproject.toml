@@ -44,8 +44,8 @@ dynamic = ['version']
 
 [project.optional-dependencies]
 all = [
-    'phonenumbers>=8.13.11,<9',
-    'pycountry>=22.3.5,<23',
+    'phonenumbers>=8,<9',
+    'pycountry>=22,<23',
 ]
 
 [tool.hatch.metadata]
