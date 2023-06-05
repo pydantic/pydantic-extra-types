@@ -10,27 +10,9 @@ phonenumbers==8.13.13
     # via pydantic-extra-types (pyproject.toml)
 pydantic @ git+https://github.com/pydantic/pydantic.git@main
     # via pydantic-extra-types (pyproject.toml)
-<<<<<<< HEAD
-<<<<<<< HEAD
 pydantic-core==0.38.0
     # via pydantic
+pyotp==2.7.0
+    # via pydantic-extra-types (pyproject.toml)
 typing-extensions==4.6.3
-=======
-pydantic-core==0.11.1
->>>>>>> bf80d52 (switch `get_validators` to `__get_pydantic_core_schema__`)
     # via pydantic
-pyotp==2.7.0
-    # via pydantic-extra-types (pyproject.toml)
-<<<<<<< HEAD
-=======
-=======
-pydantic-core==0.22.0
-    # via pydantic
-pyotp==2.7.0
-    # via pydantic-extra-types (pyproject.toml)
->>>>>>> b905b36 (update requirements)
-typing-extensions==4.5.0
-    # via
-    #   pydantic
-    #   pydantic-core
->>>>>>> bf80d52 (switch `get_validators` to `__get_pydantic_core_schema__`)

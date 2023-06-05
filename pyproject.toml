@@ -39,12 +39,8 @@ classifiers = [
 requires-python = '>=3.7'
 dependencies = [
     'pydantic@git+https://github.com/pydantic/pydantic.git@main',
-<<<<<<< HEAD
     'phonenumbers',
-    'pyotp',
-=======
     'pyotp >=2.0.0,<2.8.0',
->>>>>>> bf80d52 (switch `get_validators` to `__get_pydantic_core_schema__`)
 ]
 dynamic = ['version']
 
