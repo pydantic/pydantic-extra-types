@@ -8,6 +8,7 @@ from pydantic_extra_types.types import (
     CountryNumericCode,
     CountryOfficialName,
     CountryShortName,
+    OTPToken,
     PaymentCardBrand,
     PaymentCardNumber,
     PhoneNumber,
@@ -25,4 +26,5 @@ __all__ = (
     'CountryNumericCode',
     'CountryOfficialName',
     'PhoneNumber',
+    'OTPToken',
 )
