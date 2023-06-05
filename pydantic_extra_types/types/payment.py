@@ -3,7 +3,7 @@ from typing import ClassVar, Type, TypeVar
 
 from pydantic_core import PydanticCustomError, core_schema
 
-from pydantic.annotated import GetCoreSchemaHandler
+from pydantic import GetCoreSchemaHandler
 
 T = TypeVar('T')
 

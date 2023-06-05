@@ -4,7 +4,7 @@ from typing import Callable, Generator, Type, TypeVar
 
 from pydantic_core import PydanticCustomError, core_schema
 
-from pydantic.annotated import GetCoreSchemaHandler
+from pydantic import GetCoreSchemaHandler
 
 GeneratorCallableStr = Generator[Callable[..., str], None, None]
 
