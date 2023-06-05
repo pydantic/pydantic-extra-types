@@ -5,7 +5,7 @@ import pytest
 from pydantic import BaseModel, ValidationError
 from pydantic_core._pydantic_core import PydanticCustomError
 
-from pydantic_extra_types import PaymentCardBrand, PaymentCardNumber
+from pydantic_extra_types.payment import PaymentCardBrand, PaymentCardNumber
 
 VALID_AMEX = '370000000000002'
 VALID_MC = '5100000000000003'
