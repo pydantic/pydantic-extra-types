@@ -43,7 +43,10 @@ dependencies = [
 dynamic = ['version']
 
 [project.optional-dependencies]
-all = ['phonenumbers']
+all = [
+    'phonenumbers>=8,<9',
+    'pycountry>=22,<23',
+]
 
 [tool.hatch.metadata]
 allow-direct-references = true
@@ -111,6 +114,7 @@ disallow_untyped_decorators = true
 disallow_untyped_calls = true
 disallow_untyped_defs = true
 implicit_optional = true
+ignore_missing_imports = true
 
 
 [[tool.mypy.overrides]]
@@ -128,6 +132,8 @@ log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(linen
 log_cli_date_format= "%Y-%m-%d %H:%M:%S"
 filterwarnings = [
     'error',
+    # This ignore will be removed when pycountry will drop py36 & support py311
+    'ignore:::pkg_resources',
 ]
 
 # configuring https://github.com/pydantic/hooky
