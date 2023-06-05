@@ -12,11 +12,10 @@ import re
 from colorsys import hls_to_rgb, rgb_to_hls
 from typing import Any, Callable, Optional, Tuple, Type, Union, cast
 
-from pydantic_core import CoreSchema, PydanticCustomError, core_schema
-
 from pydantic._internal import _repr, _utils
 from pydantic._internal._schema_generation_shared import GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
+from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
 ColorTuple = Union[Tuple[int, int, int], Tuple[int, int, int, float]]
 ColorType = Union[ColorTuple, str]

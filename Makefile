@@ -13,18 +13,17 @@ refresh-lockfiles:
 	find requirements/ -name '*.txt' ! -name 'all.txt' -type f -delete
 	pip-compile -q --resolver backtracking -o requirements/linting.txt requirements/linting.in
 	pip-compile -q --resolver backtracking -o requirements/testing.txt requirements/testing.in
-	pip-compile -q --resolver backtracking -o requirements/pyproject.txt pyproject.toml
+	pip-compile -q --resolver backtracking --extra all -o requirements/pyproject.txt pyproject.toml
 	pip install --dry-run -r requirements/all.txt
 
 .PHONY: format
 format:
-	isort $(sources)
 	black $(sources)
+	ruff --fix $(sources)
 
 .PHONY: lint
 lint:
 	ruff $(sources)
-	isort $(sources) --check-only --df
 	black $(sources) --check --diff
 
 .PHONY: mypy

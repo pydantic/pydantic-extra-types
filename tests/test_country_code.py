@@ -1,11 +1,15 @@
 from string import printable
 
 import pytest
-
 from pydantic import BaseModel, ValidationError
-from pydantic_extra_types import CountryAlpha2, CountryAlpha3, CountryNumericCode, CountryOfficialName, CountryShortName
-from pydantic_extra_types.types.country import (
+
+from pydantic_extra_types.country import (
+    CountryAlpha2,
+    CountryAlpha3,
     CountryInfo,
+    CountryNumericCode,
+    CountryOfficialName,
+    CountryShortName,
     _index_by_alpha2,
     _index_by_alpha3,
     _index_by_numeric_code,

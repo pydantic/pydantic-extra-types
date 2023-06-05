@@ -34,15 +34,9 @@ pygments==2.15.1
 pytest==7.3.1
     # via
     #   -r requirements/testing.in
-    #   pytest-asyncio
     #   pytest-cov
-    #   pytest-mock
     #   pytest-pretty
-pytest-asyncio==0.21.0
-    # via -r requirements/testing.in
 pytest-cov==4.1.0
-    # via -r requirements/testing.in
-pytest-mock==3.10.0
     # via -r requirements/testing.in
 pytest-pretty==1.2.0
     # via -r requirements/testing.in

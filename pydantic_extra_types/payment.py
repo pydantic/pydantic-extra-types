@@ -1,9 +1,8 @@
 from enum import Enum
 from typing import ClassVar, Type, TypeVar
 
-from pydantic_core import PydanticCustomError, core_schema
-
 from pydantic import GetCoreSchemaHandler
+from pydantic_core import PydanticCustomError, core_schema
 
 T = TypeVar('T')
 

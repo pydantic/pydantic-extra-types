@@ -1,10 +1,10 @@
 from datetime import datetime
 
 import pytest
+from pydantic import BaseModel, ValidationError
 from pydantic_core import PydanticCustomError
 
-from pydantic import BaseModel, ValidationError
-from pydantic_extra_types import Color
+from pydantic_extra_types.color import Color
 
 
 @pytest.mark.parametrize(
