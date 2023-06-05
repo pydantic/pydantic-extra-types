@@ -1,8 +1,8 @@
 from string import printable
 
 import pytest
-
 from pydantic import BaseModel, ValidationError
+
 from pydantic_extra_types import CountryAlpha2, CountryAlpha3, CountryNumericCode, CountryOfficialName, CountryShortName
 from pydantic_extra_types.types.country import (
     CountryInfo,

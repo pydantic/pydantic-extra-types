@@ -1,8 +1,8 @@
 from typing import Any
 
 import pytest
-
 from pydantic import BaseModel, ValidationError
+
 from pydantic_extra_types import ABARoutingNumber
 
 

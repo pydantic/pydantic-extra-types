@@ -18,13 +18,12 @@ refresh-lockfiles:
 
 .PHONY: format
 format:
-	isort $(sources)
 	black $(sources)
+	ruff --fix $(sources)
 
 .PHONY: lint
 lint:
 	ruff $(sources)
-	isort $(sources) --check-only --df
 	black $(sources) --check --diff
 
 .PHONY: mypy

@@ -2,9 +2,9 @@ from collections import namedtuple
 from typing import Any
 
 import pytest
+from pydantic import BaseModel, ValidationError
 from pydantic_core._pydantic_core import PydanticCustomError
 
-from pydantic import BaseModel, ValidationError
 from pydantic_extra_types import PaymentCardBrand, PaymentCardNumber
 
 VALID_AMEX = '370000000000002'

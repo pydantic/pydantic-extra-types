@@ -1,10 +1,16 @@
 from __future__ import annotations
 
-from typing import Callable, Generator, Type, TypeVar
-
-from pydantic_core import PydanticCustomError, core_schema
+from typing import Callable, Generator, TypeVar
 
 from pydantic import GetCoreSchemaHandler
+from pydantic_core import PydanticCustomError, core_schema
+
+try:
+    import phonenumbers
+except ModuleNotFoundError:
+    raise RuntimeError(
+        '`PhoneNumber` requires "phonenumbers" to be installed. You can install it with "pip install phonenumbers"'
+    )
 
 GeneratorCallableStr = Generator[Callable[..., str], None, None]
 
@@ -16,16 +22,8 @@ class PhoneNumber(str):
     An international phone number
     """
 
-    try:
-        import phonenumbers
-
-        supported_regions: list[str] = sorted(phonenumbers.SUPPORTED_REGIONS)
-        supported_formats: list[str] = sorted(
-            [f for f in phonenumbers.PhoneNumberFormat.__dict__.keys() if f.isupper()]
-        )
-    except ImportError:
-        supported_regions = []
-        supported_formats = []
+    supported_regions: list[str] = sorted(phonenumbers.SUPPORTED_REGIONS)
+    supported_formats: list[str] = sorted([f for f in phonenumbers.PhoneNumberFormat.__dict__.keys() if f.isupper()])
 
     default_region_code: str | None = None
     phone_format: str = 'RFC3966'
@@ -33,16 +31,15 @@ class PhoneNumber(str):
     max_length: int = 64
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: Type[T], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: type[T], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.general_after_validator_function(
-            cls.validate, core_schema.str_schema(min_length=cls.min_length, max_length=cls.max_length)
+            cls.validate,
+            core_schema.str_schema(min_length=cls.min_length, max_length=cls.max_length),
         )
 
     @classmethod
     def validate(cls, phone_number: str, _: core_schema.ValidationInfo) -> str:
         try:
-            import phonenumbers
-
             parsed_number = phonenumbers.parse(phone_number, cls.default_region_code)
         except phonenumbers.phonenumberutil.NumberParseException as exc:
             raise PydanticCustomError('value_error', 'value is not a valid phone number') from exc

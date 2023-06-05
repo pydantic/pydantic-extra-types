@@ -38,10 +38,12 @@ classifiers = [
 ]
 requires-python = '>=3.7'
 dependencies = [
-    'pydantic@git+https://github.com/pydantic/pydantic.git@main',
-    'phonenumbers'
+    'pydantic>=2.0b1',
 ]
 dynamic = ['version']
+
+[project.optional-dependencies]
+all = ['phonenumbers']
 
 [tool.hatch.metadata]
 allow-direct-references = true
@@ -50,11 +52,12 @@ allow-direct-references = true
 Homepage = 'https://github.com/pydantic/pydantic-extra-types'
 Source = 'https://github.com/pydantic/pydantic-extra-types'
 Changelog = 'https://github.com/pydantic/pydantic-extra-types/releases'
-# TODO: Documentation
+Documentation = 'https://docs.pydantic.dev/dev-v2/usage/types/types/'
 
 [tool.ruff]
 line-length = 120
-extend-select = ['Q', 'RUF100', 'C90']
+extend-select = ['Q', 'RUF100', 'C90', 'UP', 'I']
+isort = { known-first-party = ['pydantic_extra_types', 'tests'] }
 flake8-quotes = {inline-quotes = 'single', multiline-quotes = 'double'}
 mccabe = { max-complexity = 14 }
 
@@ -86,14 +89,6 @@ color = true
 line-length = 120
 target-version = ['py310']
 skip-string-normalization = true
-
-[tool.isort]
-line_length = 120
-known_first_party = 'pydantic'
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-combine_as_imports = true
 
 [tool.mypy]
 exclude = 'pydantic_extra_types/__init__.py'
