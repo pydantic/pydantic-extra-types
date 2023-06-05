@@ -8,7 +8,7 @@ from typing import Dict, List, Type, TypeVar
 
 from pydantic_core import PydanticCustomError, core_schema
 
-from pydantic.annotated import GetCoreSchemaHandler
+from pydantic import GetCoreSchemaHandler
 
 T = TypeVar("T")
 
@@ -1805,9 +1805,9 @@ def _index_by_official_name() -> Dict[str, CountryInfo]:
 
 class CountryAlpha2(str):
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'CountryAlpha2':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> "CountryAlpha2":
         if __input_value not in _index_by_alpha2():
-            raise PydanticCustomError('country_alpha2', 'Invalid country alpha2 code')
+            raise PydanticCustomError("country_alpha2", "Invalid country alpha2 code")
         return cls(__input_value)
 
     @classmethod
@@ -1838,9 +1838,9 @@ class CountryAlpha2(str):
 
 class CountryAlpha3(str):
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'CountryAlpha3':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> "CountryAlpha3":
         if __input_value not in _index_by_alpha3():
-            raise PydanticCustomError('country_alpha3', 'Invalid country alpha3 code')
+            raise PydanticCustomError("country_alpha3", "Invalid country alpha3 code")
         return cls(__input_value)
 
     @classmethod
@@ -1872,9 +1872,9 @@ class CountryAlpha3(str):
 
 class CountryNumericCode(str):
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'CountryNumericCode':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> "CountryNumericCode":
         if __input_value not in _index_by_numeric_code():
-            raise PydanticCustomError('country_numeric_code', 'Invalid country numeric code')
+            raise PydanticCustomError("country_numeric_code", "Invalid country numeric code")
         return cls(__input_value)
 
     @classmethod
@@ -1906,9 +1906,9 @@ class CountryNumericCode(str):
 
 class CountryShortName(str):
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'CountryShortName':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> "CountryShortName":
         if __input_value not in _index_by_short_name():
-            raise PydanticCustomError('country_short_name', 'Invalid country short name')
+            raise PydanticCustomError("country_short_name", "Invalid country short name")
         return cls(__input_value)
 
     @classmethod
@@ -1916,7 +1916,9 @@ class CountryShortName(str):
         cls, source: Type[T], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
-            cls._validate, core_schema.str_schema(), serialization=core_schema.to_string_ser_schema()
+            cls._validate,
+            core_schema.str_schema(),
+            serialization=core_schema.to_string_ser_schema(),
         )
 
     @property
@@ -1938,9 +1940,9 @@ class CountryShortName(str):
 
 class CountryOfficialName(str):
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'CountryOfficialName':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> "CountryOfficialName":
         if __input_value not in _index_by_official_name():
-            raise PydanticCustomError('country_numeric_code', 'Invalid country official name')
+            raise PydanticCustomError("country_numeric_code", "Invalid country official name")
         return cls(__input_value)
 
     @classmethod
@@ -1948,7 +1950,9 @@ class CountryOfficialName(str):
         cls, source: Type[T], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
-            cls._validate, core_schema.str_schema(), serialization=core_schema.to_string_ser_schema()
+            cls._validate,
+            core_schema.str_schema(),
+            serialization=core_schema.to_string_ser_schema(),
         )
 
     @property
