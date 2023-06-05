@@ -133,3 +133,8 @@ asyncio_mode= "auto"
 filterwarnings = [
     'error',
 ]
+
+# configuring https://github.com/pydantic/hooky
+[tool.hooky]
+reviewers = ['yezz123', 'Kludex']
+require_change_file = false
