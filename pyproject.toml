@@ -132,6 +132,7 @@ log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(linen
 log_cli_date_format= "%Y-%m-%d %H:%M:%S"
 filterwarnings = [
     'error',
+    # This ignore will be removed when pycountry will drop py36 & support py311
     'ignore:::pkg_resources',
 ]
 
