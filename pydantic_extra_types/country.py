@@ -4,7 +4,7 @@ Based on: https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
 """
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Dict, List, Optional, Type, TypeVar
+from typing import Dict, List, Type, TypeVar
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
@@ -26,7 +26,7 @@ class CountryInfo:
     numeric_code: str
     short_name: str
     # NOTICE: Not all countries have an official name
-    official_name: Optional[str]
+    official_name: str
 
 
 @lru_cache()
