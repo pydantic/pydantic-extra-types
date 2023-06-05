@@ -6,9 +6,15 @@ from dataclasses import dataclass
 from functools import lru_cache
 from typing import Dict, List, Optional, Type, TypeVar
 
-import pycountry
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
+
+try:
+    import pycountry
+except ModuleNotFoundError:
+    raise RuntimeError(
+        'The `country` module requires "pycountry" to be installed. You can install it with "pip install pycountry".'
+    )
 
 T = TypeVar('T')
 
