@@ -1,20 +1,18 @@
 from __future__ import annotations
 
-from typing import Callable, Generator, TypeVar
+from typing import Any, Callable, Generator
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
 try:
     import phonenumbers
-except ModuleNotFoundError:
+except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
         '`PhoneNumber` requires "phonenumbers" to be installed. You can install it with "pip install phonenumbers"'
     )
 
 GeneratorCallableStr = Generator[Callable[..., str], None, None]
-
-T = TypeVar('T')
 
 
 class PhoneNumber(str):
@@ -31,14 +29,14 @@ class PhoneNumber(str):
     max_length: int = 64
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: type[T], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.general_after_validator_function(
-            cls.validate,
+            cls._validate,
             core_schema.str_schema(min_length=cls.min_length, max_length=cls.max_length),
         )
 
     @classmethod
-    def validate(cls, phone_number: str, _: core_schema.ValidationInfo) -> str:
+    def _validate(cls, phone_number: str, _: core_schema.ValidationInfo) -> str:
         try:
             parsed_number = phonenumbers.parse(phone_number, cls.default_region_code)
         except phonenumbers.phonenumberutil.NumberParseException as exc:

@@ -7,10 +7,12 @@ A few colors have multiple names referring to the sames colors, eg. `grey` and `
 In these cases the _last_ color when sorted alphabetically takes preferences,
 eg. `Color((0, 255, 255)).as_named() == 'cyan'` because "cyan" comes after "aqua".
 """
+from __future__ import annotations
+
 import math
 import re
 from colorsys import hls_to_rgb, rgb_to_hls
-from typing import Any, Callable, Optional, Tuple, Type, Union, cast
+from typing import Any, Callable, Tuple, Union, cast
 
 from pydantic import GetJsonSchemaHandler
 from pydantic._internal import _repr, _utils
@@ -18,7 +20,7 @@ from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
 ColorTuple = Union[Tuple[int, int, int], Tuple[int, int, int, float]]
-ColorType = Union[ColorTuple, str]
+ColorType = Union[ColorTuple, str, 'Color']
 HslColorTuple = Union[Tuple[float, float, float], Tuple[float, float, float, float]]
 
 
@@ -29,13 +31,13 @@ class RGBA:
 
     __slots__ = 'r', 'g', 'b', 'alpha', '_tuple'
 
-    def __init__(self, r: float, g: float, b: float, alpha: Optional[float]):
+    def __init__(self, r: float, g: float, b: float, alpha: float | None):
         self.r = r
         self.g = g
         self.b = b
         self.alpha = alpha
 
-        self._tuple: Tuple[float, float, float, Optional[float]] = (r, g, b, alpha)
+        self._tuple: tuple[float, float, float, float | None] = (r, g, b, alpha)
 
     def __getitem__(self, item: Any) -> Any:
         return self._tuple[item]
@@ -82,7 +84,8 @@ class Color(_repr.Representation):
             value = value._original
         else:
             raise PydanticCustomError(
-                'color_error', 'value is not a valid color: value must be a tuple, list or string'
+                'color_error',
+                'value is not a valid color: value must be a tuple, list or string',
             )
 
         # if we've got here value must be a valid color
@@ -92,7 +95,7 @@ class Color(_repr.Representation):
     def __get_pydantic_json_schema__(
         cls, core_schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> JsonSchemaValue:
-        field_schema = {}  # type: ignore[var-annotated]
+        field_schema: dict[str, Any] = {}
         field_schema.update(type='string', format='color')
         return field_schema
 
@@ -159,7 +162,7 @@ class Color(_repr.Representation):
                 f'{round(self._alpha_float(), 2)})'
             )
 
-    def as_rgb_tuple(self, *, alpha: Optional[bool] = None) -> ColorTuple:
+    def as_rgb_tuple(self, *, alpha: bool | None = None) -> ColorTuple:
         """
         Returns the color as an RGB or RGBA tuple.
 
@@ -197,7 +200,7 @@ class Color(_repr.Representation):
             h, s, li, a = self.as_hsl_tuple(alpha=True)  # type: ignore
             return f'hsl({h * 360:0.0f}, {s:0.0%}, {li:0.0%}, {round(a, 2)})'
 
-    def as_hsl_tuple(self, *, alpha: Optional[bool] = None) -> HslColorTuple:
+    def as_hsl_tuple(self, *, alpha: bool | None = None) -> HslColorTuple:
         """
         Returns the color as an HSL or HSLA tuple.
 
@@ -232,20 +235,20 @@ class Color(_repr.Representation):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: Type[Any], handler: Callable[[Any], CoreSchema]
+        cls, source: type[Any], handler: Callable[[Any], CoreSchema]
     ) -> core_schema.CoreSchema:
         return core_schema.general_plain_validator_function(
             cls._validate, serialization=core_schema.to_string_ser_schema()
         )
 
     @classmethod
-    def _validate(cls, __input_value: Any, _: Any) -> 'Color':
+    def _validate(cls, __input_value: Any, _: Any) -> Color:
         return cls(__input_value)
 
     def __str__(self) -> str:
         return self.as_named(fallback=True)
 
-    def __repr_args__(self) -> '_repr.ReprArgs':
+    def __repr_args__(self) -> _repr.ReprArgs:
         return [(None, self.as_named(fallback=True))] + [('rgb', self.as_rgb_tuple())]
 
     def __eq__(self, other: Any) -> bool:
@@ -255,7 +258,7 @@ class Color(_repr.Representation):
         return hash(self.as_rgb_tuple())
 
 
-def parse_tuple(value: Tuple[Any, ...]) -> RGBA:
+def parse_tuple(value: tuple[Any, ...]) -> RGBA:
     """Parse a tuple or list to get RGBA values.
 
     Args:
@@ -311,7 +314,7 @@ def parse_str(value: str) -> RGBA:
         *rgb, a = m.groups()
         r, g, b = (int(v * 2, 16) for v in rgb)
         if a:
-            alpha: Optional[float] = int(a * 2, 16) / 255
+            alpha: float | None = int(a * 2, 16) / 255
         else:
             alpha = None
         return ints_to_rgba(r, g, b, alpha)
@@ -341,10 +344,10 @@ def parse_str(value: str) -> RGBA:
 
 
 def ints_to_rgba(
-    r: Union[int, str],
-    g: Union[int, str],
-    b: Union[int, str],
-    alpha: Optional[float] = None,
+    r: int | str,
+    g: int | str,
+    b: int | str,
+    alpha: float | None = None,
 ) -> RGBA:
     """
     Converts integer or string values for RGB color and an optional alpha value to an `RGBA` object.
@@ -366,7 +369,7 @@ def ints_to_rgba(
     )
 
 
-def parse_color_value(value: Union[int, str], max_val: int = 255) -> float:
+def parse_color_value(value: int | str, max_val: int = 255) -> float:
     """
     Parse the color value provided and return a number between 0 and 1.
 
@@ -397,7 +400,7 @@ def parse_color_value(value: Union[int, str], max_val: int = 255) -> float:
         )
 
 
-def parse_float_alpha(value: Union[None, str, float, int]) -> Optional[float]:
+def parse_float_alpha(value: None | str | float | int) -> float | None:
     """
     Parse an alpha value checking it's a valid float in the range 0 to 1.
 
@@ -434,7 +437,7 @@ def parse_float_alpha(value: Union[None, str, float, int]) -> Optional[float]:
         )
 
 
-def parse_hsl(h: str, h_units: str, sat: str, light: str, alpha: Optional[float] = None) -> RGBA:
+def parse_hsl(h: str, h_units: str, sat: str, light: str, alpha: float | None = None) -> RGBA:
     """
     Parse raw hue, saturation, lightness, and alpha values and convert to RGBA.
 

@@ -1,9 +1,7 @@
-from typing import ClassVar, Type, TypeVar
+from typing import Any, ClassVar, Type
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
-
-T = TypeVar('T')
 
 
 class ABARoutingNumber(str):
@@ -17,7 +15,7 @@ class ABARoutingNumber(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: Type[T], handler: GetCoreSchemaHandler
+        cls, source: Type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls.validate,
@@ -36,7 +34,7 @@ class ABARoutingNumber(str):
     @classmethod
     def validate_digits(cls, routing_number: str) -> None:
         if not routing_number.isdigit():
-            raise PydanticCustomError('aba_routing_number', 'Routing number is not all digits')
+            raise PydanticCustomError('aba_routing_number', 'routing number is not all digits')
 
     @classmethod
     def validate_routing_number(cls, routing_number: str) -> str:
@@ -51,5 +49,5 @@ class ABARoutingNumber(str):
             + sum(map(int, [routing_number[2], routing_number[5], routing_number[8]]))
         )
         if checksum % 10 != 0:
-            raise PydanticCustomError('aba_routing_number', 'Incorrect ABA routing transing number')
+            raise PydanticCustomError('aba_routing_number', 'Incorrect ABA routing transit number')
         return routing_number

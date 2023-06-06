@@ -33,6 +33,7 @@ classifiers = [
     'Environment :: Console',
     'Environment :: MacOS X',
     'Framework :: Pydantic',
+    'Framework :: Pydantic :: 2',
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: Internet',
 ]
@@ -48,9 +49,6 @@ all = [
     'pycountry>=22,<23',
 ]
 
-[tool.hatch.metadata]
-allow-direct-references = true
-
 [project.urls]
 Homepage = 'https://github.com/pydantic/pydantic-extra-types'
 Source = 'https://github.com/pydantic/pydantic-extra-types'
@@ -63,10 +61,6 @@ extend-select = ['Q', 'RUF100', 'C90', 'UP', 'I']
 isort = { known-first-party = ['pydantic_extra_types', 'tests'] }
 flake8-quotes = {inline-quotes = 'single', multiline-quotes = 'double'}
 mccabe = { max-complexity = 14 }
-
-[tool.ruff.per-file-ignores]
-'pydantic_extra_types/__init__.py' = ['F405', 'F403']
-'pydantic_extra_types/types/country.py' = ['Q000']
 
 [tool.coverage.run]
 source = ['pydantic_extra_types']
@@ -82,6 +76,9 @@ source = [
 
 [tool.coverage.report]
 precision = 2
+fail_under = 100
+show_missing = true
+skip_covered = true
 exclude_lines = [
     'pragma: no cover',
     'raise NotImplementedError',
@@ -92,44 +89,14 @@ exclude_lines = [
 [tool.black]
 color = true
 line-length = 120
-target-version = ['py310']
+target-version = ['py37']
 skip-string-normalization = true
 
 [tool.mypy]
-exclude = 'pydantic_extra_types/__init__.py'
+strict = true
 plugins = 'pydantic.mypy'
-python_version = '3.10'
-show_error_codes = true
-follow_imports = 'silent'
-strict_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-disallow_any_generics = true
-check_untyped_defs = true
-no_implicit_reexport = false
-warn_unused_configs = true
-disallow_subclassing_any = true
-disallow_incomplete_defs = true
-disallow_untyped_decorators = true
-disallow_untyped_calls = true
-disallow_untyped_defs = true
-implicit_optional = true
-ignore_missing_imports = true
-
-
-[[tool.mypy.overrides]]
-module = [
-    'dotenv.*',
-]
-ignore_missing_imports = true
-
 
 [tool.pytest.ini_options]
-testpaths = 'tests'
-log_cli = "1"
-log_cli_level = "INFO"
-log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
-log_cli_date_format= "%Y-%m-%d %H:%M:%S"
 filterwarnings = [
     'error',
     # This ignore will be removed when pycountry will drop py36 & support py311
