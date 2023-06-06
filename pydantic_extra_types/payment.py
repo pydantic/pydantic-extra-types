@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, ClassVar, TypeVar
+from typing import Any, ClassVar
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
-
-T = TypeVar('T')
 
 
 class PaymentCardBrand(str, Enum):

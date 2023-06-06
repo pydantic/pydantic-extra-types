@@ -4,19 +4,17 @@ Based on: https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
 """
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Dict, List, Type, TypeVar
+from typing import Any, Dict, List, Type
 
-from pydantic import GetCoreSchemaHandler
+from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
 try:
-    import pycountry
-except ModuleNotFoundError:
+    import pycountry  # type: ignore[import]
+except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
         'The `country` module requires "pycountry" to be installed. You can install it with "pip install pycountry".'
     )
-
-T = TypeVar('T')
 
 
 @dataclass
@@ -25,7 +23,7 @@ class CountryInfo:
     alpha3: str
     numeric_code: str
     short_name: str
-    # NOTICE: Not all countries have an official name
+    # NOTE: Not all countries have an official name
     official_name: str
 
 
@@ -65,7 +63,7 @@ def _index_by_short_name() -> Dict[str, CountryInfo]:
 
 @lru_cache()
 def _index_by_official_name() -> Dict[str, CountryInfo]:
-    return {country.official_name: country for country in _countries() if country.official_name is not None}
+    return {country.official_name: country for country in _countries() if country.official_name}
 
 
 class CountryAlpha2(str):
@@ -77,12 +75,20 @@ class CountryAlpha2(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: Type[T], handler: GetCoreSchemaHandler
+        cls, source: Type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,
             core_schema.str_schema(to_upper=True),
         )
+
+    @classmethod
+    def __get_pydantic_json_schema__(
+        cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+    ) -> dict[str, Any]:
+        json_schema = handler(schema)
+        json_schema.update({'pattern': r'^\w{2}$'})
+        return json_schema
 
     @property
     def alpha3(self) -> str:
@@ -99,7 +105,7 @@ class CountryAlpha2(str):
     @property
     def official_name(self) -> str:
         country = _index_by_alpha2()[self]
-        return country.official_name if country.official_name is not None else ''
+        return country.official_name
 
 
 class CountryAlpha3(str):
@@ -111,13 +117,21 @@ class CountryAlpha3(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: Type[T], handler: GetCoreSchemaHandler
+        cls, source: Type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,
             core_schema.str_schema(to_upper=True),
             serialization=core_schema.to_string_ser_schema(),
         )
+
+    @classmethod
+    def __get_pydantic_json_schema__(
+        cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+    ) -> dict[str, Any]:
+        json_schema = handler(schema)
+        json_schema.update({'pattern': r'^\w{3}$'})
+        return json_schema
 
     @property
     def alpha2(self) -> str:
@@ -134,7 +148,7 @@ class CountryAlpha3(str):
     @property
     def official_name(self) -> str:
         country = _index_by_alpha3()[self]
-        return country.official_name if country.official_name is not None else ''
+        return country.official_name
 
 
 class CountryNumericCode(str):
@@ -146,13 +160,21 @@ class CountryNumericCode(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: Type[T], handler: GetCoreSchemaHandler
+        cls, source: Type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,
             core_schema.str_schema(to_upper=True),
             serialization=core_schema.to_string_ser_schema(),
         )
+
+    @classmethod
+    def __get_pydantic_json_schema__(
+        cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+    ) -> dict[str, Any]:
+        json_schema = handler(schema)
+        json_schema.update({'pattern': r'^[0-9]{3}$'})
+        return json_schema
 
     @property
     def alpha2(self) -> str:
@@ -169,7 +191,7 @@ class CountryNumericCode(str):
     @property
     def official_name(self) -> str:
         country = _index_by_numeric_code()[self]
-        return country.official_name if country.official_name is not None else ''
+        return country.official_name
 
 
 class CountryShortName(str):
@@ -181,7 +203,7 @@ class CountryShortName(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: Type[T], handler: GetCoreSchemaHandler
+        cls, source: Type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,
@@ -204,7 +226,7 @@ class CountryShortName(str):
     @property
     def official_name(self) -> str:
         country = _index_by_short_name()[self]
-        return country.official_name if country.official_name is not None else ''
+        return country.official_name
 
 
 class CountryOfficialName(str):
@@ -216,7 +238,7 @@ class CountryOfficialName(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: Type[T], handler: GetCoreSchemaHandler
+        cls, source: Type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,
