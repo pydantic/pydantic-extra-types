@@ -13,6 +13,7 @@ from pydantic_extra_types.color import Color
         # named colors
         ('aliceblue', (240, 248, 255)),
         ('Antiquewhite', (250, 235, 215)),
+        ('transparent', (0, 0, 0, 0)),
         ('#000000', (0, 0, 0)),
         ('#DAB', (221, 170, 187)),
         ('#dab', (221, 170, 187)),

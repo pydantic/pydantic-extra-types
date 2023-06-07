@@ -291,6 +291,7 @@ def parse_str(value: str) -> RGBA:
     * hex long eg. `<prefix>ffffff` (prefix can be `#`, `0x` or nothing)
     * `rgb(<r>, <g>, <b>)`
     * `rgba(<r>, <g>, <b>, <a>)`
+    * `transparent`
 
     Args:
         value: A string representing a color.
@@ -336,6 +337,9 @@ def parse_str(value: str) -> RGBA:
     m = re.fullmatch(r_hsl, value_lower) or re.fullmatch(r_hsl_v4_style, value_lower)
     if m:
         return parse_hsl(*m.groups())  # type: ignore
+
+    if value_lower == 'transparent':
+        return RGBA(0, 0, 0, 0)
 
     raise PydanticCustomError(
         'color_error',
