@@ -20,7 +20,6 @@ class PaymentCardBrand(str, Enum):
     visa = 'Visa'
     mir = 'Mir'
     maestro = 'Maestro'
-    maestro_uk = 'Maestro UK'
     discover = 'Discover'
     verve = 'Verve'
     dankort = 'Dankort'
@@ -157,14 +156,13 @@ class PaymentCardNumber(str):
         elif 2200 <= int(card_number[:4]) <= 2204:
             brand = PaymentCardBrand.mir
             required_length = list(range(16, 20))
-        elif card_number[:4] in {'5018', '5020', '5038', '5893', '6304', '6759', '6761', '6762', '6763'}:
-            brand = PaymentCardBrand.maestro
-            required_length = list(range(12, 20))
-        elif card_number.startswith('6759') or card_number[:6] in (
+        elif card_number[:4] in {'5018', '5020', '5038', '5893', '6304', '6759', '6761', '6762', '6763'} or card_number[
+            :6
+        ] in (
             '676770',
             '676774',
         ):
-            brand = PaymentCardBrand.maestro_uk
+            brand = PaymentCardBrand.maestro
             required_length = list(range(12, 20))
         elif card_number.startswith('65') or 644 <= int(card_number[:3]) <= 649 or card_number.startswith('6011'):
             brand = PaymentCardBrand.discover
