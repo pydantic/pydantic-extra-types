@@ -1,7 +1,5 @@
-`PaymentCardNumber`
-: for parsing and validating payment cards
 
-The `PaymentCardNumber` type validates [payment cards](https://en.wikipedia.org/wiki/Payment_card)
+The `PaymentCardNumber` type validates [payment cards]
 (such as a debit or credit card).
 
 ```py
@@ -51,3 +49,6 @@ The actual validation verifies the card number is:
 * [luhn](https://en.wikipedia.org/wiki/Luhn_algorithm) valid
 * the correct length based on the BIN, if Amex, Mastercard or Visa, and between
   12 and 19 digits for all other brands
+
+
+[payment cards]: https://en.wikipedia.org/wiki/Payment_card

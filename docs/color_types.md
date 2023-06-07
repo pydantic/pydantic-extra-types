@@ -83,5 +83,5 @@ except ValidationError as e:
 The `__str__` method for `Color` returns `self.as_named(fallback=True)`.
 
 !!! note
-    the `as_hsl*` refer to hue, saturation, lightness "HSL" as used in html and most of the world, **not**
+    The `as_hsl*` refer to hue, saturation, lightness "HSL" as used in html and most of the world, **not**
     "HLS" as used in Python's `colorsys`.
