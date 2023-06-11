@@ -7,7 +7,7 @@ from datetime import date
 
 from pydantic import BaseModel, constr
 
-from pydantic_extra_types.types import PaymentCardBrand, PaymentCardNumber
+from pydantic_extra_types.payment import PaymentCardBrand, PaymentCardNumber
 
 
 class Card(BaseModel):
