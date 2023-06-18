@@ -6,7 +6,7 @@ from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
 try:
-    import schwifty  # type: ignore[import]
+    import schwifty
 except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
         'The `iban` module requires "schwifty" to be installed. You can install it with "pip install schwifty".'
@@ -35,7 +35,7 @@ class Iban(str):
         return schwifty.IBAN(iban)
 
     @property
-    def bank(self) -> dict | None:
+    def bank(self) -> Any:
         return self.iban.bank
 
     @property
