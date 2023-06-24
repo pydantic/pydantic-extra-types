@@ -1,9 +1,10 @@
+from string import printable
+
 import pytest
 from pydantic import BaseModel, ValidationError
+
 from pydantic_extra_types.iban import Iban
-from string import printable
-from pydantic_core._pydantic_core import PydanticCustomError
-from schwifty.exceptions import InvalidLength
+
 
 @pytest.fixture(scope='module', name='IBANFixture')
 def iban_fixture():
@@ -20,7 +21,7 @@ def iban_fixture():
         'DE89370400440532013000',
         'DE89370400440532013000',
         'NL56ABNA2238591354',
-        'GB64BARC20040149326928'
+        'GB64BARC20040149326928',
     ],
 )
 def test_iban_properties(iban, IBANFixture):
