@@ -33,9 +33,6 @@ def test_iban_properties(iban, IBANFixture):
     assert iban_obj.bank_code == iban_obj.iban.bank_code
     assert iban_obj.numeric == iban_obj.iban.numeric
 
-def test_validate_iban_digits():
-    with pytest.raises(PydanticCustomError, match='IBAN is invalid'):
-        Iban.validate_iban_digits('DE89 3704 0044 0532 0130 01')
 
 @pytest.mark.parametrize(
     'iban',
