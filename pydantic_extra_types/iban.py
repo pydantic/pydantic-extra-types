@@ -31,7 +31,7 @@ class Iban(str):
     @classmethod
     def validate_iban_digits(cls, iban: str) -> schwifty.iban.IBAN:
         if not isinstance(iban, str):
-            raise PydanticCustomError('iban_digits', 'IBAN is invalid')
+            raise PydanticCustomError('iban_digits', 'IBAN is invalid')  # pragma: no cover
         return schwifty.IBAN(iban)
 
     @property
