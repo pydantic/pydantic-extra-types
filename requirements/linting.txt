@@ -50,4 +50,5 @@ virtualenv==20.23.0
     # via pre-commit
 
 # The following packages are considered to be unsafe in a requirements file:
+pandas-stubs==2.0.2.230605
 # setuptools
