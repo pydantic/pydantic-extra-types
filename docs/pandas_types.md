@@ -9,7 +9,7 @@ from pydantic_extra_types.pandas_types import Series
 
 
 class MyData(BaseModel):
-    numbers: Series[int]
+    numbers: Series
 
 
 data = {"numbers": pd.Series([1, 2, 3, 4, 5])}
@@ -22,3 +22,4 @@ print(my_data.numbers)
 # > 3    4
 # > 4    5
 # > dtype: int64
+```
