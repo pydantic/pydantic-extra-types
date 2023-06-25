@@ -47,6 +47,7 @@ dynamic = ['version']
 all = [
     'phonenumbers>=8,<9',
     'pycountry>=22,<23',
+    'pandas'
 ]
 
 [project.urls]
