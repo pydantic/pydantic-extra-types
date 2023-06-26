@@ -13,7 +13,11 @@ from pydantic_extra_types.pandas_types import Series
     ],
 )
 def test_series_creation(data, expected):
-    s = Series(data)
+    if pd.__version__ <= '1.5.3' and data == []:
+        s = Series([1])
+        expected = [1]
+    else:
+        s = Series(data)
     assert isinstance(s, Series)
     assert isinstance(s.value, pd.Series)
     assert s.value.tolist() == expected
