@@ -1,4 +1,4 @@
-from typing import Any, List, Tuple, TypeVar, Union
+from typing import Any, List, Tuple, Type, TypeVar, Union
 
 import pandas as pd
 from pydantic import GetCoreSchemaHandler
@@ -13,7 +13,7 @@ class Series:
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
+        cls, source: Type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.general_after_validator_function(
             cls._validate,
