@@ -51,48 +51,12 @@ jobs:
 
       - run: pip freeze
 
-      - run: mkdir coverage
-
       - run: make test
         env:
-          COVERAGE_FILE: coverage/.coverage.${{ runner.os }}-py${{ matrix.python-version }}-with-deps
           CONTEXT: ${{ runner.os }}-py${{ matrix.python-version }}-with-deps
 
-      - name: store coverage files
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage
-          path: coverage
-
-  coverage-combine:
-    needs: [test]
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.8'
-
-      - name: get coverage files
-        uses: actions/download-artifact@v3
-        with:
-          name: coverage
-          path: coverage
-
-      - run: pip install coverage[toml]
-
-      - run: ls -la coverage
-      - run: coverage combine coverage
-      - run: coverage report
-      - run: coverage html --show-contexts --title "pydantic coverage for ${{ github.sha }}"
-
-      - name: Store coverage html
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-html
-          path: htmlcov
+      - run: coverage xml
+      - uses: codecov/codecov-action@v3
 
   # https://github.com/marketplace/actions/alls-green#why used for branch protection checks
   check:
