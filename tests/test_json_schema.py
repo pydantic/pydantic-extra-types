@@ -9,6 +9,7 @@ from pydantic_extra_types.country import (
     CountryOfficialName,
     CountryShortName,
 )
+from pydantic_extra_types.pandas_types import Series
 from pydantic_extra_types.payment import PaymentCardNumber
 
 
@@ -80,6 +81,15 @@ from pydantic_extra_types.payment import PaymentCardNumber
             CountryShortName,
             {
                 'properties': {'x': {'title': 'X', 'type': 'string'}},
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            Series,
+            {
+                'properties': {'x': {'title': 'X'}},
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',
