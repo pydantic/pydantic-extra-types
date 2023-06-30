@@ -1,8 +1,14 @@
 from typing import Any, List, Tuple, Type, TypeVar, Union
 
-import pandas as pd
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import core_schema
+
+try:
+    import pandas as pd
+except ModuleNotFoundError:  # pragma: no cover
+    raise RuntimeError(
+        '`PhoneNumber` requires "phonenumbers" to be installed. You can install it with "pip install phonenumbers"'
+    )
 
 T = TypeVar('T', str, bytes, bool, int, float, complex, pd.Timestamp, pd.Timedelta, pd.Period)
 
@@ -33,7 +39,7 @@ class Series:
         return getattr(self.value, name)
 
     def __eq__(self, __value: object) -> bool:
-        return isinstance(__value, pd.Series) or isinstance(__value, Series)
+        return isinstance(__value, (pd.Series, Series))
 
     def __add__(self, other: Union['Series', List[Any], Tuple[Any], T]) -> 'Series':
         if isinstance(other, Series):
