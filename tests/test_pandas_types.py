@@ -1,7 +1,16 @@
 import pandas as pd
 import pytest
+from pydantic import BaseModel
 
 from pydantic_extra_types.pandas_types import Series
+
+
+@pytest.fixture(scope='session', name='SeriesModel')
+def series_model_fixture():
+    class SeriesModel(BaseModel):
+        data: Series
+
+    return SeriesModel
 
 
 @pytest.mark.parametrize(
@@ -91,3 +100,16 @@ def test_series_addition_invalid_value_error(data, other) -> None:
     s = Series(data)
     with pytest.raises(ValueError):
         s + other
+
+
+def test_valid_series_model(SeriesModel) -> None:
+    model = SeriesModel(data=[1, 2, 4])
+    assert isinstance(model.data, Series)
+    assert model.data == pd.Series([1, 2, 4])
+
+
+def test_valid_series_model_with_pd_series(SeriesModel) -> None:
+    s = pd.Series([1, 2, 4])
+    model = SeriesModel(data=s)
+    assert isinstance(model.data, Series)
+    assert model.data == s
