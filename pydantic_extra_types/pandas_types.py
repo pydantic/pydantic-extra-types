@@ -7,7 +7,7 @@ try:
     import pandas as pd
 except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
-        '`PhoneNumber` requires "phonenumbers" to be installed. You can install it with "pip install phonenumbers"'
+        '`Series` requires "pandas" to be installed. You can install it with "pip install pandas"'
     )
 
 T = TypeVar('T', str, bytes, bool, int, float, complex, pd.Timestamp, pd.Timedelta, pd.Period)
