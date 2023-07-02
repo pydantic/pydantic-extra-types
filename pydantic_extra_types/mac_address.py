@@ -1,18 +1,11 @@
-# Mac Address Parsing and Validation
-# This code provides functionality to parse and validate Mac Addresses in different formats,
-# such as IEEE 802 MAC-48, EUI-48, EUI-64, or a 20-octet format. It includes a `MacAddress` class
-# that represents a Mac Address and provides methods for conversion, validation, and serialization.
-# The code also includes a `validate_mac_address` function that takes a byte value representing a Mac Address
-# and returns the parsed Mac Address as a string.
-# Various custom error classes, such as `PydanticCustomError`, are used to handle specific validation errors.
+"""
+Mac Address Parsing and Validation
 
-# The code is organized into the following components:
-
-# - MacAddress: A class representing a Mac Address. It provides methods for initialization, serialization,
-#   validation, and conversion.
-
-# - validate_mac_address: A function that takes a byte value representing a Mac Address.
-#   It supports parsing Mac Addresses in different formats based on specific rules and validations.
+This code provides functionality to parse and validate Mac Addresses in different formats, such as IEEE 802 MAC-48,
+EUI-48, EUI-64, or a 20-octet format. It includes a `MacAddress` class that represents a Mac Address and provides
+methods for conversion, validation, and serialization. The code also includes a `validate_mac_address` function
+that takes a byte value representing a Mac Address and returns the parsed Mac Address as a string.
+"""
 
 from __future__ import annotations
 
@@ -107,7 +100,7 @@ def validate_mac_address(value: bytes) -> str:
                 x += 5
             else:
                 x += 3
-        except ValueError:
-            raise PydanticCustomError('mac_address_format', 'Unrecognized format')
+        except ValueError as e:
+            raise PydanticCustomError('mac_address_format', 'Unrecognized format') from e
 
     return ':'.join(f'{b:02x}' for b in hw)
