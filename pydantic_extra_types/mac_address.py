@@ -16,9 +16,10 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable, Union
+from typing import Any, Union
 
-from pydantic_core import CoreSchema, PydanticCustomError, core_schema
+from pydantic import GetCoreSchemaHandler
+from pydantic_core import PydanticCustomError, core_schema
 
 MacAddressType = Union[str, bytes]
 
@@ -43,10 +44,11 @@ class MacAddress(str):
             )
 
     @classmethod
-    def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: Callable[[Any], CoreSchema]
-    ) -> core_schema.CoreSchema:
-        return core_schema.general_plain_validator_function(cls._validate)
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        return core_schema.general_after_validator_function(
+            cls._validate,
+            core_schema.str_schema(),
+        )
 
     @classmethod
     def _validate(cls, __input_value: Any, _: Any) -> MacAddress:
