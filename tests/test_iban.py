@@ -33,6 +33,13 @@ def test_iban_properties(iban, IBANFixture):
     assert iban_obj.account_code == iban_obj.iban.account_code
     assert iban_obj.bank_code == iban_obj.iban.bank_code
     assert iban_obj.numeric == iban_obj.iban.numeric
+    assert iban_obj.spec == iban_obj.iban.spec
+    assert iban_obj.bic == iban_obj.iban.bic
+    assert iban_obj.country == iban_obj.iban.country
+    assert iban_obj.bank_name == iban_obj.iban.bank_name
+    assert iban_obj.bank_short_name == iban_obj.iban.bank_short_name
+    assert iban_obj.branch_code == iban_obj.iban.branch_code
+    assert iban_obj.bban == iban_obj.iban.bban
 
 
 @pytest.mark.parametrize(

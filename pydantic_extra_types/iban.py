@@ -57,3 +57,31 @@ class Iban(str):
     @property
     def numeric(self) -> int:
         return self.iban.numeric
+
+    @property
+    def spec(self) -> dict:
+        return self.iban.spec
+
+    @property
+    def bic(self) -> None | schwifty.bic.BIC:
+        return self.iban.bic
+
+    @property
+    def country(self) -> Any:
+        return self.iban.country
+
+    @property
+    def bank_name(self) -> None | str:
+        return self.iban.bank_name
+
+    @property
+    def bank_short_name(self) -> None | str:
+        return self.iban.bank_short_name
+
+    @property
+    def branch_code(self) -> str:
+        return self.iban.branch_code
+
+    @property
+    def bban(self) -> str:
+        return self.iban.bban
