@@ -59,7 +59,7 @@ class Iban(str):
         return self.iban.numeric
 
     @property
-    def spec(self) -> dict:
+    def spec(self) -> Any:
         return self.iban.spec
 
     @property
