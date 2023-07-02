@@ -85,3 +85,7 @@ class Iban(str):
     @property
     def bban(self) -> str:
         return self.iban.bban
+
+    @property
+    def checksum_digits(self) -> str:
+        return self.iban.checksum_digits

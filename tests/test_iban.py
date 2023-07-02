@@ -40,6 +40,7 @@ def test_iban_properties(iban, IBANFixture):
     assert iban_obj.bank_short_name == iban_obj.iban.bank_short_name
     assert iban_obj.branch_code == iban_obj.iban.branch_code
     assert iban_obj.bban == iban_obj.iban.bban
+    assert iban_obj.checksum_digits == iban_obj.iban.checksum_digits
 
 
 @pytest.mark.parametrize(
