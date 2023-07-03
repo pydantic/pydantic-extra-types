@@ -1,7 +1,7 @@
 """
-Mac Address Parsing and Validation
+MAC address Parsing and Validation
 
-This code provides functionality to parse and validate Mac Addresses in different formats, such as IEEE 802 MAC-48,
+This code provides functionality to parse and validate MAC addresses in different formats, such as IEEE 802 MAC-48,
 EUI-48, EUI-64, or a 20-octet format. It includes a `MacAddress` class that represents a Mac Address and provides
 methods for conversion, validation, and serialization. The code also includes a `validate_mac_address` function
 that takes a byte value representing a Mac Address and returns the parsed Mac Address as a string.
