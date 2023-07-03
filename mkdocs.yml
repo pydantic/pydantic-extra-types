@@ -43,7 +43,7 @@ nav:
   - Payment Card: 'payment_cards.md'
   - Phone Number: 'phone_numbers.md'
   - ABA Routing Number: 'routing_number.md'
-  - Mac Address: 'mac_address.md'
+  - MAC address: 'mac_address.md'
 
 markdown_extensions:
 - tables
