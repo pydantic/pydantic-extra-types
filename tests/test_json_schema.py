@@ -2,6 +2,7 @@ import pytest
 from pydantic import BaseModel
 
 from pydantic_extra_types.color import Color
+from pydantic_extra_types.coordinate import Coordinate, Latitude, Longitude
 from pydantic_extra_types.country import (
     CountryAlpha2,
     CountryAlpha3,
@@ -95,6 +96,47 @@ from pydantic_extra_types.payment import PaymentCardNumber
                         'type': 'string',
                     }
                 },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            Latitude,
+            {
+                'properties': {
+                    'x': {
+                        'maximum': 90.0,
+                        'minimum': -90.0,
+                        'title': 'X',
+                        'type': 'number',
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            Longitude,
+            {
+                'properties': {
+                    'x': {
+                        'maximum': 180.0,
+                        'minimum': -180.0,
+                        'title': 'X',
+                        'type': 'number',
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            Coordinate,
+            {
+                'properties': {'x': {'format': 'coordinate', 'title': 'X', 'type': 'string'}},
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',
