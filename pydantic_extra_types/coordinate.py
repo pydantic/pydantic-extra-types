@@ -5,28 +5,22 @@ from pydantic._internal import _repr
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
-LatitudeType = Union[str, int, float]
+LongitudeLatitudeType = Union[str, int, float]
 
 
 class Latitude(float):
-    ge: ClassVar[float] = -90.00
-    le: ClassVar[float] = 90.00
+    min: ClassVar[float] = -90.00
+    max: ClassVar[float] = 90.00
 
-    def __init__(self, value: LatitudeType):
+    def __init__(self, value: LongitudeLatitudeType):
         self.validate_lat(value)
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        return core_schema.general_after_validator_function(
-            cls._validate, core_schema.float_schema(ge=cls.ge, le=cls.le)
-        )
+        return core_schema.float_schema(ge=cls.min, le=cls.max)
 
     @classmethod
-    def _validate(cls, __input_value: Any, _: core_schema.ValidationInfo) -> 'Latitude':
-        return cls(__input_value)
-
-    @classmethod
-    def validate_lat(cls, value: LatitudeType) -> None:
+    def validate_lat(cls, value: LongitudeLatitudeType) -> None:
         """
         Validate the latitude value.
 
@@ -34,7 +28,7 @@ class Latitude(float):
             PydanticCustomError: If the latitude value is not within the valid range.
         """
         try:
-            if float(value) > cls.le or float(value) < cls.ge:
+            if float(value) > cls.max or float(value) < cls.min:
                 raise PydanticCustomError('latitude_error', 'Latitude must be between -90 and 90')
         except ValueError:
             raise PydanticCustomError(
@@ -43,28 +37,19 @@ class Latitude(float):
             )
 
 
-LongitudeType = Union[str, int, float]
-
-
 class Longitude(float):
-    ge: ClassVar[float] = -180.00
-    le: ClassVar[float] = 180.00
+    min: ClassVar[float] = -180.00
+    max: ClassVar[float] = 180.00
 
-    def __init__(self, value: LongitudeType):
+    def __init__(self, value: LongitudeLatitudeType):
         self.validate_long(value)
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        return core_schema.general_after_validator_function(
-            cls._validate, core_schema.float_schema(ge=cls.ge, le=cls.le)
-        )
+        return core_schema.float_schema(ge=cls.min, le=cls.max)
 
     @classmethod
-    def _validate(cls, __input_value: Any, _: core_schema.ValidationInfo) -> 'Longitude':
-        return cls(__input_value)
-
-    @classmethod
-    def validate_long(cls, value: Any) -> None:
+    def validate_long(cls, value: LongitudeLatitudeType) -> None:
         """
         Validate the longitude value.
 
@@ -72,7 +57,7 @@ class Longitude(float):
             PydanticCustomError: If the longitude value is not within the valid range.
         """
         try:
-            if float(value) > cls.le or float(value) < cls.ge:
+            if float(value) > cls.max or float(value) < cls.min:
                 raise PydanticCustomError('longitude_error', 'Longitude must be between -180 and 180')
         except ValueError:
             raise PydanticCustomError(
