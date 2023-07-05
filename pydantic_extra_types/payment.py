@@ -22,6 +22,7 @@ class PaymentCardBrand(str, Enum):
     * PaymentCardBrand.visa
     * PaymentCardBrand.other
     """
+
     amex = 'American Express'
     mastercard = 'Mastercard'
     visa = 'Visa'
