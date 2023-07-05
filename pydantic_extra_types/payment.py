@@ -1,3 +1,8 @@
+"""
+Represents and validates payment cards (such as a debit or credit card),
+including validation for payment card number and issuer.
+"""
+
 from __future__ import annotations
 
 from enum import Enum
@@ -8,6 +13,15 @@ from pydantic_core import PydanticCustomError, core_schema
 
 
 class PaymentCardBrand(str, Enum):
+    """Enumeration of payment card brands.
+
+    `PaymentCardBrand` can be one of the following based on the BIN:
+
+    * PaymentCardBrand.amex
+    * PaymentCardBrand.mastercard
+    * PaymentCardBrand.visa
+    * PaymentCardBrand.other
+    """
     amex = 'American Express'
     mastercard = 'Mastercard'
     visa = 'Visa'
@@ -19,8 +33,15 @@ class PaymentCardBrand(str, Enum):
 
 
 class PaymentCardNumber(str):
-    """
-    Based on: https://en.wikipedia.org/wiki/Payment_card_number
+    """A [payment card number](https://en.wikipedia.org/wiki/Payment_card_number).
+
+    Attributes:
+        strip_whitespace: Whether to strip whitespace from the input value.
+        min_length: The minimum length of the card number.
+        max_length: The maximum length of the card number.
+        bin: The first 6 digits of the card number.
+        last4: The last 4 digits of the card number.
+        brand: The brand of the card.
     """
 
     strip_whitespace: ClassVar[bool] = True
@@ -50,22 +71,49 @@ class PaymentCardNumber(str):
 
     @classmethod
     def validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> PaymentCardNumber:
+        """Validate the `PaymentCardNumber` instance.
+
+        Args:
+            __input_value: The input value to validate.
+            _: The validation info.
+
+        Returns:
+            The validated `PaymentCardNumber` instance.
+        """
         return cls(__input_value)
 
     @property
     def masked(self) -> str:
+        """The masked card number."""
         num_masked = len(self) - 10  # len(bin) + len(last4) == 10
         return f'{self.bin}{"*" * num_masked}{self.last4}'
 
     @classmethod
     def validate_digits(cls, card_number: str) -> None:
+        """Validate that the card number is all digits.
+
+        Args:
+            card_number: The card number to validate.
+
+        Raises:
+            PydanticCustomError: If the card number is not all digits.
+        """
         if not card_number.isdigit():
             raise PydanticCustomError('payment_card_number_digits', 'Card number is not all digits')
 
     @classmethod
     def validate_luhn_check_digit(cls, card_number: str) -> str:
-        """
-        Based on: https://en.wikipedia.org/wiki/Luhn_algorithm
+        """Validate the payment card number.
+        Based on the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm).
+
+        Args:
+            card_number: The card number to validate.
+
+        Returns:
+            The validated card number.
+
+        Raises:
+            PydanticCustomError: If the card number is not valid.
         """
         sum_ = int(card_number[-1])
         length = len(card_number)
@@ -84,9 +132,18 @@ class PaymentCardNumber(str):
 
     @staticmethod
     def validate_brand(card_number: str) -> PaymentCardBrand:
-        """
-        Validate length based on BIN for major brands:
-        https://en.wikipedia.org/wiki/Payment_card_number#Issuer_identification_number_(IIN)
+        """Validate length based on
+        [BIN](https://en.wikipedia.org/wiki/Payment_card_number#Issuer_identification_number_(IIN))
+        for major brands.
+
+        Args:
+            card_number: The card number to validate.
+
+        Returns:
+            The validated card brand.
+
+        Raises:
+            PydanticCustomError: If the card number is not valid.
         """
         if card_number[0] == '4':
             brand = PaymentCardBrand.visa
