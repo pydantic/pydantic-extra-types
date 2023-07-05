@@ -15,8 +15,8 @@ class Lat(BaseModel):
     lat: Latitude
 
 
-class Long(BaseModel):
-    long: Longitude
+class Lng(BaseModel):
+    lng: Longitude
 
 
 @pytest.mark.parametrize(
@@ -115,11 +115,11 @@ def test_format_latitude(latitude: float, valid: bool):
 )
 def test_format_longitude(longitude: float, valid: bool):
     if valid:
-        _long = Long(long=longitude).long
-        assert _long == float(longitude)
+        _lng = Lng(lng=longitude).lng
+        assert _lng == float(longitude)
     else:
-        with pytest.raises(ValidationError, match='1 validation error for Long'):
-            Long(long=longitude)
+        with pytest.raises(ValidationError, match='1 validation error for Lng'):
+            Lng(lng=longitude)
 
 
 def test_str_repr():

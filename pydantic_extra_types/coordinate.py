@@ -1,26 +1,26 @@
-from typing import Any, Callable, ClassVar, Tuple, Type, Union
+from typing import Any, Callable, ClassVar, Dict, Tuple, Type, Union
 
 from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic._internal import _repr
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
-LongitudeLatitudeType = Union[str, int, float]
+CoordinateValueType = Union[str, int, float]
 
 
 class Latitude(float):
     min: ClassVar[float] = -90.00
     max: ClassVar[float] = 90.00
 
-    def __init__(self, value: LongitudeLatitudeType):
-        self.validate_lat(value)
+    def __init__(self, value: CoordinateValueType):
+        self.validate(value)
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.float_schema(ge=cls.min, le=cls.max)
 
     @classmethod
-    def validate_lat(cls, value: LongitudeLatitudeType) -> None:
+    def validate(cls, value: CoordinateValueType) -> None:
         """
         Validate the latitude value.
 
@@ -41,15 +41,15 @@ class Longitude(float):
     min: ClassVar[float] = -180.00
     max: ClassVar[float] = 180.00
 
-    def __init__(self, value: LongitudeLatitudeType):
-        self.validate_long(value)
+    def __init__(self, value: CoordinateValueType):
+        self.validate(value)
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.float_schema(ge=cls.min, le=cls.max)
 
     @classmethod
-    def validate_long(cls, value: LongitudeLatitudeType) -> None:
+    def validate(cls, value: CoordinateValueType) -> None:
         """
         Validate the longitude value.
 
@@ -93,7 +93,7 @@ class Coordinate(_repr.Representation):
     def __get_pydantic_json_schema__(
         cls, core_schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> JsonSchemaValue:
-        field_schema: dict[str, Any] = {}
+        field_schema: Dict[str, Any] = {}
         field_schema.update(type='string', format='coordinate')
         return field_schema
 

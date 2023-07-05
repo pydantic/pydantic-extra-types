@@ -16,8 +16,8 @@ class Lat(BaseModel):
     lat: Latitude
 
 
-class Long(BaseModel):
-    long: Longitude
+class Lng(BaseModel):
+    lng: Longitude
 
 
 class Coord(BaseModel):
@@ -28,7 +28,7 @@ lat = Lat(
     lat='90.0',
 )
 
-long = Long(
+lng = Lng(
     long='180.0'
 )
 
@@ -37,7 +37,7 @@ coord = Coord(
 )
 print(lat.lat)
 # > 90.0
-print(long.long)
+print(lng.lng)
 # > 180.0
 print(coord.coord)
 # > 90.0,180.0
