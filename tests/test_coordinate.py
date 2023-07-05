@@ -2,7 +2,6 @@ from typing import Any
 
 import pytest
 from pydantic import BaseModel, ValidationError
-from pydantic_core import PydanticCustomError
 
 from pydantic_extra_types.coordinate import Coordinate, Latitude, Longitude
 
@@ -24,12 +23,14 @@ class Lng(BaseModel):
     [
         # Valid coordinates
         ((20.0, 10.0), (20.0, 10.0), True),
+        ((0, 0), (0, 0), True),  # Empty tuple
         ((-90.0, 0.0), (-90.0, 0.0), True),
         (('20.0', 10.0), (20.0, 10.0), True),
         ((20.0, '10.0'), (20.0, 10.0), True),
         (('45.678, -123.456'), (45.678, -123.456), True),
         ((45.678, -123.456), (45.678, -123.456), True),
         (Coordinate((20.0, 10.0)), (20.0, 10.0), True),
+        (Coordinate(latitude=20.0, longitude=10.0), (20.0, 10.0), True),
         # Invalid coordinates
         ((), None, False),  # Empty tuple
         ((10.0,), None, False),  # Tuple with only one value
@@ -37,6 +38,7 @@ class Lng(BaseModel):
         ((20.0, 10.0, 30.0), None, False),  # Tuple with more than 2 values
         ('20.0, 10.0, 30.0', None, False),  # Str with more than 2 values
         (2, None, False),  # Tuple with more than 2 values
+        ((20.0, 10.0, 'extra'), None, False),  # Extra kwargs
     ],
 )
 def test_format_for_coordinate(coord: (Any, Any), result: (float, float), valid: bool):
@@ -45,8 +47,14 @@ def test_format_for_coordinate(coord: (Any, Any), result: (float, float), valid:
         assert _coord.latitude == result[0]
         assert _coord.longitude == result[1]
     else:
-        with pytest.raises(PydanticCustomError, match='value is not a valid'):
+        with pytest.raises(ValidationError, match='1 validation error for Coordinate'):
             Coordinate(coord)
+
+
+def test_bad_kwargs_for_coordinate():
+    with pytest.raises(ValidationError, match='Coordinate constructor accepts'):
+        Coordinate(latitude=20.0)
+        Coordinate(lat=20.0, long=10.0)
 
 
 @pytest.mark.parametrize(
@@ -66,7 +74,7 @@ def test_limit_for_coordinate(coord: (Any, Any), valid: bool):
         assert _coord.latitude == coord[0]
         assert _coord.longitude == coord[1]
     else:
-        with pytest.raises(PydanticCustomError, match='value is not a valid'):
+        with pytest.raises(ValidationError, match='1 validation error for Coordinate'):
             Coordinate(coord)
 
 
@@ -125,7 +133,7 @@ def test_format_longitude(longitude: float, valid: bool):
 def test_str_repr():
     assert str(Coordinate('20.0,10.0')) == '20.0,10.0'
     assert str(Coordinate((20.0, 10.0))) == '20.0,10.0'
-    assert repr(Coordinate((20.0, 10.0))) == 'Coordinate(_latitude=20.0, _longitude=10.0)'
+    assert repr(Coordinate((20.0, 10.0))) == 'Coordinate(latitude=20.0, longitude=10.0)'
 
 
 def test_eq():
