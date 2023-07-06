@@ -1,3 +1,9 @@
+from pydantic import BaseModel, validator
+from pydantic_extra_types.pandas_types import Series
+import pandas as pd
+
+
+"""
 from typing import Any, Type, TypeVar
 
 import pandas as pd
@@ -20,3 +26,25 @@ class Series(pd.Series):  # type: ignore
     @classmethod
     def _validate(cls, __input_value: Any, _: core_schema.ValidationInfo) -> 'Series':
         return cls(__input_value)
+"""
+
+
+class Model(BaseModel):
+    x: Series
+
+
+m = Model(x=[1, 2, 4])
+s = pd.Series([1, 2, 4])
+t = Series(data=[1, 2, 4], index=["a", "b", "d"])
+
+print(m)
+print(m.x)
+
+print(s)
+
+print(m.x == s)
+
+print(isinstance(m.x, pd.Series))
+
+print(t)
+print(t.index)
