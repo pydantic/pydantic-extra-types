@@ -28,8 +28,8 @@ def test_series_creation(data, expected):
     else:
         s = Series(data)
     assert isinstance(s, Series)
-    assert isinstance(s.value, pd.Series)
-    assert s.value.tolist() == expected
+    assert isinstance(s, pd.Series)
+    assert s.tolist() == expected
 
 
 def test_series_repr():
@@ -48,8 +48,8 @@ def test_series_equality():
     data = [1, 2, 3]
     s1 = Series(data)
     s2 = Series(data)
-    assert s1 == s2
-    assert s2 == pd.Series(data)
+    assert s1.equals(other=s2)
+    assert s2.equals(pd.Series(data))
 
 
 def test_series_addition():
@@ -58,8 +58,8 @@ def test_series_addition():
     s1 = Series(data1)
     s2 = Series(data2)
     s3 = s1 + s2
-    assert isinstance(s3, Series)
-    assert s3.value.tolist() == [5, 7, 9]
+    assert isinstance(s3, pd.Series)
+    assert s3.tolist() == [5, 7, 9]
 
 
 @pytest.mark.parametrize(
@@ -73,8 +73,8 @@ def test_series_addition():
 def test_series_addition_with_types(data, other, expected):
     s = Series(data)
     result = s + other
-    assert isinstance(result, Series)
-    assert result.value.tolist() == expected
+    assert isinstance(result, pd.Series)
+    assert result.tolist() == expected
 
 
 @pytest.mark.parametrize(
@@ -104,12 +104,12 @@ def test_series_addition_invalid_value_error(data, other) -> None:
 
 def test_valid_series_model(SeriesModel) -> None:
     model = SeriesModel(data=[1, 2, 4])
-    assert isinstance(model.data, Series)
-    assert model.data == pd.Series([1, 2, 4])
+    assert isinstance(model.data, pd.Series)
+    assert model.data.equals(pd.Series([1, 2, 4]))
 
 
 def test_valid_series_model_with_pd_series(SeriesModel) -> None:
     s = pd.Series([1, 2, 4])
     model = SeriesModel(data=s)
-    assert isinstance(model.data, Series)
-    assert model.data == s
+    assert isinstance(model.data, pd.Series)
+    assert model.data.equals(s)
