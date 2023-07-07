@@ -1,10 +1,13 @@
 
-`Coordinate` parses `Latitude` and `Longitude`
+Coordinate parses Latitude and Longitude.
 
-You can use the type `Coordinate` data type for storing coordinates.
-Coordinate can be defined by this format `<Latitude>,<Longitude>`: `41.40338, 2.17403`.
-The first number in your latitude coordinate is between -90 and 90.
-The first number in your longitude coordinate is between -180 and 180.
+You can use the `Coordinate` data type for storing coordinates. Coordinates can be defined using one of the following formats:
+
+1. Tuple format: `(Latitude, Longitude)`. For example: `(41.40338, 2.17403)`.
+2. `Coordinate` instance format: `Coordinate(latitude=Latitude, longitude=Longitude)`. For example: `Coordinate(latitude=41.40338, longitude=2.17403)`.
+3. Shorthand format: `(Latitude)`. In this case, the latitude value is specified, and the longitude is set to 0. For example: `(41.40338)`.
+
+The latitude value should be between -90 and 90, while the longitude value should be between -180 and 180.
 
 ```py
 from pydantic import BaseModel
