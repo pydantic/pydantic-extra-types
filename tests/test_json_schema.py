@@ -139,13 +139,11 @@ from pydantic_extra_types.payment import PaymentCardNumber
                 'properties': {
                     'x': {
                         'format': 'coordinate',
-                        'properties': {
-                            'latitude': {'maximum': 90.0, 'minimum': -90.0, 'title': 'Latitude', 'type': 'number'},
-                            'longitude': {'maximum': 180.0, 'minimum': -180.0, 'title': 'Longitude', 'type': 'number'},
-                        },
-                        'required': ['latitude', 'longitude'],
-                        'title': 'Coordinate',
-                        'type': 'object',
+                        'maxItems': 2,
+                        'minItems': 2,
+                        'prefixItems': [{'type': 'number'}, {'type': 'number'}],
+                        'title': 'X',
+                        'type': 'array',
                     }
                 },
                 'required': ['x'],
