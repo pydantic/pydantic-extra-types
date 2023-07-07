@@ -32,7 +32,6 @@ class Lng(BaseModel):
         (Coordinate(latitude=0, longitude=0), (0, 0), None),
         (ArgsKwargs(args=()), (0, 0), None),
         (ArgsKwargs(args=(1, 0.0)), (1.0, 0), None),
-        (ArgsKwargs(args=(1.0,)), (1.0, 0), None),
         ((45.678, -123.456), (45.678, -123.456), None),
         (('45.678, -123.456'), (45.678, -123.456), None),
         # Invalid coordinates
@@ -40,6 +39,7 @@ class Lng(BaseModel):
         ((10.0,), None, 'Field required'),  # Tuple with only one value
         (('ten, '), None, 'string is not recognized as a valid coordinate'),
         ((20.0, 10.0, 30.0), None, 'Tuple should have at most 2 items'),  # Tuple with more than 2 values
+        (ArgsKwargs(args=(1.0,)), None, 'Input should be a dictionary or an instance of Coordinate'),
         ('20.0, 10.0, 30.0', None, 'Tuple should have at most 2 items'),  # Str with more than 2 values
         (2, None, 'Input should be a dictionary or an instance of Coordinate'),  # Wrong type
     ],
@@ -137,6 +137,6 @@ def test_eq():
     assert Coord(coord=(20.0, 10.0)).coord == Coord(coord='20.0,10.0').coord
 
 
-def test_color_hashable():
+def test_coordinate_hashable():
     assert hash(Coord(coord=(20.0, 10.0)).coord) == hash(Coord(coord=(20.0, 10.0)).coord)
     assert hash(Coord(coord=(20.0, 11.0)).coord) != hash(Coord(coord=(20.0, 10.0)).coord)

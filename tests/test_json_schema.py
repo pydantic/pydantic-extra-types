@@ -141,7 +141,10 @@ from pydantic_extra_types.payment import PaymentCardNumber
                         'format': 'coordinate',
                         'maxItems': 2,
                         'minItems': 2,
-                        'prefixItems': [{'type': 'number'}, {'type': 'number'}],
+                        'prefixItems': [
+                            {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
+                            {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
+                        ],
                         'title': 'X',
                         'type': 'array',
                     }

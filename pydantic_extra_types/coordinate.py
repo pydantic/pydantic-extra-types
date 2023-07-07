@@ -50,7 +50,7 @@ class Coordinate(_repr.Representation):
                 core_schema.chain_schema(
                     [
                         core_schema.no_info_wrap_validator_function(
-                            cls._parse_tuple, handler.generate_schema(Tuple[float, float])
+                            cls._parse_tuple, handler.generate_schema(Tuple[Latitude, Longitude])
                         ),
                         handler(source),
                     ]
@@ -65,7 +65,7 @@ class Coordinate(_repr.Representation):
             if n_args == 0:
                 value = cls._NULL_ISLAND
             elif n_args == 1:
-                value = (value.args[0], cls._NULL_ISLAND[1])
+                value = value.args[0]
         return handler(value)
 
     @classmethod
