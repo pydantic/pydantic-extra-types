@@ -54,7 +54,7 @@ class MacAddress(str):
                 {'mac_address': value.decode(), 'required_length': 14},
             )
 
-        if value[2] == ord(':') or value[2] == ord('-'):
+        if value[2] in [ord(':'), ord('-')]:
             if (len(value) + 1) % 3 != 0:
                 raise PydanticCustomError(
                     'invalid MAC address', 'Must have the format xx:xx:xx:xx:xx:xx or xx-xx-xx-xx-xx-xx'
