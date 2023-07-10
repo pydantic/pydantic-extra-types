@@ -139,6 +139,6 @@ def test_model_validation():
             'input': '1234',
             'loc': ('mac_address',),
             'msg': 'Length for a 1234 MAC address must be 14',
-            'type': 'invalid MAC address',
+            'type': 'mac_address_len',
         }
     ]
