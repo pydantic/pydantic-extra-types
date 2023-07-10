@@ -31,8 +31,7 @@ class MacAddress(str):
 
     @classmethod
     def _validate(cls, __input_value: str, _: Any) -> str:
-        _mac_address = cls.validate_mac_address(__input_value.encode())
-        return _mac_address
+        return cls.validate_mac_address(__input_value.encode())
 
     @staticmethod
     def validate_mac_address(value: bytes) -> str:
