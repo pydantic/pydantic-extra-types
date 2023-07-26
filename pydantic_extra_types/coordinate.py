@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Any, ClassVar, Tuple, Union
 
-from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
+from pydantic import GetCoreSchemaHandler, dataclasses
 from pydantic._internal import _repr
-from pydantic.json_schema import JsonSchemaValue
-from pydantic_core import ArgsKwargs, CoreSchema, PydanticCustomError, core_schema
+from pydantic_core import ArgsKwargs, PydanticCustomError, core_schema
 
 CoordinateValueType = Union[str, int, float]
 
@@ -29,37 +27,32 @@ class Longitude(float):
         return core_schema.float_schema(ge=cls.min, le=cls.max)
 
 
-@dataclass
+@dataclasses.dataclass
 class Coordinate(_repr.Representation):
-    _NULL_ISLAND: ClassVar[tuple[float, float]] = (0.0, 0.0)
+    _NULL_ISLAND: ClassVar[tuple[float, float]] = 0.0, 0.0
+
     latitude: Latitude
     longitude: Longitude
 
     @classmethod
-    def __get_pydantic_json_schema__(cls, core_schema: CoreSchema, handler: GetJsonSchemaHandler) -> JsonSchemaValue:
-        field_schema: dict[str, Any] = handler(core_schema)
-        field_schema.update(format='coordinate')
-        return field_schema
-
-    @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        schema_chain = [
+            core_schema.no_info_wrap_validator_function(cls._parse_str, core_schema.str_schema()),
+            core_schema.no_info_wrap_validator_function(
+                cls._parse_tuple,
+                handler.generate_schema(Tuple[float, float]),
+            ),
+            handler(source),
+        ]
         return core_schema.no_info_wrap_validator_function(
             cls._parse_args,
-            core_schema.no_info_wrap_validator_function(
-                cls._parse_str,
-                core_schema.chain_schema(
-                    [
-                        core_schema.no_info_wrap_validator_function(
-                            cls._parse_tuple, handler.generate_schema(Tuple[Latitude, Longitude])
-                        ),
-                        handler(source),
-                    ]
-                ),
+            core_schema.union_schema(
+                [core_schema.chain_schema(schema_chain[2 - x :]) for x in range(3)],
             ),
         )
 
     @classmethod
-    def _parse_args(cls, value: Any, handler: Any) -> Any:
+    def _parse_args(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
         if isinstance(value, ArgsKwargs) and not value.kwargs:
             n_args = len(value.args)
             if n_args == 0:
@@ -69,23 +62,23 @@ class Coordinate(_repr.Representation):
         return handler(value)
 
     @classmethod
-    def _parse_str(cls, value: Any, handler: Any) -> Any:
-        if isinstance(value, str):
-            try:
-                value = tuple(float(x) for x in value.split(','))
-            except ValueError:
-                raise PydanticCustomError(
-                    'coordinate_error',
-                    'value is not a valid coordinate: string is not recognized as a valid coordinate',
-                )
-        return handler(value)
+    def _parse_str(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+        if not isinstance(value, str):
+            return value
+        try:
+            value = tuple(float(x) for x in value.split(','))
+        except ValueError:
+            raise PydanticCustomError(
+                'coordinate_error',
+                'value is not a valid coordinate: string is not recognized as a valid coordinate',
+            )
+        return ArgsKwargs(args=value)
 
     @classmethod
-    def _parse_tuple(cls, value: Any, handler: Any) -> Any:
-        if isinstance(value, tuple):
-            result = handler(value)
-            return ArgsKwargs(args=result)
-        return value
+    def _parse_tuple(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+        if not isinstance(value, tuple):
+            return value
+        return ArgsKwargs(args=handler(value))
 
     def __str__(self) -> str:
         return f'{self.latitude},{self.longitude}'

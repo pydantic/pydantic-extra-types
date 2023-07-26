@@ -136,18 +136,34 @@ from pydantic_extra_types.payment import PaymentCardNumber
         (
             Coordinate,
             {
+                '$defs': {
+                    'Coordinate': {
+                        'properties': {
+                            'latitude': {'maximum': 90.0, 'minimum': -90.0, 'title': 'Latitude', 'type': 'number'},
+                            'longitude': {'maximum': 180.0, 'minimum': -180.0, 'title': 'Longitude', 'type': 'number'},
+                        },
+                        'required': ['latitude', 'longitude'],
+                        'title': 'Coordinate',
+                        'type': 'object',
+                    }
+                },
                 'properties': {
                     'x': {
-                        'format': 'coordinate',
-                        'maxItems': 2,
-                        'minItems': 2,
-                        'prefixItems': [
-                            {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
-                            {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
+                        'anyOf': [
+                            {'$ref': '#/$defs/Coordinate'},
+                            {
+                                'maxItems': 2,
+                                'minItems': 2,
+                                'prefixItems': [
+                                    {'type': 'number'},
+                                    {'type': 'number'},
+                                ],
+                                'type': 'array',
+                            },
+                            {'type': 'string'},
                         ],
                         'title': 'X',
-                        'type': 'array',
-                    }
+                    },
                 },
                 'required': ['x'],
                 'title': 'Model',
