@@ -3,6 +3,7 @@ from typing import Any, Optional
 
 import pytest
 from pydantic import BaseModel, ValidationError
+from pydantic_core._pydantic_core import ArgsKwargs
 
 from pydantic_extra_types.coordinate import Coordinate, Latitude, Longitude
 
@@ -29,12 +30,21 @@ class Lng(BaseModel):
         ((20.0, '10.0'), (20.0, 10.0), None),
         ((45.678, -123.456), (45.678, -123.456), None),
         (('45.678, -123.456'), (45.678, -123.456), None),
-        (Coordinate((20.0, 10.0)), (20.0, 10.0), None),
+        (Coordinate(20.0, 10.0), (20.0, 10.0), None),
+        (Coordinate(latitude=0, longitude=0), (0, 0), None),
+        (ArgsKwargs(args=()), (0, 0), None),
+        (ArgsKwargs(args=(1, 0.0)), (1.0, 0), None),
         # # Invalid coordinates
         ((), None, 'Field required'),  # Empty tuple
         ((10.0,), None, 'Field required'),  # Tuple with only one value
         (('ten, '), None, 'string is not recognized as a valid coordinate'),
         ((20.0, 10.0, 30.0), None, 'Tuple should have at most 2 items'),  # Tuple with more than 2 values
+        (ArgsKwargs(args=(1.0,)), None, 'Input should be a dictionary or an instance of Coordinate'),
+        (
+            '20.0, 10.0, 30.0',
+            None,
+            'Input should be a dictionary or an instance of Coordinate ',
+        ),  # Str with more than 2 values
         ('20.0, 10.0, 30.0', None, 'Unexpected positional argument'),  # Str with more than 2 values
         (2, None, 'Input should be a dictionary or an instance of Coordinate'),  # Wrong type
     ],
@@ -47,7 +57,7 @@ def test_format_for_coordinate(coord: (Any, Any), result: (float, float), error:
         assert _coord.longitude == result[1]
     else:
         with pytest.raises(ValidationError, match=error):
-            Coordinate(coord)
+            Coord(coord=coord).coord
 
 
 @pytest.mark.parametrize(
@@ -68,7 +78,7 @@ def test_limit_for_coordinate(coord: (Any, Any), error: Optional[Pattern]):
         assert _coord.longitude == coord[1]
     else:
         with pytest.raises(ValidationError, match=error):
-            Coordinate(coord)
+            Coord(coord=coord).coord
 
 
 @pytest.mark.parametrize(
@@ -124,19 +134,21 @@ def test_format_longitude(longitude: float, valid: bool):
 
 
 def test_str_repr():
-    assert str(Coordinate('20.0,10.0')) == '20.0,10.0'
-    assert str(Coordinate((20.0, 10.0))) == '20.0,10.0'
-    assert repr(Coordinate((20.0, 10.0))) == 'Coordinate(latitude=20.0, longitude=10.0)'
+    assert str(Coord(coord=(20.0, 10.0)).coord) == '20.0,10.0'
+    assert str(Coord(coord=('20.0, 10.0')).coord) == '20.0,10.0'
+    assert repr(Coord(coord=(20.0, 10.0)).coord) == 'Coordinate(latitude=20.0, longitude=10.0)'
 
 
 def test_eq():
-    assert Coordinate('20.0,10.0') == Coordinate((20.0, 10.0))
-    assert Coordinate('20.0,10.0') != Coordinate('20.0,11.0')
+    assert Coord(coord=(20.0, 10.0)).coord != Coord(coord='20.0,11.0').coord
+    assert Coord(coord=('20.0, 10.0')).coord != Coord(coord='20.0,11.0').coord
+    assert Coord(coord=('20.0, 10.0')).coord != Coord(coord='20.0,11.0').coord
+    assert Coord(coord=(20.0, 10.0)).coord == Coord(coord='20.0,10.0').coord
 
 
-def test_color_hashable():
-    assert hash(Coordinate((20.0, 10.0))) == hash(Coordinate((20.0, 10.0)))
-    assert hash(Coordinate((20.0, 11.0))) != hash(Coordinate((20.0, 10.0)))
+def test_hashable():
+    assert hash(Coord(coord=(20.0, 10.0)).coord) == hash(Coord(coord=(20.0, 10.0)).coord)
+    assert hash(Coord(coord=(20.0, 11.0)).coord) != hash(Coord(coord=(20.0, 10.0)).coord)
 
 
 def test_json_schema():

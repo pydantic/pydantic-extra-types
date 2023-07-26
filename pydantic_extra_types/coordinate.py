@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import Any, ClassVar, Tuple, Union
+from dataclasses import dataclass
+from typing import Any, ClassVar, Mapping, Tuple, Union
 
-from pydantic import GetCoreSchemaHandler, dataclasses
+from pydantic import GetCoreSchemaHandler
 from pydantic._internal import _repr
 from pydantic_core import ArgsKwargs, PydanticCustomError, core_schema
 
@@ -27,9 +28,9 @@ class Longitude(float):
         return core_schema.float_schema(ge=cls.min, le=cls.max)
 
 
-@dataclasses.dataclass
+@dataclass
 class Coordinate(_repr.Representation):
-    _NULL_ISLAND: ClassVar[tuple[float, float]] = 0.0, 0.0
+    _NULL_ISLAND: ClassVar[tuple[float, float]] = (0.0, 0.0)
 
     latitude: Latitude
     longitude: Longitude
@@ -44,12 +45,13 @@ class Coordinate(_repr.Representation):
             ),
             handler(source),
         ]
-        return core_schema.no_info_wrap_validator_function(
-            cls._parse_args,
-            core_schema.union_schema(
-                [core_schema.chain_schema(schema_chain[2 - x :]) for x in range(3)],
-            ),
-        )
+
+        chain_length = len(schema_chain)
+        chain_schemas: list[Mapping[str, Any]] = [
+            core_schema.chain_schema(schema_chain[x:]) for x in range(chain_length - 1, -1, -1)
+        ]
+
+        return core_schema.no_info_wrap_validator_function(cls._parse_args, core_schema.union_schema(chain_schemas))
 
     @classmethod
     def _parse_args(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
