@@ -5,9 +5,8 @@ You can use the `Coordinate` data type for storing coordinates. Coordinates can 
 
 1. Tuple format: `(Latitude, Longitude)`. For example: `(41.40338, 2.17403)`.
 2. `Coordinate` instance format: `Coordinate(latitude=Latitude, longitude=Longitude)`. For example: `Coordinate(latitude=41.40338, longitude=2.17403)`.
-3. Shorthand format: `(Latitude)`. In this case, the latitude value is specified, and the longitude is set to 0. For example: `(41.40338)`.
 
-The `Latitude` class and `Longitude`` class, which are used to represent latitude and longitude, respectively, enforce the following valid ranges for their values:
+The `Latitude` class and `Longitude` class, which are used to represent latitude and longitude, respectively, enforce the following valid ranges for their values:
 
 - `Latitude`: The latitude value should be between -90 and 90, inclusive.
 - `Longitude`: The longitude value should be between -180 and 180, inclusive.
