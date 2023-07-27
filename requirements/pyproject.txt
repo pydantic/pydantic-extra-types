@@ -10,12 +10,14 @@ phonenumbers==8.13.13
     # via pydantic-extra-types (pyproject.toml)
 pycountry==22.3.5
     # via pydantic-extra-types (pyproject.toml)
-pydantic==2.0b2
+pydantic==2.0.3
     # via pydantic-extra-types (pyproject.toml)
-pydantic-core==0.38.0
+pydantic-core==2.3.0
     # via pydantic
 typing-extensions==4.6.3
-    # via pydantic
+    # via
+    #   pydantic
+    #   pydantic-core
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
