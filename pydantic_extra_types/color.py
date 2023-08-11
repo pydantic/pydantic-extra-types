@@ -15,7 +15,7 @@ from colorsys import hls_to_rgb, rgb_to_hls
 from typing import Any, Callable, Tuple, Union, cast
 
 from pydantic import GetJsonSchemaHandler
-from pydantic._internal import _repr, _utils
+from pydantic._internal import _repr
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
@@ -430,7 +430,7 @@ def parse_float_alpha(value: None | str | float | int) -> float | None:
             'value is not a valid color: alpha values must be a valid float',
         )
 
-    if _utils.almost_equal_floats(alpha, 1):
+    if math.isclose(alpha, 1):
         return None
     elif 0 <= alpha <= 1:
         return alpha
