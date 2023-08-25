@@ -12,7 +12,13 @@ from __future__ import annotations
 import math
 import re
 from colorsys import hls_to_rgb, rgb_to_hls
-from typing import Any, Callable, Literal, Tuple, Union, cast
+from typing import Any, Callable, Tuple, Union, cast
+
+try:
+    from typing import Literal
+except ImportError:
+    # Python <3.8
+    from typing_extensions import Literal  # type: ignore[assignment]
 
 from pydantic import GetJsonSchemaHandler
 from pydantic._internal import _repr
