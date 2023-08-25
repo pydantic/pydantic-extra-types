@@ -184,6 +184,13 @@ def test_as_hex():
     assert Color('B0B').as_hex() == '#b0b'
     assert Color((1, 2, 3, 0.123456)).as_hex() == '#0102031f'
     assert Color((1, 2, 3, 0.1)).as_hex() == '#0102031a'
+    
+def test_as_hex_long():
+    assert Color((1, 2, 3)).as_hex(format="long") == '#010203'
+    assert Color((119, 119, 119)).as_hex(format="long") == '#777777'
+    assert Color((119, 0, 238)).as_hex(format="long") == '#7700ee'
+    assert Color('B0B').as_hex(format="long") == '#bb00bb'
+    assert Color("#0102031a").as_hex(format="long") == '#0102031a'
 
 
 def test_as_named():
