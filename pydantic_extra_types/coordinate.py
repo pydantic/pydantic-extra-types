@@ -1,7 +1,5 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
-from typing import Any, ClassVar, Mapping, Tuple, Union
+from typing import Any, ClassVar, Tuple, Type, Union
 
 from pydantic import GetCoreSchemaHandler
 from pydantic._internal import _repr
@@ -15,7 +13,7 @@ class Latitude(float):
     max: ClassVar[float] = 90.00
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.float_schema(ge=cls.min, le=cls.max)
 
 
@@ -24,7 +22,7 @@ class Longitude(float):
     max: ClassVar[float] = 180.00
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.float_schema(ge=cls.min, le=cls.max)
 
 
@@ -36,7 +34,7 @@ class Coordinate(_repr.Representation):
     longitude: Longitude
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         schema_chain = [
             core_schema.no_info_wrap_validator_function(cls._parse_str, core_schema.str_schema()),
             core_schema.no_info_wrap_validator_function(
@@ -47,11 +45,10 @@ class Coordinate(_repr.Representation):
         ]
 
         chain_length = len(schema_chain)
-        chain_schemas: list[Mapping[str, Any]] = [
-            core_schema.chain_schema(schema_chain[x:]) for x in range(chain_length - 1, -1, -1)
-        ]
-
-        return core_schema.no_info_wrap_validator_function(cls._parse_args, core_schema.union_schema(chain_schemas))
+        chain_schemas = [core_schema.chain_schema(schema_chain[x:]) for x in range(chain_length - 1, -1, -1)]
+        return core_schema.no_info_wrap_validator_function(
+            cls._parse_args, core_schema.union_schema(chain_schemas)  # type: ignore[arg-type]
+        )
 
     @classmethod
     def _parse_args(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
