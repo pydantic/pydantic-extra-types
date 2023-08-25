@@ -16,7 +16,7 @@ from typing import Any, Callable, Tuple, Union, cast
 
 try:
     from typing import Literal
-except ImportError:
+except ImportError:  # pragma: no cover
     # Python <3.8
     from typing_extensions import Literal  # type: ignore[assignment]
 
