@@ -28,7 +28,7 @@ class Longitude(float):
 
 @dataclass
 class Coordinate(_repr.Representation):
-    _NULL_ISLAND: ClassVar[tuple[float, float]] = (0.0, 0.0)
+    _NULL_ISLAND: ClassVar[Tuple[float, float]] = (0.0, 0.0)
 
     latitude: Latitude
     longitude: Longitude
