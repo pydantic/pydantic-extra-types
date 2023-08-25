@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from pydantic.dataclasses import dataclass
 from typing import Any, ClassVar, Mapping, Tuple, Union
 
 from pydantic import GetCoreSchemaHandler
