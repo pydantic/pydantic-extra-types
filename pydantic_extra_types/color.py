@@ -15,7 +15,7 @@ import sys
 from colorsys import hls_to_rgb, rgb_to_hls
 from typing import Any, Callable, Tuple, Union, cast
 
-if sys.version_info >= (3, 8):
+if sys.version_info >= (3, 8):  # pragma: no cover
     from typing import Literal
 else:  # pragma: no cover
     from typing_extensions import Literal
