@@ -11,8 +11,14 @@ from __future__ import annotations
 
 import math
 import re
+import sys
 from colorsys import hls_to_rgb, rgb_to_hls
 from typing import Any, Callable, Tuple, Union, cast
+
+if sys.version_info >= (3, 8):  # pragma: no cover
+    from typing import Literal
+else:  # pragma: no cover
+    from typing_extensions import Literal
 
 from pydantic import GetJsonSchemaHandler
 from pydantic._internal import _repr
@@ -132,7 +138,7 @@ class Color(_repr.Representation):
         else:
             return self.as_hex()
 
-    def as_hex(self) -> str:
+    def as_hex(self, format: Literal['short', 'long'] = 'short') -> str:
         """Returns the hexadecimal representation of the color.
 
         Hex string representing the color can be 3, 4, 6, or 8 characters depending on whether the string
@@ -146,7 +152,7 @@ class Color(_repr.Representation):
             values.append(float_to_255(self._rgba.alpha))
 
         as_hex = ''.join(f'{v:02x}' for v in values)
-        if all(c in repeat_colors for c in values):
+        if format == 'short' and all(c in repeat_colors for c in values):
             as_hex = ''.join(as_hex[c] for c in range(0, len(as_hex), 2))
         return '#' + as_hex
 
