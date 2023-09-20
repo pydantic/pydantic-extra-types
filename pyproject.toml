@@ -53,7 +53,7 @@ all = [
 Homepage = 'https://github.com/pydantic/pydantic-extra-types'
 Source = 'https://github.com/pydantic/pydantic-extra-types'
 Changelog = 'https://github.com/pydantic/pydantic-extra-types/releases'
-Documentation = 'https://docs.pydantic.dev/latest/'
+Documentation = 'https://docs.pydantic.dev/dev-v2/usage/types/types/'
 
 [tool.ruff]
 line-length = 120

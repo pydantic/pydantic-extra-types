@@ -1,5 +1,6 @@
 """
-Country definitions that are based on the [ISO 3166](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes).
+Country definitions that are based on the ISO 3166 format
+Based on: https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
 """
 from __future__ import annotations
 
@@ -68,23 +69,6 @@ def _index_by_official_name() -> dict[str, CountryInfo]:
 
 
 class CountryAlpha2(str):
-    """CountryAlpha2 parses country codes in the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-    format.
-
-    ```py
-    from pydantic import BaseModel
-
-    from pydantic_extra_types.country import CountryAlpha2
-
-    class Product(BaseModel):
-        made_in: CountryAlpha2
-
-    product = Product(made_in='ES')
-    print(product)
-    #> made_in='ES'
-    ```
-    """
-
     @classmethod
     def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> CountryAlpha2:
         if __input_value not in _index_by_alpha2():
@@ -110,44 +94,23 @@ class CountryAlpha2(str):
 
     @property
     def alpha3(self) -> str:
-        """The country code in the [ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) format."""
         return _index_by_alpha2()[self].alpha3
 
     @property
     def numeric_code(self) -> str:
-        """The country code in the [ISO 3166-1 numeric](https://en.wikipedia.org/wiki/ISO_3166-1_numeric) format."""
         return _index_by_alpha2()[self].numeric_code
 
     @property
     def short_name(self) -> str:
-        """The country short name."""
         return _index_by_alpha2()[self].short_name
 
     @property
     def official_name(self) -> str:
-        """The country official name."""
         country = _index_by_alpha2()[self]
         return country.official_name
 
 
 class CountryAlpha3(str):
-    """CountryAlpha3 parses country codes in the [ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
-    format.
-
-    ```py
-    from pydantic import BaseModel
-
-    from pydantic_extra_types.country import CountryAlpha3
-
-    class Product(BaseModel):
-        made_in: CountryAlpha3
-
-    product = Product(made_in="USA")
-    print(product)
-    #> made_in='USA'
-    ```
-    """
-
     @classmethod
     def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> CountryAlpha3:
         if __input_value not in _index_by_alpha3():
@@ -174,44 +137,23 @@ class CountryAlpha3(str):
 
     @property
     def alpha2(self) -> str:
-        """The country code in the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format."""
         return _index_by_alpha3()[self].alpha2
 
     @property
     def numeric_code(self) -> str:
-        """The country code in the [ISO 3166-1 numeric](https://en.wikipedia.org/wiki/ISO_3166-1_numeric) format."""
         return _index_by_alpha3()[self].numeric_code
 
     @property
     def short_name(self) -> str:
-        """The country short name."""
         return _index_by_alpha3()[self].short_name
 
     @property
     def official_name(self) -> str:
-        """The country official name."""
         country = _index_by_alpha3()[self]
         return country.official_name
 
 
 class CountryNumericCode(str):
-    """CountryNumericCode parses country codes in the
-    [ISO 3166-1 numeric](https://en.wikipedia.org/wiki/ISO_3166-1_numeric) format.
-
-    ```py
-    from pydantic import BaseModel
-
-    from pydantic_extra_types.country import CountryNumericCode
-
-    class Product(BaseModel):
-        made_in: CountryNumericCode
-
-    product = Product(made_in="840")
-    print(product)
-    #> made_in='840'
-    ```
-    """
-
     @classmethod
     def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> CountryNumericCode:
         if __input_value not in _index_by_numeric_code():
@@ -238,43 +180,23 @@ class CountryNumericCode(str):
 
     @property
     def alpha2(self) -> str:
-        """The country code in the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format."""
         return _index_by_numeric_code()[self].alpha2
 
     @property
     def alpha3(self) -> str:
-        """The country code in the [ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) format."""
         return _index_by_numeric_code()[self].alpha3
 
     @property
     def short_name(self) -> str:
-        """The country short name."""
         return _index_by_numeric_code()[self].short_name
 
     @property
     def official_name(self) -> str:
-        """The country official name."""
         country = _index_by_numeric_code()[self]
         return country.official_name
 
 
 class CountryShortName(str):
-    """CountryShortName parses country codes in the short name format.
-
-    ```py
-    from pydantic import BaseModel
-
-    from pydantic_extra_types.country import CountryShortName
-
-    class Product(BaseModel):
-        made_in: CountryShortName
-
-    product = Product(made_in="United States")
-    print(product)
-    #> made_in='United States'
-    ```
-    """
-
     @classmethod
     def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> CountryShortName:
         if __input_value not in _index_by_short_name():
@@ -293,43 +215,23 @@ class CountryShortName(str):
 
     @property
     def alpha2(self) -> str:
-        """The country code in the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format."""
         return _index_by_short_name()[self].alpha2
 
     @property
     def alpha3(self) -> str:
-        """The country code in the [ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) format."""
         return _index_by_short_name()[self].alpha3
 
     @property
     def numeric_code(self) -> str:
-        """The country code in the [ISO 3166-1 numeric](https://en.wikipedia.org/wiki/ISO_3166-1_numeric) format."""
         return _index_by_short_name()[self].numeric_code
 
     @property
     def official_name(self) -> str:
-        """The country official name."""
         country = _index_by_short_name()[self]
         return country.official_name
 
 
 class CountryOfficialName(str):
-    """CountryOfficialName parses country codes in the official name format.
-
-    ```py
-    from pydantic import BaseModel
-
-    from pydantic_extra_types.country import CountryOfficialName
-
-    class Product(BaseModel):
-        made_in: CountryOfficialName
-
-    product = Product(made_in="United States of America")
-    print(product)
-    #> made_in='United States of America'
-    ```
-    """
-
     @classmethod
     def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> CountryOfficialName:
         if __input_value not in _index_by_official_name():
@@ -348,20 +250,16 @@ class CountryOfficialName(str):
 
     @property
     def alpha2(self) -> str:
-        """The country code in the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format."""
         return _index_by_official_name()[self].alpha2
 
     @property
     def alpha3(self) -> str:
-        """The country code in the [ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) format."""
         return _index_by_official_name()[self].alpha3
 
     @property
     def numeric_code(self) -> str:
-        """The country code in the [ISO 3166-1 numeric](https://en.wikipedia.org/wiki/ISO_3166-1_numeric) format."""
         return _index_by_official_name()[self].numeric_code
 
     @property
     def short_name(self) -> str:
-        """The country short name."""
         return _index_by_official_name()[self].short_name
