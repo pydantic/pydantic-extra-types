@@ -1,33 +1,25 @@
 """
-The `pydantic_extra_types.mac_address` module provides functionality to parse and validate MAC addresses in different
-formats, such as IEEE 802 MAC-48, EUI-48, EUI-64, or a 20-octet format.
+MAC address Parsing and Validation
+
+This code provides functionality to parse and validate MAC addresses in different formats, such as IEEE 802 MAC-48,
+EUI-48, EUI-64, or a 20-octet format. It includes a `MacAddress` class that represents a Mac Address and provides
+methods for conversion, validation, and serialization. The code also includes a `validate_mac_address` function
+that takes a byte value representing a Mac Address and returns the parsed Mac Address as a string.
 """
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Union
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
+MacAddressType = Union[str, bytes]
+
 
 class MacAddress(str):
-    """Represents a MAC address and provides methods for conversion, validation, and serialization.
-
-    ```py
-    from pydantic import BaseModel
-
-    from pydantic_extra_types.mac_address import MacAddress
-
-
-    class Network(BaseModel):
-        mac_address: MacAddress
-
-
-    network = Network(mac_address="00:00:5e:00:53:01")
-    print(network)
-    #> mac_address='00:00:5e:00:53:01'
-    ```
+    """
+    Represents a mac address - IEEE 802 MAC-48, EUI-48, EUI-64, or a 20-octet
     """
 
     @classmethod
@@ -44,16 +36,16 @@ class MacAddress(str):
     @staticmethod
     def validate_mac_address(value: bytes) -> str:
         """
-        Validate a MAC Address from the provided byte value.
+        Validate a Mac Address from the provided byte value.
 
         Args:
-            value: The byte value representing the MAC address.
+            value (bytes): The byte value representing the Mac Address.
 
         Returns:
-            str: The parsed MAC address.
+            str: The parsed Mac Address as a string.
 
         Raises:
-            PydanticCustomError: If the value is not a valid MAC address.
+            PydanticCustomError: If the value is not a valid Mac Address.
         """
         if len(value) < 14:
             raise PydanticCustomError(
