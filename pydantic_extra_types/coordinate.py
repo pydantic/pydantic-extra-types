@@ -1,14 +1,32 @@
+"""
+The `pydantic_extra_types.coordinate` module provides the [`Latitude`][pydantic_extra_types.coordinate.Latitude],
+[`Longitude`][pydantic_extra_types.coordinate.Longitude], and
+[`Coordinate`][pydantic_extra_types.coordinate.Coordinate] data types.
+"""
 from dataclasses import dataclass
-from typing import Any, ClassVar, Tuple, Type, Union
+from typing import Any, ClassVar, Tuple, Type
 
 from pydantic import GetCoreSchemaHandler
 from pydantic._internal import _repr
 from pydantic_core import ArgsKwargs, PydanticCustomError, core_schema
 
-CoordinateValueType = Union[str, int, float]
-
 
 class Latitude(float):
+    """Latitude value should be between -90 and 90, inclusive.
+
+    ```py
+    from pydantic import BaseModel
+    from pydantic_extra_types.coordinate import Latitude
+
+    class Location(BaseModel):
+        latitude: Latitude
+
+    location = Location(latitude=41.40338)
+    print(location)
+    #> latitude=41.40338
+    ```
+    """
+
     min: ClassVar[float] = -90.00
     max: ClassVar[float] = 90.00
 
@@ -18,6 +36,22 @@ class Latitude(float):
 
 
 class Longitude(float):
+    """Longitude value should be between -180 and 180, inclusive.
+
+    ```py
+    from pydantic import BaseModel
+
+    from pydantic_extra_types.coordinate import Longitude
+
+    class Location(BaseModel):
+        longitude: Longitude
+
+    location = Location(longitude=2.17403)
+    print(location)
+    #> longitude=2.17403
+    ```
+    """
+
     min: ClassVar[float] = -180.00
     max: ClassVar[float] = 180.00
 
@@ -28,6 +62,27 @@ class Longitude(float):
 
 @dataclass
 class Coordinate(_repr.Representation):
+    """Coordinate parses Latitude and Longitude.
+
+    You can use the `Coordinate` data type for storing coordinates. Coordinates can be
+    defined using one of the following formats:
+
+    1. Tuple: `(Latitude, Longitude)`. For example: `(41.40338, 2.17403)`.
+    2. `Coordinate` instance: `Coordinate(latitude=Latitude, longitude=Longitude)`.
+
+    ```py
+    from pydantic import BaseModel
+
+    from pydantic_extra_types.coordinate import Coordinate
+
+    class Location(BaseModel):
+        coordinate: Coordinate
+
+    location = Location(coordinate=(41.40338, 2.17403))
+    #> coordinate=Coordinate(latitude=41.40338, longitude=2.17403)
+    ```
+    """
+
     _NULL_ISLAND: ClassVar[Tuple[float, float]] = (0.0, 0.0)
 
     latitude: Latitude
