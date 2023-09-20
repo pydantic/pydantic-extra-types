@@ -1,6 +1,6 @@
 """
-The `pydantic_extra_types.payment` module provides the
-[`PaymentCardNumber`][pydantic_extra_types.payment.PaymentCardNumber] data type.
+Represents and validates payment cards (such as a debit or credit card),
+including validation for payment card number and issuer.
 """
 
 from __future__ import annotations
@@ -13,7 +13,15 @@ from pydantic_core import PydanticCustomError, core_schema
 
 
 class PaymentCardBrand(str, Enum):
-    """Payment card brands supported by the [`PaymentCardNumber`][pydantic_extra_types.payment.PaymentCardNumber]."""
+    """Enumeration of payment card brands.
+
+    `PaymentCardBrand` can be one of the following based on the BIN:
+
+    * PaymentCardBrand.amex
+    * PaymentCardBrand.mastercard
+    * PaymentCardBrand.visa
+    * PaymentCardBrand.other
+    """
 
     amex = 'American Express'
     mastercard = 'Mastercard'
@@ -26,20 +34,23 @@ class PaymentCardBrand(str, Enum):
 
 
 class PaymentCardNumber(str):
-    """A [payment card number](https://en.wikipedia.org/wiki/Payment_card_number)."""
+    """A [payment card number](https://en.wikipedia.org/wiki/Payment_card_number).
+
+    Attributes:
+        strip_whitespace: Whether to strip whitespace from the input value.
+        min_length: The minimum length of the card number.
+        max_length: The maximum length of the card number.
+        bin: The first 6 digits of the card number.
+        last4: The last 4 digits of the card number.
+        brand: The brand of the card.
+    """
 
     strip_whitespace: ClassVar[bool] = True
-    """Whether to strip whitespace from the input value."""
     min_length: ClassVar[int] = 12
-    """The minimum length of the card number."""
     max_length: ClassVar[int] = 19
-    """The maximum length of the card number."""
     bin: str
-    """The first 6 digits of the card number."""
     last4: str
-    """The last 4 digits of the card number."""
     brand: PaymentCardBrand
-    """The brand of the card."""
 
     def __init__(self, card_number: str):
         self.validate_digits(card_number)
