@@ -8,7 +8,7 @@ annotated-types==0.6.0
     # via pydantic
 importlib-resources==5.13.0
     # via isocountry
-isocountry==23.1.0
+isocountry==23.2.0
     # via pydantic-extra-types (pyproject.toml)
 phonenumbers==8.13.23
     # via pydantic-extra-types (pyproject.toml)
