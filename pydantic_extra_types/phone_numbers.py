@@ -4,6 +4,7 @@ The `pydantic_extra_types.phone_numbers` module provides the
 
 This class depends on the [phonenumbers] package, which is a Python port of Google's [libphonenumber].
 """
+
 from __future__ import annotations
 
 from typing import Any, Callable, ClassVar, Generator
@@ -13,10 +14,10 @@ from pydantic_core import PydanticCustomError, core_schema
 
 try:
     import phonenumbers
-except ModuleNotFoundError:  # pragma: no cover
+except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
         '`PhoneNumber` requires "phonenumbers" to be installed. You can install it with "pip install phonenumbers"'
-    )
+    ) from e
 
 GeneratorCallableStr = Generator[Callable[..., str], None, None]
 

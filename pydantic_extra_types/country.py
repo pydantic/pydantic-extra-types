@@ -1,6 +1,7 @@
 """
 Country definitions that are based on the [ISO 3166](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes).
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -12,10 +13,10 @@ from pydantic_core import PydanticCustomError, core_schema
 
 try:
     import isocountry
-except ModuleNotFoundError:  # pragma: no cover
+except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
         'The `country` module requires "pycountry" to be installed. You can install it with "pip install pycountry".'
-    )
+    ) from e
 
 
 @dataclass
