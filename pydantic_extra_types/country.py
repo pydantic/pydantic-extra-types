@@ -11,7 +11,7 @@ from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
 try:
-    import pycountry  # type: ignore[import]
+    import isocountry  # type: ignore[import]
 except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
         'The `country` module requires "pycountry" to be installed. You can install it with "pip install pycountry".'
@@ -38,7 +38,7 @@ def _countries() -> list[CountryInfo]:
             short_name=country.name,
             official_name=getattr(country, 'official_name', ''),
         )
-        for country in pycountry.countries
+        for country in isocountry.countries
     ]
 
 
