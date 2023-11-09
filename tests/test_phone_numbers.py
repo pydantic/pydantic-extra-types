@@ -51,6 +51,7 @@ def test_parsed_but_not_a_valid_number() -> None:
     with pytest.raises(ValidationError, match='value is not a valid phone number'):
         Something(phone_number='+1 555-1212')
 
+
 def test_json_schema() -> None:
     assert Something.model_json_schema() == {
         'title': 'Something',
