@@ -46,7 +46,7 @@ class PhoneNumber(str):
         cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
         json_schema = handler(schema)
-        json_schema.update({'type': 'string', 'format': 'phone'})
+        json_schema.update({'format': 'phone'})
         return json_schema
 
     @classmethod
