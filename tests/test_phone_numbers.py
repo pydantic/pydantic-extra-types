@@ -60,7 +60,7 @@ def test_json_schema() -> None:
             'phone_number': {
                 'title': 'Phone Number',
                 'type': 'string',
-                'format': 'tel',
+                'format': 'phone',
                 'minLength': 7,
                 'maxLength': 64,
             }
