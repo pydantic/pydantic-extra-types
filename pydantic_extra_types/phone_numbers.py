@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, ClassVar, Generator
 
-from pydantic import GetCoreSchemaHandler
+from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
 try:
@@ -40,6 +40,14 @@ class PhoneNumber(str):
     """The minimum length of the phone number."""
     max_length: int = 64
     """The maximum length of the phone number."""
+
+    @classmethod
+    def __get_pydantic_json_schema__(
+        cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+    ) -> dict[str, Any]:
+        json_schema = handler(schema)
+        json_schema.update({'format': 'phone'})
+        return json_schema
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
