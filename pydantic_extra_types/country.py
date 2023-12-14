@@ -95,7 +95,7 @@ class CountryAlpha2(str):
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
-        return core_schema.general_after_validator_function(
+        return core_schema.with_info_after_validator_function(
             cls._validate,
             core_schema.str_schema(to_upper=True),
         )
@@ -158,7 +158,7 @@ class CountryAlpha3(str):
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
-        return core_schema.general_after_validator_function(
+        return core_schema.with_info_after_validator_function(
             cls._validate,
             core_schema.str_schema(to_upper=True),
             serialization=core_schema.to_string_ser_schema(),
@@ -222,7 +222,7 @@ class CountryNumericCode(str):
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
-        return core_schema.general_after_validator_function(
+        return core_schema.with_info_after_validator_function(
             cls._validate,
             core_schema.str_schema(to_upper=True),
             serialization=core_schema.to_string_ser_schema(),
@@ -285,7 +285,7 @@ class CountryShortName(str):
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
-        return core_schema.general_after_validator_function(
+        return core_schema.with_info_after_validator_function(
             cls._validate,
             core_schema.str_schema(),
             serialization=core_schema.to_string_ser_schema(),
@@ -340,7 +340,7 @@ class CountryOfficialName(str):
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
-        return core_schema.general_after_validator_function(
+        return core_schema.with_info_after_validator_function(
             cls._validate,
             core_schema.str_schema(),
             serialization=core_schema.to_string_ser_schema(),

@@ -243,7 +243,7 @@ class Color(_repr.Representation):
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: Callable[[Any], CoreSchema]
     ) -> core_schema.CoreSchema:
-        return core_schema.general_plain_validator_function(
+        return core_schema.with_info_plain_validator_function(
             cls._validate, serialization=core_schema.to_string_ser_schema()
         )
 
