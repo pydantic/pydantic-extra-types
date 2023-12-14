@@ -28,7 +28,7 @@ lint:
 
 .PHONY: mypy
 mypy:
-	mypy pydantic_extra_types --disable-recursive-aliases
+	mypy pydantic_extra_types
 
 .PHONY: pyupgrade
 pyupgrade:

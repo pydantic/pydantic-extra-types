@@ -10,9 +10,9 @@ phonenumbers==8.13.13
     # via pydantic-extra-types (pyproject.toml)
 pycountry==22.3.5
     # via pydantic-extra-types (pyproject.toml)
-pydantic==2.0.3
+pydantic==2.5.2
     # via pydantic-extra-types (pyproject.toml)
-pydantic-core==2.3.0
+pydantic-core==2.14.5
     # via pydantic
 python-ulid==1.1.0
     # via pydantic-extra-types (pyproject.toml)

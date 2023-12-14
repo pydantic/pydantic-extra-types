@@ -51,7 +51,7 @@ class PhoneNumber(str):
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        return core_schema.general_after_validator_function(
+        return core_schema.with_info_after_validator_function(
             cls._validate,
             core_schema.str_schema(min_length=cls.min_length, max_length=cls.max_length),
         )
