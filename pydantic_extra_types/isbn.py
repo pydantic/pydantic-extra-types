@@ -107,9 +107,6 @@ class ISBN(str):
 
         isbn_length = len(value)
 
-        if isbn_length not in (10, 13):
-            raise PydanticCustomError('isbn_length', f'Length for ISBN must be 10 or 13 digits, not {isbn_length}')
-
         validation_functions = {10: isbn10_digit_calc, 13: isbn13_digit_calc}
         validate = validation_functions.get(isbn_length)
 
