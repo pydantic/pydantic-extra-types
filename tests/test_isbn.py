@@ -14,8 +14,8 @@ isbn_length_test_cases = [
     ('8537809667', '9788537809662', True),  # ISBN-10 as input
     ('9788537809662', '9788537809662', True),  # ISBN-13 as input
     ('080442957X', '9780804429573', True),  # ISBN-10 ending in "X" as input
-    ('9788584390670', '9788584390670', True), #ISBN-13 Starting with 978
-    ('9790306406156', '9790306406156', True), # ISBN-13 starting with 979
+    ('9788584390670', '9788584390670', True),  # ISBN-13 Starting with 978
+    ('9790306406156', '9790306406156', True),  # ISBN-13 starting with 979
     # Invalid ISBNs
     ('97885843906701', None, False),  # Length: 14 (Higher)
     ('978858439067', None, False),  # Length: 12 (In Between)
@@ -47,7 +47,7 @@ isbn10_digits_test_cases = [
     ('853780@667', None, False),  # Non Integer in [6] position
     ('8537809@67', None, False),  # Non Integer in [7] position
     ('85378096@7', None, False),  # Non Integer in [8] position
-    ('853780966@', None, False)  # Non Integer or X in [9] position
+    ('853780966@', None, False),  # Non Integer or X in [9] position
 ]
 
 
@@ -64,8 +64,8 @@ isbn13_digits_test_cases = [
     # Valid ISBNs
     ('9788537809662', '9788537809662', True),  # ISBN-13 as input
     ('9780306406157', '9780306406157', True),  # ISBN-13 as input
-    ('9788584390670', '9788584390670', True), # ISBN-13 Starting with 978
-    ('9790306406156', '9790306406156', True), # ISBN-13 starting with 979
+    ('9788584390670', '9788584390670', True),  # ISBN-13 Starting with 978
+    ('9790306406156', '9790306406156', True),  # ISBN-13 starting with 979
 
     # Invalid ISBNs
     ('@788537809662', None, False),  # Non Integer in [0] position
@@ -95,8 +95,8 @@ def test_isbn13_digits(input_isbn: Any, output_isbn: str, valid: bool):
 isbn13_early_digits_test_cases = [
     # Valid ISBNs
     ('9780306406157', '9780306406157', True),  # ISBN-13 as input
-    ('9788584390670', '9788584390670', True), # ISBN-13 Starting with 978
-    ('9790306406156', '9790306406156', True), # ISBN-13 starting with 979
+    ('9788584390670', '9788584390670', True),  # ISBN-13 Starting with 978
+    ('9790306406156', '9790306406156', True),  # ISBN-13 starting with 979
 
     # Invalid ISBNs
     ('1788584390670', None, False),  # Does not start with 978 or 979
@@ -119,15 +119,15 @@ isbn_last_digit_test_cases = [
     ('8537809667', '9788537809662', True),  # ISBN-10 as input
     ('9788537809662', '9788537809662', True),  # ISBN-13 as input
     ('080442957X', '9780804429573', True),  # ISBN-10 ending in "X" as input
-    ('9788584390670', '9788584390670', True), # ISBN-13 Starting with 978
-    ('9790306406156', '9790306406156', True), # ISBN-13 starting with 979
+    ('9788584390670', '9788584390670', True),  # ISBN-13 Starting with 978
+    ('9790306406156', '9790306406156', True),  # ISBN-13 starting with 979
 
     # Invalid ISBNs
     ('8537809663', None, False),  # ISBN-10 as input with wrong last digit
     ('9788537809661', None, False),  # ISBN-13 as input with wrong last digit
     ('080442953X', None, False),  # ISBN-10 ending in "X" as input with wrong last digit
-    ('9788584390671', None, False), #ISBN-13 Starting with 978 with wrong last digit
-    ('9790306406155', None, False), # ISBN-13 starting with 979 with wrong last digit
+    ('9788584390671', None, False),  # ISBN-13 Starting with 978 with wrong last digit
+    ('9790306406155', None, False),  # ISBN-13 starting with 979 with wrong last digit
 ]
 
 
@@ -144,7 +144,7 @@ isbn_conversion_test_cases = [
     ('8537809667', '9788537809662'), 
     ('080442957X', '9780804429573'), 
     ('9788584390670', '9788584390670'),
-    ('9790306406156', '9790306406156')
+    ('9790306406156', '9790306406156'),
 ]
 
 
