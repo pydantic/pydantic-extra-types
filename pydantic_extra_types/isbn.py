@@ -107,6 +107,9 @@ class ISBN(str):
         validation_functions = {10: isbn10_digit_calc, 13: isbn13_digit_calc}
         validate = validation_functions.get(isbn_length)
 
+        if not callable(validate):
+            raise PydanticCustomError('isbn_invalid_length', f'Unsupported ISBN length: {isbn_length}')
+
         if validate(value) != value[-1]:
             raise PydanticCustomError('isbn_invalid_digit_check_isbn', 'Provided digit is invalid for given ISBN')
 
