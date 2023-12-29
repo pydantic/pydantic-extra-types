@@ -9,6 +9,7 @@ from pydantic_extra_types.isbn import ISBN
 class Book(BaseModel):
     isbn: ISBN
 
+
 isbn_length_test_cases = [
     # Valid ISBNs
     ('8537809667', '9788537809662', True),  # ISBN-10 as input
@@ -26,12 +27,13 @@ isbn_length_test_cases = [
 
 
 @pytest.mark.parametrize('input_isbn, output_isbn, valid', isbn_length_test_cases)
-def test_isbn_length(input_isbn: Any, output_isbn: str, valid: bool):
+def test_isbn_length(input_isbn: Any, output_isbn: str, valid: bool) -> None:
     if valid:
         assert Book(isbn=ISBN(input_isbn)).isbn == output_isbn
     else:
         with pytest.raises(ValidationError, match='isbn_length'):
             Book(isbn=ISBN(input_isbn))
+
 
 isbn10_digits_test_cases = [
     # Valid ISBNs
@@ -52,7 +54,7 @@ isbn10_digits_test_cases = [
 
 
 @pytest.mark.parametrize('input_isbn, output_isbn, valid', isbn10_digits_test_cases)
-def test_isbn10_digits(input_isbn: Any, output_isbn: str, valid: bool):
+def test_isbn10_digits(input_isbn: Any, output_isbn: str, valid: bool) -> None:
     if valid:
         assert Book(isbn=ISBN(input_isbn)).isbn == output_isbn
     else:
@@ -66,7 +68,6 @@ isbn13_digits_test_cases = [
     ('9780306406157', '9780306406157', True),  # ISBN-13 as input
     ('9788584390670', '9788584390670', True),  # ISBN-13 Starting with 978
     ('9790306406156', '9790306406156', True),  # ISBN-13 starting with 979
-
     # Invalid ISBNs
     ('@788537809662', None, False),  # Non Integer in [0] position
     ('9@88537809662', None, False),  # Non Integer in [1] position
@@ -85,19 +86,19 @@ isbn13_digits_test_cases = [
 
 
 @pytest.mark.parametrize('input_isbn, output_isbn, valid', isbn13_digits_test_cases)
-def test_isbn13_digits(input_isbn: Any, output_isbn: str, valid: bool):
+def test_isbn13_digits(input_isbn: Any, output_isbn: str, valid: bool) -> None:
     if valid:
         assert Book(isbn=ISBN(input_isbn)).isbn == output_isbn
     else:
         with pytest.raises(ValidationError, match='isbn13_invalid_characters'):
             Book(isbn=ISBN(input_isbn))
 
+
 isbn13_early_digits_test_cases = [
     # Valid ISBNs
     ('9780306406157', '9780306406157', True),  # ISBN-13 as input
     ('9788584390670', '9788584390670', True),  # ISBN-13 Starting with 978
     ('9790306406156', '9790306406156', True),  # ISBN-13 starting with 979
-
     # Invalid ISBNs
     ('1788584390670', None, False),  # Does not start with 978 or 979
     ('9288584390670', None, False),  # Does not start with 978 or 979
@@ -106,7 +107,7 @@ isbn13_early_digits_test_cases = [
 
 
 @pytest.mark.parametrize('input_isbn, output_isbn, valid', isbn13_early_digits_test_cases)
-def test_isbn13_early_digits(input_isbn: Any, output_isbn: str, valid: bool):
+def test_isbn13_early_digits(input_isbn: Any, output_isbn: str, valid: bool) -> None:
     if valid:
         assert Book(isbn=ISBN(input_isbn)).isbn == output_isbn
     else:
@@ -121,7 +122,6 @@ isbn_last_digit_test_cases = [
     ('080442957X', '9780804429573', True),  # ISBN-10 ending in "X" as input
     ('9788584390670', '9788584390670', True),  # ISBN-13 Starting with 978
     ('9790306406156', '9790306406156', True),  # ISBN-13 starting with 979
-
     # Invalid ISBNs
     ('8537809663', None, False),  # ISBN-10 as input with wrong last digit
     ('9788537809661', None, False),  # ISBN-13 as input with wrong last digit
@@ -132,22 +132,23 @@ isbn_last_digit_test_cases = [
 
 
 @pytest.mark.parametrize('input_isbn, output_isbn, valid', isbn_last_digit_test_cases)
-def test_isbn_last_digit(input_isbn: Any, output_isbn: str, valid: bool):
+def test_isbn_last_digit(input_isbn: Any, output_isbn: str, valid: bool) -> None:
     if valid:
         assert Book(isbn=ISBN(input_isbn)).isbn == output_isbn
     else:
         with pytest.raises(ValidationError, match='isbn_invalid_digit_check_isbn'):
             Book(isbn=ISBN(input_isbn))
 
+
 isbn_conversion_test_cases = [
     # Valid ISBNs
-    ('8537809667', '9788537809662'), 
-    ('080442957X', '9780804429573'), 
+    ('8537809667', '9788537809662'),
+    ('080442957X', '9780804429573'),
     ('9788584390670', '9788584390670'),
     ('9790306406156', '9790306406156'),
 ]
 
 
 @pytest.mark.parametrize('input_isbn, output_isbn', isbn_conversion_test_cases)
-def test_isbn_conversion(input_isbn: Any, output_isbn: str):
+def test_isbn_conversion(input_isbn: Any, output_isbn: str) -> None:
     assert Book(isbn=ISBN(input_isbn)).isbn == output_isbn
