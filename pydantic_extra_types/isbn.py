@@ -12,6 +12,15 @@ from pydantic_core import PydanticCustomError, core_schema
 
 
 def isbn10_digit_calc(isbn: str) -> str:
+    """
+    Calc a ISBN-10 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
+
+    Args:
+        value: The str value representing the ISBN in 10 digits.
+
+    Returns:
+        The calculated last digit.
+    """
     total = sum(int(digit) * (10 - idx) for idx, digit in enumerate(isbn[:9]))
 
     for check_digit in range(1, 11):
@@ -22,6 +31,15 @@ def isbn10_digit_calc(isbn: str) -> str:
 
 
 def isbn13_digit_calc(isbn: str) -> str:
+    """
+    Calc a ISBN-13 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
+
+    Args:
+        value: The str value representing the ISBN in 13 digits.
+
+    Returns:
+        The calculated last digit.
+    """
     total = sum(int(digit) * (1 if idx % 2 == 0 else 3) for idx, digit in enumerate(isbn[:12]))
 
     check_digit = (10 - (total % 10)) % 10
@@ -57,7 +75,6 @@ class ISBN(str):
     @classmethod
     def _validate(cls, __input_value: str, _: Any) -> str:
         cls.validate_isbn_format(__input_value)
-        cls.validate_isbn_digits(__input_value)
 
         return cls.convert_isbn10_to_isbn13(__input_value)
 
@@ -81,6 +98,8 @@ class ISBN(str):
         if isbn_length == 10:
             if not value[:-1].isdigit() or ((value[-1] != 'X') and (not value[-1].isdigit())):
                 raise PydanticCustomError('isbn10_invalid_characters', 'First 9 digits of ISBN-10 must be integers')
+            if isbn10_digit_calc(value) != value[-1]:
+                raise PydanticCustomError('isbn_invalid_digit_check_isbn10', 'Provided digit is invalid for given ISBN')
 
         if isbn_length == 13:
             if not value.isdigit():
@@ -89,29 +108,8 @@ class ISBN(str):
                 raise PydanticCustomError(
                     'isbn_invalid_early_characters', 'The first 3 digits of ISBN-13 must be 978 or 979'
                 )
-
-    @staticmethod
-    def validate_isbn_digits(value: str) -> None:
-        """
-        Validate a ISBN digits from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
-
-        Args:
-            value: The str value representing the ISBN in 10 or 13 digits.
-
-        Raises:
-            PydanticCustomError: If the check digit is not valid.
-        """
-
-        isbn_length = len(value)
-
-        validation_functions = {10: isbn10_digit_calc, 13: isbn13_digit_calc}
-        validate = validation_functions.get(isbn_length)
-
-        if not callable(validate):
-            raise PydanticCustomError('isbn_invalid_length', f'Unsupported ISBN length: {isbn_length}')
-
-        if validate(value) != value[-1]:
-            raise PydanticCustomError('isbn_invalid_digit_check_isbn', 'Provided digit is invalid for given ISBN')
+            if isbn13_digit_calc(value) != value[-1]:
+                raise PydanticCustomError('isbn_invalid_digit_check_isbn13', 'Provided digit is invalid for given ISBN')
 
     @staticmethod
     def convert_isbn10_to_isbn13(value: str) -> str:
