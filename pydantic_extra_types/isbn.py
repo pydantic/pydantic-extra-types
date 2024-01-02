@@ -124,7 +124,7 @@ class ISBN(str):
         """
 
         if len(value) == 10:
-            base_isbn = '978' + value[:-1]
+            base_isbn = f'978{value[:-1]}'
             isbn13_digit = isbn13_digit_calc(base_isbn)
             return ISBN(f'{base_isbn}{isbn13_digit}')
 
