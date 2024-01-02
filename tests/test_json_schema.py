@@ -10,6 +10,7 @@ from pydantic_extra_types.country import (
     CountryOfficialName,
     CountryShortName,
 )
+from pydantic_extra_types.isbn import ISBN
 from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.ulid import ULID
@@ -178,6 +179,20 @@ from pydantic_extra_types.ulid import ULID
                     'x': {
                         'anyOf': [{'type': 'integer'}, {'format': 'binary', 'type': 'string'}, {'type': 'string'}],
                         'title': 'X',
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            ISBN,
+            {
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
                     }
                 },
                 'required': ['x'],
