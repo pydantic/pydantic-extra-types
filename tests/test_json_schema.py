@@ -191,8 +191,8 @@ from pydantic_extra_types.isbn import ISBN
             {
                 'properties': {
                     'x': {
-                        'anyOf': [{'type': 'string'}, {'type': 'integer'}],
                         'title': 'X',
+                        'type': 'string',
                     }
                 },
                 'required': ['x'],
