@@ -13,6 +13,7 @@ from pydantic_extra_types.country import (
 from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.ulid import ULID
+from pydantic_extra_types.isbn import ISBN
 
 
 @pytest.mark.parametrize(
@@ -177,6 +178,20 @@ from pydantic_extra_types.ulid import ULID
                 'properties': {
                     'x': {
                         'anyOf': [{'type': 'integer'}, {'format': 'binary', 'type': 'string'}, {'type': 'string'}],
+                        'title': 'X',
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            ISBN,
+            {
+                'properties': {
+                    'x': {
+                        'anyOf': [{'type': 'string'}, {'type': 'integer'}],
                         'title': 'X',
                     }
                 },
