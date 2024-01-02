@@ -10,10 +10,10 @@ from pydantic_extra_types.country import (
     CountryOfficialName,
     CountryShortName,
 )
+from pydantic_extra_types.isbn import ISBN
 from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.ulid import ULID
-from pydantic_extra_types.isbn import ISBN
 
 
 @pytest.mark.parametrize(
