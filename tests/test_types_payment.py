@@ -39,6 +39,8 @@ def test_validate_digits():
     assert PaymentCardNumber.validate_digits(digits) is None
     with pytest.raises(PydanticCustomError, match='Card number is not all digits'):
         PaymentCardNumber.validate_digits('hello')
+    with pytest.raises(PydanticCustomError, match='Card number is not all digits'):
+        PaymentCardNumber.validate_digits('²')
 
 
 @pytest.mark.parametrize(
