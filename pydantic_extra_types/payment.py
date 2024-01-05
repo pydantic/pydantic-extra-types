@@ -88,7 +88,7 @@ class PaymentCardNumber(str):
         Raises:
             PydanticCustomError: If the card number is not all digits.
         """
-        if not card_number or not all("0" <= c <= "9" for c in card_number):
+        if not card_number or not all('0' <= c <= '9' for c in card_number):
             raise PydanticCustomError('payment_card_number_digits', 'Card number is not all digits')
 
     @classmethod
