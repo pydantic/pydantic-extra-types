@@ -10,11 +10,11 @@ from pydantic_extra_types.country import (
     CountryOfficialName,
     CountryShortName,
 )
+from pydantic_extra_types.iban import IBAN
 from pydantic_extra_types.isbn import ISBN
 from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.ulid import ULID
-from pydantic_extra_types.iban import Iban
 
 
 @pytest.mark.parametrize(
@@ -194,15 +194,22 @@ from pydantic_extra_types.iban import Iban
                     'x': {
                         'title': 'X',
                         'type': 'string',
-                    },
+                    }
+                },
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',
-                },
             },
-            Iban,
+        ),
+        (
+            IBAN,
             {
-                'properties': {'x': {'title': 'X', 'type': 'string'}},
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                    }
+                },
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',

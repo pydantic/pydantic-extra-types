@@ -6,7 +6,7 @@ from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
 try:
-    import schwifty
+    import schwifty  # type: ignore[import]
 except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
         'The `iban` module requires "schwifty" to be installed. You can install it with "pip install schwifty".'
@@ -19,13 +19,13 @@ class Iban(str):
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        return core_schema.general_after_validator_function(
-            cls.validate,
+        return core_schema.with_info_after_validator_function(
+            cls._validate,
             core_schema.str_schema(),
         )
 
     @classmethod
-    def validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> str:
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> str:
         return cls(__input_value)
 
     @classmethod
