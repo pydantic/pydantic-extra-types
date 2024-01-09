@@ -19,11 +19,11 @@ classifiers = [
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3 :: Only',
-    'Programming Language :: Python :: 3.7',
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
     'Intended Audience :: Developers',
     'Intended Audience :: Information Technology',
     'Intended Audience :: System Administrators',
@@ -37,7 +37,7 @@ classifiers = [
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: Internet',
 ]
-requires-python = '>=3.7'
+requires-python = '>=3.8'
 dependencies = [
     'pydantic>=2.5.2',
 ]
@@ -46,7 +46,7 @@ dynamic = ['version']
 [project.optional-dependencies]
 all = [
     'phonenumbers>=8,<9',
-    'pycountry>=22,<23',
+    'pycountry>=23,<24',
     'python-ulid>=1,<2',
     'schwifty>=2023.10.0,<=2024.01.1',
 ]

@@ -7,7 +7,6 @@ from pydantic_extra_types.country import (
     CountryAlpha2,
     CountryAlpha3,
     CountryNumericCode,
-    CountryOfficialName,
     CountryShortName,
 )
 from pydantic_extra_types.iban import Iban
@@ -67,15 +66,6 @@ from pydantic_extra_types.ulid import ULID
             CountryNumericCode,
             {
                 'properties': {'x': {'pattern': '^[0-9]{3}$', 'title': 'X', 'type': 'string'}},
-                'required': ['x'],
-                'title': 'Model',
-                'type': 'object',
-            },
-        ),
-        (
-            CountryOfficialName,
-            {
-                'properties': {'x': {'title': 'X', 'type': 'string'}},
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',
