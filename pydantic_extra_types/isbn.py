@@ -1,6 +1,5 @@
 """
-The `pydantic_extra_types.isbn` module provides functionality to recieve and validate ISBN
-(International Standard Book Number) in 10-digit and 13-digit formats. The output is always ISBN-13.
+ISBN (International Standard Book Number) is a numeric commercial book identifier which is intended to be unique. This module provides a ISBN type for Pydantic models.
 """
 
 from __future__ import annotations
@@ -12,14 +11,13 @@ from pydantic_core import PydanticCustomError, core_schema
 
 
 def isbn10_digit_calc(isbn: str) -> str:
-    """
-    Calc a ISBN-10 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
+    """Calc a ISBN-10 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
 
     Args:
-        value: The str value representing the ISBN in 10 digits.
+        isbn: The ISBN-10 value to calculate the last digit.
 
     Returns:
-        The calculated last digit.
+        The calculated last digit of the ISBN-10 value.
     """
     total = sum(int(digit) * (10 - idx) for idx, digit in enumerate(isbn[:9]))
 
@@ -31,14 +29,13 @@ def isbn10_digit_calc(isbn: str) -> str:
 
 
 def isbn13_digit_calc(isbn: str) -> str:
-    """
-    Calc a ISBN-13 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
+    """Calc a ISBN-13 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
 
     Args:
-        value: The str value representing the ISBN in 13 digits.
+        isbn: The ISBN-13 value to calculate the last digit.
 
     Returns:
-        The calculated last digit.
+        The calculated last digit of the ISBN-13 value.
     """
     total = sum(int(digit) * (1 if idx % 2 == 0 else 3) for idx, digit in enumerate(isbn[:12]))
 
@@ -80,15 +77,7 @@ class ISBN(str):
 
     @staticmethod
     def validate_isbn_format(value: str) -> None:
-        """
-        Validate a ISBN format from the provided str value.
-
-        Args:
-            value: The str value representing the ISBN in 10 or 13 digits.
-
-        Raises:
-            PydanticCustomError: If the value is not a valid ISBN.
-        """
+        """Validate a ISBN format from the provided str value."""
 
         isbn_length = len(value)
 
@@ -115,12 +104,6 @@ class ISBN(str):
     def convert_isbn10_to_isbn13(value: str) -> str:
         """
         Convert an ISBN-10 to ISBN-13.
-
-        Args:
-            value: The str value representing the ISBN.
-
-        Returns:
-            The converted ISBN or the original value if no conversion is necessary.
         """
 
         if len(value) == 10:

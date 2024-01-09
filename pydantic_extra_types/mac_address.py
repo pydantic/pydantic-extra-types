@@ -1,5 +1,5 @@
 """
-The `pydantic_extra_types.mac_address` module provides functionality to parse and validate MAC addresses in different
+The MAC address module provides functionality to parse and validate MAC addresses in different
 formats, such as IEEE 802 MAC-48, EUI-48, EUI-64, or a 20-octet format.
 """
 
@@ -45,15 +45,6 @@ class MacAddress(str):
     def validate_mac_address(value: bytes) -> str:
         """
         Validate a MAC Address from the provided byte value.
-
-        Args:
-            value: The byte value representing the MAC address.
-
-        Returns:
-            str: The parsed MAC address.
-
-        Raises:
-            PydanticCustomError: If the value is not a valid MAC address.
         """
         if len(value) < 14:
             raise PydanticCustomError(
