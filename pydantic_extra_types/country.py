@@ -28,7 +28,7 @@ class CountryInfo:
     official_name: str
 
 
-@lru_cache()
+@lru_cache
 def _countries() -> list[CountryInfo]:
     return [
         CountryInfo(
@@ -42,27 +42,27 @@ def _countries() -> list[CountryInfo]:
     ]
 
 
-@lru_cache()
+@lru_cache
 def _index_by_alpha2() -> dict[str, CountryInfo]:
     return {country.alpha2: country for country in _countries()}
 
 
-@lru_cache()
+@lru_cache
 def _index_by_alpha3() -> dict[str, CountryInfo]:
     return {country.alpha3: country for country in _countries()}
 
 
-@lru_cache()
+@lru_cache
 def _index_by_numeric_code() -> dict[str, CountryInfo]:
     return {country.numeric_code: country for country in _countries()}
 
 
-@lru_cache()
+@lru_cache
 def _index_by_short_name() -> dict[str, CountryInfo]:
     return {country.short_name: country for country in _countries()}
 
 
-@lru_cache()
+@lru_cache
 def _index_by_official_name() -> dict[str, CountryInfo]:
     return {country.official_name: country for country in _countries() if country.official_name}
 
