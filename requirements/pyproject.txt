@@ -17,7 +17,7 @@ pydantic==2.5.2
 pydantic-core==2.14.5
     # via pydantic
 python-ulid==1.1.0
-schwifty==2023.11.2
+schwifty==2023.10.0
     # via pydantic-extra-types (pyproject.toml)
 typing-extensions==4.6.3
     # via
