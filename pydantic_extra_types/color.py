@@ -11,14 +11,8 @@ from __future__ import annotations
 
 import math
 import re
-import sys
 from colorsys import hls_to_rgb, rgb_to_hls
-from typing import Any, Callable, Tuple, Union, cast
-
-if sys.version_info >= (3, 8):  # pragma: no cover
-    from typing import Literal
-else:  # pragma: no cover
-    from typing_extensions import Literal
+from typing import Any, Callable, Literal, Tuple, Union, cast
 
 from pydantic import GetJsonSchemaHandler
 from pydantic._internal import _repr

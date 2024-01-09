@@ -11,7 +11,7 @@ from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
 try:
-    import pycountry  # type: ignore[import]
+    import pycountry
 except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
         'The `country` module requires "pycountry" to be installed. You can install it with "pip install pycountry".'
@@ -24,11 +24,9 @@ class CountryInfo:
     alpha3: str
     numeric_code: str
     short_name: str
-    # NOTE: Not all countries have an official name
-    official_name: str
 
 
-@lru_cache()
+@lru_cache
 def _countries() -> list[CountryInfo]:
     return [
         CountryInfo(
@@ -36,35 +34,29 @@ def _countries() -> list[CountryInfo]:
             alpha3=country.alpha_3,
             numeric_code=country.numeric,
             short_name=country.name,
-            official_name=getattr(country, 'official_name', ''),
         )
         for country in pycountry.countries
     ]
 
 
-@lru_cache()
+@lru_cache
 def _index_by_alpha2() -> dict[str, CountryInfo]:
     return {country.alpha2: country for country in _countries()}
 
 
-@lru_cache()
+@lru_cache
 def _index_by_alpha3() -> dict[str, CountryInfo]:
     return {country.alpha3: country for country in _countries()}
 
 
-@lru_cache()
+@lru_cache
 def _index_by_numeric_code() -> dict[str, CountryInfo]:
     return {country.numeric_code: country for country in _countries()}
 
 
-@lru_cache()
+@lru_cache
 def _index_by_short_name() -> dict[str, CountryInfo]:
     return {country.short_name: country for country in _countries()}
-
-
-@lru_cache()
-def _index_by_official_name() -> dict[str, CountryInfo]:
-    return {country.official_name: country for country in _countries() if country.official_name}
 
 
 class CountryAlpha2(str):
@@ -122,12 +114,6 @@ class CountryAlpha2(str):
     def short_name(self) -> str:
         """The country short name."""
         return _index_by_alpha2()[self].short_name
-
-    @property
-    def official_name(self) -> str:
-        """The country official name."""
-        country = _index_by_alpha2()[self]
-        return country.official_name
 
 
 class CountryAlpha3(str):
@@ -187,12 +173,6 @@ class CountryAlpha3(str):
         """The country short name."""
         return _index_by_alpha3()[self].short_name
 
-    @property
-    def official_name(self) -> str:
-        """The country official name."""
-        country = _index_by_alpha3()[self]
-        return country.official_name
-
 
 class CountryNumericCode(str):
     """CountryNumericCode parses country codes in the
@@ -251,12 +231,6 @@ class CountryNumericCode(str):
         """The country short name."""
         return _index_by_numeric_code()[self].short_name
 
-    @property
-    def official_name(self) -> str:
-        """The country official name."""
-        country = _index_by_numeric_code()[self]
-        return country.official_name
-
 
 class CountryShortName(str):
     """CountryShortName parses country codes in the short name format.
@@ -305,63 +279,3 @@ class CountryShortName(str):
     def numeric_code(self) -> str:
         """The country code in the [ISO 3166-1 numeric](https://en.wikipedia.org/wiki/ISO_3166-1_numeric) format."""
         return _index_by_short_name()[self].numeric_code
-
-    @property
-    def official_name(self) -> str:
-        """The country official name."""
-        country = _index_by_short_name()[self]
-        return country.official_name
-
-
-class CountryOfficialName(str):
-    """CountryOfficialName parses country codes in the official name format.
-
-    ```py
-    from pydantic import BaseModel
-
-    from pydantic_extra_types.country import CountryOfficialName
-
-    class Product(BaseModel):
-        made_in: CountryOfficialName
-
-    product = Product(made_in="United States of America")
-    print(product)
-    #> made_in='United States of America'
-    ```
-    """
-
-    @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> CountryOfficialName:
-        if __input_value not in _index_by_official_name():
-            raise PydanticCustomError('country_numeric_code', 'Invalid country official name')
-        return cls(__input_value)
-
-    @classmethod
-    def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
-    ) -> core_schema.AfterValidatorFunctionSchema:
-        return core_schema.with_info_after_validator_function(
-            cls._validate,
-            core_schema.str_schema(),
-            serialization=core_schema.to_string_ser_schema(),
-        )
-
-    @property
-    def alpha2(self) -> str:
-        """The country code in the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format."""
-        return _index_by_official_name()[self].alpha2
-
-    @property
-    def alpha3(self) -> str:
-        """The country code in the [ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) format."""
-        return _index_by_official_name()[self].alpha3
-
-    @property
-    def numeric_code(self) -> str:
-        """The country code in the [ISO 3166-1 numeric](https://en.wikipedia.org/wiki/ISO_3166-1_numeric) format."""
-        return _index_by_official_name()[self].numeric_code
-
-    @property
-    def short_name(self) -> str:
-        """The country short name."""
-        return _index_by_official_name()[self].short_name
