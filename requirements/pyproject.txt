@@ -11,18 +11,18 @@ iso3166==2.1.1
 phonenumbers==8.13.27
     # via pydantic-extra-types (pyproject.toml)
 pycountry==23.12.11
-    # via pydantic-extra-types (pyproject.toml)
+    # via
+    #   pydantic-extra-types (pyproject.toml)
+    #   schwifty
 pydantic==2.5.3
     # via pydantic-extra-types (pyproject.toml)
 pydantic-core==2.14.6
     # via pydantic
 python-ulid==1.1.0
-schwifty==2024.01.1
+    # via pydantic-extra-types (pyproject.toml)
+schwifty==2023.11.2
     # via pydantic-extra-types (pyproject.toml)
 typing-extensions==4.9.0
     # via
     #   pydantic
     #   pydantic-core
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
