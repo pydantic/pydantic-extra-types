@@ -4,3 +4,4 @@ pytest
 codecov
 pytest-cov
 pytest-pretty
+pendulum>=3.0.0,<4.0.0
