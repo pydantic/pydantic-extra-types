@@ -32,6 +32,17 @@ class MacAddress(str):
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        """
+        Return a Pydantic CoreSchema with the MAC address validation.
+
+        Args:
+            source: The source type to be converted.
+            handler: The handler to get the CoreSchema.
+
+        Returns:
+            A Pydantic CoreSchema with the MAC address validation.
+
+        """
         return core_schema.with_info_before_validator_function(
             cls._validate,
             core_schema.str_schema(),
@@ -39,6 +50,17 @@ class MacAddress(str):
 
     @classmethod
     def _validate(cls, __input_value: str, _: Any) -> str:
+        """
+        Validate a MAC Address from the provided str value.
+
+        Args:
+            __input_value: The str value to be validated.
+            _: The source type to be converted.
+
+        Returns:
+            The validated MAC Address.
+
+        """
         return cls.validate_mac_address(__input_value.encode())
 
     @staticmethod

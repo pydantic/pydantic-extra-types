@@ -64,6 +64,17 @@ class ISBN(str):
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        """
+        Return a Pydantic CoreSchema with the ISBN validation.
+
+        Args:
+            source: The source type to be converted.
+            handler: The handler to get the CoreSchema.
+
+        Returns:
+            A Pydantic CoreSchema with the ISBN validation.
+
+        """
         return core_schema.with_info_before_validator_function(
             cls._validate,
             core_schema.str_schema(),
@@ -71,13 +82,33 @@ class ISBN(str):
 
     @classmethod
     def _validate(cls, __input_value: str, _: Any) -> str:
+        """
+        Validate a ISBN from the provided str value.
+
+        Args:
+            __input_value: The str value to be validated.
+            _: The source type to be converted.
+
+        Returns:
+            The validated ISBN.
+
+        Raises:
+            PydanticCustomError: If the ISBN is not valid.
+        """
         cls.validate_isbn_format(__input_value)
 
         return cls.convert_isbn10_to_isbn13(__input_value)
 
     @staticmethod
     def validate_isbn_format(value: str) -> None:
-        """Validate a ISBN format from the provided str value."""
+        """Validate a ISBN format from the provided str value.
+
+        Args:
+            value: The str value to be validated.
+
+        Raises:
+            PydanticCustomError: If the ISBN is not valid.
+        """
 
         isbn_length = len(value)
 
@@ -102,8 +133,13 @@ class ISBN(str):
 
     @staticmethod
     def convert_isbn10_to_isbn13(value: str) -> str:
-        """
-        Convert an ISBN-10 to ISBN-13.
+        """Convert an ISBN-10 to ISBN-13.
+
+        Args:
+            value: The ISBN-10 value to be converted.
+
+        Returns:
+            The converted ISBN-13 value.
         """
 
         if len(value) == 10:
