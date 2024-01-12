@@ -14,7 +14,7 @@ def isbn10_digit_calc(isbn: str) -> str:
     """Calc a ISBN-10 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
 
     Args:
-        isbn: The ISBN-10 value to calculate the last digit.
+        isbn: The str value representing the ISBN in 10 digits.
 
     Returns:
         The calculated last digit of the ISBN-10 value.
@@ -32,7 +32,7 @@ def isbn13_digit_calc(isbn: str) -> str:
     """Calc a ISBN-13 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
 
     Args:
-        isbn: The ISBN-13 value to calculate the last digit.
+        isbn: The str value representing the ISBN in 13 digits.
 
     Returns:
         The calculated last digit of the ISBN-13 value.
