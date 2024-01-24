@@ -4,4 +4,3 @@ annotated-types
 black
 pyupgrade
 ruff
-pendulum>=3.0.0,<4.0.0
