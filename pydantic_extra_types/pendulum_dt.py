@@ -29,7 +29,7 @@ class DateTime(_DateTime):
         dt: DateTime
 
     print(test_model(dt='2021-01-01T00:00:00+00:00'))
-    
+
     #> test_model(dt=DateTime(2021, 1, 1, 0, 0, 0, tzinfo=FixedTimezone(0, name="+00:00")))
     ```
     """
@@ -48,12 +48,10 @@ class DateTime(_DateTime):
         Returns:
             A Pydantic CoreSchema with the Datetime validation.
         """
-        return core_schema.no_info_wrap_validator_function(
-            cls._validate_datetime, core_schema.is_instance_schema(_DateTime)
-        )
+        return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.datetime_schema())
 
     @classmethod
-    def _validate_datetime(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
         """
         Validate the datetime object and return it.
 
