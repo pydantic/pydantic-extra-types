@@ -48,6 +48,7 @@ all = [
     'phonenumbers>=8,<9',
     'pycountry>=23,<24',
     'python-ulid>=1,<2',
+    'pendulum>=3.0.0,<4.0.0'
 ]
 
 [project.urls]

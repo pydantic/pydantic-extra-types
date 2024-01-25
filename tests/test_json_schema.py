@@ -12,6 +12,7 @@ from pydantic_extra_types.country import (
 from pydantic_extra_types.isbn import ISBN
 from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
+from pydantic_extra_types.pendulum_dt import DateTime
 from pydantic_extra_types.ulid import ULID
 
 
@@ -185,6 +186,15 @@ from pydantic_extra_types.ulid import ULID
                         'type': 'string',
                     }
                 },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            DateTime,
+            {
+                'properties': {'x': {'format': 'date-time', 'title': 'X', 'type': 'string'}},
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',
