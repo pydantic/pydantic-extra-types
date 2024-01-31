@@ -47,7 +47,8 @@ dynamic = ['version']
 all = [
     'phonenumbers>=8,<9',
     'pycountry>=23,<24',
-    'python-ulid>=1,<2',
+    'python-ulid>=1,<2; python_version<"3.9"',
+    'python-ulid>=1,<3; python_version>="3.9"',
     'pendulum>=3.0.0,<4.0.0'
 ]
 
