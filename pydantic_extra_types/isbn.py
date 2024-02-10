@@ -1,4 +1,6 @@
 """
+The `pydantic_extra_types.isbn` module provides functionality to recieve and validate ISBN.
+
 ISBN (International Standard Book Number) is a numeric commercial book identifier which is intended to be unique. This module provides a ISBN type for Pydantic models.
 """
 
@@ -104,7 +106,7 @@ class ISBN(str):
         """Validate a ISBN format from the provided str value.
 
         Args:
-            value: The str value to be validated.
+            value: The str value representing the ISBN in 10 or 13 digits.
 
         Raises:
             PydanticCustomError: If the ISBN is not valid.
@@ -139,7 +141,7 @@ class ISBN(str):
             value: The ISBN-10 value to be converted.
 
         Returns:
-            The converted ISBN-13 value.
+            The converted ISBN or the original value if no conversion is necessary.
         """
 
         if len(value) == 10:

@@ -58,7 +58,7 @@ class MacAddress(str):
             _: The source type to be converted.
 
         Returns:
-            The validated MAC Address.
+            str: The parsed MAC address.
 
         """
         return cls.validate_mac_address(__input_value.encode())
