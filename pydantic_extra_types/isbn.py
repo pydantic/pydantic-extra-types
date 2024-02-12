@@ -1,6 +1,7 @@
 """
-The `pydantic_extra_types.isbn` module provides functionality to recieve and validate ISBN
-(International Standard Book Number) in 10-digit and 13-digit formats. The output is always ISBN-13.
+The `pydantic_extra_types.isbn` module provides functionality to recieve and validate ISBN.
+
+ISBN (International Standard Book Number) is a numeric commercial book identifier which is intended to be unique. This module provides a ISBN type for Pydantic models.
 """
 
 from __future__ import annotations
@@ -12,14 +13,13 @@ from pydantic_core import PydanticCustomError, core_schema
 
 
 def isbn10_digit_calc(isbn: str) -> str:
-    """
-    Calc a ISBN-10 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
+    """Calc a ISBN-10 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
 
     Args:
         isbn: The str value representing the ISBN in 10 digits.
 
     Returns:
-        The calculated last digit.
+        The calculated last digit of the ISBN-10 value.
     """
     total = sum(int(digit) * (10 - idx) for idx, digit in enumerate(isbn[:9]))
 
@@ -31,14 +31,13 @@ def isbn10_digit_calc(isbn: str) -> str:
 
 
 def isbn13_digit_calc(isbn: str) -> str:
-    """
-    Calc a ISBN-13 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
+    """Calc a ISBN-13 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
 
     Args:
         isbn: The str value representing the ISBN in 13 digits.
 
     Returns:
-        The calculated last digit.
+        The calculated last digit of the ISBN-13 value.
     """
     total = sum(int(digit) * (1 if idx % 2 == 0 else 3) for idx, digit in enumerate(isbn[:12]))
 
@@ -67,6 +66,17 @@ class ISBN(str):
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        """
+        Return a Pydantic CoreSchema with the ISBN validation.
+
+        Args:
+            source: The source type to be converted.
+            handler: The handler to get the CoreSchema.
+
+        Returns:
+            A Pydantic CoreSchema with the ISBN validation.
+
+        """
         return core_schema.with_info_before_validator_function(
             cls._validate,
             core_schema.str_schema(),
@@ -74,20 +84,32 @@ class ISBN(str):
 
     @classmethod
     def _validate(cls, __input_value: str, _: Any) -> str:
+        """
+        Validate a ISBN from the provided str value.
+
+        Args:
+            __input_value: The str value to be validated.
+            _: The source type to be converted.
+
+        Returns:
+            The validated ISBN.
+
+        Raises:
+            PydanticCustomError: If the ISBN is not valid.
+        """
         cls.validate_isbn_format(__input_value)
 
         return cls.convert_isbn10_to_isbn13(__input_value)
 
     @staticmethod
     def validate_isbn_format(value: str) -> None:
-        """
-        Validate a ISBN format from the provided str value.
+        """Validate a ISBN format from the provided str value.
 
         Args:
             value: The str value representing the ISBN in 10 or 13 digits.
 
         Raises:
-            PydanticCustomError: If the value is not a valid ISBN.
+            PydanticCustomError: If the ISBN is not valid.
         """
 
         isbn_length = len(value)
@@ -113,11 +135,10 @@ class ISBN(str):
 
     @staticmethod
     def convert_isbn10_to_isbn13(value: str) -> str:
-        """
-        Convert an ISBN-10 to ISBN-13.
+        """Convert an ISBN-10 to ISBN-13.
 
         Args:
-            value: The str value representing the ISBN.
+            value: The ISBN-10 value to be converted.
 
         Returns:
             The converted ISBN or the original value if no conversion is necessary.
