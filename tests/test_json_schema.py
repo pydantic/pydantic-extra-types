@@ -1,3 +1,4 @@
+import pycountry
 import pytest
 from pydantic import BaseModel
 
@@ -10,10 +11,16 @@ from pydantic_extra_types.country import (
     CountryShortName,
 )
 from pydantic_extra_types.isbn import ISBN
+from pydantic_extra_types.language_code import ISO639_3, ISO639_5
 from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
 from pydantic_extra_types.ulid import ULID
+
+languages = [lang.alpha_3 for lang in pycountry.languages]
+language_families = [lang.alpha_3 for lang in pycountry.language_families]
+languages.sort()
+language_families.sort()
 
 
 @pytest.mark.parametrize(
@@ -195,6 +202,40 @@ from pydantic_extra_types.ulid import ULID
             DateTime,
             {
                 'properties': {'x': {'format': 'date-time', 'title': 'X', 'type': 'string'}},
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            ISO639_3,
+            {
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'enum': languages,
+                        'maxLength': 3,
+                        'minLength': 3,
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            ISO639_5,
+            {
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'enum': language_families,
+                        'maxLength': 3,
+                        'minLength': 3,
+                    }
+                },
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',
