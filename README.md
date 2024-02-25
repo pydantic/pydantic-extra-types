@@ -8,7 +8,3 @@
 A place for pydantic types that probably shouldn't exist in the main pydantic lib.
 
 See [pydantic/pydantic#5012](https://github.com/pydantic/pydantic/issues/5012) for more info.
-
-**Currently a work in progress.**
-
-This package will be officially released as V2 when pydantic V2 is released.

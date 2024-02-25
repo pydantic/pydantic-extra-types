@@ -12,10 +12,10 @@ from __future__ import annotations
 import math
 import re
 from colorsys import hls_to_rgb, rgb_to_hls
-from typing import Any, Callable, Tuple, Union, cast
+from typing import Any, Callable, Literal, Tuple, Union, cast
 
 from pydantic import GetJsonSchemaHandler
-from pydantic._internal import _repr, _utils
+from pydantic._internal import _repr
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
@@ -132,7 +132,7 @@ class Color(_repr.Representation):
         else:
             return self.as_hex()
 
-    def as_hex(self) -> str:
+    def as_hex(self, format: Literal['short', 'long'] = 'short') -> str:
         """Returns the hexadecimal representation of the color.
 
         Hex string representing the color can be 3, 4, 6, or 8 characters depending on whether the string
@@ -146,7 +146,7 @@ class Color(_repr.Representation):
             values.append(float_to_255(self._rgba.alpha))
 
         as_hex = ''.join(f'{v:02x}' for v in values)
-        if all(c in repeat_colors for c in values):
+        if format == 'short' and all(c in repeat_colors for c in values):
             as_hex = ''.join(as_hex[c] for c in range(0, len(as_hex), 2))
         return '#' + as_hex
 
@@ -237,7 +237,7 @@ class Color(_repr.Representation):
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: Callable[[Any], CoreSchema]
     ) -> core_schema.CoreSchema:
-        return core_schema.general_plain_validator_function(
+        return core_schema.with_info_plain_validator_function(
             cls._validate, serialization=core_schema.to_string_ser_schema()
         )
 
@@ -430,7 +430,7 @@ def parse_float_alpha(value: None | str | float | int) -> float | None:
             'value is not a valid color: alpha values must be a valid float',
         )
 
-    if _utils.almost_equal_floats(alpha, 1):
+    if math.isclose(alpha, 1):
         return None
     elif 0 <= alpha <= 1:
         return alpha
@@ -479,11 +479,8 @@ def float_to_255(c: float) -> int:
 
     Returns:
         The integer equivalent of the given float value rounded to the nearest whole number.
-
-    Raises:
-        ValueError: If the given float value is outside the acceptable range of 0 to 1 (inclusive).
     """
-    return int(round(c * 255))
+    return round(c * 255)
 
 
 COLORS_BY_NAME = {

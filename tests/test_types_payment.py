@@ -16,6 +16,17 @@ VALID_MIR_16 = '2200000000000004'
 VALID_MIR_17 = '22000000000000004'
 VALID_MIR_18 = '220000000000000004'
 VALID_MIR_19 = '2200000000000000004'
+VALID_DISCOVER = '6011000000000004'
+VALID_VERVE_16 = '5061000000000001'
+VALID_VERVE_18 = '506100000000000001'
+VALID_VERVE_19 = '5061000000000000001'
+VALID_DANKORT = '5019000000000000'
+VALID_UNIONPAY_16 = '6200000000000001'
+VALID_UNIONPAY_19 = '8100000000000000001'
+VALID_JCB_16 = '3528000000000001'
+VALID_JCB_19 = '3528000000000000001'
+VALID_MAESTRO = '6759649826438453'
+VALID_TROY = '9792000000000001'
 VALID_OTHER = '2000000000000000008'
 LUHN_INVALID = '4000000000000000'
 LEN_INVALID = '40000000000000006'
@@ -39,6 +50,8 @@ def test_validate_digits():
     assert PaymentCardNumber.validate_digits(digits) is None
     with pytest.raises(PydanticCustomError, match='Card number is not all digits'):
         PaymentCardNumber.validate_digits('hello')
+    with pytest.raises(PydanticCustomError, match='Card number is not all digits'):
+        PaymentCardNumber.validate_digits('²')
 
 
 @pytest.mark.parametrize(
@@ -92,8 +105,19 @@ def test_validate_luhn_check_digit(card_number: str, valid: bool):
         (VALID_MIR_17, PaymentCardBrand.mir, True),
         (VALID_MIR_18, PaymentCardBrand.mir, True),
         (VALID_MIR_19, PaymentCardBrand.mir, True),
-        (VALID_OTHER, PaymentCardBrand.other, True),
+        (VALID_DISCOVER, PaymentCardBrand.discover, True),
+        (VALID_VERVE_16, PaymentCardBrand.verve, True),
+        (VALID_VERVE_18, PaymentCardBrand.verve, True),
+        (VALID_VERVE_19, PaymentCardBrand.verve, True),
+        (VALID_DANKORT, PaymentCardBrand.dankort, True),
+        (VALID_UNIONPAY_16, PaymentCardBrand.unionpay, True),
+        (VALID_UNIONPAY_19, PaymentCardBrand.unionpay, True),
+        (VALID_JCB_16, PaymentCardBrand.jcb, True),
+        (VALID_JCB_19, PaymentCardBrand.jcb, True),
         (LEN_INVALID, PaymentCardBrand.visa, False),
+        (VALID_MAESTRO, PaymentCardBrand.maestro, True),
+        (VALID_TROY, PaymentCardBrand.troy, True),
+        (VALID_OTHER, PaymentCardBrand.other, True),
     ],
 )
 def test_length_for_brand(card_number: str, brand: PaymentCardBrand, valid: bool):
@@ -113,7 +137,14 @@ def test_length_for_brand(card_number: str, brand: PaymentCardBrand, valid: bool
         (VALID_MC, PaymentCardBrand.mastercard),
         (VALID_VISA_16, PaymentCardBrand.visa),
         (VALID_MIR_16, PaymentCardBrand.mir),
+        (VALID_DISCOVER, PaymentCardBrand.discover),
+        (VALID_VERVE_16, PaymentCardBrand.verve),
+        (VALID_DANKORT, PaymentCardBrand.dankort),
+        (VALID_UNIONPAY_16, PaymentCardBrand.unionpay),
+        (VALID_JCB_16, PaymentCardBrand.jcb),
         (VALID_OTHER, PaymentCardBrand.other),
+        (VALID_MAESTRO, PaymentCardBrand.maestro),
+        (VALID_TROY, PaymentCardBrand.troy),
     ],
 )
 def test_get_brand(card_number: str, brand: PaymentCardBrand):

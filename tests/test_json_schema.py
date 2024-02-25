@@ -2,15 +2,19 @@ import pytest
 from pydantic import BaseModel
 
 from pydantic_extra_types.color import Color
+from pydantic_extra_types.coordinate import Coordinate, Latitude, Longitude
 from pydantic_extra_types.country import (
     CountryAlpha2,
     CountryAlpha3,
     CountryNumericCode,
-    CountryOfficialName,
     CountryShortName,
 )
 from pydantic_extra_types.pandas_types import Series
+from pydantic_extra_types.isbn import ISBN
+from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
+from pydantic_extra_types.pendulum_dt import DateTime
+from pydantic_extra_types.ulid import ULID
 
 
 @pytest.mark.parametrize(
@@ -69,7 +73,7 @@ from pydantic_extra_types.payment import PaymentCardNumber
             },
         ),
         (
-            CountryOfficialName,
+            CountryShortName,
             {
                 'properties': {'x': {'title': 'X', 'type': 'string'}},
                 'required': ['x'],
@@ -78,9 +82,115 @@ from pydantic_extra_types.payment import PaymentCardNumber
             },
         ),
         (
-            CountryShortName,
+            MacAddress,
             {
-                'properties': {'x': {'title': 'X', 'type': 'string'}},
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            Latitude,
+            {
+                'properties': {
+                    'x': {
+                        'maximum': 90.0,
+                        'minimum': -90.0,
+                        'title': 'X',
+                        'type': 'number',
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            Longitude,
+            {
+                'properties': {
+                    'x': {
+                        'maximum': 180.0,
+                        'minimum': -180.0,
+                        'title': 'X',
+                        'type': 'number',
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            Coordinate,
+            {
+                '$defs': {
+                    'Coordinate': {
+                        'properties': {
+                            'latitude': {'maximum': 90.0, 'minimum': -90.0, 'title': 'Latitude', 'type': 'number'},
+                            'longitude': {'maximum': 180.0, 'minimum': -180.0, 'title': 'Longitude', 'type': 'number'},
+                        },
+                        'required': ['latitude', 'longitude'],
+                        'title': 'Coordinate',
+                        'type': 'object',
+                    }
+                },
+                'properties': {
+                    'x': {
+                        'anyOf': [
+                            {'$ref': '#/$defs/Coordinate'},
+                            {
+                                'maxItems': 2,
+                                'minItems': 2,
+                                'prefixItems': [
+                                    {'type': 'number'},
+                                    {'type': 'number'},
+                                ],
+                                'type': 'array',
+                            },
+                            {'type': 'string'},
+                        ],
+                        'title': 'X',
+                    },
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            ULID,
+            {
+                'properties': {
+                    'x': {
+                        'anyOf': [{'type': 'integer'}, {'format': 'binary', 'type': 'string'}, {'type': 'string'}],
+                        'title': 'X',
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            ISBN,
+            {
+                'properties': {'x': {'title': 'X'}},
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            DateTime,
+            {
+                'properties': {'x': {'format': 'date-time', 'title': 'X', 'type': 'string'}},
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',

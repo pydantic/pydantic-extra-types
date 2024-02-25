@@ -11,9 +11,9 @@ install:
 refresh-lockfiles:
 	@echo "Updating requirements/*.txt files using pip-compile"
 	find requirements/ -name '*.txt' ! -name 'all.txt' -type f -delete
-	pip-compile -q --resolver backtracking -o requirements/linting.txt requirements/linting.in
-	pip-compile -q --resolver backtracking -o requirements/testing.txt requirements/testing.in
-	pip-compile -q --resolver backtracking --extra all -o requirements/pyproject.txt pyproject.toml
+	pip-compile -q --no-emit-index-url --resolver backtracking -o requirements/linting.txt requirements/linting.in
+	pip-compile -q --no-emit-index-url --resolver backtracking -o requirements/testing.txt requirements/testing.in
+	pip-compile -q --no-emit-index-url --resolver backtracking --extra all -o requirements/pyproject.txt pyproject.toml
 	pip install --dry-run -r requirements/all.txt
 
 .PHONY: format
@@ -28,7 +28,7 @@ lint:
 
 .PHONY: mypy
 mypy:
-	mypy pydantic_extra_types --disable-recursive-aliases
+	mypy pydantic_extra_types
 
 .PHONY: pyupgrade
 pyupgrade:

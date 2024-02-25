@@ -1,6 +1,6 @@
 """
-Represents and validates payment cards (such as a debit or credit card),
-including validation for payment card number and issuer.
+The `pydantic_extra_types.payment` module provides the
+[`PaymentCardNumber`][pydantic_extra_types.payment.PaymentCardNumber] data type.
 """
 
 from __future__ import annotations
@@ -13,20 +13,19 @@ from pydantic_core import PydanticCustomError, core_schema
 
 
 class PaymentCardBrand(str, Enum):
-    """Enumeration of payment card brands.
-
-    `PaymentCardBrand` can be one of the following based on the BIN:
-
-    * PaymentCardBrand.amex
-    * PaymentCardBrand.mastercard
-    * PaymentCardBrand.visa
-    * PaymentCardBrand.other
-    """
+    """Payment card brands supported by the [`PaymentCardNumber`][pydantic_extra_types.payment.PaymentCardNumber]."""
 
     amex = 'American Express'
     mastercard = 'Mastercard'
     visa = 'Visa'
     mir = 'Mir'
+    maestro = 'Maestro'
+    discover = 'Discover'
+    verve = 'Verve'
+    dankort = 'Dankort'
+    troy = 'Troy'
+    unionpay = 'UnionPay'
+    jcb = 'JCB'
     other = 'other'
 
     def __str__(self) -> str:
@@ -34,23 +33,20 @@ class PaymentCardBrand(str, Enum):
 
 
 class PaymentCardNumber(str):
-    """A [payment card number](https://en.wikipedia.org/wiki/Payment_card_number).
-
-    Attributes:
-        strip_whitespace: Whether to strip whitespace from the input value.
-        min_length: The minimum length of the card number.
-        max_length: The maximum length of the card number.
-        bin: The first 6 digits of the card number.
-        last4: The last 4 digits of the card number.
-        brand: The brand of the card.
-    """
+    """A [payment card number](https://en.wikipedia.org/wiki/Payment_card_number)."""
 
     strip_whitespace: ClassVar[bool] = True
+    """Whether to strip whitespace from the input value."""
     min_length: ClassVar[int] = 12
+    """The minimum length of the card number."""
     max_length: ClassVar[int] = 19
+    """The maximum length of the card number."""
     bin: str
+    """The first 6 digits of the card number."""
     last4: str
+    """The last 4 digits of the card number."""
     brand: PaymentCardBrand
+    """The brand of the card."""
 
     def __init__(self, card_number: str):
         self.validate_digits(card_number)
@@ -63,7 +59,7 @@ class PaymentCardNumber(str):
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        return core_schema.general_after_validator_function(
+        return core_schema.with_info_after_validator_function(
             cls.validate,
             core_schema.str_schema(
                 min_length=cls.min_length, max_length=cls.max_length, strip_whitespace=cls.strip_whitespace
@@ -99,7 +95,7 @@ class PaymentCardNumber(str):
         Raises:
             PydanticCustomError: If the card number is not all digits.
         """
-        if not card_number.isdigit():
+        if not card_number or not all('0' <= c <= '9' for c in card_number):
             raise PydanticCustomError('payment_card_number_digits', 'Card number is not all digits')
 
     @classmethod
@@ -146,37 +142,58 @@ class PaymentCardNumber(str):
         Raises:
             PydanticCustomError: If the card number is not valid.
         """
+        brand = PaymentCardBrand.other
+
         if card_number[0] == '4':
             brand = PaymentCardBrand.visa
+            required_length = [13, 16, 19]
         elif 51 <= int(card_number[:2]) <= 55:
             brand = PaymentCardBrand.mastercard
+            required_length = [16]
         elif card_number[:2] in {'34', '37'}:
             brand = PaymentCardBrand.amex
+            required_length = [15]
         elif 2200 <= int(card_number[:4]) <= 2204:
             brand = PaymentCardBrand.mir
-        else:
-            brand = PaymentCardBrand.other
+            required_length = list(range(16, 20))
+        elif card_number[:4] in {'5018', '5020', '5038', '5893', '6304', '6759', '6761', '6762', '6763'} or card_number[
+            :6
+        ] in (
+            '676770',
+            '676774',
+        ):
+            brand = PaymentCardBrand.maestro
+            required_length = list(range(12, 20))
+        elif card_number.startswith('65') or 644 <= int(card_number[:3]) <= 649 or card_number.startswith('6011'):
+            brand = PaymentCardBrand.discover
+            required_length = list(range(16, 20))
+        elif (
+            506099 <= int(card_number[:6]) <= 506198
+            or 650002 <= int(card_number[:6]) <= 650027
+            or 507865 <= int(card_number[:6]) <= 507964
+        ):
+            brand = PaymentCardBrand.verve
+            required_length = [16, 18, 19]
+        elif card_number[:4] in {'5019', '4571'}:
+            brand = PaymentCardBrand.dankort
+            required_length = [16]
+        elif card_number.startswith('9792'):
+            brand = PaymentCardBrand.troy
+            required_length = [16]
+        elif card_number[:2] in {'62', '81'}:
+            brand = PaymentCardBrand.unionpay
+            required_length = [16, 19]
+        elif 3528 <= int(card_number[:4]) <= 3589:
+            brand = PaymentCardBrand.jcb
+            required_length = [16, 19]
 
-        required_length: None | int | str = None
-        if brand in PaymentCardBrand.mastercard:
-            required_length = 16
-            valid = len(card_number) == required_length
-        elif brand == PaymentCardBrand.visa:
-            required_length = '13, 16 or 19'
-            valid = len(card_number) in {13, 16, 19}
-        elif brand == PaymentCardBrand.amex:
-            required_length = 15
-            valid = len(card_number) == required_length
-        elif brand == PaymentCardBrand.mir:
-            required_length = 'in range from 16 to 19'
-            valid = len(card_number) in range(16, 20)
-        else:
-            valid = True
+        valid = len(card_number) in required_length if brand != PaymentCardBrand.other else True
 
         if not valid:
             raise PydanticCustomError(
                 'payment_card_number_brand',
-                'Length for a {brand} card must be {required_length}',
+                f'Length for a {brand} card must be {" or ".join(map(str, required_length))}',
                 {'brand': brand, 'required_length': required_length},
             )
+
         return brand
