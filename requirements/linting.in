@@ -4,4 +4,3 @@ annotated-types
 black
 pyupgrade
 ruff
-pandas-stubs
