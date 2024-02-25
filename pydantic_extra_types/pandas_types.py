@@ -11,8 +11,8 @@ class Series(pd.Series):  # type: ignore
     @classmethod
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: GetCoreSchemaHandler
-    ) -> core_schema.AfterValidatorFunctionSchema:
-        return core_schema.general_after_validator_function(
+    ) -> core_schema.BeforeValidatorFunctionSchema:
+        return core_schema.no_info_before_validator_function(
             cls._validate,
             core_schema.any_schema(),
         )

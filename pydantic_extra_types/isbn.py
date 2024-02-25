@@ -1,7 +1,8 @@
 """
 The `pydantic_extra_types.isbn` module provides functionality to recieve and validate ISBN.
 
-ISBN (International Standard Book Number) is a numeric commercial book identifier which is intended to be unique. This module provides a ISBN type for Pydantic models.
+ISBN (International Standard Book Number) is a numeric commercial book identifier which is intended to be unique.
+This module provides a ISBN type for Pydantic models.
 """
 
 from __future__ import annotations
