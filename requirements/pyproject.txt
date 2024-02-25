@@ -6,7 +6,7 @@
 #
 annotated-types==0.6.0
     # via pydantic
-pandas==2.2.1
+pandas==2.0.3
     # via pydantic-extra-types (pyproject.toml)
 pendulum==3.0.0
     # via pydantic-extra-types (pyproject.toml)
