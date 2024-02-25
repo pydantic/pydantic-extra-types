@@ -28,7 +28,7 @@ nodeenv==1.8.0
     # via pre-commit
 numpy==1.25.0
     # via pandas-stubs
-pandas-stubs==2.2.0.240218
+pandas-stubs==2.0.0.230412 
     # via -r requirements/linting.in
 packaging==23.2
     # via black
