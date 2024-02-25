@@ -9,9 +9,9 @@ from pydantic_extra_types.country import (
     CountryNumericCode,
     CountryShortName,
 )
-from pydantic_extra_types.pandas_types import Series
 from pydantic_extra_types.isbn import ISBN
 from pydantic_extra_types.mac_address import MacAddress
+from pydantic_extra_types.pandas_types import Series
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
 from pydantic_extra_types.ulid import ULID
