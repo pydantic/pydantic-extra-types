@@ -11,7 +11,7 @@ from pydantic_extra_types.country import (
     CountryNumericCode,
     CountryShortName,
 )
-from pydantic_extra_types.currency_code import ISO4217, EverydayCurrency
+from pydantic_extra_types.currency_code import ISO4217, Currency
 from pydantic_extra_types.isbn import ISBN
 from pydantic_extra_types.language_code import ISO639_3, ISO639_5
 from pydantic_extra_types.mac_address import MacAddress
@@ -271,7 +271,7 @@ everyday_currencies.sort()
             },
         ),
         (
-            EverydayCurrency,
+            Currency,
             {
                 'properties': {
                     'x': {

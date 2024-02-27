@@ -43,9 +43,9 @@ class ISO4217(str):
     class Currency(BaseModel):
         alpha_3: ISO4217
 
-    currency = Currency(alpha_3='ssr')
+    currency = Currency(alpha_3='AED')
     print(currency)
-    # > alpha_3='ssr'
+    # > alpha_3='AED'
     ```
     """
 
@@ -89,20 +89,20 @@ class ISO4217(str):
         return json_schema
 
 
-class EverydayCurrency(str):
-    """EverydayCurrency parses currency subset of the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) format.
+class Currency(str):
+    """Currency parses currency subset of the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) format.
     It excludes bonds testing codes and precious metals.
         ```py
         from pydantic import BaseModel
 
-        from pydantic_extra_types.currency_code import EverydayCurrency
+        from pydantic_extra_types.currency_code import Currency
 
-        class Currency(BaseModel):
-            alpha_3: EverydayCurrency
+        class currency(BaseModel):
+            alpha_3: Currency
 
-        currency = Currency(alpha_3='ssr')
-        print(currency)
-        # > alpha_3='ssr'
+        cur = currency(alpha_3='AED')
+        print(cur)
+        # > alpha_3='AED'
         ```
     """
 

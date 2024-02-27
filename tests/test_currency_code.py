@@ -11,12 +11,11 @@ class ISO4217CheckingModel(BaseModel):
     currency: currency_code.ISO4217
 
 
-class EveryDayCurrencyCheckingModel(BaseModel):
-    currency: currency_code.EverydayCurrency
+class CurrencyCheckingModel(BaseModel):
+    currency: currency_code.Currency
 
 
-forbidden_currencies = list(currency_code._CODES_FOR_BONDS_METAL_TESTING)
-forbidden_currencies.sort()
+forbidden_currencies = sorted(currency_code._CODES_FOR_BONDS_METAL_TESTING)
 
 
 @pytest.mark.parametrize('currency', map(lambda code: code.alpha_3, pycountry.currencies))
@@ -34,7 +33,7 @@ def test_ISO4217_code_ok(currency: str):
     ),
 )
 def test_everyday_code_ok(currency: str):
-    model = EveryDayCurrencyCheckingModel(currency=currency)
+    model = CurrencyCheckingModel(currency=currency)
     assert model.currency == currency
     assert model.model_dump() == {'currency': currency}  # test serialization
 
@@ -56,10 +55,10 @@ def test_forbidden_everyday(forbidden_currency):
     with pytest.raises(
         ValidationError,
         match=re.escape(
-            '1 validation error for EveryDayCurrencyCheckingModel\ncurrency\n  '
+            '1 validation error for CurrencyCheckingModel\ncurrency\n  '
             'Invalid currency code. See https://en.wikipedia.org/wiki/ISO_4217. '
             'Bonds, testing and precious metals codes are not allowed. '
             f"[type=InvalidCurrency, input_value='{forbidden_currency}', input_type=str]"
         ),
     ):
-        EveryDayCurrencyCheckingModel(currency=forbidden_currency)
+        CurrencyCheckingModel(currency=forbidden_currency)
