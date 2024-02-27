@@ -121,11 +121,11 @@ class Coordinate(_repr.Representation):
         if not isinstance(value, str):
             return value
         try:
-            value = tuple(float(x) for x in value.split(","))
+            value = tuple(float(x) for x in value.split(','))
         except ValueError:
             raise PydanticCustomError(
-                "coordinate_error",
-                "value is not a valid coordinate: string is not recognized as a valid coordinate",
+                'coordinate_error',
+                'value is not a valid coordinate: string is not recognized as a valid coordinate',
             )
         return ArgsKwargs(args=value)
 
@@ -136,7 +136,7 @@ class Coordinate(_repr.Representation):
         return ArgsKwargs(args=handler(value))
 
     def __str__(self) -> str:
-        return f"{self.latitude},{self.longitude}"
+        return f'{self.latitude},{self.longitude}'
 
     def __eq__(self, other: Any) -> bool:
         return isinstance(other, Coordinate) and self.latitude == other.latitude and self.longitude == other.longitude
