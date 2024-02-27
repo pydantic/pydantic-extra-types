@@ -15,18 +15,18 @@ from pydantic_core import PydanticCustomError, core_schema
 class PaymentCardBrand(str, Enum):
     """Payment card brands supported by the [`PaymentCardNumber`][pydantic_extra_types.payment.PaymentCardNumber]."""
 
-    amex = "American Express"
-    mastercard = "Mastercard"
-    visa = "Visa"
-    mir = "Mir"
-    maestro = "Maestro"
-    discover = "Discover"
-    verve = "Verve"
-    dankort = "Dankort"
-    troy = "Troy"
-    unionpay = "UnionPay"
-    jcb = "JCB"
-    other = "other"
+    amex = 'American Express'
+    mastercard = 'Mastercard'
+    visa = 'Visa'
+    mir = 'Mir'
+    maestro = 'Maestro'
+    discover = 'Discover'
+    verve = 'Verve'
+    dankort = 'Dankort'
+    troy = 'Troy'
+    unionpay = 'UnionPay'
+    jcb = 'JCB'
+    other = 'other'
 
     def __str__(self) -> str:
         return self.value
@@ -95,8 +95,8 @@ class PaymentCardNumber(str):
         Raises:
             PydanticCustomError: If the card number is not all digits.
         """
-        if not card_number or not all("0" <= c <= "9" for c in card_number):
-            raise PydanticCustomError("payment_card_number_digits", "Card number is not all digits")
+        if not card_number or not all('0' <= c <= '9' for c in card_number):
+            raise PydanticCustomError('payment_card_number_digits', 'Card number is not all digits')
 
     @classmethod
     def validate_luhn_check_digit(cls, card_number: str) -> str:
@@ -124,7 +124,7 @@ class PaymentCardNumber(str):
             sum_ += digit
         valid = sum_ % 10 == 0
         if not valid:
-            raise PydanticCustomError("payment_card_number_luhn", "Card number is not luhn valid")
+            raise PydanticCustomError('payment_card_number_luhn', 'Card number is not luhn valid')
         return card_number
 
     @staticmethod
@@ -144,27 +144,27 @@ class PaymentCardNumber(str):
         """
         brand = PaymentCardBrand.other
 
-        if card_number[0] == "4":
+        if card_number[0] == '4':
             brand = PaymentCardBrand.visa
             required_length = [13, 16, 19]
         elif 51 <= int(card_number[:2]) <= 55:
             brand = PaymentCardBrand.mastercard
             required_length = [16]
-        elif card_number[:2] in {"34", "37"}:
+        elif card_number[:2] in {'34', '37'}:
             brand = PaymentCardBrand.amex
             required_length = [15]
         elif 2200 <= int(card_number[:4]) <= 2204:
             brand = PaymentCardBrand.mir
             required_length = list(range(16, 20))
-        elif card_number[:4] in {"5018", "5020", "5038", "5893", "6304", "6759", "6761", "6762", "6763"} or card_number[
+        elif card_number[:4] in {'5018', '5020', '5038', '5893', '6304', '6759', '6761', '6762', '6763'} or card_number[
             :6
         ] in (
-            "676770",
-            "676774",
+            '676770',
+            '676774',
         ):
             brand = PaymentCardBrand.maestro
             required_length = list(range(12, 20))
-        elif card_number.startswith("65") or 644 <= int(card_number[:3]) <= 649 or card_number.startswith("6011"):
+        elif card_number.startswith('65') or 644 <= int(card_number[:3]) <= 649 or card_number.startswith('6011'):
             brand = PaymentCardBrand.discover
             required_length = list(range(16, 20))
         elif (
@@ -174,13 +174,13 @@ class PaymentCardNumber(str):
         ):
             brand = PaymentCardBrand.verve
             required_length = [16, 18, 19]
-        elif card_number[:4] in {"5019", "4571"}:
+        elif card_number[:4] in {'5019', '4571'}:
             brand = PaymentCardBrand.dankort
             required_length = [16]
-        elif card_number.startswith("9792"):
+        elif card_number.startswith('9792'):
             brand = PaymentCardBrand.troy
             required_length = [16]
-        elif card_number[:2] in {"62", "81"}:
+        elif card_number[:2] in {'62', '81'}:
             brand = PaymentCardBrand.unionpay
             required_length = [16, 19]
         elif 3528 <= int(card_number[:4]) <= 3589:
@@ -191,9 +191,9 @@ class PaymentCardNumber(str):
 
         if not valid:
             raise PydanticCustomError(
-                "payment_card_number_brand",
+                'payment_card_number_brand',
                 f'Length for a {brand} card must be {" or ".join(map(str, required_length))}',
-                {"brand": brand, "required_length": required_length},
+                {'brand': brand, 'required_length': required_length},
             )
 
         return brand

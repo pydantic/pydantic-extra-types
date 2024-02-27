@@ -70,5 +70,5 @@ class DateTime(_DateTime):
         try:
             data = parse(value)
         except Exception as exc:
-            raise PydanticCustomError("value_error", "value is not a valid timestamp") from exc
+            raise PydanticCustomError('value_error', 'value is not a valid timestamp') from exc
         return handler(data)

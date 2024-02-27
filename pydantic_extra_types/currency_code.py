@@ -18,17 +18,17 @@ except ModuleNotFoundError:  # pragma: no cover
 
 # List of codes that should not be usually used within regular transactions
 _CODES_FOR_BONDS_METAL_TESTING = {
-    "XTS",  # testing
-    "XAU",  # gold
-    "XAG",  # silver
-    "XPD",  # palladium
-    "XPT",  # platinum
-    "XBA",  # Bond Markets Unit European Composite Unit (EURCO)
-    "XBB",  # Bond Markets Unit European Monetary Unit (E.M.U.-6)
-    "XBC",  # Bond Markets Unit European Unit of Account 9 (E.U.A.-9)
-    "XBD",  # Bond Markets Unit European Unit of Account 17 (E.U.A.-17)
-    "XXX",  # no currency
-    "XDR",  # SDR (Special Drawing Right)
+    'XTS',  # testing
+    'XAU',  # gold
+    'XAG',  # silver
+    'XPD',  # palladium
+    'XPT',  # platinum
+    'XBA',  # Bond Markets Unit European Composite Unit (EURCO)
+    'XBB',  # Bond Markets Unit European Monetary Unit (E.M.U.-6)
+    'XBC',  # Bond Markets Unit European Unit of Account 9 (E.U.A.-9)
+    'XBD',  # Bond Markets Unit European Unit of Account 17 (E.U.A.-17)
+    'XXX',  # no currency
+    'XDR',  # SDR (Special Drawing Right)
 }
 
 
@@ -69,7 +69,7 @@ class ISO4217(str):
         """
         if currency_code not in cls.allowed_currencies:
             raise PydanticCustomError(
-                "ISO4217", "Invalid ISO 4217 currency code. See https://en.wikipedia.org/wiki/ISO_4217"
+                'ISO4217', 'Invalid ISO 4217 currency code. See https://en.wikipedia.org/wiki/ISO_4217'
             )
         return currency_code
 
@@ -85,7 +85,7 @@ class ISO4217(str):
         cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
         json_schema = handler(schema)
-        json_schema.update({"enum": cls.allowed_countries_list})
+        json_schema.update({'enum': cls.allowed_countries_list})
         return json_schema
 
 
@@ -129,10 +129,10 @@ class Currency(str):
         """
         if currency_symbol not in cls.allowed_currencies:
             raise PydanticCustomError(
-                "InvalidCurrency",
-                "Invalid currency code."
-                " See https://en.wikipedia.org/wiki/ISO_4217. "
-                "Bonds, testing and precious metals codes are not allowed.",
+                'InvalidCurrency',
+                'Invalid currency code.'
+                ' See https://en.wikipedia.org/wiki/ISO_4217. '
+                'Bonds, testing and precious metals codes are not allowed.',
             )
         return currency_symbol
 
@@ -175,5 +175,5 @@ class Currency(str):
 
         """
         json_schema = handler(schema)
-        json_schema.update({"enum": cls.allowed_countries_list})
+        json_schema.update({'enum': cls.allowed_countries_list})
         return json_schema

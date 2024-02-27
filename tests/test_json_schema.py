@@ -1,7 +1,8 @@
 import pycountry
-import pydantic_extra_types
 import pytest
 from pydantic import BaseModel
+
+import pydantic_extra_types
 from pydantic_extra_types.color import Color
 from pydantic_extra_types.coordinate import Coordinate, Latitude, Longitude
 from pydantic_extra_types.country import (
@@ -35,255 +36,255 @@ everyday_currencies.sort()
 
 
 @pytest.mark.parametrize(
-    "cls,expected",
+    'cls,expected',
     [
         (
             Color,
             {
-                "properties": {"x": {"format": "color", "title": "X", "type": "string"}},
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'properties': {'x': {'format': 'color', 'title': 'X', 'type': 'string'}},
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             PaymentCardNumber,
             {
-                "properties": {
-                    "x": {
-                        "maxLength": 19,
-                        "minLength": 12,
-                        "title": "X",
-                        "type": "string",
+                'properties': {
+                    'x': {
+                        'maxLength': 19,
+                        'minLength': 12,
+                        'title': 'X',
+                        'type': 'string',
                     }
                 },
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             CountryAlpha2,
             {
-                "properties": {"x": {"pattern": "^\\w{2}$", "title": "X", "type": "string"}},
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'properties': {'x': {'pattern': '^\\w{2}$', 'title': 'X', 'type': 'string'}},
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             CountryAlpha3,
             {
-                "properties": {"x": {"pattern": "^\\w{3}$", "title": "X", "type": "string"}},
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'properties': {'x': {'pattern': '^\\w{3}$', 'title': 'X', 'type': 'string'}},
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             CountryNumericCode,
             {
-                "properties": {"x": {"pattern": "^[0-9]{3}$", "title": "X", "type": "string"}},
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'properties': {'x': {'pattern': '^[0-9]{3}$', 'title': 'X', 'type': 'string'}},
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             CountryShortName,
             {
-                "properties": {"x": {"title": "X", "type": "string"}},
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'properties': {'x': {'title': 'X', 'type': 'string'}},
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             MacAddress,
             {
-                "properties": {
-                    "x": {
-                        "title": "X",
-                        "type": "string",
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
                     }
                 },
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             Latitude,
             {
-                "properties": {
-                    "x": {
-                        "maximum": 90.0,
-                        "minimum": -90.0,
-                        "title": "X",
-                        "type": "number",
+                'properties': {
+                    'x': {
+                        'maximum': 90.0,
+                        'minimum': -90.0,
+                        'title': 'X',
+                        'type': 'number',
                     }
                 },
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             Longitude,
             {
-                "properties": {
-                    "x": {
-                        "maximum": 180.0,
-                        "minimum": -180.0,
-                        "title": "X",
-                        "type": "number",
+                'properties': {
+                    'x': {
+                        'maximum': 180.0,
+                        'minimum': -180.0,
+                        'title': 'X',
+                        'type': 'number',
                     }
                 },
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             Coordinate,
             {
-                "$defs": {
-                    "Coordinate": {
-                        "properties": {
-                            "latitude": {"maximum": 90.0, "minimum": -90.0, "title": "Latitude", "type": "number"},
-                            "longitude": {"maximum": 180.0, "minimum": -180.0, "title": "Longitude", "type": "number"},
+                '$defs': {
+                    'Coordinate': {
+                        'properties': {
+                            'latitude': {'maximum': 90.0, 'minimum': -90.0, 'title': 'Latitude', 'type': 'number'},
+                            'longitude': {'maximum': 180.0, 'minimum': -180.0, 'title': 'Longitude', 'type': 'number'},
                         },
-                        "required": ["latitude", "longitude"],
-                        "title": "Coordinate",
-                        "type": "object",
+                        'required': ['latitude', 'longitude'],
+                        'title': 'Coordinate',
+                        'type': 'object',
                     }
                 },
-                "properties": {
-                    "x": {
-                        "anyOf": [
-                            {"$ref": "#/$defs/Coordinate"},
+                'properties': {
+                    'x': {
+                        'anyOf': [
+                            {'$ref': '#/$defs/Coordinate'},
                             {
-                                "maxItems": 2,
-                                "minItems": 2,
-                                "prefixItems": [
-                                    {"type": "number"},
-                                    {"type": "number"},
+                                'maxItems': 2,
+                                'minItems': 2,
+                                'prefixItems': [
+                                    {'type': 'number'},
+                                    {'type': 'number'},
                                 ],
-                                "type": "array",
+                                'type': 'array',
                             },
-                            {"type": "string"},
+                            {'type': 'string'},
                         ],
-                        "title": "X",
+                        'title': 'X',
                     },
                 },
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             ULID,
             {
-                "properties": {
-                    "x": {
-                        "anyOf": [{"type": "integer"}, {"format": "binary", "type": "string"}, {"type": "string"}],
-                        "title": "X",
+                'properties': {
+                    'x': {
+                        'anyOf': [{'type': 'integer'}, {'format': 'binary', 'type': 'string'}, {'type': 'string'}],
+                        'title': 'X',
                     }
                 },
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             ISBN,
             {
-                "properties": {
-                    "x": {
-                        "title": "X",
-                        "type": "string",
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
                     }
                 },
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             DateTime,
             {
-                "properties": {"x": {"format": "date-time", "title": "X", "type": "string"}},
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'properties': {'x': {'format': 'date-time', 'title': 'X', 'type': 'string'}},
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             ISO639_3,
             {
-                "properties": {
-                    "x": {
-                        "title": "X",
-                        "type": "string",
-                        "enum": languages,
-                        "maxLength": 3,
-                        "minLength": 3,
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'enum': languages,
+                        'maxLength': 3,
+                        'minLength': 3,
                     }
                 },
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             ISO639_5,
             {
-                "properties": {
-                    "x": {
-                        "title": "X",
-                        "type": "string",
-                        "enum": language_families,
-                        "maxLength": 3,
-                        "minLength": 3,
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'enum': language_families,
+                        'maxLength': 3,
+                        'minLength': 3,
                     }
                 },
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             ISO4217,
             {
-                "properties": {
-                    "x": {
-                        "title": "X",
-                        "type": "string",
-                        "enum": currencies,
-                        "maxLength": 3,
-                        "minLength": 3,
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'enum': currencies,
+                        'maxLength': 3,
+                        'minLength': 3,
                     }
                 },
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
         (
             Currency,
             {
-                "properties": {
-                    "x": {
-                        "title": "X",
-                        "type": "string",
-                        "enum": everyday_currencies,
-                        "maxLength": 3,
-                        "minLength": 3,
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'enum': everyday_currencies,
+                        'maxLength': 3,
+                        'minLength': 3,
                     }
                 },
-                "required": ["x"],
-                "title": "Model",
-                "type": "object",
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
             },
         ),
     ],

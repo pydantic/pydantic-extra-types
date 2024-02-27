@@ -52,7 +52,7 @@ class ABARoutingNumber(str):
         )
 
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> "ABARoutingNumber":
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'ABARoutingNumber':
         return cls(__input_value)
 
     @classmethod
@@ -66,7 +66,7 @@ class ABARoutingNumber(str):
             PydanticCustomError: If the routing number is not all digits.
         """
         if not routing_number.isdigit():
-            raise PydanticCustomError("aba_routing_number", "routing number is not all digits")
+            raise PydanticCustomError('aba_routing_number', 'routing number is not all digits')
 
     @classmethod
     def _validate_routing_number(cls, routing_number: str) -> str:
@@ -85,5 +85,5 @@ class ABARoutingNumber(str):
             + sum(map(int, [routing_number[2], routing_number[5], routing_number[8]]))
         )
         if checksum % 10 != 0:
-            raise PydanticCustomError("aba_routing_number", "Incorrect ABA routing transit number")
+            raise PydanticCustomError('aba_routing_number', 'Incorrect ABA routing transit number')
         return routing_number
