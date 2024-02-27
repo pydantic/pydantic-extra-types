@@ -55,7 +55,7 @@ class ISO639_3(str):
         """
         if __input_value not in cls.allowed_values:
             raise PydanticCustomError(
-                'ISO649_3', 'Invalid ISO 639-3 language code. See https://en.wikipedia.org/wiki/ISO_639-3'
+                "ISO649_3", "Invalid ISO 639-3 language code. See https://en.wikipedia.org/wiki/ISO_639-3"
             )
         return cls(__input_value)
 
@@ -95,7 +95,7 @@ class ISO639_3(str):
 
         """
         json_schema = handler(schema)
-        json_schema.update({'enum': cls.allowed_values_list})
+        json_schema.update({"enum": cls.allowed_values_list})
         return json_schema
 
 
@@ -138,7 +138,7 @@ class ISO639_5(str):
         """
         if __input_value not in cls.allowed_values:
             raise PydanticCustomError(
-                'ISO649_5', 'Invalid ISO 639-5 language code. See https://en.wikipedia.org/wiki/ISO_639-5'
+                "ISO649_5", "Invalid ISO 639-5 language code. See https://en.wikipedia.org/wiki/ISO_639-5"
             )
         return cls(__input_value)
 
@@ -178,5 +178,5 @@ class ISO639_5(str):
 
         """
         json_schema = handler(schema)
-        json_schema.update({'enum': cls.allowed_values_list})
+        json_schema.update({"enum": cls.allowed_values_list})
         return json_schema

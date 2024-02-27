@@ -58,5 +58,5 @@ class ULID(_repr.Representation):
             else:
                 ulid = _ULID.from_bytes(value)
         except ValueError:
-            raise PydanticCustomError('ulid_format', 'Unrecognized format')
+            raise PydanticCustomError("ulid_format", "Unrecognized format")
         return handler(ulid)
