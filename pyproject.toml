@@ -60,10 +60,18 @@ Documentation = 'https://docs.pydantic.dev/latest/'
 
 [tool.ruff]
 line-length = 120
-extend-select = ['Q', 'RUF100', 'C90', 'UP', 'I']
-isort = { known-first-party = ['pydantic_extra_types', 'tests'] }
-flake8-quotes = {inline-quotes = 'single', multiline-quotes = 'double'}
-mccabe = { max-complexity = 14 }
+
+[tool.ruff.lint]
+select = ['Q', 'RUF100', 'C90', 'UP', 'I']
+
+[tool.ruff.lint.mccabe]
+max-complexity = 14
+
+[tool.ruff.lint.isort]
+known-third-party = ["pydantic_extra_types", "tests"]
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
 
 [tool.coverage.run]
 source = ['pydantic_extra_types']
@@ -89,11 +97,6 @@ exclude_lines = [
     '@overload',
 ]
 
-[tool.black]
-color = true
-line-length = 120
-target-version = ['py37']
-skip-string-normalization = true
 
 [tool.mypy]
 strict = true
