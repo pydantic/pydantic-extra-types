@@ -1,7 +1,21 @@
 version: 2
 
 updates:
-- package-ecosystem: github-actions
-  directory: /
-  schedule:
-    interval: monthly
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: ⬆
+  # Python
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      python-packages:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: ⬆
