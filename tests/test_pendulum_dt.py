@@ -1,7 +1,6 @@
 import pendulum
 import pytest
 from pydantic import BaseModel, ValidationError
-
 from pydantic_extra_types.pendulum_dt import DateTime
 
 
@@ -19,7 +18,7 @@ def test_pendulum_dt_existing_instance():
 
 
 @pytest.mark.parametrize(
-    'dt', [pendulum.now().to_iso8601_string(), pendulum.now().to_w3c_string(), pendulum.now().to_iso8601_string()]
+    "dt", [pendulum.now().to_iso8601_string(), pendulum.now().to_w3c_string(), pendulum.now().to_iso8601_string()]
 )
 def test_pendulum_dt_from_serialized(dt):
     """
@@ -30,7 +29,7 @@ def test_pendulum_dt_from_serialized(dt):
     assert model.dt == dt_actual
 
 
-@pytest.mark.parametrize('dt', [None, 'malformed', pendulum.now().to_iso8601_string()[:5], 42])
+@pytest.mark.parametrize("dt", [None, "malformed", pendulum.now().to_iso8601_string()[:5], 42])
 def test_pendulum_dt_malformed(dt):
     """
     Verifies that the instance fails to validate if malformed dt are passed.

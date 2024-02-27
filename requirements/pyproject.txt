@@ -8,13 +8,13 @@ annotated-types==0.6.0
     # via pydantic
 pendulum==3.0.0
     # via pydantic-extra-types (pyproject.toml)
-phonenumbers==8.13.28
+phonenumbers==8.13.31
     # via pydantic-extra-types (pyproject.toml)
 pycountry==23.12.11
     # via pydantic-extra-types (pyproject.toml)
-pydantic==2.5.3
+pydantic==2.6.3
     # via pydantic-extra-types (pyproject.toml)
-pydantic-core==2.14.6
+pydantic-core==2.16.3
     # via pydantic
 python-dateutil==2.8.2
     # via
@@ -26,9 +26,9 @@ six==1.16.0
     # via python-dateutil
 time-machine==2.13.0
     # via pendulum
-typing-extensions==4.9.0
+typing-extensions==4.10.0
     # via
     #   pydantic
     #   pydantic-core
-tzdata==2023.4
+tzdata==2024.1
     # via pendulum

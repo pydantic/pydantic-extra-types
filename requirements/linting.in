@@ -1,6 +1,4 @@
 pre-commit
 mypy
 annotated-types
-black
-pyupgrade
 ruff

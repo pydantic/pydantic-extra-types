@@ -18,21 +18,17 @@ refresh-lockfiles:
 
 .PHONY: format
 format:
-	black $(sources)
 	ruff --fix $(sources)
+	ruff format $(sources)
 
 .PHONY: lint
 lint:
 	ruff $(sources)
-	black $(sources) --check --diff
+	ruff format --check $(sources)
 
 .PHONY: mypy
 mypy:
 	mypy pydantic_extra_types
-
-.PHONY: pyupgrade
-pyupgrade:
-	pyupgrade --py37-plus `find pydantic_extra_types tests -name "*.py" -type f`
 
 .PHONY: test
 test:

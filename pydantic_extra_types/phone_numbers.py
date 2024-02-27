@@ -34,7 +34,7 @@ class PhoneNumber(str):
 
     default_region_code: ClassVar[str | None] = None
     """The default region code to use when parsing phone numbers without an international prefix."""
-    phone_format: str = 'RFC3966'
+    phone_format: str = "RFC3966"
     """The format of the phone number."""
     min_length: int = 7
     """The minimum length of the phone number."""
@@ -46,7 +46,7 @@ class PhoneNumber(str):
         cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
         json_schema = handler(schema)
-        json_schema.update({'format': 'phone'})
+        json_schema.update({"format": "phone"})
         return json_schema
 
     @classmethod
@@ -61,8 +61,8 @@ class PhoneNumber(str):
         try:
             parsed_number = phonenumbers.parse(phone_number, cls.default_region_code)
         except phonenumbers.phonenumberutil.NumberParseException as exc:
-            raise PydanticCustomError('value_error', 'value is not a valid phone number') from exc
+            raise PydanticCustomError("value_error", "value is not a valid phone number") from exc
         if not phonenumbers.is_valid_number(parsed_number):
-            raise PydanticCustomError('value_error', 'value is not a valid phone number')
+            raise PydanticCustomError("value_error", "value is not a valid phone number")
 
         return phonenumbers.format_number(parsed_number, getattr(phonenumbers.PhoneNumberFormat, cls.phone_format))
