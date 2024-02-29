@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## v2.6.0
+
+* Allow python-ulid 2.x on Python 3.9 and later by @musicinmybrain in <https://github.com/pydantic/pydantic-extra-types/pull/131>
+* Do not pin the ”major” version of pycountry by @musicinmybrain in <https://github.com/pydantic/pydantic-extra-types/pull/132>
+* 🤖 Create dependabot.yml for updating GitHub action by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/134>
+* Bump samuelcolvin/check-python-version from 3.1 to 4.1 by @dependabot in <https://github.com/pydantic/pydantic-extra-types/pull/135>
+* Bump codecov/codecov-action from 3 to 4 by @dependabot in <https://github.com/pydantic/pydantic-extra-types/pull/136>
+* Bump actions/setup-python from 4 to 5 by @dependabot in <https://github.com/pydantic/pydantic-extra-types/pull/138>
+* Bump actions/checkout from 2 to 4 by @dependabot in <https://github.com/pydantic/pydantic-extra-types/pull/137>
+* :memo: Refactor Documentation for ISBN and MAC address modules by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/124>
+* Add language code definitions and test by @07pepa in <https://github.com/pydantic/pydantic-extra-types/pull/141>
+* :memo: Create a `changelog` to match release notes by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/142>
+* Add currency code ISO 4217 and its subset that includes only currencies by @07pepa in <https://github.com/pydantic/pydantic-extra-types/pull/143>
+* 🔨 Update code formatting and linting configurations by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/144>
+* 👷 Add Python checking for dependencies by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/145>
+* ⬆ Bump pre-commit/action from 3.0.0 to 3.0.1 by @dependabot in <https://github.com/pydantic/pydantic-extra-types/pull/146>
+* 🐛 fix single quote issue  by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/148>
+
 ## v2.5.0
 
 * Add Pendulum DT support by @theunkn0wn1 in <https://github.com/pydantic/pydantic-extra-types/pull/110>
