@@ -15,7 +15,6 @@ from pydantic_extra_types.currency_code import ISO4217, Currency
 from pydantic_extra_types.isbn import ISBN
 from pydantic_extra_types.language_code import ISO639_3, ISO639_5
 from pydantic_extra_types.mac_address import MacAddress
-from pydantic_extra_types.pandas_types import Series
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
 from pydantic_extra_types.ulid import ULID
@@ -213,12 +212,6 @@ everyday_currencies.sort()
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',
-            },
-        ),
-        (
-            Series,
-            {
-                'properties': {'x': {'title': 'X'}},
             },
         ),
         (
