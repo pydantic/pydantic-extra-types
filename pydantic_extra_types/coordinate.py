@@ -102,7 +102,8 @@ class Coordinate(_repr.Representation):
         chain_length = len(schema_chain)
         chain_schemas = [core_schema.chain_schema(schema_chain[x:]) for x in range(chain_length - 1, -1, -1)]
         return core_schema.no_info_wrap_validator_function(
-            cls._parse_args, core_schema.union_schema(chain_schemas)  # type: ignore[arg-type]
+            cls._parse_args,
+            core_schema.union_schema(chain_schemas),  # type: ignore[arg-type]
         )
 
     @classmethod

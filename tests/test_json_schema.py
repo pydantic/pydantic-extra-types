@@ -1,6 +1,8 @@
+import pycountry
 import pytest
 from pydantic import BaseModel
 
+import pydantic_extra_types
 from pydantic_extra_types.color import Color
 from pydantic_extra_types.coordinate import Coordinate, Latitude, Longitude
 from pydantic_extra_types.country import (
@@ -9,12 +11,29 @@ from pydantic_extra_types.country import (
     CountryNumericCode,
     CountryShortName,
 )
+from pydantic_extra_types.currency_code import ISO4217, Currency
 from pydantic_extra_types.isbn import ISBN
+from pydantic_extra_types.language_code import ISO639_3, ISO639_5
 from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.pandas_types import Series
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
 from pydantic_extra_types.ulid import ULID
+
+languages = [lang.alpha_3 for lang in pycountry.languages]
+language_families = [lang.alpha_3 for lang in pycountry.language_families]
+languages.sort()
+language_families.sort()
+
+currencies = [currency.alpha_3 for currency in pycountry.currencies]
+currencies.sort()
+everyday_currencies = [
+    currency.alpha_3
+    for currency in pycountry.currencies
+    if currency.alpha_3 not in pydantic_extra_types.currency_code._CODES_FOR_BONDS_METAL_TESTING
+]
+
+everyday_currencies.sort()
 
 
 @pytest.mark.parametrize(
@@ -200,6 +219,71 @@ from pydantic_extra_types.ulid import ULID
             Series,
             {
                 'properties': {'x': {'title': 'X'}},
+            },
+        ),
+        (
+            ISO639_3,
+            {
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'enum': languages,
+                        'maxLength': 3,
+                        'minLength': 3,
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            ISO639_5,
+            {
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'enum': language_families,
+                        'maxLength': 3,
+                        'minLength': 3,
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            ISO4217,
+            {
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'enum': currencies,
+                        'maxLength': 3,
+                        'minLength': 3,
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            Currency,
+            {
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'enum': everyday_currencies,
+                        'maxLength': 3,
+                        'minLength': 3,
+                    }
+                },
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',

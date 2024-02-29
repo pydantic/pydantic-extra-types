@@ -60,12 +60,25 @@ Source = 'https://github.com/pydantic/pydantic-extra-types'
 Changelog = 'https://github.com/pydantic/pydantic-extra-types/releases'
 Documentation = 'https://docs.pydantic.dev/latest/'
 
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
+
 [tool.ruff]
 line-length = 120
+target-version = 'py38'
+
+[tool.ruff.lint]
 extend-select = ['Q', 'RUF100', 'C90', 'UP', 'I']
-isort = { known-first-party = ['pydantic_extra_types', 'tests'] }
 flake8-quotes = {inline-quotes = 'single', multiline-quotes = 'double'}
+isort = { known-first-party = ['pydantic_extra_types', 'tests'] }
 mccabe = { max-complexity = 14 }
+pydocstyle = { convention = 'google' }
+
+[tool.ruff.format]
+quote-style = 'single'
+
+[tool.ruff.lint.per-file-ignores]
+'pydantic_extra_types/color.py' = ['E741']
 
 [tool.coverage.run]
 source = ['pydantic_extra_types']
@@ -91,11 +104,6 @@ exclude_lines = [
     '@overload',
 ]
 
-[tool.black]
-color = true
-line-length = 120
-target-version = ['py37']
-skip-string-normalization = true
 
 [tool.mypy]
 strict = true

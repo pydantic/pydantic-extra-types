@@ -218,7 +218,7 @@ class Color(_repr.Representation):
         Note:
             This is HSL as used in HTML and most other places, not HLS as used in Python's `colorsys`.
         """
-        h, l, s = rgb_to_hls(self._rgba.r, self._rgba.g, self._rgba.b)  # noqa: E741
+        h, l, s = rgb_to_hls(self._rgba.r, self._rgba.g, self._rgba.b)
         if alpha is None:
             if self._rgba.alpha is None:
                 return h, s, l

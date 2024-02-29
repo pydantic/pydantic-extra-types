@@ -6,24 +6,18 @@
 #
 annotated-types==0.6.0
     # via -r requirements/linting.in
-black==23.12.1
-    # via -r requirements/linting.in
 cfgv==3.4.0
     # via pre-commit
-click==8.1.7
-    # via black
 distlib==0.3.8
     # via virtualenv
 filelock==3.13.1
     # via virtualenv
-identify==2.5.33
+identify==2.5.35
     # via pre-commit
 mypy==1.8.0
     # via -r requirements/linting.in
 mypy-extensions==1.0.0
-    # via
-    #   black
-    #   mypy
+    # via mypy
 nodeenv==1.8.0
     # via pre-commit
 numpy==1.26.4
@@ -33,24 +27,20 @@ pandas-stubs==2.2.0.240218
 packaging==23.2
     # via black
 pathspec==0.12.1
-    # via black
-platformdirs==4.1.0
-    # via
-    #   black
-    #   virtualenv
-pre-commit==3.6.0
     # via -r requirements/linting.in
 pyupgrade==3.15.0
+
+platformdirs==4.2.0
+    # via virtualenv
+pre-commit==3.6.2
     # via -r requirements/linting.in
 pyyaml==6.0.1
     # via pre-commit
-ruff==0.1.14
+ruff==0.2.2
     # via -r requirements/linting.in
-tokenize-rt==5.2.0
-    # via pyupgrade
-typing-extensions==4.9.0
+typing-extensions==4.10.0
     # via mypy
-virtualenv==20.25.0
+virtualenv==20.25.1
     # via pre-commit
 
 # The following packages are considered to be unsafe in a requirements file:
