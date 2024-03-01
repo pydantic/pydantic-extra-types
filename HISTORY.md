@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## v2.6.0
+
+* Allow python-ulid 2.x on Python 3.9 and later by @musicinmybrain in <https://github.com/pydantic/pydantic-extra-types/pull/131>
+* Do not pin the ”major” version of pycountry by @musicinmybrain in <https://github.com/pydantic/pydantic-extra-types/pull/132>
+* 🤖 Create dependabot.yml for updating GitHub action by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/134>
+* :memo: Refactor Documentation for ISBN and MAC address modules by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/124>
+* Add language code definitions and test by @07pepa in <https://github.com/pydantic/pydantic-extra-types/pull/141>
+* :memo: Create a `changelog` to match release notes by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/142>
+* Add currency code ISO 4217 and its subset that includes only currencies by @07pepa in <https://github.com/pydantic/pydantic-extra-types/pull/143>
+* 🔨 Update code formatting and linting configurations by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/144>
+* 👷 Add Python checking for dependencies by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/145>
+* 🐛 fix single quote issue  by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/148>
+
 ## v2.5.0
 
 * Add Pendulum DT support by @theunkn0wn1 in <https://github.com/pydantic/pydantic-extra-types/pull/110>
