@@ -4,6 +4,7 @@ The `pydantic_extra_types.phone_numbers` module provides the
 
 This class depends on the [phonenumbers] package, which is a Python port of Google's [libphonenumber].
 """
+
 from __future__ import annotations
 
 from typing import Any, Callable, ClassVar, Generator

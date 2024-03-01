@@ -2,6 +2,7 @@
 The `pydantic_extra_types.routing_number` module provides the
 [`ABARoutingNumber`][pydantic_extra_types.routing_number.ABARoutingNumber] data type.
 """
+
 from typing import Any, ClassVar, Type
 
 from pydantic import GetCoreSchemaHandler

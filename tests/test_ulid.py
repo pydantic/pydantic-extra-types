@@ -31,8 +31,8 @@ class Something(BaseModel):
         (_ULID.from_str('01BTGNYV6HRNK8K8VKZASZCFPE'), '01BTGNYV6HRNK8K8VKZASZCFPE', True),
         (_ULID.from_str('01BTGNYV6HRNK8K8VKZASZCFPF'), '01BTGNYV6HRNK8K8VKZASZCFPF', True),
         # Invalid _ULID for bytes format
-        (b'\x01\xBA\x1E\xB2\x8A\x9F\xFAy\x10\xD5\xA5k\xC8', None, False),  # Invalid ULID (short length)
-        (b'\x01\xBA\x1E\xB2\x8A\x9F\xFAy\x10\xD5\xA5k\xC8\xB6\x00', None, False),  # Invalid ULID (long length)
+        (b'\x01\xba\x1e\xb2\x8a\x9f\xfay\x10\xd5\xa5k\xc8', None, False),  # Invalid ULID (short length)
+        (b'\x01\xba\x1e\xb2\x8a\x9f\xfay\x10\xd5\xa5k\xc8\xb6\x00', None, False),  # Invalid ULID (long length)
         # Valid ULID for int format
         (109667145845879622871206540411193812282, '2JG4FVY7N8XS4GFVHPXGJZ8S9T', True),
         (109667145845879622871206540411193812283, '2JG4FVY7N8XS4GFVHPXGJZ8S9V', True),

@@ -1,6 +1,7 @@
 """
 Language definitions that are based on the [ISO 639-3](https://en.wikipedia.org/wiki/ISO_639-3) & [ISO 639-5](https://en.wikipedia.org/wiki/ISO_639-5).
 """
+
 from __future__ import annotations
 
 from typing import Any

@@ -1,6 +1,7 @@
 """
 Currency definitions that are based on the [ISO4217](https://en.wikipedia.org/wiki/ISO_4217).
 """
+
 from __future__ import annotations
 
 from typing import Any

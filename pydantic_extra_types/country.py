@@ -1,6 +1,7 @@
 """
 Country definitions that are based on the [ISO 3166](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes).
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
