@@ -3,6 +3,7 @@ The `pydantic_extra_types.coordinate` module provides the [`Latitude`][pydantic_
 [`Longitude`][pydantic_extra_types.coordinate.Longitude], and
 [`Coordinate`][pydantic_extra_types.coordinate.Coordinate] data types.
 """
+
 from dataclasses import dataclass
 from typing import Any, ClassVar, Tuple, Type
 

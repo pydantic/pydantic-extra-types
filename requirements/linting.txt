@@ -26,7 +26,7 @@ pre-commit==3.6.2
     # via -r requirements/linting.in
 pyyaml==6.0.1
     # via pre-commit
-ruff==0.2.2
+ruff==0.3.0
     # via -r requirements/linting.in
 typing-extensions==4.10.0
     # via mypy

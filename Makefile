@@ -18,12 +18,12 @@ refresh-lockfiles:
 
 .PHONY: format
 format:
-	ruff --fix $(sources)
+	ruff check --fix $(sources)
 	ruff format $(sources)
 
 .PHONY: lint
 lint:
-	ruff $(sources)
+	ruff check $(sources)
 	ruff format --check $(sources)
 
 .PHONY: mypy
