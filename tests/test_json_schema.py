@@ -18,6 +18,7 @@ from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
 from pydantic_extra_types.ulid import ULID
+from pydantic_extra_types.mongo_objectId import ObjectIdField
 
 languages = [lang.alpha_3 for lang in pycountry.languages]
 language_families = [lang.alpha_3 for lang in pycountry.language_families]
@@ -280,6 +281,20 @@ everyday_currencies.sort()
                         'enum': everyday_currencies,
                         'maxLength': 3,
                         'minLength': 3,
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            ObjectIdField,
+            {
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
                     }
                 },
                 'required': ['x'],

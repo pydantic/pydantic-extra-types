@@ -10,6 +10,8 @@ pendulum==3.0.0
     # via pydantic-extra-types (pyproject.toml)
 phonenumbers==8.13.31
     # via pydantic-extra-types (pyproject.toml)
+bson==0.5.10
+# via pydantic-extra-types (pyproject.toml)
 pycountry==23.12.11
     # via pydantic-extra-types (pyproject.toml)
 pydantic==2.6.3
