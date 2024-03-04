@@ -13,7 +13,7 @@ from pydantic_extra_types.country import (
 )
 from pydantic_extra_types.currency_code import ISO4217, Currency
 from pydantic_extra_types.isbn import ISBN
-from pydantic_extra_types.language_code import ISO639_3, ISO639_5
+from pydantic_extra_types.language_code import ISO639_3, ISO639_5, LanguageAlpha2, LanguageName
 from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
@@ -214,6 +214,24 @@ everyday_currencies.sort()
             DateTime,
             {
                 'properties': {'x': {'format': 'date-time', 'title': 'X', 'type': 'string'}},
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            LanguageAlpha2,
+            {
+                'properties': {'x': {'pattern': '^\\w{2}$', 'title': 'X', 'type': 'string'}},
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            LanguageName,
+            {
+                'properties': {'x': {'title': 'X', 'type': 'string'}},
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',
