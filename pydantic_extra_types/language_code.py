@@ -22,6 +22,15 @@ except ModuleNotFoundError:  # pragma: no cover
 
 @dataclass
 class LanguageInfo:
+    """
+    LanguageInfo is a dataclass that contains the language information.
+
+    Args:
+        alpha2: The language code in the [ISO 639-1 alpha-2](https://en.wikipedia.org/wiki/ISO_639-1) format.
+        alpha3: The language code in the [ISO 639-3 alpha-3](https://en.wikipedia.org/wiki/ISO_639-3) format.
+        name: The language name.
+    """
+
     alpha2: Union[str, None]
     alpha3: str
     name: str
@@ -29,6 +38,12 @@ class LanguageInfo:
 
 @lru_cache
 def _languages() -> list[LanguageInfo]:
+    """
+    Return a list of LanguageInfo objects containing the language information.
+
+    Returns:
+        A list of LanguageInfo objects containing the language information.
+    """
     return [
         LanguageInfo(
             alpha2=getattr(language, 'alpha_2', None),
@@ -41,16 +56,25 @@ def _languages() -> list[LanguageInfo]:
 
 @lru_cache
 def _index_by_alpha2() -> dict[str, LanguageInfo]:
+    """
+    Return a dictionary with the language code in the [ISO 639-1 alpha-2](https://en.wikipedia.org/wiki/ISO_639-1) format as the key and the LanguageInfo object as the value.
+    """
     return {language.alpha2: language for language in _languages() if language.alpha2 is not None}
 
 
 @lru_cache
 def _index_by_alpha3() -> dict[str, LanguageInfo]:
+    """
+    Return a dictionary with the language code in the [ISO 639-3 alpha-3](https://en.wikipedia.org/wiki/ISO_639-3) format as the key and the LanguageInfo object as the value.
+    """
     return {language.alpha3: language for language in _languages()}
 
 
 @lru_cache
 def _index_by_name() -> dict[str, LanguageInfo]:
+    """
+    Return a dictionary with the language name as the key and the LanguageInfo object as the value.
+    """
     return {language.name: language for language in _languages()}
 
 
@@ -75,6 +99,16 @@ class LanguageAlpha2(str):
 
     @classmethod
     def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> LanguageAlpha2:
+        """
+        Validate a language code in the ISO 639-1 alpha-2 format from the provided str value.
+
+        Args:
+            __input_value: The str value to be validated.
+            _: The Pydantic ValidationInfo.
+
+        Returns:
+            The validated language code in the ISO 639-1 alpha-2 format.
+        """
         if __input_value not in _index_by_alpha2():
             raise PydanticCustomError('language_alpha2', 'Invalid language alpha2 code')
         return cls(__input_value)
@@ -83,6 +117,16 @@ class LanguageAlpha2(str):
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
+        """
+        Return a Pydantic CoreSchema with the language code in the ISO 639-1 alpha-2 format validation.
+
+        Args:
+            source: The source type.
+            handler: The handler to get the CoreSchema.
+
+        Returns:
+            A Pydantic CoreSchema with the language code in the ISO 639-1 alpha-2 format validation.
+        """
         return core_schema.with_info_after_validator_function(
             cls._validate,
             core_schema.str_schema(to_lower=True),
@@ -92,6 +136,16 @@ class LanguageAlpha2(str):
     def __get_pydantic_json_schema__(
         cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
+        """
+        Return a Pydantic JSON Schema with the language code in the ISO 639-1 alpha-2 format validation.
+
+        Args:
+            schema: The Pydantic CoreSchema.
+            handler: The handler to get the JSON Schema.
+
+        Returns:
+            A Pydantic JSON Schema with the language code in the ISO 639-1 alpha-2 format validation.
+        """
         json_schema = handler(schema)
         json_schema.update({'pattern': r'^\w{2}$'})
         return json_schema
@@ -128,6 +182,16 @@ class LanguageName(str):
 
     @classmethod
     def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> LanguageName:
+        """
+        Validate a language name from the provided str value.
+
+        Args:
+            __input_value: The str value to be validated.
+            _: The Pydantic ValidationInfo.
+
+        Returns:
+            The validated language name.
+        """
         if __input_value not in _index_by_name():
             raise PydanticCustomError('language_name', 'Invalid language name')
         return cls(__input_value)
@@ -136,6 +200,16 @@ class LanguageName(str):
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
+        """
+        Return a Pydantic CoreSchema with the language name validation.
+
+        Args:
+            source: The source type.
+            handler: The handler to get the CoreSchema.
+
+        Returns:
+            A Pydantic CoreSchema with the language name validation.
+        """
         return core_schema.with_info_after_validator_function(
             cls._validate,
             core_schema.str_schema(),
