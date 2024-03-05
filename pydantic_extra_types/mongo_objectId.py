@@ -34,7 +34,7 @@ class ObjectIdField(str):
 
     @classmethod
     def validate(cls, value):
-        if not ObjectId.is_valid(value):
-            raise PydanticCustomError('invalid object id', 'invalid format')
-
-        return ObjectId(value)
+        try:
+            return ObjectId(value)
+        except bson.errors.InvalidId as invalid_id:
+            raise PydanticCustomError('value_error', 'invalid format for MongoDB object identifier') from invalid_id
