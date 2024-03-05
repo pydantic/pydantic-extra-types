@@ -1,6 +1,12 @@
 from typing import Any
 
-from bson import ObjectId
+try:
+    from bson import ObjectId
+except ModuleNotFoundError:  # pragma: no cover
+    raise RuntimeError(
+        'The `ObjectIdField` module requires "bson" to be installed. You can install it with "pip install '
+        'bson".'
+    )
 from pydantic_core import core_schema
 from pydantic_core import PydanticCustomError
 
