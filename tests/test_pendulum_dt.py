@@ -37,7 +37,7 @@ def test_pendulum_dt_from_serialized(dt):
 
 
 @pytest.mark.parametrize(
-    "date", [pendulum.today().to_iso8601_string(), pendulum.today().to_w3c_string(), pendulum.today().to_iso8601_string()]
+    'date', [pendulum.today().to_iso8601_string(), pendulum.today().to_w3c_string(), pendulum.today().to_iso8601_string()]
 )
 def test_pendulum_date_from_serialized(date):
     """
@@ -59,7 +59,7 @@ def test_pendulum_dt_malformed(dt):
         Model(dt=dt, d=pendulum.today())
 
 
-@pytest.mark.parametrize("date", [None, "malformed", pendulum.today().to_iso8601_string()[:5], 42])
+@pytest.mark.parametrize('date', [None, 'malformed', pendulum.today().to_iso8601_string()[:5], 42])
 def test_pendulum_date_malformed(date):
     """
     Verifies that the instance fails to validate if malformed date are passed.
