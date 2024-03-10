@@ -18,7 +18,7 @@ def test_pendulum_dt_existing_instance():
     today = pendulum.today()
     model = Model(dt=now, d=today)
     assert model.dt == now
-    assert model.d == today
+    assert model.d == today.date()
 
 
 @pytest.mark.parametrize(
@@ -32,7 +32,7 @@ def test_pendulum_dt_from_serialized(dt):
     today = pendulum.today()
     model = Model(dt=dt, d=today)
     assert model.dt == dt_actual
-    assert model.d == today
+    assert model.d == today.date()
 
 
 @pytest.mark.parametrize(
@@ -46,7 +46,7 @@ def test_pendulum_date_from_serialized(date):
     date_actual = pendulum.parse(date)
     model = Model(dt=now, d=date_actual)
     assert model.dt == now
-    assert model.d == date_actual
+    assert model.d == date_actual.date()
 
 
 @pytest.mark.parametrize('dt', [None, 'malformed', pendulum.now().to_iso8601_string()[:5], 42])
