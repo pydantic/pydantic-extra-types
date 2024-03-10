@@ -2,8 +2,7 @@ import pendulum
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from pydantic_extra_types.pendulum_dt import Date
-from pydantic_extra_types.pendulum_dt import DateTime
+from pydantic_extra_types.pendulum_dt import Date, DateTime
 
 
 class Model(BaseModel):
