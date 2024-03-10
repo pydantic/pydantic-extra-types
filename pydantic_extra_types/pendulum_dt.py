@@ -4,6 +4,7 @@ CoreSchema implementation. This allows Pydantic to validate the DateTime object.
 """
 
 try:
+    from pendulum import Date as _Date
     from pendulum import DateTime as _DateTime
     from pendulum import parse
 except ModuleNotFoundError:  # pragma: no cover
@@ -71,4 +72,62 @@ class DateTime(_DateTime):
             data = parse(value)
         except Exception as exc:
             raise PydanticCustomError('value_error', 'value is not a valid timestamp') from exc
+        return handler(data)
+
+
+class Date(_Date):
+    """
+    A `pendulum.Date` object. At runtime, this type decomposes into pendulum.Date automatically.
+    This type exists because Pydantic throws a fit on unknown types.
+
+    ```python
+    from pydantic import BaseModel
+    from pydantic_extra_types.pendulum_dt import Date
+
+    class test_model(BaseModel):
+        dt: Date
+
+    print(test_model(dt='2021-01-01'))
+
+    #> test_model(dt=Date(2021, 1, 1))
+    ```
+    """
+
+    __slots__: List[str] = []
+
+    @classmethod
+    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        """
+        Return a Pydantic CoreSchema with the Date validation
+
+        Args:
+            source: The source type to be converted.
+            handler: The handler to get the CoreSchema.
+
+        Returns:
+            A Pydantic CoreSchema with the Date validation.
+        """
+        return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.date_schema())
+
+    @classmethod
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+        """
+        Validate the date object and return it.
+
+        Args:
+            value: The value to validate.
+            handler: The handler to get the CoreSchema.
+
+        Returns:
+            The validated value or raises a PydanticCustomError.
+        """
+        # if we are passed an existing instance, pass it straight through.
+        if isinstance(value, _Date):
+            return handler(value)
+
+        # otherwise, parse it.
+        try:
+            data = parse(value)
+        except Exception as exc:
+            raise PydanticCustomError('value_error', 'value is not a valid date') from exc
         return handler(data)
