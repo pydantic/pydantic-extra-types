@@ -15,10 +15,10 @@ def test_pendulum_dt_existing_instance():
     Verifies that constructing a model with an existing pendulum dt doesn't throw.
     """
     now = pendulum.now()
-    today = pendulum.today()
+    today = pendulum.today().date()
     model = Model(dt=now, d=today)
     assert model.dt == now
-    assert model.d == today.date()
+    assert model.d == today
 
 
 @pytest.mark.parametrize(
@@ -29,10 +29,10 @@ def test_pendulum_dt_from_serialized(dt):
     Verifies that building an instance from serialized, well-formed strings decode properly.
     """
     dt_actual = pendulum.parse(dt)
-    today = pendulum.today()
+    today = pendulum.today().date()
     model = Model(dt=dt, d=today)
     assert model.dt == dt_actual
-    assert model.d == today.date()
+    assert model.d == today
 
 
 @pytest.mark.parametrize(
@@ -44,10 +44,10 @@ def test_pendulum_date_from_serialized(date):
     Verifies that building an instance from serialized, well-formed strings decode properly.
     """
     now = pendulum.now()
-    date_actual = pendulum.parse(date)
+    date_actual = pendulum.parse(date).date()
     model = Model(dt=now, d=date_actual)
     assert model.dt == now
-    assert model.d == date_actual.date()
+    assert model.d == date_actual
 
 
 @pytest.mark.parametrize('dt', [None, 'malformed', pendulum.now().to_iso8601_string()[:5], 42])
