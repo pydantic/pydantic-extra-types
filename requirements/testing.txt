@@ -48,3 +48,4 @@ rich==13.7.0
     # via pytest-pretty
 urllib3==2.2.1
     # via requests
+httpx
