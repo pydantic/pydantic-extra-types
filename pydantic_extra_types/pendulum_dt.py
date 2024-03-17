@@ -10,8 +10,8 @@ except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
         'The `pendulum_dt` module requires "pendulum" to be installed. You can install it with "pip install pendulum".'
     )
-from typing import Any, List, Type
 import datetime as dt
+from typing import Any, List, Type
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
