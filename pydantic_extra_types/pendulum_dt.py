@@ -5,12 +5,13 @@ CoreSchema implementation. This allows Pydantic to validate the DateTime object.
 
 try:
     from pendulum import DateTime as _DateTime
-    from pendulum import parse
+    from pendulum import parse, instance
 except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
         'The `pendulum_dt` module requires "pendulum" to be installed. You can install it with "pip install pendulum".'
     )
 from typing import Any, List, Type
+import datetime as dt
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
@@ -65,6 +66,8 @@ class DateTime(_DateTime):
         # if we are passed an existing instance, pass it straight through.
         if isinstance(value, _DateTime):
             return handler(value)
+        elif isinstance(value, dt.datetime):
+            return instance(value)
 
         # otherwise, parse it.
         try:
