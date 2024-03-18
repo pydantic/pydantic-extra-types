@@ -43,16 +43,12 @@ def test_pendulum_dt_from_serialized(dt):
     assert model.dt == dt_actual
 
 
-@pytest.mark.parametrize(
-    'date',
-    [pendulum.today().to_iso8601_string(), pendulum.today().to_w3c_string(), pendulum.today().to_iso8601_string()],
-)
-def test_pendulum_date_from_serialized(date):
+def test_pendulum_date_from_serialized():
     """
     Verifies that building an instance from serialized, well-formed strings decode properly.
     """
-    date_actual = pendulum.parse(date).date()
-    model = DateModel(d=date_actual)
+    date_actual = pendulum.parse('2024-03-18').date()
+    model = DateModel(d='2024-03-18')
     assert model.d == date_actual
 
 
