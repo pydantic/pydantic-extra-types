@@ -5,8 +5,11 @@ from pydantic import BaseModel, ValidationError
 from pydantic_extra_types.pendulum_dt import Date, DateTime
 
 
-class Model(BaseModel):
+class DtModel(BaseModel):
     dt: DateTime
+
+
+class DateModel(BaseModel):
     d: Date
 
 
@@ -15,9 +18,16 @@ def test_pendulum_dt_existing_instance():
     Verifies that constructing a model with an existing pendulum dt doesn't throw.
     """
     now = pendulum.now()
-    today = pendulum.today().date()
-    model = Model(dt=now, d=today)
+    model = DtModel(dt=now)
     assert model.dt == now
+
+
+def test_pendulum_date_existing_instance():
+    """
+    Verifies that constructing a model with an existing pendulum date doesn't throw.
+    """
+    today = pendulum.today().date()
+    model = DateModel(d=today)
     assert model.d == today
 
 
@@ -29,10 +39,8 @@ def test_pendulum_dt_from_serialized(dt):
     Verifies that building an instance from serialized, well-formed strings decode properly.
     """
     dt_actual = pendulum.parse(dt)
-    today = pendulum.today().date()
-    model = Model(dt=dt, d=today)
+    model = DtModel(dt=dt)
     assert model.dt == dt_actual
-    assert model.d == today
 
 
 @pytest.mark.parametrize(
@@ -43,10 +51,8 @@ def test_pendulum_date_from_serialized(date):
     """
     Verifies that building an instance from serialized, well-formed strings decode properly.
     """
-    now = pendulum.now()
     date_actual = pendulum.parse(date).date()
-    model = Model(dt=now, d=date_actual)
-    assert model.dt == now
+    model = DateModel(d=date_actual)
     assert model.d == date_actual
 
 
@@ -56,7 +62,7 @@ def test_pendulum_dt_malformed(dt):
     Verifies that the instance fails to validate if malformed dt are passed.
     """
     with pytest.raises(ValidationError):
-        Model(dt=dt, d=pendulum.today())
+        DtModel(dt=dt)
 
 
 @pytest.mark.parametrize('date', [None, 'malformed', pendulum.today().to_iso8601_string()[:5], 42])
@@ -65,4 +71,4 @@ def test_pendulum_date_malformed(date):
     Verifies that the instance fails to validate if malformed date are passed.
     """
     with pytest.raises(ValidationError):
-        Model(dt=pendulum.now(), d=date)
+        DateModel(d=date)
