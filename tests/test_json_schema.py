@@ -199,12 +199,7 @@ everyday_currencies.sort()
         (
             ISBN,
             {
-                'properties': {
-                    'x': {
-                        'title': 'X',
-                        'type': 'string',
-                    }
-                },
+                'properties': {'x': {'title': 'X'}},
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',
