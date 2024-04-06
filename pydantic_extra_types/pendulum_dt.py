@@ -6,6 +6,7 @@ CoreSchema implementation. This allows Pydantic to validate the DateTime object.
 try:
     from pendulum import Date as _Date
     from pendulum import DateTime as _DateTime
+    from pendulum import Duration as _Duration
     from pendulum import parse
 except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
@@ -130,4 +131,62 @@ class Date(_Date):
             data = parse(value)
         except Exception as exc:
             raise PydanticCustomError('value_error', 'value is not a valid date') from exc
+        return handler(data)
+
+
+class Duration(_Duration):
+    """
+    A `pendulum.Duration` object. At runtime, this type decomposes into pendulum.Duration automatically.
+    This type exists because Pydantic throws a fit on unknown types.
+
+    ```python
+    from pydantic import BaseModel
+    from pydantic_extra_types.pendulum_dt import Duration
+
+    class test_model(BaseModel):
+        delta_t: Duration
+
+    print(test_model(delta_t='P1DT25H'))
+
+    #> test_model(delta_t=Duration(days=2, hours=1))
+    ```
+    """
+
+    __slots__: List[str] = []
+
+    @classmethod
+    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        """
+        Return a Pydantic CoreSchema with the Duration validation
+
+        Args:
+            source: The source type to be converted.
+            handler: The handler to get the CoreSchema.
+
+        Returns:
+            A Pydantic CoreSchema with the Duration validation.
+        """
+        return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.timedelta_schema())
+
+    @classmethod
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+        """
+        Validate the Duration object and return it.
+
+        Args:
+            value: The value to validate.
+            handler: The handler to get the CoreSchema.
+
+        Returns:
+            The validated value or raises a PydanticCustomError.
+        """
+        # if we are passed an existing instance, pass it straight through.
+        if isinstance(value, _Duration):
+            return handler(value)
+
+        # otherwise, parse it.
+        try:
+            data = parse(value)
+        except Exception as exc:
+            raise PydanticCustomError('value_error', 'value is not a valid duration') from exc
         return handler(data)
