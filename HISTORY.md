@@ -1,82 +1,93 @@
 # CHANGELOG
 
-## v2.6.0
+## Latest Changes
 
-* Allow python-ulid 2.x on Python 3.9 and later by @musicinmybrain in <https://github.com/pydantic/pydantic-extra-types/pull/131>
-* Do not pin the ”major” version of pycountry by @musicinmybrain in <https://github.com/pydantic/pydantic-extra-types/pull/132>
-* 🤖 Create dependabot.yml for updating GitHub action by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/134>
-* :memo: Refactor Documentation for ISBN and MAC address modules by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/124>
-* Add language code definitions and test by @07pepa in <https://github.com/pydantic/pydantic-extra-types/pull/141>
-* :memo: Create a `changelog` to match release notes by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/142>
-* Add currency code ISO 4217 and its subset that includes only currencies by @07pepa in <https://github.com/pydantic/pydantic-extra-types/pull/143>
-* 🔨 Update code formatting and linting configurations by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/144>
-* 👷 Add Python checking for dependencies by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/145>
-* 🐛 fix single quote issue  by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/148>
+* Added LanguageAlpha2 and LanguageName types. PR [#153](https://github.com/pydantic/pydantic-extra-types/pull/153) by [odelmarcelle](https://github.com/odelmarcelle)
+* Added support for pendulum Dates. PR [#154](https://github.com/pydantic/pydantic-extra-types/pull/154) by [Woody1193](https://github.com/Woody1193)
+* Add support for pendulum Duration. PR [#162](https://github.com/pydantic/pydantic-extra-types/pull/162) by [tempookian](https://github.com/tempookian)
 
-## v2.5.0
+### Dependencies
 
-* Add Pendulum DT support by @theunkn0wn1 in <https://github.com/pydantic/pydantic-extra-types/pull/110>
+* ⬆ Bump the python-packages group with 1 update. PR [#150](https://github.com/pydantic/pydantic-extra-types/pull/150) by [dependabot](https://github.com/dependabot)
+* ⬆ Bump the python-packages group with 6 updates. PR [#160](https://github.com/pydantic/pydantic-extra-types/pull/160) by [dependabot](https://github.com/dependabot)
 
-## v2.4.1
+## 2.6.0
 
-* Fix refs blocking docs build by @sydney-runkle in <https://github.com/pydantic/pydantic-extra-types/pull/125>
+* Allow python-ulid 2.x on Python 3.9 and later. PR [#131](https://github.com/pydantic/pydantic-extra-types/pull/131) by [@musicinmybrain](https://github.com/musicinmybrain)
+* Do not pin the ”major” version of pycountry. PR [#132](https://github.com/pydantic/pydantic-extra-types/pull/132) by [@musicinmybrain](https://github.com/musicinmybrain)
+* 🤖 Create dependabot.yml for updating GitHub action. PR [#134](https://github.com/pydantic/pydantic-extra-types/pull/134) by [@yezz123](https://github.com/yezz123)
+* Refactor Documentation for ISBN and MAC address modules. PR [#124](https://github.com/pydantic/pydantic-extra-types/pull/124) by [@yezz123](https://github.com/yezz123)
+* Add language code definitions and test. PR [#141](https://github.com/pydantic/pydantic-extra-types/pull/141) by [@07pepa](https://github.com/07pepa)
+* Create a `changelog` to match release notes. PR [#142](https://github.com/pydantic/pydantic-extra-types/pull/142) by [@yezz123](https://github.com/yezz123)
+* Add currency code ISO 4217 and its subset that includes only currencies. PR [#143](https://github.com/pydantic/pydantic-extra-types/pull/143) by [@07pepa](https://github.com/07pepa)
+* 🔨 Update code formatting and linting configurations. PR [#144](https://github.com/pydantic/pydantic-extra-types/pull/144) by [@yezz123](https://github.com/yezz123)
+* 👷 Add Python checking for dependencies. PR [#145](https://github.com/pydantic/pydantic-extra-types/pull/145) by [@yezz123](https://github.com/yezz123)
+* 🐛 Fix single quote issue. PR [#148](https://github.com/pydantic/pydantic-extra-types/pull/148) by [@yezz123](https://github.com/yezz123)
 
-## v2.4.0
+## 2.5.0
 
-* Add: New type ISBN by @lucasmucidas in <https://github.com/pydantic/pydantic-extra-types/pull/116>
-* fix validate_digits actually allowing non digit characters by @romaincaillon in <https://github.com/pydantic/pydantic-extra-types/pull/120>
-* ♻️ refactor the `validate_brand` method & add new types by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/56>
-* ✅ Drop python 3.7 & support 3.12 by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/122>
+* Add Pendulum DT support. PR [#110](https://github.com/pydantic/pydantic-extra-types/pull/110) by [@theunkn0wn1](https://github.com/theunkn0wn1)
 
-## v2.3.0
+## 2.4.1
 
-* Upgrade pydantic version to >=2.5.2 by @hramezani in <https://github.com/pydantic/pydantic-extra-types/pull/113>
+* Fix refs blocking docs build. PR [#125](https://github.com/pydantic/pydantic-extra-types/pull/125) by [@sydney-runkle](https://github.com/sydney-runkle)
 
-## v.2.2.0
+## 2.4.0
 
-* Add `long` and `short` format to `as_hex` by @DJRHails in <https://github.com/pydantic/pydantic-extra-types/pull/93>
-* Refactor documentation by @Kludex in <https://github.com/pydantic/pydantic-extra-types/pull/98>
-* ✨  add `ULID` type by @JeanArhancet in <https://github.com/pydantic/pydantic-extra-types/pull/73>
-* Added `__get_pydantic_json_schema__` method with `format='tel'` by @hasansezertasan in <https://github.com/pydantic/pydantic-extra-types/pull/106>
+* Add: New type ISBN. PR [#116](https://github.com/pydantic/pydantic-extra-types/pull/116) by [lucasmucidas](https://github.com/lucasmucidas)
+* Fix validate_digits actually allowing non-digit characters. PR [#120](https://github.com/pydantic/pydantic-extra-types/pull/120) by [romaincaillon](https://github.com/romaincaillon)
+* Refactor the `validate_brand` method & add new types. PR [#56](https://github.com/pydantic/pydantic-extra-types/pull/56) by [yezz123](https://github.com/yezz123)
+* Drop Python 3.7 & support 3.12. PR [#122](https://github.com/pydantic/pydantic-extra-types/pull/122) by [yezz123](https://github.com/yezz123)
 
-## v2.1.0
+## 2.3.0
 
-* ✨  add `MacAddress` type by @JeanArhancet in <https://github.com/pydantic/pydantic-extra-types/pull/71>
-* :memo: fix usage of `MAC address` by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/72>
-* Add docstrings for payment cards by @tpdorsey in <https://github.com/pydantic/pydantic-extra-types/pull/77>
-* Fix mac adddress validation by @JeanArhancet in <https://github.com/pydantic/pydantic-extra-types/pull/79>
-* Remove work in progress part from README.md by @hramezani in <https://github.com/pydantic/pydantic-extra-types/pull/81>
-* Add `Latitude`, `Longitude` and `Coordinate`  by @JeanArhancet in <https://github.com/pydantic/pydantic-extra-types/pull/76>
-* Refactor: use stdlib and remove useless code by @eumiro in <https://github.com/pydantic/pydantic-extra-types/pull/86>
-* Make Latitude and Longitude evaluated by @Kludex in <https://github.com/pydantic/pydantic-extra-types/pull/90>
+* Upgrade pydantic version to >=2.5.2. PR [#113](https://github.com/pydantic/pydantic-extra-types/pull/113) by [hramezani](https://github.com/hramezani)
 
-## v2.0.0
+## 2.2.0
 
-* Migrate `Color` & `Payment Card` by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/2>
-* add `pydantic` to classifiers by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/13>
-* remove dependencies caching by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/16>
-* :bug: deprecate `__modify_schema__` method by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/20>
-* Fix Color JSON schema generation by @dmontagu in <https://github.com/pydantic/pydantic-extra-types/pull/21>
-* fix issues of `pydantic_core.core_schema` has no attribute `xxx` by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/23>
-* Fix Failed tests for `color` type by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/26>
-* Created Country type by @HomiGrotas in <https://github.com/pydantic/pydantic-extra-types/pull/14>
-* Add phone number types by @JamesHutchison in <https://github.com/pydantic/pydantic-extra-types/pull/25>
-* make `phonenumbers` a requirement by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/29>
-* chore(feat): Add ABARouting number type by @RevinderDev in <https://github.com/pydantic/pydantic-extra-types/pull/30>
-* add missing countries by @EssaAlshammri in <https://github.com/pydantic/pydantic-extra-types/pull/32>
-* chore: resolve `pydantic-core` dependency conflict by @hirotasoshu in <https://github.com/pydantic/pydantic-extra-types/pull/45>
-* Add `MIR` card brand by @hirotasoshu in <https://github.com/pydantic/pydantic-extra-types/pull/46>
-* fix dependencies version by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/48>
-* 📝 Add documentation for `Color` and `PaymentCardNumber` by @Kludex in <https://github.com/pydantic/pydantic-extra-types/pull/50>
-* Add hooky by @Kludex in <https://github.com/pydantic/pydantic-extra-types/pull/51>
-* ♻️ Simplify project structure by @Kludex in <https://github.com/pydantic/pydantic-extra-types/pull/52>
-* 👷 Add coverage check on the pipeline by @Kludex in <https://github.com/pydantic/pydantic-extra-types/pull/53>
-* ♻️ refactor country type using `pycountry` by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/54>
-* ✅ Add 100% coverage by @Kludex in <https://github.com/pydantic/pydantic-extra-types/pull/57>
-* Add support for transparent Color by @CollinHeist in <https://github.com/pydantic/pydantic-extra-types/pull/59>
-* 📝 Add documentation for `PhoneNumber` and `ABARoutingNumber` by @Kludex in <https://github.com/pydantic/pydantic-extra-types/pull/60>
-* 📝 Refactor README by @Kludex in <https://github.com/pydantic/pydantic-extra-types/pull/61>
-* 🚚 Rename `routing_number.md` to `routing_numbers.md` by @Kludex in <https://github.com/pydantic/pydantic-extra-types/pull/62>
-* :memo: fix code in `payment` documentation by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/63>
-* uprev pydantic to b3 by @samuelcolvin in <https://github.com/pydantic/pydantic-extra-types/pull/69>
-* Prepare for release 2.0.0 by @hramezani in <https://github.com/pydantic/pydantic-extra-types/pull/70>
+* Add `long` and `short` format to `as_hex`. PR [#93](https://github.com/pydantic/pydantic-extra-types/pull/93) by [DJRHails](https://github.com/DJRHails)
+* Refactor documentation. PR [#98](https://github.com/pydantic/pydantic-extra-types/pull/98) by [Kludex](https://github.com/Kludex)
+* Add `ULID` type. PR [#73](https://github.com/pydantic/pydantic-extra-types/pull/73) by [JeanArhancet](https://github.com/JeanArhancet)
+* Add `__get_pydantic_json_schema__` method with `format='tel'`. PR [#106](https://github.com/pydantic/pydantic-extra-types/pull/106) by [hasansezertasan](https://github.com/hasansezertasan)
+
+## 2.1.0
+
+* Add `MacAddress` type. PR [#71](https://github.com/pydantic/pydantic-extra-types/pull/71) by [JeanArhancet](https://github.com/JeanArhancet)
+* Fix usage of `MAC address`. PR [#72](https://github.com/pydantic/pydantic-extra-types/pull/72) by [yezz123](https://github.com/yezz123)
+* Add docstrings for payment cards. PR [#77](https://github.com/pydantic/pydantic-extra-types/pull/77) by [tpdorsey](https://github.com/tpdorsey)
+* Fix MAC address validation. PR [#79](https://github.com/pydantic/pydantic-extra-types/pull/79) by [JeanArhancet](https://github.com/JeanArhancet)
+* Remove work in progress part from README.md. PR [#81](https://github.com/pydantic/pydantic-extra-types/pull/81) by [hramezani](https://github.com/hramezani)
+* Add `Latitude`, `Longitude`, and `Coordinate`. PR [#76](https://github.com/pydantic/pydantic-extra-types/pull/76) by [JeanArhancet](https://github.com/JeanArhancet)
+* Refactor: use stdlib and remove useless code. PR [#86](https://github.com/pydantic/pydantic-extra-types/pull/86) by [eumiro](https://github.com/eumiro)
+* Make Latitude and Longitude evaluated. PR [#90](https://github.com/pydantic/pydantic-extra-types/pull/90) by [Kludex](https://github.com/Kludex)
+
+## 2.0.0
+
+* Migrate `Color` & `Payment Card`. PR [#2](https://github.com/pydantic/pydantic-extra-types/pull/2) by [yezz123](https://github.com/yezz123)
+* Add `pydantic` to classifiers. PR [#13](https://github.com/pydantic/pydantic-extra-types/pull/13) by [yezz123](https://github.com/yezz123)
+* Remove dependencies caching. PR [#16](https://github.com/pydantic/pydantic-extra-types/pull/16) by [yezz123](https://github.com/yezz123)
+* Deprecate `__modify_schema__` method. PR [#20](https://github.com/pydantic/pydantic-extra-types/pull/20) by [yezz123](https://github.com/yezz123)
+* Fix Color JSON schema generation. PR [#21](https://github.com/pydantic/pydantic-extra-types/pull/21) by [dmontagu](https://github.com/dmontagu)
+* Fix issues of `pydantic_core.core_schema` has no attribute `xxx`. PR [#23](https://github.com/pydantic/pydantic-extra-types/pull/23) by [yezz123](https://github.com/yezz123)
+* Fix Failed tests for `color` type. PR [#26](https://github.com/pydantic/pydantic-extra-types/pull/26) by [yezz123](https://github.com/yezz123)
+* Created Country type. PR [#14](https://github.com/pydantic/pydantic-extra-types/pull/14) by [HomiGrotas](https://github.com/HomiGrotas)
+* Add phone number types. PR [#25](https://github.com/pydantic/pydantic-extra-types/pull/25) by [JamesHutchison](https://github.com/JamesHutchison)
+* Make `phonenumbers` a requirement. PR [#29](https://github.com/pydantic/pydantic-extra-types/pull/29) by [yezz123](https://github.com/yezz123)
+* Add ABARouting number type. PR [#30](https://github.com/pydantic/pydantic-extra-types/pull/30) by [RevinderDev](https://github.com/RevinderDev)
+* Add missing countries. PR [#32](https://github.com/pydantic/pydantic-extra-types/pull/32) by [EssaAlshammri](https://github.com/EssaAlshammri)
+* Resolve `pydantic-core` dependency conflict. PR [#45](https://github.com/pydantic/pydantic-extra-types/pull/45) by [hirotasoshu](https://github.com/hirotasoshu)
+* Add `MIR` card brand. PR [#46](https://github.com/pydantic/pydantic-extra-types/pull/46) by [hirotasoshu](https://github.com/hirotasoshu)
+* Fix dependencies version. PR [#48](https://github.com/pydantic/pydantic-extra-types/pull/48) by [yezz123](https://github.com/yezz123)
+* Add documentation for `Color` and `PaymentCardNumber`. PR [#50](https://github.com/pydantic/pydantic-extra-types/pull/50) by [Kludex](https://github.com/Kludex)
+* Add hooky. PR [#51](https://github.com/pydantic/pydantic-extra-types/pull/51) by [Kludex](https://github.com/Kludex)
+* Simplify project structure. PR [#52](https://github.com/pydantic/pydantic-extra-types/pull/52) by [Kludex](https://github.com/Kludex)
+* Add coverage check on the pipeline. PR [#53](https://github.com/pydantic/pydantic-extra-types/pull/53) by [Kludex](https://github.com/Kludex)
+* Refactor country type using `pycountry`. PR [#54](https://github.com/pydantic/pydantic-extra-types/pull/54) by [yezz123](https://github.com/yezz123)
+* Add 100% coverage. PR [#57](https://github.com/pydantic/pydantic-extra-types/pull/57) by [Kludex](https://github.com/Kludex)
+* Add support for transparent Color. PR [#59](https://github.com/pydantic/pydantic-extra-types/pull/59) by [CollinHeist](https://github.com/CollinHeist)
+* Add documentation for `PhoneNumber` and `ABARoutingNumber`. PR [#60](https://github.com/pydantic/pydantic-extra-types/pull/60) by [Kludex](https://github.com/Kludex)
+* Refactor README. PR [#61](https://github.com/pydantic/pydantic-extra-types/pull/61) by [Kludex](https://github.com/Kludex)
+* Rename `routing_number.md` to `routing_numbers.md`. PR [#62](https://github.com/pydantic/pydantic-extra-types/pull/62) by [Kludex](https://github.com/Kludex)
+* Fix code in `payment` documentation. PR [#63](https://github.com/pydantic/pydantic-extra-types/pull/63) by [yezz123](https://github.com/yezz123)
+* Uprev pydantic to b3. PR [#69](https://github.com/pydantic/pydantic-extra-types/pull/69) by [samuelcolvin](https://github.com/samuelcolvin)
+* Prepare for release 2.0.0. PR [#70](https://github.com/pydantic/pydantic-extra-types/pull/70) by [hramezani](https://github.com/hramezani)
