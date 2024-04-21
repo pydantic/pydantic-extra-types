@@ -2,6 +2,10 @@
 
 ## Latest Changes
 
+## 2.7.0
+
+* 🔥 Remove latest-changes workflow. PR [#165](https://github.com/pydantic/pydantic-extra-types/pull/165) by [yezz123](https://github.com/yezz123)
+* 🔨 Add latest-changes workflow to generate Changes. PR [#164](https://github.com/pydantic/pydantic-extra-types/pull/164) by [yezz123](https://github.com/yezz123)
 * Added LanguageAlpha2 and LanguageName types. PR [#153](https://github.com/pydantic/pydantic-extra-types/pull/153) by [odelmarcelle](https://github.com/odelmarcelle)
 * Added support for pendulum Dates. PR [#154](https://github.com/pydantic/pydantic-extra-types/pull/154) by [Woody1193](https://github.com/Woody1193)
 * Add support for pendulum Duration. PR [#162](https://github.com/pydantic/pydantic-extra-types/pull/162) by [tempookian](https://github.com/tempookian)
