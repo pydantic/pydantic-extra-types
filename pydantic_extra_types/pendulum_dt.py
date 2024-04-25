@@ -7,7 +7,7 @@ try:
     from pendulum import Date as _Date
     from pendulum import DateTime as _DateTime
     from pendulum import Duration as _Duration
-    from pendulum import parse
+    from pendulum import from_timestamp, parse
 except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
         'The `pendulum_dt` module requires "pendulum" to be installed. You can install it with "pip install pendulum".'
@@ -70,7 +70,7 @@ class DateTime(_DateTime):
 
         # otherwise, parse it.
         try:
-            data = parse(value)
+            data = from_timestamp(value) if isinstance(value, int) else parse(value)
         except Exception as exc:
             raise PydanticCustomError('value_error', 'value is not a valid timestamp') from exc
         return handler(data)
@@ -128,7 +128,7 @@ class Date(_Date):
 
         # otherwise, parse it.
         try:
-            data = parse(value)
+            data = from_timestamp(value).date() if isinstance(value, int) else parse(value)
         except Exception as exc:
             raise PydanticCustomError('value_error', 'value is not a valid date') from exc
         return handler(data)
