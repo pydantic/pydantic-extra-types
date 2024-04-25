@@ -112,6 +112,8 @@ filterwarnings = [
     'error',
     # This ignore will be removed when pycountry will drop py36 & support py311
     'ignore:::pkg_resources',
+    # Ignores deprecation warnings from pendulum
+    'ignore::DeprecationWarning',
 ]
 
 # configuring https://github.com/pydantic/hooky
