@@ -90,6 +90,24 @@ def test_pendulum_duration_from_serialized(delta_t_str):
     assert model.delta_t == true_delta_t
 
 
+def test_pendulum_dt_from_timestamp():
+    """
+    Verifies that building an instance from integer timestamps decode properly.
+    """
+    parsed_dt = pendulum.from_timestamp(1234567890)
+    model = DtModel(dt=1234567890)
+    assert model.dt == parsed_dt
+
+
+def test_pendulum_date_from_timestamp():
+    """
+    Verifies that building an instance from integer timestamps decode properly.
+    """
+    parsed_d = pendulum.from_timestamp(1234567890).date()
+    model = DateModel(d=1234567890)
+    assert model.d == parsed_d
+
+
 @pytest.mark.parametrize('dt', [None, 'malformed', pendulum.now().to_iso8601_string()[:5], 42])
 def test_pendulum_dt_malformed(dt):
     """
