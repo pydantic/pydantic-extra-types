@@ -10,7 +10,7 @@ charset-normalizer==3.3.2
     # via requests
 codecov==2.1.13
     # via -r requirements/testing.in
-coverage[toml]==7.4.4
+coverage[toml]==7.5.0
     # via
     #   -r requirements/testing.in
     #   codecov
@@ -27,11 +27,11 @@ mdurl==0.1.2
     # via markdown-it-py
 packaging==23.2
     # via pytest
-pluggy==1.4.0
+pluggy==1.5.0
     # via pytest
 pygments==2.17.2
     # via rich
-pytest==8.1.1
+pytest==8.2.0
     # via
     #   -r requirements/testing.in
     #   pytest-cov
