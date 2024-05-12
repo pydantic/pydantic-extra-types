@@ -3,7 +3,7 @@ from typing import Annotated
 from pydantic import UrlConstraints
 from pydantic_core import Url, MultiHostUrl
 
-PostgresDsn = Annotated[  # +
+PostgresDsn = Annotated[
     MultiHostUrl,
     UrlConstraints(
         host_required=True,
@@ -78,7 +78,7 @@ except ValidationError as e:
     '''
 ```
 """
-CockroachDsn = Annotated[  # +
+CockroachDsn = Annotated[
     Url,
     UrlConstraints(
         host_required=True,
@@ -102,7 +102,7 @@ AmqpDsn = Annotated[Url, UrlConstraints(allowed_schemes=['amqp', 'amqps'])]  # +
 * TLD not required
 * Host required
 """
-RedisDsn = Annotated[  # +
+RedisDsn = Annotated[
     Url,
     UrlConstraints(allowed_schemes=['redis', 'rediss'], default_host='localhost', default_port=6379, default_path='/0'),
 ]
@@ -120,7 +120,7 @@ MongoDsn = Annotated[MultiHostUrl, UrlConstraints(allowed_schemes=['mongodb', 'm
 * Port not required
 * User info may be passed without user part (e.g., `mongodb://mongodb0.example.com:27017`).
 """
-KafkaDsn = Annotated[Url, UrlConstraints(allowed_schemes=['kafka'], default_host='localhost', default_port=9092)]
+KafkaDsn = Annotated[Url, UrlConstraints(allowed_schemes=['kafka'], default_host='localhost', default_port=9092)]  # +
 """A type that will accept any Kafka DSN.
 
 * User info required
@@ -128,7 +128,7 @@ KafkaDsn = Annotated[Url, UrlConstraints(allowed_schemes=['kafka'], default_host
 * Host required
 """
 NatsDsn = Annotated[
-    Url , UrlConstraints(allowed_schemes=['nats', 'tls', 'ws'], default_host='localhost', default_port=4222)
+    Url , UrlConstraints(allowed_schemes=['nats', 'tls', 'ws'], default_host='localhost', default_port=4222)  # +
 ]
 """A type that will accept any NATS DSN.
 

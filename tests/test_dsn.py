@@ -7,6 +7,10 @@ from pydantic_extra_types.dsn import (
     CockroachDsn,
     MongoDsn,
     RedisDsn,
+    KafkaDsn,
+    NatsDsn,
+    MySQLDsn,
+    MariaDBDsn, ClickHouseDsn
 )
 
 
@@ -247,3 +251,91 @@ def test_mongodsn_default_ports(dsn: str, expected: str):
 
     m = Model(dsn=dsn)
     assert str(m.dsn) == expected
+
+
+def test_kafka_dsns():
+    class Model(BaseModel):
+        a: KafkaDsn
+
+    m = Model(a='kafka://')
+    assert m.a.scheme == 'kafka'
+    assert m.a.host == 'localhost'
+    assert m.a.port == 9092
+    assert str(m.a) == 'kafka://localhost:9092'
+
+    m = Model(a='kafka://kafka1')
+    assert str(m.a) == 'kafka://kafka1:9092'
+
+    with pytest.raises(ValidationError) as exc_info:
+        Model(a='http://example.org')
+    assert exc_info.value.errors(include_url=False)[0]['type'] == 'url_scheme'
+
+    m = Model(a='kafka://kafka3:9093')
+    assert m.a.username is None
+    assert m.a.password is None
+
+
+@pytest.mark.parametrize(
+    'dsn,result',
+    [
+        ('nats://user:pass@localhost:4222', 'nats://user:pass@localhost:4222'),
+        ('tls://user@localhost', 'tls://user@localhost:4222'),
+        ('ws://localhost:2355', 'ws://localhost:2355/'),
+        ('tls://', 'tls://localhost:4222'),
+        ('ws://:password@localhost:9999', 'ws://:password@localhost:9999/'),
+    ],
+)
+def test_nats_dsns(dsn, result):
+    class Model(BaseModel):
+        dsn: NatsDsn
+
+    assert str(Model(dsn=dsn).dsn) == result
+
+
+@pytest.mark.parametrize(
+    'dsn',
+    [
+        'mysql://user:pass@localhost:3306/app',
+        'mysql+mysqlconnector://user:pass@localhost:3306/app',
+        'mysql+aiomysql://user:pass@localhost:3306/app',
+        'mysql+asyncmy://user:pass@localhost:3306/app',
+        'mysql+mysqldb://user:pass@localhost:3306/app',
+        'mysql+pymysql://user:pass@localhost:3306/app?charset=utf8mb4',
+        'mysql+cymysql://user:pass@localhost:3306/app',
+        'mysql+pyodbc://user:pass@localhost:3306/app',
+    ],
+)
+def test_mysql_dsns(dsn):
+    class Model(BaseModel):
+        a: MySQLDsn
+
+    assert str(Model(a=dsn).a) == dsn
+
+
+@pytest.mark.parametrize(
+    'dsn',
+    [
+        'mariadb://user:pass@localhost:3306/app',
+        'mariadb+mariadbconnector://user:pass@localhost:3306/app',
+        'mariadb+pymysql://user:pass@localhost:3306/app',
+    ],
+)
+def test_mariadb_dsns(dsn):
+    class Model(BaseModel):
+        a: MariaDBDsn
+
+    assert str(Model(a=dsn).a) == dsn
+
+
+@pytest.mark.parametrize(
+    'dsn',
+    [
+        'clickhouse+native://user:pass@localhost:9000/app',
+        'clickhouse+asynch://user:pass@localhost:9000/app',
+    ],
+)
+def test_clickhouse_dsns(dsn):
+    class Model(BaseModel):
+        a: ClickHouseDsn
+
+    assert str(Model(a=dsn).a) == dsn
