@@ -2,15 +2,16 @@ import pytest
 from pydantic import BaseModel, ValidationError
 
 from pydantic_extra_types.dsn import (
-    PostgresDsn,
     AmqpDsn,
+    ClickHouseDsn,
     CockroachDsn,
-    MongoDsn,
-    RedisDsn,
     KafkaDsn,
-    NatsDsn,
+    MariaDBDsn,
+    MongoDsn,
     MySQLDsn,
-    MariaDBDsn, ClickHouseDsn
+    NatsDsn,
+    PostgresDsn,
+    RedisDsn,
 )
 
 

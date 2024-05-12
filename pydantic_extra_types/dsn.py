@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from pydantic import UrlConstraints
-from pydantic_core import Url, MultiHostUrl
+from pydantic_core import MultiHostUrl, Url
 
 PostgresDsn = Annotated[
     MultiHostUrl,
@@ -128,7 +128,7 @@ KafkaDsn = Annotated[Url, UrlConstraints(allowed_schemes=['kafka'], default_host
 * Host required
 """
 NatsDsn = Annotated[
-    Url , UrlConstraints(allowed_schemes=['nats', 'tls', 'ws'], default_host='localhost', default_port=4222)  # +
+    Url, UrlConstraints(allowed_schemes=['nats', 'tls', 'ws'], default_host='localhost', default_port=4222)  # +
 ]
 """A type that will accept any NATS DSN.
 
