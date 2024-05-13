@@ -1,7 +1,7 @@
 import sys
 
-if sys.version_info < (3, 9):
-    from typing_extensions import Annotated
+if sys.version_info < (3, 9):  # pragma: no cover
+    from typing_extensions import Annotated  # pragma: no cover
 else:
     from typing import Annotated
 
