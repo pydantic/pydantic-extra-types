@@ -1,4 +1,9 @@
-from typing import Annotated
+import sys
+
+if sys.version_info >= (3, 8):
+    from typing import Annotated
+else:
+    from typing_extensions import Annotated
 
 from pydantic import UrlConstraints
 from pydantic_core import MultiHostUrl, Url
