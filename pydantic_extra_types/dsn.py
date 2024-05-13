@@ -3,7 +3,7 @@ import sys
 if sys.version_info < (3, 9):  # pragma: no cover
     from typing_extensions import Annotated  # pragma: no cover
 else:
-    from typing import Annotated
+    from typing import Annotated  # pragma: no cover
 
 from pydantic import UrlConstraints
 from pydantic_core import MultiHostUrl, Url
