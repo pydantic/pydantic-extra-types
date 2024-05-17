@@ -17,6 +17,7 @@ from pydantic_extra_types.language_code import ISO639_3, ISO639_5, LanguageAlpha
 from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
+from pydantic_extra_types.script_code import ISO_15924
 from pydantic_extra_types.ulid import ULID
 
 languages = [lang.alpha_3 for lang in pycountry.languages]
@@ -31,6 +32,8 @@ everyday_currencies = [
     for currency in pycountry.currencies
     if currency.alpha_3 not in pydantic_extra_types.currency_code._CODES_FOR_BONDS_METAL_TESTING
 ]
+
+scripts = [script.alpha_4 for script in pycountry.scripts]
 
 everyday_currencies.sort()
 
@@ -298,6 +301,23 @@ everyday_currencies.sort()
                         'enum': everyday_currencies,
                         'maxLength': 3,
                         'minLength': 3,
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            ISO_15924,
+            {
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'enum': scripts,
+                        'maxLength': 4,
+                        'minLength': 4,
                     }
                 },
                 'required': ['x'],
