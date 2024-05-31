@@ -1,8 +1,13 @@
+from datetime import date, datetime, timedelta
+from datetime import timezone as tz
+
 import pendulum
 import pytest
 from pydantic import BaseModel, ValidationError
 
 from pydantic_extra_types.pendulum_dt import Date, DateTime, Duration
+
+UTC = tz.utc
 
 
 class DtModel(BaseModel):
@@ -17,32 +22,77 @@ class DurationModel(BaseModel):
     delta_t: Duration
 
 
-def test_pendulum_dt_existing_instance():
+@pytest.mark.parametrize(
+    'instance',
+    [
+        pendulum.now(),
+        datetime.now(),
+        datetime.now(UTC),
+    ],
+)
+def test_existing_instance(instance):
     """
     Verifies that constructing a model with an existing pendulum dt doesn't throw.
     """
-    now = pendulum.now()
-    model = DtModel(dt=now)
-    assert model.dt == now
+    model = DtModel(dt=instance)
+    if isinstance(instance, datetime):
+        assert model.dt == pendulum.instance(instance)
+        if instance.tzinfo is None and isinstance(instance, datetime):
+            instance = model.dt.replace(tzinfo=UTC)  # pendulum defaults to UTC
+        dt = model.dt
+    else:
+        assert model.dt == instance
+        dt = model.dt
+
+    assert dt.day == instance.day
+    assert dt.month == instance.month
+    assert dt.year == instance.year
+    assert dt.hour == instance.hour
+    assert dt.minute == instance.minute
+    assert dt.second == instance.second
+    assert dt.microsecond == instance.microsecond
+    if dt.tzinfo != instance.tzinfo:
+        assert dt.tzinfo.utcoffset(dt) == instance.tzinfo.utcoffset(instance)
 
 
-def test_pendulum_date_existing_instance():
+@pytest.mark.parametrize(
+    'instance',
+    [
+        pendulum.today(),
+        date.today(),
+    ],
+)
+def test_pendulum_date_existing_instance(instance):
     """
     Verifies that constructing a model with an existing pendulum date doesn't throw.
     """
-    today = pendulum.today().date()
-    model = DateModel(d=today)
-    assert model.d == today
+    model = DateModel(d=instance)
+    if isinstance(instance, datetime):
+        assert model.d == pendulum.instance(instance).date()
+    else:
+        assert model.d == instance
+    d = model.d
+    assert d.day == instance.day
+    assert d.month == instance.month
+    assert d.year == instance.year
 
 
-def test_pendulum_duration_existing_instance():
+@pytest.mark.parametrize(
+    'instance',
+    [
+        pendulum.duration(days=42, hours=13, minutes=37),
+        pendulum.duration(days=-42, hours=13, minutes=37),
+        timedelta(days=42, hours=13, minutes=37),
+        timedelta(days=-42, hours=13, minutes=37),
+    ],
+)
+def test_duration_timedelta__existing_instance(instance):
     """
     Verifies that constructing a model with an existing pendulum duration doesn't throw.
     """
-    delta_t = pendulum.duration(days=42, hours=13, minutes=37)
-    model = DurationModel(delta_t=delta_t)
+    model = DurationModel(delta_t=instance)
 
-    assert model.delta_t.total_seconds() == delta_t.total_seconds()
+    assert model.delta_t.total_seconds() == instance.total_seconds()
 
 
 @pytest.mark.parametrize(
