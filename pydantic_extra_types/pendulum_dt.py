@@ -3,6 +3,8 @@ Native Pendulum DateTime object implementation. This is a copy of the Pendulum D
 CoreSchema implementation. This allows Pydantic to validate the DateTime object.
 """
 
+import pendulum
+
 try:
     from pendulum import Date as _Date
     from pendulum import DateTime as _DateTime
@@ -12,6 +14,7 @@ except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
         'The `pendulum_dt` module requires "pendulum" to be installed. You can install it with "pip install pendulum".'
     )
+from datetime import date, datetime, timedelta
 from typing import Any, List, Type
 
 from pydantic import GetCoreSchemaHandler
@@ -67,6 +70,9 @@ class DateTime(_DateTime):
         # if we are passed an existing instance, pass it straight through.
         if isinstance(value, _DateTime):
             return handler(value)
+
+        if isinstance(value, datetime):
+            return handler(DateTime.instance(value))
 
         # otherwise, parse it.
         try:
@@ -126,6 +132,9 @@ class Date(_Date):
         if isinstance(value, _Date):
             return handler(value)
 
+        if isinstance(value, date):
+            return handler(pendulum.instance(value))
+
         # otherwise, parse it.
         try:
             data = parse(value)
@@ -183,6 +192,9 @@ class Duration(_Duration):
         # if we are passed an existing instance, pass it straight through.
         if isinstance(value, _Duration):
             return handler(value)
+
+        if isinstance(value, timedelta):
+            return handler(_Duration(seconds=value.total_seconds()))
 
         # otherwise, parse it.
         try:
