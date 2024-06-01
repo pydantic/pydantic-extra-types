@@ -67,3 +67,9 @@ class PhoneNumber(str):
             raise PydanticCustomError('value_error', 'value is not a valid phone number')
 
         return phonenumbers.format_number(parsed_number, getattr(phonenumbers.PhoneNumberFormat, cls.phone_format))
+
+    def __eq__(self, other: Any) -> bool:
+        return super().__eq__(other)
+
+    def __hash__(self) -> int:
+        return super().__hash__()

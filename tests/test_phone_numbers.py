@@ -52,6 +52,20 @@ def test_parsed_but_not_a_valid_number() -> None:
         Something(phone_number='+1 555-1212')
 
 
+def test_hashes() -> None:
+    assert hash(PhoneNumber('555-1212')) == hash(PhoneNumber('555-1212'))
+    assert hash(PhoneNumber('555-1212')) == hash('555-1212')
+    assert hash(PhoneNumber('555-1212')) != hash('555-1213')
+    assert hash(PhoneNumber('555-1212')) != hash(PhoneNumber('555-1213'))
+
+
+def test_eq() -> None:
+    assert PhoneNumber('555-1212') == PhoneNumber('555-1212')
+    assert PhoneNumber('555-1212') == '555-1212'
+    assert PhoneNumber('555-1212') != '555-1213'
+    assert PhoneNumber('555-1212') != PhoneNumber('555-1213')
+
+
 def test_json_schema() -> None:
     assert Something.model_json_schema() == {
         'title': 'Something',
