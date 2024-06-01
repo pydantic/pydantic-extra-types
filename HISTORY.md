@@ -2,6 +2,16 @@
 
 ## Latest Changes
 
+* Add ISO 15924 and tests. [#174](https://github.com/pydantic/pydantic-extra-types/pull/174) by [@07pepa](https://github.com/07pepa)
+
+* add native datetime to pendulum_dt.py. [#176](https://github.com/pydantic/pydantic-extra-types/pull/176) by [@07pepa](https://github.com/07pepa)
+
+* add hash and eq to phone_numbers. [#177](https://github.com/pydantic/pydantic-extra-types/pull/177) by [@07pepa](https://github.com/07pepa)
+
+### Dependencies
+
+* ⬆ Bump the python-packages group with 4 updates. PR [#171](https://github.com/pydantic/pydantic-extra-types/pull/171) by @dependabot
+
 ## 2.7.0
 
 * 🔥 Remove latest-changes workflow. PR [#165](https://github.com/pydantic/pydantic-extra-types/pull/165) by [yezz123](https://github.com/yezz123)
