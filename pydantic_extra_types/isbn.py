@@ -123,7 +123,7 @@ class ISBN(str):
             if isbn10_digit_calc(value) != value[-1]:
                 raise PydanticCustomError('isbn_invalid_digit_check_isbn10', 'Provided digit is invalid for given ISBN')
 
-        if isbn_length == 13:
+        elif isbn_length == 13:
             if not value.isdigit():
                 raise PydanticCustomError('isbn13_invalid_characters', 'All digits of ISBN-13 must be integers')
             if value[:3] not in ('978', '979'):

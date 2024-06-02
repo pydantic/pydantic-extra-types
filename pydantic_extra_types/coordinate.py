@@ -123,18 +123,16 @@ class Coordinate(_repr.Representation):
             return value
         try:
             value = tuple(float(x) for x in value.split(','))
-        except ValueError:
+        except ValueError as e:
             raise PydanticCustomError(
                 'coordinate_error',
                 'value is not a valid coordinate: string is not recognized as a valid coordinate',
-            )
+            ) from e
         return ArgsKwargs(args=value)
 
     @classmethod
     def _parse_tuple(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
-        if not isinstance(value, tuple):
-            return value
-        return ArgsKwargs(args=handler(value))
+        return ArgsKwargs(args=handler(value)) if isinstance(value, tuple) else value
 
     def __str__(self) -> str:
         return f'{self.latitude},{self.longitude}'

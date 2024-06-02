@@ -14,10 +14,10 @@ from pydantic_core import PydanticCustomError, core_schema
 
 try:
     import phonenumbers
-except ModuleNotFoundError:  # pragma: no cover
+except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
         '`PhoneNumber` requires "phonenumbers" to be installed. You can install it with "pip install phonenumbers"'
-    )
+    ) from e
 
 GeneratorCallableStr = Generator[Callable[..., str], None, None]
 
