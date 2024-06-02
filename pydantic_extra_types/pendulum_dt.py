@@ -10,10 +10,10 @@ try:
     from pendulum import DateTime as _DateTime
     from pendulum import Duration as _Duration
     from pendulum import parse
-except ModuleNotFoundError:  # pragma: no cover
+except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
         'The `pendulum_dt` module requires "pendulum" to be installed. You can install it with "pip install pendulum".'
-    )
+    ) from e
 from datetime import date, datetime, timedelta
 from typing import Any, List, Type
 

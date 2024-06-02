@@ -15,10 +15,10 @@ from pydantic_core import PydanticCustomError, core_schema
 
 try:
     from ulid import ULID as _ULID
-except ModuleNotFoundError:  # pragma: no cover
+except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
         'The `ulid` module requires "python-ulid" to be installed. You can install it with "pip install python-ulid".'
-    )
+    ) from e
 
 UlidType = Union[str, bytes, int]
 
@@ -58,6 +58,6 @@ class ULID(_repr.Representation):
                 ulid = value
             else:
                 ulid = _ULID.from_bytes(value)
-        except ValueError:
-            raise PydanticCustomError('ulid_format', 'Unrecognized format')
+        except ValueError as e:
+            raise PydanticCustomError('ulid_format', 'Unrecognized format') from e
         return handler(ulid)

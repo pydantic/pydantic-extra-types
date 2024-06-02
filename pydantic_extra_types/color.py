@@ -121,17 +121,16 @@ class Color(_repr.Representation):
         Raises:
             ValueError: When no named color is found and fallback is `False`.
         """
-        if self._rgba.alpha is None:
-            rgb = cast(Tuple[int, int, int], self.as_rgb_tuple())
-            try:
-                return COLORS_BY_VALUE[rgb]
-            except KeyError as e:
-                if fallback:
-                    return self.as_hex()
-                else:
-                    raise ValueError('no named color found, use fallback=True, as_hex() or as_rgb()') from e
-        else:
+        if self._rgba.alpha is not None:
             return self.as_hex()
+        rgb = cast(Tuple[int, int, int], self.as_rgb_tuple())
+        try:
+            return COLORS_BY_VALUE[rgb]
+        except KeyError as e:
+            if fallback:
+                return self.as_hex()
+            else:
+                raise ValueError('no named color found, use fallback=True, as_hex() or as_rgb()') from e
 
     def as_hex(self, format: Literal['short', 'long'] = 'short') -> str:
         """Returns the hexadecimal representation of the color.
@@ -149,7 +148,7 @@ class Color(_repr.Representation):
         as_hex = ''.join(f'{v:02x}' for v in values)
         if format == 'short' and all(c in repeat_colors for c in values):
             as_hex = ''.join(as_hex[c] for c in range(0, len(as_hex), 2))
-        return '#' + as_hex
+        return f'#{as_hex}'
 
     def as_rgb(self) -> str:
         """
@@ -179,16 +178,10 @@ class Color(_repr.Representation):
                 If alpha is included, it is in the range 0 to 1.
         """
         r, g, b = (float_to_255(c) for c in self._rgba[:3])
-        if alpha is None:
-            if self._rgba.alpha is None:
-                return r, g, b
-            else:
-                return r, g, b, self._alpha_float()
-        elif alpha:
-            return r, g, b, self._alpha_float()
-        else:
-            # alpha is False
+        if alpha is None and self._rgba.alpha is None or alpha is not None and not alpha:
             return r, g, b
+        else:
+            return r, g, b, self._alpha_float()
 
     def as_hsl(self) -> str:
         """
@@ -225,11 +218,7 @@ class Color(_repr.Representation):
                 return h, s, l
             else:
                 return h, s, l, self._alpha_float()
-        if alpha:
-            return h, s, l, self._alpha_float()
-        else:
-            # alpha is False
-            return h, s, l
+        return (h, s, l, self._alpha_float()) if alpha else (h, s, l)
 
     def _alpha_float(self) -> float:
         return 1 if self._rgba.alpha is None else self._rgba.alpha
@@ -315,20 +304,14 @@ def parse_str(value: str) -> RGBA:
     if m:
         *rgb, a = m.groups()
         r, g, b = (int(v * 2, 16) for v in rgb)
-        if a:
-            alpha: float | None = int(a * 2, 16) / 255
-        else:
-            alpha = None
+        alpha = int(a * 2, 16) / 255 if a else None
         return ints_to_rgba(r, g, b, alpha)
 
     m = re.fullmatch(r_hex_long, value_lower)
     if m:
         *rgb, a = m.groups()
         r, g, b = (int(v, 16) for v in rgb)
-        if a:
-            alpha = int(a, 16) / 255
-        else:
-            alpha = None
+        alpha = int(a, 16) / 255 if a else None
         return ints_to_rgba(r, g, b, alpha)
 
     m = re.fullmatch(r_rgb, value_lower) or re.fullmatch(r_rgb_v4_style, value_lower)
@@ -390,11 +373,11 @@ def parse_color_value(value: int | str, max_val: int = 255) -> float:
     """
     try:
         color = float(value)
-    except ValueError:
+    except ValueError as e:
         raise PydanticCustomError(
             'color_error',
             'value is not a valid color: color values must be a valid number',
-        )
+        ) from e
     if 0 <= color <= max_val:
         return color / max_val
     else:
@@ -425,11 +408,11 @@ def parse_float_alpha(value: None | str | float | int) -> float | None:
             alpha = float(value[:-1]) / 100
         else:
             alpha = float(value)
-    except ValueError:
+    except ValueError as e:
         raise PydanticCustomError(
             'color_error',
             'value is not a valid color: alpha values must be a valid float',
-        )
+        ) from e
 
     if math.isclose(alpha, 1):
         return None
@@ -465,7 +448,7 @@ def parse_hsl(h: str, h_units: str, sat: str, light: str, alpha: float | None = 
         h_value = h_value % rads / rads
     else:
         # turns
-        h_value = h_value % 1
+        h_value %= 1
 
     r, g, b = hls_to_rgb(h_value, l_value, s_value)
     return RGBA(r, g, b, parse_float_alpha(alpha))

@@ -11,11 +11,11 @@ from pydantic_core import PydanticCustomError, core_schema
 
 try:
     import pycountry
-except ModuleNotFoundError:  # pragma: no cover
+except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
         'The `currency_code` module requires "pycountry" to be installed. You can install it with "pip install '
         'pycountry".'
-    )
+    ) from e
 
 # List of codes that should not be usually used within regular transactions
 _CODES_FOR_BONDS_METAL_TESTING = {

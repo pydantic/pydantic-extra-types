@@ -13,10 +13,10 @@ from pydantic_core import PydanticCustomError, core_schema
 
 try:
     import pycountry
-except ModuleNotFoundError:  # pragma: no cover
+except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
         'The `country` module requires "pycountry" to be installed. You can install it with "pip install pycountry".'
-    )
+    ) from e
 
 
 @dataclass
