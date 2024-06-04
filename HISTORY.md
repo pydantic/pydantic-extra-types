@@ -2,14 +2,25 @@
 
 ## Latest Changes
 
+## 2.8.0
+
+### Refactor
+
+* ♻️ refactor some functions & minor changes. [#180](https://github.com/pydantic/pydantic-extra-types/pull/180) by [@yezz123](https://github.com/yezz123)
+
+### Internal
+
+* Allow requiring extra dependencies. [#178](https://github.com/pydantic/pydantic-extra-types/pull/178) by [@yezz123](https://github.com/yezz123)
+
+### Types
+
 * Add ISO 15924 and tests. [#174](https://github.com/pydantic/pydantic-extra-types/pull/174) by [@07pepa](https://github.com/07pepa)
-
 * add native datetime to pendulum_dt.py. [#176](https://github.com/pydantic/pydantic-extra-types/pull/176) by [@07pepa](https://github.com/07pepa)
-
 * add hash and eq to phone_numbers. [#177](https://github.com/pydantic/pydantic-extra-types/pull/177) by [@07pepa](https://github.com/07pepa)
 
 ### Dependencies
 
+* ⬆ Bump the python-packages group with 5 updates. PR [#179](https://github.com/pydantic/pydantic-extra-types/pull/179) by @dependabot
 * ⬆ Bump the python-packages group with 4 updates. PR [#171](https://github.com/pydantic/pydantic-extra-types/pull/171) by @dependabot
 
 ## 2.7.0
