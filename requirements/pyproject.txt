@@ -4,7 +4,7 @@
 #
 #    pip-compile --extra=all --no-emit-index-url --output-file=requirements/pyproject.txt pyproject.toml
 #
-annotated-types==0.6.0
+annotated-types==0.7.0
     # via pydantic
 pendulum==3.0.0
     # via pydantic-extra-types (pyproject.toml)

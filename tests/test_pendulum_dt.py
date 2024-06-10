@@ -3,7 +3,7 @@ from datetime import timezone as tz
 
 import pendulum
 import pytest
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, TypeAdapter, ValidationError
 
 from pydantic_extra_types.pendulum_dt import Date, DateTime, Duration
 
@@ -51,6 +51,8 @@ def test_existing_instance(instance):
     assert dt.minute == instance.minute
     assert dt.second == instance.second
     assert dt.microsecond == instance.microsecond
+    assert isinstance(dt, pendulum.DateTime)
+    assert type(dt) is DateTime
     if dt.tzinfo != instance.tzinfo:
         assert dt.tzinfo.utcoffset(dt) == instance.tzinfo.utcoffset(instance)
 
@@ -75,6 +77,8 @@ def test_pendulum_date_existing_instance(instance):
     assert d.day == instance.day
     assert d.month == instance.month
     assert d.year == instance.year
+    assert isinstance(d, pendulum.Date)
+    assert type(d) is Date
 
 
 @pytest.mark.parametrize(
@@ -93,6 +97,8 @@ def test_duration_timedelta__existing_instance(instance):
     model = DurationModel(delta_t=instance)
 
     assert model.delta_t.total_seconds() == instance.total_seconds()
+    assert isinstance(model.delta_t, pendulum.Duration)
+    assert model.delta_t
 
 
 @pytest.mark.parametrize(
@@ -100,7 +106,6 @@ def test_duration_timedelta__existing_instance(instance):
     [
         pendulum.now().to_iso8601_string(),
         pendulum.now().to_w3c_string(),
-        pendulum.now().to_iso8601_string(),
     ],
 )
 def test_pendulum_dt_from_serialized(dt):
@@ -110,15 +115,23 @@ def test_pendulum_dt_from_serialized(dt):
     dt_actual = pendulum.parse(dt)
     model = DtModel(dt=dt)
     assert model.dt == dt_actual
+    assert type(model.dt) is DateTime
+    assert isinstance(model.dt, pendulum.DateTime)
 
 
-def test_pendulum_date_from_serialized():
+@pytest.mark.parametrize(
+    'd',
+    [pendulum.now().date().isoformat(), pendulum.now().to_w3c_string(), pendulum.now().to_iso8601_string()],
+)
+def test_pendulum_date_from_serialized(d):
     """
     Verifies that building an instance from serialized, well-formed strings decode properly.
     """
-    date_actual = pendulum.parse('2024-03-18').date()
-    model = DateModel(d='2024-03-18')
+    date_actual = pendulum.parse(d).date()
+    model = DateModel(d=d)
     assert model.d == date_actual
+    assert type(model.d) is Date
+    assert isinstance(model.d, pendulum.Date)
 
 
 @pytest.mark.parametrize(
@@ -138,9 +151,11 @@ def test_pendulum_duration_from_serialized(delta_t_str):
     true_delta_t = pendulum.parse(delta_t_str)
     model = DurationModel(delta_t=delta_t_str)
     assert model.delta_t == true_delta_t
+    assert type(model.delta_t) is Duration
+    assert isinstance(model.delta_t, pendulum.Duration)
 
 
-@pytest.mark.parametrize('dt', [None, 'malformed', pendulum.now().to_iso8601_string()[:5], 42])
+@pytest.mark.parametrize('dt', [None, 'malformed', pendulum.now().to_iso8601_string()[:5], 42, 'P10Y10M10D'])
 def test_pendulum_dt_malformed(dt):
     """
     Verifies that the instance fails to validate if malformed dt are passed.
@@ -149,7 +164,7 @@ def test_pendulum_dt_malformed(dt):
         DtModel(dt=dt)
 
 
-@pytest.mark.parametrize('date', [None, 'malformed', pendulum.today().to_iso8601_string()[:5], 42])
+@pytest.mark.parametrize('date', [None, 'malformed', pendulum.today().to_iso8601_string()[:5], 42, 'P10Y10M10D'])
 def test_pendulum_date_malformed(date):
     """
     Verifies that the instance fails to validate if malformed date are passed.
@@ -160,7 +175,7 @@ def test_pendulum_date_malformed(date):
 
 @pytest.mark.parametrize(
     'delta_t',
-    [None, 'malformed', pendulum.today().to_iso8601_string()[:5], 42, '12m'],
+    [None, 'malformed', pendulum.today().to_iso8601_string()[:5], 42, '12m', '2021-01-01T12:00:00'],
 )
 def test_pendulum_duration_malformed(delta_t):
     """
@@ -168,3 +183,24 @@ def test_pendulum_duration_malformed(delta_t):
     """
     with pytest.raises(ValidationError):
         DurationModel(delta_t=delta_t)
+
+
+@pytest.mark.parametrize(
+    'input_type, value, is_instance',
+    [
+        (Date, '2021-01-01', pendulum.Date),
+        (Date, date(2021, 1, 1), pendulum.Date),
+        (Date, pendulum.date(2021, 1, 1), pendulum.Date),
+        (DateTime, '2021-01-01T12:00:00', pendulum.DateTime),
+        (DateTime, datetime(2021, 1, 1, 12, 0, 0), pendulum.DateTime),
+        (DateTime, pendulum.datetime(2021, 1, 1, 12, 0, 0), pendulum.DateTime),
+        (Duration, 'P1DT25H', pendulum.Duration),
+        (Duration, timedelta(days=1, hours=25), pendulum.Duration),
+        (Duration, pendulum.duration(days=1, hours=25), pendulum.Duration),
+    ],
+)
+def test_date_type_adapter(input_type: type, value, is_instance: type):
+    validated = TypeAdapter(input_type).validate_python(value)
+    assert type(validated) is input_type
+    assert isinstance(validated, input_type)
+    assert isinstance(validated, is_instance)
