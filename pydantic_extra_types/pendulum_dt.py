@@ -19,7 +19,17 @@ from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
 
-class DateTime(_DateTime):
+class DateTimeSettings(type):
+    def __new__(cls, name, bases, dct, **kwargs):  # type: ignore[no-untyped-def]
+        dct['strict'] = kwargs.pop('strict', True)
+        return super().__new__(cls, name, bases, dct)
+
+    def __init__(cls, name, bases, dct, **kwargs):  # type: ignore[no-untyped-def]
+        super().__init__(name, bases, dct)
+        cls.strict = kwargs.get('strict', True)
+
+
+class DateTime(_DateTime, metaclass=DateTimeSettings):
     """
     A `pendulum.DateTime` object. At runtime, this type decomposes into pendulum.DateTime automatically.
     This type exists because Pydantic throws a fit on unknown types.
@@ -54,7 +64,7 @@ class DateTime(_DateTime):
         return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.datetime_schema())
 
     @classmethod
-    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> 'DateTime':
         """
         Validate the datetime object and return it.
 
@@ -68,12 +78,10 @@ class DateTime(_DateTime):
         # if we are passed an existing instance, pass it straight through.
         if isinstance(value, (_DateTime, datetime)):
             return DateTime.instance(value)
-
-        # otherwise, parse it.
         try:
-            value = parse(value, exact=True)
-            if not isinstance(value, _DateTime):
-                raise ValueError(f'value is not a valid datetime it is a {type(value)}')
+            # probably the best way to have feature parity with
+            # https://docs.pydantic.dev/latest/api/standard_library_types/#datetimedatetime
+            value = handler(value)
             return DateTime(
                 value.year,
                 value.month,
@@ -84,8 +92,16 @@ class DateTime(_DateTime):
                 value.microsecond,
                 value.tzinfo,
             )
-        except Exception as exc:
-            raise PydanticCustomError('value_error', 'value is not a valid timestamp') from exc
+        except ValueError:
+            try:
+                value = parse(value, strict=cls.strict)
+                if isinstance(value, _DateTime):
+                    return DateTime.instance(value)
+                raise ValueError(f'value is not a valid datetime it is a {type(value)}')
+            except ValueError:
+                raise
+            except Exception as exc:
+                raise PydanticCustomError('value_error', 'value is not a valid datetime') from exc
 
 
 class Date(_Date):
@@ -123,7 +139,7 @@ class Date(_Date):
         return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.date_schema())
 
     @classmethod
-    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> 'Date':
         """
         Validate the date object and return it.
 
@@ -183,7 +199,7 @@ class Duration(_Duration):
         return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.timedelta_schema())
 
     @classmethod
-    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> 'Duration':
         """
         Validate the Duration object and return it.
 
