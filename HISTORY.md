@@ -2,6 +2,16 @@
 
 ## Latest Changes
 
+## 2.8.1
+
+### Bug Fixes
+
+* 🐛 Fix Pendulum date time object to have correct typing. [#184](https://github.com/pydantic/pydantic-extra-types/pull/184) by [@07pepa](https://github.com/07pepa)
+
+### Types
+
+* ✨ Add parsing of pendulum_dt from unix time and non-strict parsing. [#185](https://github.com/pydantic/pydantic-extra-types/pull/185) by [@07pepa](https://github.com/07pepa)
+
 ## 2.8.0
 
 ### Refactor
