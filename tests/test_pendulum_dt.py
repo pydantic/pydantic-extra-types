@@ -134,6 +134,32 @@ def test_pendulum_dt_from_serialized(dt):
     [
         pendulum.now().to_iso8601_string(),
         pendulum.now().to_w3c_string(),
+    ],
+)
+def test_pendulum_dt_from_serialized_preserves_timezones(dt):
+    """
+    Verifies that building an instance from serialized, well-formed strings decode
+    properly and preserves the timezone information across all of the Pendulum DateTime
+    properties.  Regression test for pydantic/pydantic-extra-types#188.
+    """
+    dt_actual = pendulum.parse(dt)
+    model = DtModel(dt=dt)
+    assert model.dt == dt_actual
+    assert type(model.dt) is DateTime
+    assert isinstance(model.dt, pendulum.DateTime)
+    assert model.dt.tzinfo is not None
+    assert model.dt.tzinfo.utcoffset(model.dt) == dt_actual.tzinfo.utcoffset(dt_actual)
+    assert model.dt.tz is not None
+    assert model.dt.tz.utcoffset(model.dt) == dt_actual.tz.utcoffset(dt_actual)
+    assert model.dt.timezone is not None
+    assert model.dt.timezone.utcoffset(model.dt) == dt_actual.timezone.utcoffset(dt_actual)
+
+
+@pytest.mark.parametrize(
+    'dt',
+    [
+        pendulum.now().to_iso8601_string(),
+        pendulum.now().to_w3c_string(),
         'Sat Oct 11 17:13:46 UTC 2003',  # date util parsing
         pendulum.now().to_iso8601_string()[:5],  # actualy valid or pendulum.parse(dt, strict=False) would fail here
     ],

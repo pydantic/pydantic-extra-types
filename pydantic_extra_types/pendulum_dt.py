@@ -82,16 +82,7 @@ class DateTime(_DateTime, metaclass=DateTimeSettings):
             # probably the best way to have feature parity with
             # https://docs.pydantic.dev/latest/api/standard_library_types/#datetimedatetime
             value = handler(value)
-            return DateTime(
-                value.year,
-                value.month,
-                value.day,
-                value.hour,
-                value.minute,
-                value.second,
-                value.microsecond,
-                value.tzinfo,
-            )
+            return DateTime.instance(value)
         except ValueError:
             try:
                 value = parse(value, strict=cls.strict)
