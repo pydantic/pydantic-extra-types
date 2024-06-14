@@ -2,6 +2,11 @@
 
 ## Latest Changes
 
+## 2.8.2
+
+* 🐛 Preserve timezone information when validating Pendulum DateTimes. [#189](https://github.com/pydantic/pydantic-extra-types/pull/189) by [@chrisguidry
+](https://github.com/chrisguidry)
+
 ## 2.8.1
 
 ### Bug Fixes
