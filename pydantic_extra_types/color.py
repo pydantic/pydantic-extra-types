@@ -124,13 +124,14 @@ class Color(_repr.Representation):
         if self._rgba.alpha is not None:
             return self.as_hex()
         rgb = cast(Tuple[int, int, int], self.as_rgb_tuple())
-        try:
+
+        if rgb in COLORS_BY_VALUE:
             return COLORS_BY_VALUE[rgb]
-        except KeyError as e:
+        else:
             if fallback:
                 return self.as_hex()
             else:
-                raise ValueError('no named color found, use fallback=True, as_hex() or as_rgb()') from e
+                raise ValueError('no named color found, use fallback=True, as_hex() or as_rgb()')
 
     def as_hex(self, format: Literal['short', 'long'] = 'short') -> str:
         """Returns the hexadecimal representation of the color.
@@ -292,12 +293,10 @@ def parse_str(value: str) -> RGBA:
     Raises:
         ValueError: If the input string cannot be parsed to an RGBA tuple.
     """
+
     value_lower = value.lower()
-    try:
+    if value_lower in COLORS_BY_NAME:
         r, g, b = COLORS_BY_NAME[value_lower]
-    except KeyError:
-        pass
-    else:
         return ints_to_rgba(r, g, b, None)
 
     m = re.fullmatch(r_hex_short, value_lower)
