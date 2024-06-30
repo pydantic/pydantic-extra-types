@@ -28,7 +28,7 @@ lint:
 
 .PHONY: mypy
 mypy:
-	mypy pydantic_extra_types
+	@mypy pydantic_extra_types
 
 .PHONY: test
 test:
