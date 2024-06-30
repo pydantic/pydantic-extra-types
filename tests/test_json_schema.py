@@ -18,6 +18,7 @@ from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
 from pydantic_extra_types.script_code import ISO_15924
+from pydantic_extra_types.timezone_name import TimeZoneName
 from pydantic_extra_types.ulid import ULID
 
 languages = [lang.alpha_3 for lang in pycountry.languages]
@@ -34,6 +35,8 @@ everyday_currencies = [
 ]
 
 scripts = [script.alpha_4 for script in pycountry.scripts]
+
+timezone_names = TimeZoneName.allowed_values_list
 
 everyday_currencies.sort()
 
@@ -318,6 +321,22 @@ everyday_currencies.sort()
                         'enum': scripts,
                         'maxLength': 4,
                         'minLength': 4,
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            TimeZoneName,
+            {
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'enum': timezone_names,
+                        'minLength': 1,
                     }
                 },
                 'required': ['x'],
