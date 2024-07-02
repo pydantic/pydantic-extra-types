@@ -18,6 +18,7 @@ from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
 from pydantic_extra_types.script_code import ISO_15924
+from pydantic_extra_types.semantic_version import SemanticVersion
 from pydantic_extra_types.ulid import ULID
 
 languages = [lang.alpha_3 for lang in pycountry.languages]
@@ -320,6 +321,15 @@ everyday_currencies.sort()
                         'minLength': 4,
                     }
                 },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            SemanticVersion,
+            {
+                'properties': {'x': {'title': 'X', 'type': 'string'}},
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',

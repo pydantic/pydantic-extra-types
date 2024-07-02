@@ -15,6 +15,7 @@ def application_object_fixture():
 def test_valid_semantic_version(SemanticVersionObject):
     application = SemanticVersionObject(version='1.0.0')
     assert application.version
+    assert application.model_dump() == {'version': '1.0.0'}
 
 
 def test_invalid_semantic_version(SemanticVersionObject):
