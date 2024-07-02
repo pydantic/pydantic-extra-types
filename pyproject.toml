@@ -46,6 +46,8 @@ dynamic = ['version']
 [project.optional-dependencies]
 all = [
     'phonenumbers>=8,<9',
+    'pycountry>=22,<23',
+    'pandas==2.2.1',
     'pycountry>=23',
     'semver>=3.0.2',
     'python-ulid>=1,<2; python_version<"3.9"',
