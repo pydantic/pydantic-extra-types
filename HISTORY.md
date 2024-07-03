@@ -2,6 +2,21 @@
 
 ## Latest Changes
 
+## 2.9.0
+
+### Types
+
+* Add Semantic version type. PR [#195](https://github.com/pydantic/pydantic-extra-types/pull/195) by [@nikstuckenbrock](https://github.com/nikstuckenbrock)
+* Add timezone name validation. PR [#193](https://github.com/pydantic/pydantic-extra-types/pull/193) by [@07pepa](https://github.com/07pepa)
+
+### Refactor
+
+* Replace try-except block by if-else statement. PR [#192](https://github.com/pydantic/pydantic-extra-types/pull/192) by [@maxsos](https://github.com/maxsos)
+
+### Dependencies
+
+* ⬆ Bump the python-packages group with 4 updates.  PR [#194](https://github.com/pydantic/pydantic-extra-types/pull/194) by @dependabot
+
 ## 2.8.2
 
 * 🐛 Preserve timezone information when validating Pendulum DateTimes. [#189](https://github.com/pydantic/pydantic-extra-types/pull/189) by [@chrisguidry
