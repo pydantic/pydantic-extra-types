@@ -2,14 +2,55 @@
 
 ## Latest Changes
 
+## 2.9.0
+
+### Types
+
+* Add Semantic version type. PR [#195](https://github.com/pydantic/pydantic-extra-types/pull/195) by [@nikstuckenbrock](https://github.com/nikstuckenbrock)
+* Add timezone name validation. PR [#193](https://github.com/pydantic/pydantic-extra-types/pull/193) by [@07pepa](https://github.com/07pepa)
+
+### Refactor
+
+* Replace try-except block by if-else statement. PR [#192](https://github.com/pydantic/pydantic-extra-types/pull/192) by [@maxsos](https://github.com/maxsos)
+
+### Dependencies
+
+* ⬆ Bump the python-packages group with 4 updates.  PR [#194](https://github.com/pydantic/pydantic-extra-types/pull/194) by @dependabot
+
+## 2.8.2
+
+* 🐛 Preserve timezone information when validating Pendulum DateTimes. [#189](https://github.com/pydantic/pydantic-extra-types/pull/189) by [@chrisguidry
+](https://github.com/chrisguidry)
+
+## 2.8.1
+
+### Bug Fixes
+
+* 🐛 Fix Pendulum date time object to have correct typing. [#184](https://github.com/pydantic/pydantic-extra-types/pull/184) by [@07pepa](https://github.com/07pepa)
+
+### Types
+
+* ✨ Add parsing of pendulum_dt from unix time and non-strict parsing. [#185](https://github.com/pydantic/pydantic-extra-types/pull/185) by [@07pepa](https://github.com/07pepa)
+
+## 2.8.0
+
+### Refactor
+
+* ♻️ refactor some functions & minor changes. [#180](https://github.com/pydantic/pydantic-extra-types/pull/180) by [@yezz123](https://github.com/yezz123)
+
+### Internal
+
+* Allow requiring extra dependencies. [#178](https://github.com/pydantic/pydantic-extra-types/pull/178) by [@yezz123](https://github.com/yezz123)
+
+### Types
+
 * Add ISO 15924 and tests. [#174](https://github.com/pydantic/pydantic-extra-types/pull/174) by [@07pepa](https://github.com/07pepa)
-
 * add native datetime to pendulum_dt.py. [#176](https://github.com/pydantic/pydantic-extra-types/pull/176) by [@07pepa](https://github.com/07pepa)
-
 * add hash and eq to phone_numbers. [#177](https://github.com/pydantic/pydantic-extra-types/pull/177) by [@07pepa](https://github.com/07pepa)
 
 ### Dependencies
 
+* ⬆ Bump the python-packages group with 5 updates. PR [#179](https://github.com/pydantic/pydantic-extra-types/pull/179) by @dependabot
 * ⬆ Bump the python-packages group with 4 updates. PR [#171](https://github.com/pydantic/pydantic-extra-types/pull/171) by @dependabot
 
 ## 2.7.0

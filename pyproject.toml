@@ -45,13 +45,16 @@ dynamic = ['version']
 all = [
     'phonenumbers>=8,<9',
     'pycountry>=23',
+    'semver>=3.0.2',
     'python-ulid>=1,<2; python_version<"3.9"',
     'python-ulid>=1,<3; python_version>="3.9"',
     'pendulum>=3.0.0,<4.0.0',
-    'semver~=3.0.2',
+    'pytz>=2024.1',
+    'tzdata>=2024.1',
 ]
 phonenumbers = ['phonenumbers>=8,<9']
 pycountry = ['pycountry>=23']
+semver = ['semver>=3.0.2']
 python_ulid = [
     'python-ulid>=1,<2; python_version<"3.9"',
     'python-ulid>=1,<3; python_version>="3.9"',
@@ -118,6 +121,8 @@ filterwarnings = [
     'error',
     # This ignore will be removed when pycountry will drop py36 & support py311
     'ignore:::pkg_resources',
+    # This ignore will be removed when pendulum fixes https://github.com/sdispater/pendulum/issues/834
+    'ignore:datetime.datetime.utcfromtimestamp.*:DeprecationWarning'
 ]
 
 # configuring https://github.com/pydantic/hooky
