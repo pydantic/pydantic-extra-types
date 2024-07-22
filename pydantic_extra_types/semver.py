@@ -1,5 +1,5 @@
 """
-The SemVer module provides functionality to parse and validate Semantic Versioning (SemVer) strings.
+The _VersionPydanticAnnotation class provides functionality to parse and validate Semantic Versioning (SemVer) strings.
 
 This class depends on the [semver](https://python-semver.readthedocs.io/en/latest/index.html) package.
 """
