@@ -50,6 +50,7 @@ all = [
     'python-ulid>=1,<3; python_version>="3.9"',
     'pendulum>=3.0.0,<4.0.0',
     'pytz>=2024.1',
+    'semver~=3.0.2',
     'tzdata>=2024.1',
 ]
 phonenumbers = ['phonenumbers>=8,<9']
