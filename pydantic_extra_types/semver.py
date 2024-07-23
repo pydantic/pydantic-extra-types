@@ -7,10 +7,10 @@ This class depends on the [semver](https://python-semver.readthedocs.io/en/lates
 import sys
 from typing import Any, Callable
 
-if sys.version_info >= (3, 8):
-    from typing import Annotated
+if sys.version_info < (3, 9):  # pragma: no cover
+    from typing_extensions import Annotated  # pragma: no cover
 else:
-    from typing_extensions import Annotated
+    from typing import Annotated  # pragma: no cover
 
 from pydantic import GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
