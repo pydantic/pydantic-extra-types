@@ -4,7 +4,13 @@ The _VersionPydanticAnnotation class provides functionality to parse and validat
 This class depends on the [semver](https://python-semver.readthedocs.io/en/latest/index.html) package.
 """
 
-from typing import Annotated, Any, Callable
+import sys
+from typing import Any, Callable
+
+if sys.version_info >= (3, 8):
+    from typing import Annotated
+else:
+    from typing_extensions import Annotated
 
 from pydantic import GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
