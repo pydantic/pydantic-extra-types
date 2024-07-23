@@ -1,6 +1,7 @@
-from pydantic import BaseModel
-from pydantic_extra_types.semver import _VersionPydanticAnnotation
 import pytest
+from pydantic import BaseModel
+
+from pydantic_extra_types.semver import _VersionPydanticAnnotation
 
 
 class SomethingWithAVersion(BaseModel):
