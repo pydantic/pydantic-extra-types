@@ -5,9 +5,10 @@ This class depends on the [semver](https://python-semver.readthedocs.io/en/lates
 """
 
 from typing import Annotated, Any, Callable
+
 from pydantic import GetJsonSchemaHandler
-from pydantic_core import core_schema
 from pydantic.json_schema import JsonSchemaValue
+from pydantic_core import core_schema
 from semver import Version
 
 
