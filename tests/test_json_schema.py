@@ -356,13 +356,13 @@ everyday_currencies.sort()
             },
         ),
         (
-            _VersionPydanticAnnotation, 
+            _VersionPydanticAnnotation,
             {
                 'properties': {'x': {'title': 'X', 'type': 'string'}},
                 'required': ['x'],
                 'title': 'Model',
-                'type': 'object'
-            }
+                'type': 'object',
+            },
         )
     ],
 )
