@@ -22,7 +22,23 @@ class _VersionPydanticAnnotation(Version):
     """
     Represents a Semantic Versioning (SemVer).
 
-    Warps the `version` type from `semver`.
+    Wraps the `version` type from `semver`.
+
+    Example: 
+
+    ```python
+    from pydantic import BaseModel
+
+    from pydantic_extra_types.semver import _VersionPydanticAnnotation
+
+    class appVersion(BaseModel):
+        version: _VersionPydanticAnnotation
+
+    app_version = appVersion(version="1.2.3")
+
+    print(app_version.version)
+    # > 1.2.3
+    ```
     """
 
     @classmethod
