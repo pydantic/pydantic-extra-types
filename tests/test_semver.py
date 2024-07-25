@@ -19,12 +19,3 @@ def test_valid_semver_with_prerelease() -> None:
 def test_invalid_semver() -> None:
     with pytest.raises(ValueError):
         SomethingWithAVersion(version='jim.was.here')
-
-
-def test_json_schema() -> None:
-    assert SomethingWithAVersion.model_json_schema() == {
-        'properties': {'version': {'title': 'Version', 'type': 'string'}},
-        'required': ['version'],
-        'title': 'SomethingWithAVersion',
-        'type': 'object',
-    }

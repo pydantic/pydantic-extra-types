@@ -21,6 +21,7 @@ from pydantic_extra_types.script_code import ISO_15924
 from pydantic_extra_types.semantic_version import SemanticVersion
 from pydantic_extra_types.timezone_name import TimeZoneName
 from pydantic_extra_types.ulid import ULID
+from pydantic_extra_types.semver import _VersionPydanticAnnotation
 
 languages = [lang.alpha_3 for lang in pycountry.languages]
 language_families = [lang.alpha_3 for lang in pycountry.language_families]
@@ -354,6 +355,15 @@ everyday_currencies.sort()
                 'type': 'object',
             },
         ),
+        (
+            _VersionPydanticAnnotation, 
+            {
+                'properties': {'x': {'title': 'X', 'type': 'string'}},
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object'
+            }
+        )
     ],
 )
 def test_json_schema(cls, expected):
