@@ -24,7 +24,7 @@ class _VersionPydanticAnnotation(Version):
 
     Wraps the `version` type from `semver`.
 
-    Example: 
+    Example:
 
     ```python
     from pydantic import BaseModel
