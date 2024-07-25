@@ -368,7 +368,7 @@ everyday_currencies.sort()
                 'title': 'Model',
                 'type': 'object',
             },
-        )
+        ),
     ],
 )
 def test_json_schema(cls, expected):
