@@ -31,15 +31,21 @@ def test_formats_phone_number() -> None:
 
 
 def test_supported_regions() -> None:
-    assert 'US' in PhoneNumber.supported_regions
-    assert 'GB' in PhoneNumber.supported_regions
+    assert PhoneNumber.supported_regions == []
+    PhoneNumber.supported_regions = ['US']
 
+    assert Something(phone_number='+1 901 555 1212')
 
-def test_supported_formats() -> None:
-    assert 'E164' in PhoneNumber.supported_formats
-    assert 'RFC3966' in PhoneNumber.supported_formats
-    assert '__dict__' not in PhoneNumber.supported_formats
-    assert 'to_string' not in PhoneNumber.supported_formats
+    with pytest.raises(ValidationError, match='value is not from a supported region'):
+        Something(phone_number='+44 20 7946 0958')
+
+    USPhoneNumber = PhoneNumber()
+    USPhoneNumber.supported_regions = ['US']
+    assert USPhoneNumber.supported_regions == ['US']
+    assert Something(phone_number='+1 901 555 1212')
+
+    with pytest.raises(ValidationError, match='value is not from a supported region'):
+        Something(phone_number='+44 20 7946 0958')
 
 
 def test_parse_error() -> None:
@@ -75,8 +81,6 @@ def test_json_schema() -> None:
                 'title': 'Phone Number',
                 'type': 'string',
                 'format': 'phone',
-                'minLength': 7,
-                'maxLength': 64,
             }
         },
         'required': ['phone_number'],
