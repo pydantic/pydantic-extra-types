@@ -59,7 +59,8 @@ class PhoneNumber(str):
             raise PydanticCustomError('value_error', 'value is not a valid phone number')
 
         if cls.supported_regions and not any(
-            phonenumbers.is_valid_number_for_region(parsed_number, region_code=region) for region in cls.supported_regions
+            phonenumbers.is_valid_number_for_region(parsed_number, region_code=region)
+            for region in cls.supported_regions
         ):
             raise PydanticCustomError('value_error', 'value is not from a supported region')
 

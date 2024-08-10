@@ -47,6 +47,7 @@ def test_supported_regions() -> None:
     with pytest.raises(ValidationError, match='value is not from a supported region'):
         Something(phone_number='+44 20 7946 0958')
 
+
 def test_parse_error() -> None:
     with pytest.raises(ValidationError, match='value is not a valid phone number'):
         Something(phone_number='555 1212')
