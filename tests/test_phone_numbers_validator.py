@@ -1,4 +1,10 @@
-from typing import Annotated, Any, Optional, Union
+from typing import Any, Optional, Union
+try:
+    from typing import Annotated
+except ImportError:
+    # Python 3.8
+    from typing_extensions import Annotated
+
 
 import phonenumbers
 import pytest
