@@ -160,7 +160,7 @@ class PhoneNumberValidator:
 
         return phonenumbers.format_number(parsed_number, getattr(phonenumbers.PhoneNumberFormat, number_format))
 
-    def __get_pydantic_core_schema__(self, *_) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(self, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.no_info_before_validator_function(
             partial(
                 self._parse,
