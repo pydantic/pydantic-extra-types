@@ -94,8 +94,14 @@ class PhoneNumberValidator:
         str: The formatted phone number.
 
     Example:
-        MyNumberType = Annotated[str, PhoneNumberValidator()]
-        USNumberType = Annotated[str, PhoneNumberValidator(supported_regions=['US'], default_region='US')]
+        MyNumberType = Annotated[
+            Union[str, phonenumbers.PhoneNumber],
+            PhoneNumberValidator()
+        ]
+        USNumberType = Annotated[
+            Union[str, phonenumbers.PhoneNumber],
+            PhoneNumberValidator(supported_regions=['US'], default_region='US')
+        ]
 
         class SomeModel(BaseModel):
             phone_number: MyNumberType

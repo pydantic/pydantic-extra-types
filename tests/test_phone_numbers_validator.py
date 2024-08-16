@@ -1,21 +1,22 @@
 from typing import Annotated, Any, Optional, Union
 
 import phonenumbers
+from phonenumbers import PhoneNumber
 import pytest
 from pydantic import BaseModel, TypeAdapter, ValidationError
 
 from pydantic_extra_types.phone_numbers import PhoneNumberValidator
 
-Number = Annotated[Union[str, phonenumbers.PhoneNumber], PhoneNumberValidator()]
+Number = Annotated[Union[str, PhoneNumber], PhoneNumberValidator()]
 NANumber = Annotated[
-    Union[str, phonenumbers.PhoneNumber],
+    Union[str, PhoneNumber],
     PhoneNumberValidator(
         supported_regions=['US', 'CA'],
         default_region='US',
     ),
 ]
 UKNumber = Annotated[
-    Union[str, phonenumbers.PhoneNumber],
+    Union[str, PhoneNumber],
     PhoneNumberValidator(
         supported_regions=['GB'],
         default_region='GB',
