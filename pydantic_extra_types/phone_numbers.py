@@ -7,13 +7,17 @@ This class depends on the [phonenumbers] package, which is a Python port of Goog
 
 from __future__ import annotations
 
-from typing import Any, ClassVar
+from dataclasses import dataclass
+from functools import partial
+from typing import Any, ClassVar, Optional, Sequence
 
 from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
 try:
     import phonenumbers
+    from phonenumbers import PhoneNumber as BasePhoneNumber
+    from phonenumbers.phonenumberutil import NumberParseException
 except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
         '`PhoneNumber` requires "phonenumbers" to be installed. You can install it with "pip install phonenumbers"'
@@ -68,6 +72,105 @@ class PhoneNumber(str):
 
     def __eq__(self, other: Any) -> bool:
         return super().__eq__(other)
+
+    def __hash__(self) -> int:
+        return super().__hash__()
+
+
+@dataclass(frozen=True)
+class PhoneNumberValidator:
+    """
+    A pydantic before validator for phone numbers using the [phonenumbers](https://pypi.org/project/phonenumbers/) package,
+    a Python port of Google's [libphonenumber](https://github.com/google/libphonenumber/).
+
+    Intended to be used to create custom pydantic data types using the `typing.Annotated` type construct.
+
+    Args:
+        default_region (str | None): The default region code to use when parsing phone numbers without an international prefix.
+            If `None` (default), the region must be supplied in the phone number as an international prefix.
+        number_format (str): The format of the phone number to return. See `phonenumbers.PhoneNumberFormat` for valid values.
+        supported_regions (list[str]): The supported regions. If empty, all regions are supported (default).
+    Returns:
+        str: The formatted phone number.
+
+    Example:
+        MyNumberType = Annotated[str, PhoneNumberValidator()]
+        USNumberType = Annotated[str, PhoneNumberValidator(supported_regions=['US'], default_region='US')]
+
+        class SomeModel(BaseModel):
+            phone_number: MyNumberType
+            us_number: USNumberType
+    """
+
+    default_region: Optional[str] = None
+    number_format: str = 'RFC3966'
+    supported_regions: Optional[Sequence[str]] = None
+
+    def __post_init__(self) -> None:
+        if self.default_region and self.default_region not in phonenumbers.SUPPORTED_REGIONS:
+            raise ValueError(f'Invalid default region code: {self.default_region}')
+
+        if self.number_format not in (
+            number_format
+            for number_format in dir(phonenumbers.PhoneNumberFormat)
+            if not number_format.startswith('_') and number_format.isupper()
+        ):
+            raise ValueError(f'Invalid number format: {self.number_format}')
+
+        if self.supported_regions:
+            for supported_region in self.supported_regions:
+                if supported_region not in phonenumbers.SUPPORTED_REGIONS:
+                    raise ValueError(f'Invalid supported region code: {supported_region}')
+
+    @staticmethod
+    def _parse(
+        region: str | None,
+        number_format: str,
+        supported_regions: Optional[Sequence[str]],
+        phone_number: Any,
+    ) -> str:
+        if not phone_number:
+            raise PydanticCustomError('value_error', 'value is not a valid phone number')
+
+        if not isinstance(phone_number, (str, BasePhoneNumber)):
+            raise PydanticCustomError('value_error', 'value is not a valid phone number')
+
+        parsed_number = None
+        if isinstance(phone_number, BasePhoneNumber):
+            parsed_number = phone_number
+        else:
+            try:
+                parsed_number = phonenumbers.parse(phone_number, region=region)
+            except NumberParseException as exc:
+                raise PydanticCustomError('value_error', 'value is not a valid phone number') from exc
+
+        if not phonenumbers.is_valid_number(parsed_number):
+            raise PydanticCustomError('value_error', 'value is not a valid phone number')
+
+        if supported_regions and not any(
+            phonenumbers.is_valid_number_for_region(parsed_number, region_code=region) for region in supported_regions
+        ):
+            raise PydanticCustomError('value_error', 'value is not from a supported region')
+
+        return phonenumbers.format_number(parsed_number, getattr(phonenumbers.PhoneNumberFormat, number_format))
+
+    def __get_pydantic_core_schema__(self, *_) -> core_schema.CoreSchema:
+        return core_schema.no_info_before_validator_function(
+            partial(
+                self._parse,
+                self.default_region,
+                self.number_format,
+                self.supported_regions,
+            ),
+            core_schema.str_schema(),
+        )
+
+    def __get_pydantic_json_schema__(
+        self, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+    ) -> dict[str, Any]:
+        json_schema = handler(schema)
+        json_schema.update({'format': 'phone'})
+        return json_schema
 
     def __hash__(self) -> int:
         return super().__hash__()
