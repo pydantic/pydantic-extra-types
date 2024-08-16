@@ -1,8 +1,8 @@
 from typing import Annotated, Any, Optional, Union
 
 import phonenumbers
-from phonenumbers import PhoneNumber
 import pytest
+from phonenumbers import PhoneNumber
 from pydantic import BaseModel, TypeAdapter, ValidationError
 
 from pydantic_extra_types.phone_numbers import PhoneNumberValidator
