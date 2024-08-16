@@ -1,4 +1,5 @@
 from typing import Any, Optional, Union
+
 try:
     from typing import Annotated
 except ImportError:
