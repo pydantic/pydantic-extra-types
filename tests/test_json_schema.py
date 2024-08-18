@@ -1,6 +1,14 @@
+from typing import Union
+
 import pycountry
 import pytest
 from pydantic import BaseModel
+
+try:
+    from typing import Annotated
+except ImportError:
+    # Python 3.8
+    from typing_extensions import Annotated
 
 import pydantic_extra_types
 from pydantic_extra_types.color import Color
@@ -22,6 +30,7 @@ from pydantic_extra_types.language_code import (
 from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
+from pydantic_extra_types.phone_numbers import PhoneNumber, PhoneNumberValidator
 from pydantic_extra_types.script_code import ISO_15924
 from pydantic_extra_types.semantic_version import SemanticVersion
 from pydantic_extra_types.semver import _VersionPydanticAnnotation
@@ -46,6 +55,16 @@ scripts = [script.alpha_4 for script in pycountry.scripts]
 timezone_names = TimeZoneName.allowed_values_list
 
 everyday_currencies.sort()
+
+AnyNumberRFC3966 = Annotated[Union[str, PhoneNumber], PhoneNumberValidator()]
+USNumberE164 = Annotated[
+    Union[str, PhoneNumber],
+    PhoneNumberValidator(
+        supported_regions=['US'],
+        default_region='US',
+        number_format='E164',
+    ),
+]
 
 
 @pytest.mark.parametrize(
@@ -367,6 +386,51 @@ everyday_currencies.sort()
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',
+            },
+        ),
+        (
+            PhoneNumber,
+            {
+                'title': 'Model',
+                'type': 'object',
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'format': 'phone',
+                    }
+                },
+                'required': ['x'],
+            },
+        ),
+        (
+            AnyNumberRFC3966,
+            {
+                'title': 'Model',
+                'type': 'object',
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'format': 'phone',
+                    }
+                },
+                'required': ['x'],
+            },
+        ),
+        (
+            USNumberE164,
+            {
+                'title': 'Model',
+                'type': 'object',
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'format': 'phone',
+                    }
+                },
+                'required': ['x'],
             },
         ),
     ],

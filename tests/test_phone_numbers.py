@@ -70,18 +70,3 @@ def test_eq() -> None:
     assert PhoneNumber('555-1212') == '555-1212'
     assert PhoneNumber('555-1212') != '555-1213'
     assert PhoneNumber('555-1212') != PhoneNumber('555-1213')
-
-
-def test_json_schema() -> None:
-    assert Something.model_json_schema() == {
-        'title': 'Something',
-        'type': 'object',
-        'properties': {
-            'phone_number': {
-                'title': 'Phone Number',
-                'type': 'string',
-                'format': 'phone',
-            }
-        },
-        'required': ['phone_number'],
-    }
