@@ -32,7 +32,7 @@ class S3Path(str):
         return f'{self.__class__.__name__}({self.value!r})'
 
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'S3Path':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> S3Path:
         return cls(__input_value)
 
     @classmethod
