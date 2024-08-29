@@ -6,6 +6,8 @@ A simpleAWS S3 URLs parser.
 It also provides the `Bucket`, `Key` component.
 """
 
+from __future__ import annotations
+
 import re
 from typing import Any, ClassVar, Type
 
@@ -18,7 +20,10 @@ class S3Path(str):
 
     def __init__(self, value: str) -> None:
         self.value = value
-        self.bucket, self.key, self.last_key = re.match(self.patt, self.value).groups()
+        groups: tuple[str, str, str] = re.match(self.patt, self.value).groups()  # type: ignore
+        self.bucket: str = groups[0]
+        self.key: str = groups[1]
+        self.last_key: str = groups[2]
 
     def __str__(self) -> str:  # pragma: no cover
         return self.value
