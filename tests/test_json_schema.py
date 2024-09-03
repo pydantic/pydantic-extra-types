@@ -31,6 +31,7 @@ from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
 from pydantic_extra_types.phone_numbers import PhoneNumber, PhoneNumberValidator
+from pydantic_extra_types.s3 import S3Path
 from pydantic_extra_types.script_code import ISO_15924
 from pydantic_extra_types.semantic_version import SemanticVersion
 from pydantic_extra_types.semver import _VersionPydanticAnnotation
@@ -431,6 +432,23 @@ USNumberE164 = Annotated[
                     }
                 },
                 'required': ['x'],
+            },
+        ),
+        (
+            S3Path,
+            {
+                'title': 'Model',
+                'type': 'object',
+                'properties': {
+                    'x': {
+                        'pattern': '^s3://([^/]+)/(.*?([^/]+)/?)$',
+                        'title': 'X',
+                        'type': 'string',
+                    },
+                },
+                'required': [
+                    'x',
+                ],
             },
         ),
     ],
