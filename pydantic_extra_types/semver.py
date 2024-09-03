@@ -12,10 +12,16 @@ if sys.version_info < (3, 9):  # pragma: no cover
 else:
     from typing import Annotated  # pragma: no cover
 
+import warnings
+
 from pydantic import GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
 from semver import Version
+
+warnings.warn(
+    'Use from pydantic_extra_types.semver import SemanticVersion instead. Will be removed in 3.0.0.', DeprecationWarning
+)
 
 
 class _VersionPydanticAnnotation(Version):

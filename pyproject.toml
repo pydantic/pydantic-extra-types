@@ -38,7 +38,7 @@ classifiers = [
     'Topic :: Internet',
 ]
 requires-python = '>=3.8'
-dependencies = ['pydantic>=2.5.2']
+dependencies = ['pydantic>=2.5.2','typing-extensions']
 dynamic = ['version']
 
 [project.optional-dependencies]
@@ -123,7 +123,8 @@ filterwarnings = [
     # This ignore will be removed when pycountry will drop py36 & support py311
     'ignore:::pkg_resources',
     # This ignore will be removed when pendulum fixes https://github.com/sdispater/pendulum/issues/834
-    'ignore:datetime.datetime.utcfromtimestamp.*:DeprecationWarning'
+    'ignore:datetime.datetime.utcfromtimestamp.*:DeprecationWarning',
+    ' ignore:Use from pydantic_extra_types.semver import SemanticVersion instead. Will be removed in 3.0.0.:DeprecationWarning'
 ]
 
 # configuring https://github.com/pydantic/hooky
