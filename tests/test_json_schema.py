@@ -13,20 +13,11 @@ except ImportError:
 import pydantic_extra_types
 from pydantic_extra_types.color import Color
 from pydantic_extra_types.coordinate import Coordinate, Latitude, Longitude
-from pydantic_extra_types.country import (
-    CountryAlpha2,
-    CountryAlpha3,
-    CountryNumericCode,
-    CountryShortName,
-)
+from pydantic_extra_types.country import CountryAlpha2, CountryAlpha3, CountryNumericCode, CountryShortName
 from pydantic_extra_types.currency_code import ISO4217, Currency
+from pydantic_extra_types.domain import DomainStr
 from pydantic_extra_types.isbn import ISBN
-from pydantic_extra_types.language_code import (
-    ISO639_3,
-    ISO639_5,
-    LanguageAlpha2,
-    LanguageName,
-)
+from pydantic_extra_types.language_code import ISO639_3, ISO639_5, LanguageAlpha2, LanguageName
 from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
@@ -442,6 +433,22 @@ USNumberE164 = Annotated[
                 'properties': {
                     'x': {
                         'pattern': '^s3://([^/]+)/(.*?([^/]+)/?)$',
+                        'title': 'X',
+                        'type': 'string',
+                    },
+                },
+                'required': [
+                    'x',
+                ],
+            },
+        ),
+        (
+            DomainStr,
+            {
+                'title': 'Model',
+                'type': 'object',
+                'properties': {
+                    'x': {
                         'title': 'X',
                         'type': 'string',
                     },
