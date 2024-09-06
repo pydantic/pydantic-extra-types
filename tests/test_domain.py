@@ -72,11 +72,5 @@ def test_very_long_domains(domain: str):
 
 @pytest.mark.parametrize('domain', invalid_domain_types)
 def test_invalid_domain_types(domain: Any):
-    try:
-        MyModel.model_validate({'domain': domain})
-        raise Exception(
-            f"This test case types that should raise the ValidationError exception. This value '{domain}' did not raise such an exception."
-        )
-    except ValidationError:
-        # An error is expected on this test
-        pass
+    with pytest.raises(ValidationError, match='Value must be a string'):
+        MyModel(domain=domain)
