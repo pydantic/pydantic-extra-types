@@ -1,8 +1,9 @@
-try:
-    from typing import Annotated
-except ImportError:
-    # Python 3.8
-    from typing_extensions import Annotated
+import sys
+
+if sys.version_info < (3, 9):  # pragma: no cover
+    from typing_extensions import Annotated  # pragma: no cover
+else:
+    from typing import Annotated  # pragma: no cover
 
 from pydantic import StringConstraints
 
