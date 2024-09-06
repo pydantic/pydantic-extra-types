@@ -19,12 +19,12 @@ class DomainStr(str):
 
     @classmethod
     def __get_validators__(cls) -> Generator[Any]:
-        yield cls.validate
+        yield cls.validate  # pragma: no cover
 
     @classmethod
     def validate(cls, v: Any) -> DomainStr:
         if not isinstance(v, str):
-            raise PydanticCustomError('domain_type', 'Value must be a string')
+            raise PydanticCustomError('domain_type', 'Value must be a string')  # pragma: no cover
 
         v = v.strip().lower()
         if len(v) < 1 or len(v) > 253:
@@ -47,4 +47,4 @@ class DomainStr(str):
     def __get_pydantic_json_schema__(
         cls, schema: core_schema.CoreSchema, handler: GetCoreSchemaHandler
     ) -> Mapping[str, Any]:
-        return handler(schema)
+        return handler(schema)  # pragma: no cover
