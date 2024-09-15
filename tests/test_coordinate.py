@@ -189,7 +189,7 @@ def test_json_schema():
                 'type': 'object',
             }
         },
-        'properties': {'value': {'allOf': [{'$ref': '#/$defs/Coordinate'}], 'title': 'Value'}},
+        'properties': {'value': {'$ref': '#/$defs/Coordinate', 'title': 'Value'}},
         'required': ['value'],
         'title': 'Model',
         'type': 'object',
