@@ -18,11 +18,19 @@ jobs:
       - name: set up python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
+
+      - name: setup UV
+        uses: yezz123/setup-uv@v4
+        with:
+          uv-venv: ".venv"
 
       - name: install
         run: |
-          pip install -r requirements/pyproject.txt && pip install -r requirements/linting.txt
+          uv sync
+
+      - name: Freeze Dependencies
+        run: uv tree
 
       - uses: pre-commit/action@v3.0.1
         with:
@@ -46,12 +54,20 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - run: |
-          pip install -r requirements/pyproject.txt && pip install -r requirements/testing.txt
+      - name: setup UV
+        uses: yezz123/setup-uv@v4
+        with:
+          uv-venv: ".venv"
 
-      - run: pip freeze
+      - name: install
+        run: |
+          uv sync
 
-      - run: make test
+      - name: Freeze Dependencies
+        run: uv tree
+
+      - name: Run tests
+        run: make test
         env:
           CONTEXT: ${{ runner.os }}-py${{ matrix.python-version }}-with-deps
 
@@ -85,7 +101,7 @@ jobs:
       - name: set up python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: install
         run: pip install -U build
