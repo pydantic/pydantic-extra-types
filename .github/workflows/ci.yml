@@ -10,7 +10,14 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu]
+        python-version: ['3.11']
+
+    runs-on: ${{ matrix.os }}-latest
+
 
     steps:
       - uses: actions/checkout@v4
@@ -22,19 +29,22 @@ jobs:
 
       - name: setup UV
         uses: yezz123/setup-uv@v4
-        with:
-          uv-venv: ".venv"
 
       - name: install
         run: |
           uv sync
 
+      - name: Virtual Environment
+        run: |
+          source .venv/bin/activate
+
       - name: Freeze Dependencies
         run: uv tree
 
-      - uses: pre-commit/action@v3.0.1
-        with:
-          extra_args: --all-files --verbose
+      - name: Run Lint
+        run: make pre-commit
+        env:
+          CONTEXT: ${{ runner.os }}-py${{ matrix.python-version }}-with-deps
 
   test:
     name: test py${{ matrix.python-version }} on ${{ matrix.os }}
@@ -56,12 +66,14 @@ jobs:
 
       - name: setup UV
         uses: yezz123/setup-uv@v4
-        with:
-          uv-venv: ".venv"
 
       - name: install
         run: |
           uv sync
+
+      - name: Virtual Environment
+        run: |
+          source .venv/bin/activate
 
       - name: Freeze Dependencies
         run: uv tree
