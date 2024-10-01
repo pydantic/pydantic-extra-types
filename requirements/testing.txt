@@ -10,12 +10,12 @@ charset-normalizer==3.3.2
     # via requests
 codecov==2.1.13
     # via -r requirements/testing.in
-coverage[toml]==7.6.0
+coverage[toml]==7.6.1
     # via
     #   -r requirements/testing.in
     #   codecov
     #   pytest-cov
-dirty-equals==0.7.1.post0
+dirty-equals==0.8.0
     # via -r requirements/testing.in
 idna==3.6
     # via requests
@@ -31,7 +31,7 @@ pluggy==1.5.0
     # via pytest
 pygments==2.17.2
     # via rich
-pytest==8.3.2
+pytest==8.3.3
     # via
     #   -r requirements/testing.in
     #   pytest-cov
@@ -40,8 +40,6 @@ pytest-cov==5.0.0
     # via -r requirements/testing.in
 pytest-pretty==1.2.0
     # via -r requirements/testing.in
-pytz==2024.1
-    # via dirty-equals
 requests==2.31.0
     # via codecov
 rich==13.7.0
