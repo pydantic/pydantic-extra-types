@@ -14,7 +14,7 @@ filelock==3.13.1
     # via virtualenv
 identify==2.5.35
     # via pre-commit
-mypy==1.11.1
+mypy==1.11.2
     # via -r requirements/linting.in
 mypy-extensions==1.0.0
     # via mypy
@@ -26,9 +26,9 @@ pre-commit==3.8.0
     # via -r requirements/linting.in
 pyyaml==6.0.1
     # via pre-commit
-ruff==0.5.5
+ruff==0.6.8
     # via -r requirements/linting.in
-types-pytz==2024.1.0.20240417
+types-pytz==2024.2.0.20240913
     # via -r requirements/linting.in
 typing-extensions==4.10.0
     # via mypy
