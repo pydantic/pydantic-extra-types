@@ -4,7 +4,6 @@ venv/
 .venv/
 env3*/
 Pipfile
-*.lock
 *.py[cod]
 *.egg-info/
 /build/

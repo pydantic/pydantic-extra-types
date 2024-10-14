@@ -10,7 +10,14 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu]
+        python-version: ['3.11']
+
+    runs-on: ${{ matrix.os }}-latest
+
 
     steps:
       - uses: actions/checkout@v4
@@ -18,15 +25,26 @@ jobs:
       - name: set up python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
+
+      - name: setup UV
+        uses: yezz123/setup-uv@v4
 
       - name: install
         run: |
-          pip install -r requirements/pyproject.txt && pip install -r requirements/linting.txt
+          uv sync
 
-      - uses: pre-commit/action@v3.0.1
-        with:
-          extra_args: --all-files --verbose
+      - name: Virtual Environment
+        run: |
+          source .venv/bin/activate
+
+      - name: Freeze Dependencies
+        run: uv tree
+
+      - name: Run Lint
+        run: make pre-commit
+        env:
+          CONTEXT: ${{ runner.os }}-py${{ matrix.python-version }}-with-deps
 
   test:
     name: test py${{ matrix.python-version }} on ${{ matrix.os }}
@@ -46,12 +64,22 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - run: |
-          pip install -r requirements/pyproject.txt && pip install -r requirements/testing.txt
+      - name: setup UV
+        uses: yezz123/setup-uv@v4
 
-      - run: pip freeze
+      - name: install
+        run: |
+          uv sync
 
-      - run: make test
+      - name: Virtual Environment
+        run: |
+          source .venv/bin/activate
+
+      - name: Freeze Dependencies
+        run: uv tree
+
+      - name: Run tests
+        run: make test
         env:
           CONTEXT: ${{ runner.os }}-py${{ matrix.python-version }}-with-deps
 
@@ -85,7 +113,7 @@ jobs:
       - name: set up python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: install
         run: pip install -U build
