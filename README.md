@@ -8,3 +8,17 @@
 A place for pydantic types that probably shouldn't exist in the main pydantic lib.
 
 See [pydantic/pydantic#5012](https://github.com/pydantic/pydantic/issues/5012) for more info.
+
+## Installation
+
+Install this library with the desired extras dependencies as listed in [project.optional-dependencies](./pyproject.toml).
+
+For example, if pendulum support was desired:
+
+```shell
+# via poetry
+$ poetry add "pydantic-extra-types[pendulum]"
+
+# via pip
+$ pip install -U "pydantic-extra-types[pendulum]"
+```
