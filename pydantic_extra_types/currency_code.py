@@ -132,7 +132,7 @@ class Currency(str):
             raise PydanticCustomError(
                 'InvalidCurrency',
                 'Invalid currency code.'
-                ' See https://en.wikipedia.org/wiki/ISO_4217. '
+                ' See https://en.wikipedia.org/wiki/ISO_4217 . '
                 'Bonds, testing and precious metals codes are not allowed.',
             )
         return currency_symbol

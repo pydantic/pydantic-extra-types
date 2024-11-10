@@ -56,7 +56,7 @@ def test_forbidden_everyday(forbidden_currency):
         ValidationError,
         match=re.escape(
             '1 validation error for CurrencyCheckingModel\ncurrency\n  '
-            'Invalid currency code. See https://en.wikipedia.org/wiki/ISO_4217. '
+            'Invalid currency code. See https://en.wikipedia.org/wiki/ISO_4217 . '
             'Bonds, testing and precious metals codes are not allowed. '
             f"[type=InvalidCurrency, input_value='{forbidden_currency}', input_type=str]"
         ),
