@@ -1,4 +1,5 @@
 import pytest
+import semver
 from pydantic import BaseModel, ValidationError
 
 from pydantic_extra_types.semantic_version import SemanticVersion
@@ -12,9 +13,12 @@ def application_object_fixture():
     return Application
 
 
+@pytest.mark.parametrize(
+    'constructor', [str, semver.Version.parse, SemanticVersion.parse], ids=['str', 'semver.Version', 'SemanticVersion']
+)
 @pytest.mark.parametrize('version', ['1.0.0', '1.0.0-alpha.1', '1.0.0-alpha.1+build.1', '1.2.3'])
-def test_valid_semantic_version(SemanticVersionObject, version):
-    application = SemanticVersionObject(version=version)
+def test_valid_semantic_version(SemanticVersionObject, constructor, version):
+    application = SemanticVersionObject(version=constructor(version))
     assert application.version
     assert application.model_dump() == {'version': version}
 
