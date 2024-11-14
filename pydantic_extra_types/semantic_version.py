@@ -16,7 +16,7 @@ except ModuleNotFoundError as e:  # pragma: no cover
     ) from e
 
 
-class SemanticVersion:
+class SemanticVersion(semver.Version):
     """
     Semantic version based on the official [semver thread](https://python-semver.readthedocs.io/en/latest/advanced/combine-pydantic-and-semver.html).
     """
@@ -27,8 +27,8 @@ class SemanticVersion:
         _source_type: Any,
         _handler: Callable[[Any], core_schema.CoreSchema],
     ) -> core_schema.CoreSchema:
-        def validate_from_str(value: str) -> semver.Version:
-            return semver.Version.parse(value)
+        def validate_from_str(value: str) -> SemanticVersion:
+            return cls.parse(value)
 
         from_str_schema = core_schema.chain_schema(
             [
@@ -52,4 +52,8 @@ class SemanticVersion:
     def __get_pydantic_json_schema__(
         cls, _core_schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> JsonSchemaValue:
-        return handler(core_schema.str_schema())
+        return handler(
+            core_schema.str_schema(
+                pattern=r'^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
+            )
+        )

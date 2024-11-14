@@ -349,7 +349,13 @@ USNumberE164 = Annotated[
         (
             SemanticVersion,
             {
-                'properties': {'x': {'title': 'X', 'type': 'string'}},
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                        'pattern': r'^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$',
+                    }
+                },
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',
