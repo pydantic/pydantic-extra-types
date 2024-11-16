@@ -2,15 +2,15 @@ import datetime
 
 import pytest
 
-from pydantic_extra_types.epoch import Epoch
+from pydantic_extra_types import epoch
 
 
-@pytest.mark.parametrize('type_', [(int,), (float,)], ids=['integer', 'float'])
-def test_type(type_):
+@pytest.mark.parametrize('type_,cls_', [(int, epoch.Integer), (float, epoch.Number)], ids=['integer', 'number'])
+def test_type(type_, cls_):
     from pydantic import BaseModel
 
     class A(BaseModel):
-        epoch: Epoch
+        epoch: cls_
 
     now = datetime.datetime.now(tz=datetime.timezone.utc)
     ts = type_(now.timestamp())
@@ -28,11 +28,12 @@ def test_type(type_):
     assert v['epoch'] == ts
 
 
-def test_schema():
+@pytest.mark.parametrize('cls_', [(epoch.Integer), (epoch.Number)], ids=['integer', 'number'])
+def test_schema(cls_):
     from pydantic import BaseModel
 
     class A(BaseModel):
-        dt: Epoch
+        dt: cls_
 
     v = A.model_json_schema()
-    assert (dt := v['properties']['dt'])['type'] == 'number' and dt['format'] == 'date-time'
+    assert (dt := v['properties']['dt'])['type'] == cls_.TYPE and dt['format'] == 'date-time'
