@@ -21,15 +21,15 @@ class Epoch(datetime.datetime):
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: Callable[[Any], CoreSchema]
     ) -> core_schema.CoreSchema:
-        def f(value, serializer):
+        def f(value: Any, serializer: Callable[[datetime.datetime], float]) -> float:
             return serializer(value.timestamp())
+
         return core_schema.with_info_after_validator_function(
-                cls._validate, core_schema.float_schema(),
-                serialization=core_schema.wrap_serializer_function_ser_schema(f, return_schema=core_schema.float_schema())
+            cls._validate,
+            core_schema.float_schema(),
+            serialization=core_schema.wrap_serializer_function_ser_schema(f, return_schema=core_schema.float_schema()),
         )
 
     @classmethod
-    def _validate(cls, __input_value: Any, _: Any) -> "Epoch":
+    def _validate(cls, __input_value: Any, _: Any) -> datetime.datetime:
         return EPOCH + datetime.timedelta(seconds=__input_value)
-
-
