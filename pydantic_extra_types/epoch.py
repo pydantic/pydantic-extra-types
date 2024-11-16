@@ -38,8 +38,8 @@ class _Base(datetime.datetime):
         return EPOCH + datetime.timedelta(seconds=__input_value)
 
     @classmethod
-    def _f(cls, value: Any, serializer: Callable[[Any], Any]) -> Any:
-        pass
+    def _f(cls, value: Any, serializer: Callable[[Any], Any]) -> Any:  # pragma: no cover
+        raise NotImplementedError(cls)
 
 
 class Number(_Base):
