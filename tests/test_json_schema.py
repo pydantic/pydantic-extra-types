@@ -11,6 +11,7 @@ except ImportError:
     from typing_extensions import Annotated
 
 import pydantic_extra_types
+from pydantic_extra_types import epoch
 from pydantic_extra_types.color import Color
 from pydantic_extra_types.coordinate import Coordinate, Latitude, Longitude
 from pydantic_extra_types.country import CountryAlpha2, CountryAlpha3, CountryNumericCode, CountryShortName
@@ -457,6 +458,40 @@ USNumberE164 = Annotated[
                     'x': {
                         'title': 'X',
                         'type': 'string',
+                    },
+                },
+                'required': [
+                    'x',
+                ],
+            },
+        ),
+        (
+            epoch.Integer,
+            {
+                'title': 'Model',
+                'type': 'object',
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'integer',
+                        'format': 'date-time',
+                    },
+                },
+                'required': [
+                    'x',
+                ],
+            },
+        ),
+        (
+            epoch.Number,
+            {
+                'title': 'Model',
+                'type': 'object',
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'number',
+                        'format': 'date-time',
                     },
                 },
                 'required': [

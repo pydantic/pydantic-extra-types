@@ -43,6 +43,22 @@ class _Base(datetime.datetime):
 
 
 class Number(_Base):
+    """epoch.Number parses unix timestamp as float and converts it to datetime.
+
+    ```py
+    from pydantic import BaseModel
+
+    from pydantic_extra_types import epoch
+
+    class LogEntry(BaseModel):
+        timestamp: epoch.Number
+
+    logentry = LogEntry(timestamp=1.1)
+    print(logentry)
+    #> timestamp=datetime.datetime(1970, 1, 1, 0, 0, 1, 100000, tzinfo=datetime.timezone.utc)
+    ```
+    """
+
     TYPE = 'number'
     SCHEMA = core_schema.float_schema()
 
@@ -53,6 +69,23 @@ class Number(_Base):
 
 
 class Integer(_Base):
+    """epoch.Integer parses unix timestamp as integer and converts it to datetime.
+
+    ```
+    ```py
+    from pydantic import BaseModel
+
+    from pydantic_extra_types import epoch
+
+    class LogEntry(BaseModel):
+        timestamp: epoch.Integer
+
+    logentry = LogEntry(timestamp=1)
+    print(logentry)
+    #> timestamp=datetime.datetime(1970, 1, 1, 0, 0, 1, tzinfo=datetime.timezone.utc)
+    ```
+    """
+
     TYPE = 'integer'
     SCHEMA = core_schema.int_schema()
 
