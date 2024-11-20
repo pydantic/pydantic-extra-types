@@ -1,6 +1,4 @@
-"""
-Currency definitions that are based on the [ISO4217](https://en.wikipedia.org/wiki/ISO_4217).
-"""
+"""Currency definitions that are based on the [ISO4217](https://en.wikipedia.org/wiki/ISO_4217)."""
 
 from __future__ import annotations
 
@@ -41,8 +39,10 @@ class ISO4217(str):
 
     from pydantic_extra_types.currency_code import ISO4217
 
+
     class Currency(BaseModel):
         alpha_3: ISO4217
+
 
     currency = Currency(alpha_3='AED')
     print(currency)
@@ -55,8 +55,7 @@ class ISO4217(str):
 
     @classmethod
     def _validate(cls, currency_code: str, _: core_schema.ValidationInfo) -> str:
-        """
-        Validate a ISO 4217 language code from the provided str value.
+        """Validate a ISO 4217 language code from the provided str value.
 
         Args:
             currency_code: The str value to be validated.
@@ -99,8 +98,10 @@ class Currency(str):
 
         from pydantic_extra_types.currency_code import Currency
 
+
         class currency(BaseModel):
             alpha_3: Currency
+
 
         cur = currency(alpha_3='AED')
         print(cur)
@@ -115,8 +116,7 @@ class Currency(str):
 
     @classmethod
     def _validate(cls, currency_symbol: str, _: core_schema.ValidationInfo) -> str:
-        """
-        Validate a subset of the [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) format.
+        """Validate a subset of the [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) format.
         It excludes bonds testing codes and precious metals.
 
         Args:
@@ -141,16 +141,15 @@ class Currency(str):
 
     @classmethod
     def __get_pydantic_core_schema__(cls, _: type[Any], __: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        """
-        Return a Pydantic CoreSchema with the currency subset of the
+        """Return a Pydantic CoreSchema with the currency subset of the
         [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) format.
         It excludes bonds testing codes and precious metals.
 
-         Args:
+        Args:
              _: The source type.
              __: The handler to get the CoreSchema.
 
-         Returns:
+        Returns:
             A Pydantic CoreSchema with the subset of the currency subset of the
             [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) format.
             It excludes bonds testing codes and precious metals.
@@ -164,8 +163,7 @@ class Currency(str):
     def __get_pydantic_json_schema__(
         cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
-        """
-        Return a Pydantic JSON Schema with subset of the [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) format.
+        """Return a Pydantic JSON Schema with subset of the [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) format.
         Excluding bonds testing codes and precious metals.
 
         Args:

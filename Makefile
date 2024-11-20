@@ -1,70 +1,52 @@
 .DEFAULT_GOAL := all
 sources = pydantic_extra_types tests
 
-.PHONY: install
-install:
-	python -m pip install -U pip
-	pip install -r requirements/all.txt
-	pip install -e .
+.PHONY: .uv  # Check that uv is installed
+.uv:
+	@uv --version || echo 'Please install uv: https://docs.astral.sh/uv/getting-started/installation/'
 
-.PHONY: refresh-lockfiles
-refresh-lockfiles:
-	@echo "Updating requirements/*.txt files using pip-compile"
-	find requirements/ -name '*.txt' ! -name 'all.txt' -type f -delete
-	pip-compile -q --no-emit-index-url --resolver backtracking -o requirements/linting.txt requirements/linting.in
-	pip-compile -q --no-emit-index-url --resolver backtracking -o requirements/testing.txt requirements/testing.in
-	pip-compile -q --no-emit-index-url --resolver backtracking --extra all -o requirements/pyproject.txt pyproject.toml
-	pip install --dry-run -r requirements/all.txt
+.PHONY: install  # Install the package, dependencies, and pre-commit for local development
+install: .uv
+	uv sync --frozen --group all --all-extras
+	uv run pre-commit install --install-hooks
 
-.PHONY: format
+.PHONY: rebuild-lockfiles  ## Rebuild lockfiles from scratch, updating all dependencies
+rebuild-lockfiles: .uv
+	uv lock --upgrade
+
+.PHONY: format  # Format the code
 format:
-	ruff check --fix $(sources)
-	ruff format $(sources)
+	uv run ruff format
+	uv run ruff check --fix --fix-only
 
-.PHONY: lint
+.PHONY: lint  # Lint the code
 lint:
-	ruff check $(sources)
-	ruff format --check $(sources)
+	uv run ruff format --check
+	uv run ruff check
 
-.PHONY: mypy
-mypy:
-	mypy pydantic_extra_types
+.PHONY: typecheck
+typecheck:
+	uv run pyright
 
 .PHONY: test
 test:
-	coverage run -m pytest --durations=10
+	uv run pytest
 
-.PHONY: testcov
-testcov: test
-	@echo "building coverage html"
-	@coverage html
+.PHONY: test-all-python  # Run tests on Python 3.9 to 3.13
+test-all-python:
+	UV_PROJECT_ENVIRONMENT=.venv39 uv run --python 3.9 coverage run -p -m pytest
+	UV_PROJECT_ENVIRONMENT=.venv310 uv run --python 3.10 coverage run -p -m pytest
+	UV_PROJECT_ENVIRONMENT=.venv311 uv run --python 3.11 coverage run -p -m pytest
+	UV_PROJECT_ENVIRONMENT=.venv312 uv run --python 3.12 coverage run -p -m pytest
+	UV_PROJECT_ENVIRONMENT=.venv313 uv run --python 3.13 coverage run -p -m pytest
+	@uv run coverage combine
+	@uv run coverage report
 
-.PHONY: testcov-compile
-testcov-compile: build-trace test
-	@echo "building coverage html"
-	@coverage html
+.PHONY: testcov  # Run tests and collect coverage data
+testcov:
+	uv run coverage run -m pytest
+	@uv run coverage report
+	@uv run coverage html
 
 .PHONY: all
-all: lint mypy testcov
-
-.PHONY: clean
-clean:
-	rm -rf `find . -name __pycache__`
-	rm -f `find . -type f -name '*.py[co]'`
-	rm -f `find . -type f -name '*~'`
-	rm -f `find . -type f -name '.*~'`
-	rm -rf .cache
-	rm -rf .pytest_cache
-	rm -rf .mypy_cache
-	rm -rf htmlcov
-	rm -rf *.egg-info
-	rm -f .coverage
-	rm -f .coverage.*
-	rm -rf build
-	rm -rf dist
-	rm -rf coverage.xml
-	rm -rf .ruff_cache
-
-.PHONY: pre-commit
-pre-commit:
-	pre-commit run --all-files --show-diff-on-failure
+all: format lint typecheck testcov

@@ -1,5 +1,4 @@
-"""
-The `pydantic_extra_types.payment` module provides the
+"""The `pydantic_extra_types.payment` module provides the
 [`PaymentCardNumber`][pydantic_extra_types.payment.PaymentCardNumber] data type.
 """
 

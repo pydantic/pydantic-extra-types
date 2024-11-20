@@ -4,16 +4,15 @@ venv/
 .venv/
 env3*/
 Pipfile
-*.lock
 *.py[cod]
 *.egg-info/
+.python-version
 /build/
 dist/
 .cache/
 .mypy_cache/
 test.py
 .coverage
-.hypothesis
 /htmlcov/
 /site/
 /site.zip
@@ -24,5 +23,4 @@ _build/
 /sandbox/
 /.ghtopdep_cache/
 /worktrees/
-.ruff_cache/
-.python-version
+/.ruff_cache/

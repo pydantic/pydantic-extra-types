@@ -1,6 +1,4 @@
-"""
-script definitions that are based on the [ISO 15924](https://en.wikipedia.org/wiki/ISO_15924)
-"""
+"""script definitions that are based on the [ISO 15924](https://en.wikipedia.org/wiki/ISO_15924)"""
 
 from __future__ import annotations
 
@@ -27,8 +25,10 @@ class ISO_15924(str):
 
     from pydantic_extra_types.language_code import ISO_15924
 
+
     class Script(BaseModel):
         alpha_4: ISO_15924
+
 
     script = Script(alpha_4='Java')
     print(lang)
@@ -41,8 +41,7 @@ class ISO_15924(str):
 
     @classmethod
     def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> ISO_15924:
-        """
-        Validate a ISO 15924 language code from the provided str value.
+        """Validate a ISO 15924 language code from the provided str value.
 
         Args:
             __input_value: The str value to be validated.
@@ -64,8 +63,7 @@ class ISO_15924(str):
     def __get_pydantic_core_schema__(
         cls, _: type[Any], __: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
-        """
-        Return a Pydantic CoreSchema with the ISO 639-3 language code validation.
+        """Return a Pydantic CoreSchema with the ISO 639-3 language code validation.
 
         Args:
             _: The source type.
@@ -84,8 +82,7 @@ class ISO_15924(str):
     def __get_pydantic_json_schema__(
         cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
-        """
-        Return a Pydantic JSON Schema with the ISO 639-3 language code validation.
+        """Return a Pydantic JSON Schema with the ISO 639-3 language code validation.
 
         Args:
             schema: The Pydantic CoreSchema.

@@ -1,6 +1,4 @@
-"""
-Language definitions that are based on the [ISO 639-3](https://en.wikipedia.org/wiki/ISO_639-3) & [ISO 639-5](https://en.wikipedia.org/wiki/ISO_639-5).
-"""
+"""Language definitions that are based on the [ISO 639-3](https://en.wikipedia.org/wiki/ISO_639-3) & [ISO 639-5](https://en.wikipedia.org/wiki/ISO_639-5)."""
 
 from __future__ import annotations
 
@@ -22,8 +20,7 @@ except ModuleNotFoundError as e:  # pragma: no cover
 
 @dataclass
 class LanguageInfo:
-    """
-    LanguageInfo is a dataclass that contains the language information.
+    """LanguageInfo is a dataclass that contains the language information.
 
     Args:
         alpha2: The language code in the [ISO 639-1 alpha-2](https://en.wikipedia.org/wiki/ISO_639-1) format.
@@ -38,8 +35,7 @@ class LanguageInfo:
 
 @lru_cache
 def _languages() -> list[LanguageInfo]:
-    """
-    Return a list of LanguageInfo objects containing the language information.
+    """Return a list of LanguageInfo objects containing the language information.
 
     Returns:
         A list of LanguageInfo objects containing the language information.
@@ -56,25 +52,19 @@ def _languages() -> list[LanguageInfo]:
 
 @lru_cache
 def _index_by_alpha2() -> dict[str, LanguageInfo]:
-    """
-    Return a dictionary with the language code in the [ISO 639-1 alpha-2](https://en.wikipedia.org/wiki/ISO_639-1) format as the key and the LanguageInfo object as the value.
-    """
+    """Return a dictionary with the language code in the [ISO 639-1 alpha-2](https://en.wikipedia.org/wiki/ISO_639-1) format as the key and the LanguageInfo object as the value."""
     return {language.alpha2: language for language in _languages() if language.alpha2 is not None}
 
 
 @lru_cache
 def _index_by_alpha3() -> dict[str, LanguageInfo]:
-    """
-    Return a dictionary with the language code in the [ISO 639-3 alpha-3](https://en.wikipedia.org/wiki/ISO_639-3) format as the key and the LanguageInfo object as the value.
-    """
+    """Return a dictionary with the language code in the [ISO 639-3 alpha-3](https://en.wikipedia.org/wiki/ISO_639-3) format as the key and the LanguageInfo object as the value."""
     return {language.alpha3: language for language in _languages()}
 
 
 @lru_cache
 def _index_by_name() -> dict[str, LanguageInfo]:
-    """
-    Return a dictionary with the language name as the key and the LanguageInfo object as the value.
-    """
+    """Return a dictionary with the language name as the key and the LanguageInfo object as the value."""
     return {language.name: language for language in _languages()}
 
 
@@ -87,20 +77,21 @@ class LanguageAlpha2(str):
 
     from pydantic_extra_types.language_code import LanguageAlpha2
 
+
     class Movie(BaseModel):
         audio_lang: LanguageAlpha2
         subtitles_lang: LanguageAlpha2
 
+
     movie = Movie(audio_lang='de', subtitles_lang='fr')
     print(movie)
-    #> audio_lang='de' subtitles_lang='fr'
+    # > audio_lang='de' subtitles_lang='fr'
     ```
     """
 
     @classmethod
     def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> LanguageAlpha2:
-        """
-        Validate a language code in the ISO 639-1 alpha-2 format from the provided str value.
+        """Validate a language code in the ISO 639-1 alpha-2 format from the provided str value.
 
         Args:
             __input_value: The str value to be validated.
@@ -117,8 +108,7 @@ class LanguageAlpha2(str):
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
-        """
-        Return a Pydantic CoreSchema with the language code in the ISO 639-1 alpha-2 format validation.
+        """Return a Pydantic CoreSchema with the language code in the ISO 639-1 alpha-2 format validation.
 
         Args:
             source: The source type.
@@ -136,8 +126,7 @@ class LanguageAlpha2(str):
     def __get_pydantic_json_schema__(
         cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
-        """
-        Return a Pydantic JSON Schema with the language code in the ISO 639-1 alpha-2 format validation.
+        """Return a Pydantic JSON Schema with the language code in the ISO 639-1 alpha-2 format validation.
 
         Args:
             schema: The Pydantic CoreSchema.
@@ -170,20 +159,21 @@ class LanguageName(str):
 
     from pydantic_extra_types.language_code import LanguageName
 
+
     class Movie(BaseModel):
         audio_lang: LanguageName
         subtitles_lang: LanguageName
 
+
     movie = Movie(audio_lang='Dutch', subtitles_lang='Mandarin Chinese')
     print(movie)
-    #> audio_lang='Dutch' subtitles_lang='Mandarin Chinese'
+    # > audio_lang='Dutch' subtitles_lang='Mandarin Chinese'
     ```
     """
 
     @classmethod
     def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> LanguageName:
-        """
-        Validate a language name from the provided str value.
+        """Validate a language name from the provided str value.
 
         Args:
             __input_value: The str value to be validated.
@@ -200,8 +190,7 @@ class LanguageName(str):
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
-        """
-        Return a Pydantic CoreSchema with the language name validation.
+        """Return a Pydantic CoreSchema with the language name validation.
 
         Args:
             source: The source type.
@@ -236,8 +225,10 @@ class ISO639_3(str):
 
     from pydantic_extra_types.language_code import ISO639_3
 
+
     class Language(BaseModel):
         alpha_3: ISO639_3
+
 
     lang = Language(alpha_3='ssr')
     print(lang)
@@ -250,8 +241,7 @@ class ISO639_3(str):
 
     @classmethod
     def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> ISO639_3:
-        """
-        Validate a ISO 639-3 language code from the provided str value.
+        """Validate a ISO 639-3 language code from the provided str value.
 
         Args:
             __input_value: The str value to be validated.
@@ -273,8 +263,7 @@ class ISO639_3(str):
     def __get_pydantic_core_schema__(
         cls, _: type[Any], __: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
-        """
-        Return a Pydantic CoreSchema with the ISO 639-3 language code validation.
+        """Return a Pydantic CoreSchema with the ISO 639-3 language code validation.
 
         Args:
             _: The source type.
@@ -293,8 +282,7 @@ class ISO639_3(str):
     def __get_pydantic_json_schema__(
         cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
-        """
-        Return a Pydantic JSON Schema with the ISO 639-3 language code validation.
+        """Return a Pydantic JSON Schema with the ISO 639-3 language code validation.
 
         Args:
             schema: The Pydantic CoreSchema.
@@ -318,8 +306,10 @@ class ISO639_5(str):
 
     from pydantic_extra_types.language_code import ISO639_5
 
+
     class Language(BaseModel):
         alpha_3: ISO639_5
+
 
     lang = Language(alpha_3='gem')
     print(lang)
@@ -333,8 +323,7 @@ class ISO639_5(str):
 
     @classmethod
     def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> ISO639_5:
-        """
-        Validate a ISO 639-5 language code from the provided str value.
+        """Validate a ISO 639-5 language code from the provided str value.
 
         Args:
             __input_value: The str value to be validated.
@@ -356,8 +345,7 @@ class ISO639_5(str):
     def __get_pydantic_core_schema__(
         cls, _: type[Any], __: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
-        """
-        Return a Pydantic CoreSchema with the ISO 639-5 language code validation.
+        """Return a Pydantic CoreSchema with the ISO 639-5 language code validation.
 
         Args:
             _: The source type.
@@ -376,8 +364,7 @@ class ISO639_5(str):
     def __get_pydantic_json_schema__(
         cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
-        """
-        Return a Pydantic JSON Schema with the ISO 639-5 language code validation.
+        """Return a Pydantic JSON Schema with the ISO 639-5 language code validation.
 
         Args:
             schema: The Pydantic CoreSchema.

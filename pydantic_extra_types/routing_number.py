@@ -1,9 +1,8 @@
-"""
-The `pydantic_extra_types.routing_number` module provides the
+"""The `pydantic_extra_types.routing_number` module provides the
 [`ABARoutingNumber`][pydantic_extra_types.routing_number.ABARoutingNumber] data type.
 """
 
-from typing import Any, ClassVar, Type
+from typing import Any, ClassVar
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
@@ -21,12 +20,14 @@ class ABARoutingNumber(str):
 
     from pydantic_extra_types.routing_number import ABARoutingNumber
 
+
     class BankAccount(BaseModel):
         routing_number: ABARoutingNumber
 
+
     account = BankAccount(routing_number='122105155')
     print(account)
-    #> routing_number='122105155'
+    # > routing_number='122105155'
     ```
     """
 
@@ -40,7 +41,7 @@ class ABARoutingNumber(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source: Type[Any], handler: GetCoreSchemaHandler
+        cls, source: type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.with_info_after_validator_function(
             cls._validate,

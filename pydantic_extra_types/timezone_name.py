@@ -5,7 +5,7 @@ from __future__ import annotations
 import importlib
 import sys
 import warnings
-from typing import Any, Callable, List, Set, Type, cast
+from typing import Any, Callable, cast
 
 from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
@@ -20,14 +20,14 @@ def _is_available(name: str) -> bool:
         return False
 
 
-def _tz_provider_from_zone_info() -> Set[str]:  # pragma: no cover
+def _tz_provider_from_zone_info() -> set[str]:  # pragma: no cover
     """Get timezones from the zoneinfo module."""
     from zoneinfo import available_timezones
 
     return set(available_timezones())
 
 
-def _tz_provider_from_pytz() -> Set[str]:  # pragma: no cover
+def _tz_provider_from_pytz() -> set[str]:  # pragma: no cover
     """Get timezones from the pytz module."""
     from pytz import all_timezones
 
@@ -42,13 +42,11 @@ def _warn_about_pytz_usage() -> None:
     )
 
 
-def get_timezones() -> Set[str]:
+def get_timezones() -> set[str]:
     """Determine the timezone provider and return available timezones."""
     if _is_available('zoneinfo') and _is_available('tzdata'):  # pragma: no cover
         return _tz_provider_from_zone_info()
     elif _is_available('pytz'):  # pragma: no cover
-        if sys.version_info[:2] > (3, 8):
-            _warn_about_pytz_usage()
         return _tz_provider_from_pytz()
     else:  # pragma: no cover
         if sys.version_info[:2] == (3, 8):
@@ -57,17 +55,17 @@ def get_timezones() -> Set[str]:
 
 
 class TimeZoneNameSettings(type):
-    def __new__(cls, name: str, bases: tuple[type, ...], dct: dict[str, Any], **kwargs: Any) -> Type[TimeZoneName]:
+    def __new__(cls, name: str, bases: tuple[type, ...], dct: dict[str, Any], **kwargs: Any) -> type[TimeZoneName]:
         dct['strict'] = kwargs.pop('strict', True)
-        return cast(Type[TimeZoneName], super().__new__(cls, name, bases, dct))
+        return cast(type[TimeZoneName], super().__new__(cls, name, bases, dct))
 
     def __init__(cls, name: str, bases: tuple[type, ...], dct: dict[str, Any], **kwargs: Any) -> None:
         super().__init__(name, bases, dct)
         cls.strict = kwargs.get('strict', True)
 
 
-def timezone_name_settings(**kwargs: Any) -> Callable[[Type[TimeZoneName]], Type[TimeZoneName]]:
-    def wrapper(cls: Type[TimeZoneName]) -> Type[TimeZoneName]:
+def timezone_name_settings(**kwargs: Any) -> Callable[[type[TimeZoneName]], type[TimeZoneName]]:
+    def wrapper(cls: type[TimeZoneName]) -> type[TimeZoneName]:
         cls.strict = kwargs.get('strict', True)
         return cls
 
@@ -76,8 +74,7 @@ def timezone_name_settings(**kwargs: Any) -> Callable[[Type[TimeZoneName]], Type
 
 @timezone_name_settings(strict=True)
 class TimeZoneName(str):
-    """
-    TimeZoneName is a custom string subclass for validating and serializing timezone names.
+    """TimeZoneName is a custom string subclass for validating and serializing timezone names.
 
     The TimeZoneName class uses the IANA Time Zone Database for validation.
     It supports both strict and non-strict modes for timezone name validation.
@@ -122,16 +119,15 @@ class TimeZoneName(str):
     ```
     """
 
-    __slots__: List[str] = []
-    allowed_values: Set[str] = set(get_timezones())
-    allowed_values_list: List[str] = sorted(allowed_values)
+    __slots__: list[str] = []
+    allowed_values: set[str] = set(get_timezones())
+    allowed_values_list: list[str] = sorted(allowed_values)
     allowed_values_upper_to_correct: dict[str, str] = {val.upper(): val for val in allowed_values}
     strict: bool
 
     @classmethod
     def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> TimeZoneName:
-        """
-        Validate a time zone name from the provided str value.
+        """Validate a time zone name from the provided str value.
 
         Args:
             __input_value: The str value to be validated.
@@ -153,10 +149,9 @@ class TimeZoneName(str):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, _: Type[Any], __: GetCoreSchemaHandler
+        cls, _: type[Any], __: GetCoreSchemaHandler
     ) -> core_schema.AfterValidatorFunctionSchema:
-        """
-        Return a Pydantic CoreSchema with the timezone name validation.
+        """Return a Pydantic CoreSchema with the timezone name validation.
 
         Args:
             _: The source type.
@@ -174,8 +169,7 @@ class TimeZoneName(str):
     def __get_pydantic_json_schema__(
         cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
-        """
-        Return a Pydantic JSON Schema with the timezone name validation.
+        """Return a Pydantic JSON Schema with the timezone name validation.
 
         Args:
             schema: The Pydantic CoreSchema.
