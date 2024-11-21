@@ -50,7 +50,6 @@ class Number(_Base):
 
     from pydantic_extra_types import epoch
 
-
     class LogEntry(BaseModel):
         timestamp: epoch.Number
 
