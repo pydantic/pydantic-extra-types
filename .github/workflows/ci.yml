@@ -49,7 +49,7 @@ jobs:
           enable-cache: true
 
       - name: Install Extra Dependencies
-        run: make install
+        run: uv sync --frozen --group all --all-extras
 
       - run: mkdir coverage
       - run: uv run --frozen coverage run -m pytest

@@ -24,10 +24,3 @@ repos:
       types: [python]
       language: system
       pass_filenames: false
-    - id: typecheck
-      name: Typecheck
-      entry: make
-      args: [typecheck]
-      language: system
-      types: [python]
-      pass_filenames: false
