@@ -48,6 +48,9 @@ jobs:
         with:
           enable-cache: true
 
+      - name: Install Extra Dependencies
+        run: make install
+
       - run: mkdir coverage
       - run: uv run --frozen coverage run -m pytest
         env:

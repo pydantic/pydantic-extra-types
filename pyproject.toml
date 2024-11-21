@@ -75,7 +75,6 @@ lint = [
     "pre-commit>=3.5.0",
     "ruff>=0.7.4",
     "mypy>=0.910",
-    "pyright>=1.1.389",
     "annotated-types>=0.7.0",
     "types-pytz>=2024.1.0.20240417",
 ]
@@ -137,7 +136,6 @@ exclude_lines = [
     '@overload',
 ]
 
-
 [tool.mypy]
 strict = true
 plugins = 'pydantic.mypy'
@@ -156,10 +154,3 @@ filterwarnings = [
 [tool.hooky]
 reviewers = ['yezz123', 'Kludex']
 require_change_file = false
-
-[tool.pyright]
-#typeCheckingMode = "strict"
-reportUnnecessaryTypeIgnoreComment = true
-reportMissingTypeStubs = false
-include = ["pydantic_extra_types"]
-venvPath = ".venv"

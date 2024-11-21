@@ -24,10 +24,6 @@ lint:
 	uv run ruff format --check
 	uv run ruff check
 
-.PHONY: typecheck
-typecheck:
-	uv run pyright
-
 .PHONY: test
 test:
 	uv run pytest
@@ -49,4 +45,4 @@ testcov:
 	@uv run coverage html
 
 .PHONY: all
-all: format lint typecheck testcov
+all: format lint testcov
