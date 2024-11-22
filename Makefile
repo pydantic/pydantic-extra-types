@@ -5,10 +5,11 @@ sources = pydantic_extra_types tests
 .uv:
 	@uv --version || echo 'Please install uv: https://docs.astral.sh/uv/getting-started/installation/'
 
-.PHONY: install  # Install the package, dependencies, and pre-commit for local development
+.PHONY: install  ## Install the package, dependencies, and pre-commit for local development
 install: .uv
 	uv sync --frozen --group all --all-extras
-	uv run pre-commit install --install-hooks
+	uv pip install pre-commit
+	pre-commit install --install-hooks
 
 .PHONY: rebuild-lockfiles  ## Rebuild lockfiles from scratch, updating all dependencies
 rebuild-lockfiles: .uv

@@ -43,7 +43,7 @@ dependencies = ['pydantic>=2.5.2','typing-extensions']
 dynamic = ['version']
 
 [project.optional-dependencies]
-all = [
+extra = [
     'phonenumbers>=8,<9',
     'pycountry>=23',
     'semver>=3.0.2',
@@ -72,11 +72,14 @@ dev = [
     "pytest-cov>=5.0.0",
 ]
 lint = [
-    "pre-commit>=3.5.0",
     "ruff>=0.7.4",
     "mypy>=0.910",
     "annotated-types>=0.7.0",
     "types-pytz>=2024.1.0.20240417",
+]
+all = [
+  { include-group = 'dev' },
+  { include-group = 'lint' },
 ]
 
 [project.urls]

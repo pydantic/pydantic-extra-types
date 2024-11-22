@@ -14,6 +14,11 @@ env:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12']
+
     steps:
       - uses: actions/checkout@v4
 
@@ -21,7 +26,8 @@ jobs:
         with:
           enable-cache: true
 
-      - run: uv sync --python 3.12 --frozen --no-dev --group lint
+      - name: Install dependencies
+        run: uv sync --python ${{ matrix.python-version }} --group lint --all-extras
 
       - uses: pre-commit/action@v3.0.0
         with:
@@ -48,10 +54,12 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Install Extra Dependencies
-        run: uv sync --frozen --group all --all-extras
+      - name: Install extra dependencies
+        run: uv sync --group dev --all-extras
 
-      - run: mkdir coverage
+      - name: Make coverage directory
+        run: mkdir coverage
+
       - run: uv run --frozen coverage run -m pytest
         env:
           COVERAGE_FILE: coverage/.coverage.${{ runner.os }}-py${{ matrix.python-version }}
