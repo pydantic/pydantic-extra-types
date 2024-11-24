@@ -51,6 +51,9 @@ jobs:
         with:
           enable-cache: true
 
+      - name: Install dependencies
+        run: uv sync --extra all
+
       - name: Make coverage directory
         run: mkdir coverage
 
