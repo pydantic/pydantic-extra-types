@@ -485,7 +485,7 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-extra = [
+all = [
     { name = "pendulum" },
     { name = "phonenumbers" },
     { name = "pycountry" },
@@ -511,23 +511,21 @@ semver = [
 ]
 
 [package.dev-dependencies]
-all = [
+dev = [
+    { name = "coverage", extra = ["toml"] },
+    { name = "dirty-equals" },
+    { name = "pytest" },
+    { name = "pytest-pretty" },
+]
+extra = [
     { name = "annotated-types" },
     { name = "coverage", extra = ["toml"] },
     { name = "dirty-equals" },
     { name = "mypy" },
     { name = "pytest" },
-    { name = "pytest-cov" },
     { name = "pytest-pretty" },
     { name = "ruff" },
     { name = "types-pytz" },
-]
-dev = [
-    { name = "coverage", extra = ["toml"] },
-    { name = "dirty-equals" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "pytest-pretty" },
 ]
 lint = [
     { name = "annotated-types" },
@@ -538,43 +536,41 @@ lint = [
 
 [package.metadata]
 requires-dist = [
-    { name = "pendulum", marker = "extra == 'extra'", specifier = ">=3.0.0,<4.0.0" },
+    { name = "pendulum", marker = "extra == 'all'", specifier = ">=3.0.0,<4.0.0" },
     { name = "pendulum", marker = "extra == 'pendulum'", specifier = ">=3.0.0,<4.0.0" },
-    { name = "phonenumbers", marker = "extra == 'extra'", specifier = ">=8,<9" },
+    { name = "phonenumbers", marker = "extra == 'all'", specifier = ">=8,<9" },
     { name = "phonenumbers", marker = "extra == 'phonenumbers'", specifier = ">=8,<9" },
-    { name = "pycountry", marker = "extra == 'extra'", specifier = ">=23" },
+    { name = "pycountry", marker = "extra == 'all'", specifier = ">=23" },
     { name = "pycountry", marker = "extra == 'pycountry'", specifier = ">=23" },
     { name = "pydantic", specifier = ">=2.5.2" },
-    { name = "python-ulid", marker = "python_full_version >= '3.9' and extra == 'extra'", specifier = ">=1,<4" },
+    { name = "python-ulid", marker = "python_full_version >= '3.9' and extra == 'all'", specifier = ">=1,<4" },
     { name = "python-ulid", marker = "python_full_version >= '3.9' and extra == 'python-ulid'", specifier = ">=1,<4" },
-    { name = "python-ulid", marker = "python_full_version < '3.9' and extra == 'extra'", specifier = ">=1,<2" },
+    { name = "python-ulid", marker = "python_full_version < '3.9' and extra == 'all'", specifier = ">=1,<2" },
     { name = "python-ulid", marker = "python_full_version < '3.9' and extra == 'python-ulid'", specifier = ">=1,<2" },
-    { name = "pytz", marker = "extra == 'extra'", specifier = ">=2024.1" },
-    { name = "semver", marker = "extra == 'extra'", specifier = "~=3.0.2" },
-    { name = "semver", marker = "extra == 'extra'", specifier = ">=3.0.2" },
+    { name = "pytz", marker = "extra == 'all'", specifier = ">=2024.1" },
+    { name = "semver", marker = "extra == 'all'", specifier = "~=3.0.2" },
+    { name = "semver", marker = "extra == 'all'", specifier = ">=3.0.2" },
     { name = "semver", marker = "extra == 'semver'", specifier = ">=3.0.2" },
     { name = "typing-extensions" },
-    { name = "tzdata", marker = "extra == 'extra'", specifier = ">=2024.1" },
+    { name = "tzdata", marker = "extra == 'all'", specifier = ">=2024.1" },
 ]
 
 [package.metadata.requires-dev]
-all = [
+dev = [
+    { name = "coverage", extras = ["toml"], specifier = ">=7.6.1" },
+    { name = "dirty-equals", specifier = ">=0.7.1" },
+    { name = "pytest", specifier = ">=8.3.2" },
+    { name = "pytest-pretty", specifier = ">=1.2.0" },
+]
+extra = [
     { name = "annotated-types", specifier = ">=0.7.0" },
     { name = "coverage", extras = ["toml"], specifier = ">=7.6.1" },
     { name = "dirty-equals", specifier = ">=0.7.1" },
     { name = "mypy", specifier = ">=0.910" },
     { name = "pytest", specifier = ">=8.3.2" },
-    { name = "pytest-cov", specifier = ">=5.0.0" },
     { name = "pytest-pretty", specifier = ">=1.2.0" },
     { name = "ruff", specifier = ">=0.7.4" },
     { name = "types-pytz", specifier = ">=2024.1.0.20240417" },
-]
-dev = [
-    { name = "coverage", extras = ["toml"], specifier = ">=7.6.1" },
-    { name = "dirty-equals", specifier = ">=0.7.1" },
-    { name = "pytest", specifier = ">=8.3.2" },
-    { name = "pytest-cov", specifier = ">=5.0.0" },
-    { name = "pytest-pretty", specifier = ">=1.2.0" },
 ]
 lint = [
     { name = "annotated-types", specifier = ">=0.7.0" },
@@ -607,19 +603,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/8b/6c/62bbd536103af674e227c41a8f3dcd022d591f6eed5facb5a0f31ee33bbc/pytest-8.3.3.tar.gz", hash = "sha256:70b98107bd648308a7952b06e6ca9a50bc660be218d53c257cc1fc94fda10181", size = 1442487 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/6b/77/7440a06a8ead44c7757a64362dd22df5760f9b12dc5f11b6188cd2fc27a0/pytest-8.3.3-py3-none-any.whl", hash = "sha256:a6853c7375b2663155079443d2e45de913a911a11d669df02a50814944db57b2", size = 342341 },
-]
-
-[[package]]
-name = "pytest-cov"
-version = "5.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "coverage", extra = ["toml"] },
-    { name = "pytest" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/74/67/00efc8d11b630c56f15f4ad9c7f9223f1e5ec275aaae3fa9118c6a223ad2/pytest-cov-5.0.0.tar.gz", hash = "sha256:5837b58e9f6ebd335b0f8060eecce69b662415b16dc503883a02f45dfeb14857", size = 63042 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/78/3a/af5b4fa5961d9a1e6237b530eb87dd04aea6eb83da09d2a4073d81b54ccf/pytest_cov-5.0.0-py3-none-any.whl", hash = "sha256:4f0764a1219df53214206bf1feea4633c3b558a2925c8b59f144f682861ce652", size = 21990 },
 ]
 
 [[package]]
