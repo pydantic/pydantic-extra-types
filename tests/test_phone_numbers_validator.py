@@ -4,7 +4,7 @@ try:
     from typing import Annotated
 except ImportError:
     # Python 3.8
-    from typing_extensions import Annotated
+    from typing import Annotated
 
 
 import phonenumbers

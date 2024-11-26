@@ -24,6 +24,7 @@ classifiers = [
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
     'Intended Audience :: Developers',
     'Intended Audience :: Information Technology',
     'Intended Audience :: System Administrators',
@@ -62,6 +63,24 @@ python_ulid = [
 ]
 pendulum = ['pendulum>=3.0.0,<4.0.0']
 
+[dependency-groups]
+dev = [
+    "coverage[toml]>=7.6.1",
+    "pytest-pretty>=1.2.0",
+    "dirty-equals>=0.7.1",
+    "pytest>=8.3.2",
+]
+lint = [
+    "ruff>=0.7.4",
+    "mypy>=0.910",
+    "annotated-types>=0.7.0",
+    "types-pytz>=2024.1.0.20240417",
+]
+extra = [
+  { include-group = 'dev' },
+  { include-group = 'lint' },
+]
+
 [project.urls]
 Homepage = 'https://github.com/pydantic/pydantic-extra-types'
 Source = 'https://github.com/pydantic/pydantic-extra-types'
@@ -73,17 +92,24 @@ keep-runtime-typing = true
 
 [tool.ruff]
 line-length = 120
-target-version = 'py38'
+target-version = "py39"
 
 [tool.ruff.lint]
-extend-select = ['Q', 'RUF100', 'C90', 'UP', 'I']
+extend-select = [
+    "Q",
+    "RUF100",
+    "C90",
+    "UP",
+    "I",
+]
 flake8-quotes = { inline-quotes = 'single', multiline-quotes = 'double' }
-isort = { known-first-party = ['pydantic_extra_types', 'tests'] }
+isort = {known-first-party = ['pydantic_extra_types', 'tests'] }
 mccabe = { max-complexity = 14 }
 pydocstyle = { convention = 'google' }
 
 [tool.ruff.format]
-quote-style = 'single'
+docstring-code-format = true
+quote-style = "single"
 
 [tool.ruff.lint.per-file-ignores]
 'pydantic_extra_types/color.py' = ['E741']
@@ -111,7 +137,6 @@ exclude_lines = [
     'if TYPE_CHECKING:',
     '@overload',
 ]
-
 
 [tool.mypy]
 strict = true

@@ -1,5 +1,4 @@
-"""
-Native Pendulum DateTime object implementation. This is a copy of the Pendulum DateTime object, but with a Pydantic
+"""Native Pendulum DateTime object implementation. This is a copy of the Pendulum DateTime object, but with a Pydantic
 CoreSchema implementation. This allows Pydantic to validate the DateTime object.
 """
 
@@ -13,7 +12,7 @@ except ModuleNotFoundError as e:  # pragma: no cover
         'The `pendulum_dt` module requires "pendulum" to be installed. You can install it with "pip install pendulum".'
     ) from e
 from datetime import date, datetime, timedelta
-from typing import Any, List, Type
+from typing import Any
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
@@ -30,29 +29,29 @@ class DateTimeSettings(type):
 
 
 class DateTime(_DateTime, metaclass=DateTimeSettings):
-    """
-    A `pendulum.DateTime` object. At runtime, this type decomposes into pendulum.DateTime automatically.
+    """A `pendulum.DateTime` object. At runtime, this type decomposes into pendulum.DateTime automatically.
     This type exists because Pydantic throws a fit on unknown types.
 
     ```python
     from pydantic import BaseModel
     from pydantic_extra_types.pendulum_dt import DateTime
 
+
     class test_model(BaseModel):
         dt: DateTime
 
+
     print(test_model(dt='2021-01-01T00:00:00+00:00'))
 
-    #> test_model(dt=DateTime(2021, 1, 1, 0, 0, 0, tzinfo=FixedTimezone(0, name="+00:00")))
+    # > test_model(dt=DateTime(2021, 1, 1, 0, 0, 0, tzinfo=FixedTimezone(0, name="+00:00")))
     ```
     """
 
-    __slots__: List[str] = []
+    __slots__: list[str] = []
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        """
-        Return a Pydantic CoreSchema with the Datetime validation
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        """Return a Pydantic CoreSchema with the Datetime validation
 
         Args:
             source: The source type to be converted.
@@ -65,8 +64,7 @@ class DateTime(_DateTime, metaclass=DateTimeSettings):
 
     @classmethod
     def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> 'DateTime':
-        """
-        Validate the datetime object and return it.
+        """Validate the datetime object and return it.
 
         Args:
             value: The value to validate.
@@ -96,29 +94,29 @@ class DateTime(_DateTime, metaclass=DateTimeSettings):
 
 
 class Date(_Date):
-    """
-    A `pendulum.Date` object. At runtime, this type decomposes into pendulum.Date automatically.
+    """A `pendulum.Date` object. At runtime, this type decomposes into pendulum.Date automatically.
     This type exists because Pydantic throws a fit on unknown types.
 
     ```python
     from pydantic import BaseModel
     from pydantic_extra_types.pendulum_dt import Date
 
+
     class test_model(BaseModel):
         dt: Date
 
+
     print(test_model(dt='2021-01-01'))
 
-    #> test_model(dt=Date(2021, 1, 1))
+    # > test_model(dt=Date(2021, 1, 1))
     ```
     """
 
-    __slots__: List[str] = []
+    __slots__: list[str] = []
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        """
-        Return a Pydantic CoreSchema with the Date validation
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        """Return a Pydantic CoreSchema with the Date validation
 
         Args:
             source: The source type to be converted.
@@ -131,8 +129,7 @@ class Date(_Date):
 
     @classmethod
     def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> 'Date':
-        """
-        Validate the date object and return it.
+        """Validate the date object and return it.
 
         Args:
             value: The value to validate.
@@ -156,29 +153,29 @@ class Date(_Date):
 
 
 class Duration(_Duration):
-    """
-    A `pendulum.Duration` object. At runtime, this type decomposes into pendulum.Duration automatically.
+    """A `pendulum.Duration` object. At runtime, this type decomposes into pendulum.Duration automatically.
     This type exists because Pydantic throws a fit on unknown types.
 
     ```python
     from pydantic import BaseModel
     from pydantic_extra_types.pendulum_dt import Duration
 
+
     class test_model(BaseModel):
         delta_t: Duration
 
+
     print(test_model(delta_t='P1DT25H'))
 
-    #> test_model(delta_t=Duration(days=2, hours=1))
+    # > test_model(delta_t=Duration(days=2, hours=1))
     ```
     """
 
-    __slots__: List[str] = []
+    __slots__: list[str] = []
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        """
-        Return a Pydantic CoreSchema with the Duration validation
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        """Return a Pydantic CoreSchema with the Duration validation
 
         Args:
             source: The source type to be converted.
@@ -191,8 +188,7 @@ class Duration(_Duration):
 
     @classmethod
     def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> 'Duration':
-        """
-        Validate the Duration object and return it.
+        """Validate the Duration object and return it.
 
         Args:
             value: The value to validate.

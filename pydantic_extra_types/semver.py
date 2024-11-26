@@ -1,18 +1,10 @@
-"""
-The _VersionPydanticAnnotation class provides functionality to parse and validate Semantic Versioning (SemVer) strings.
+"""The _VersionPydanticAnnotation class provides functionality to parse and validate Semantic Versioning (SemVer) strings.
 
 This class depends on the [semver](https://python-semver.readthedocs.io/en/latest/index.html) package.
 """
 
-import sys
-from typing import Any, Callable
-
-if sys.version_info < (3, 9):  # pragma: no cover
-    from typing_extensions import Annotated  # pragma: no cover
-else:
-    from typing import Annotated  # pragma: no cover
-
 import warnings
+from typing import Annotated, Any, Callable
 
 from pydantic import GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
@@ -25,22 +17,22 @@ warnings.warn(
 
 
 class _VersionPydanticAnnotation(Version):
-    """
-    Represents a Semantic Versioning (SemVer).
+    """Represents a Semantic Versioning (SemVer).
 
     Wraps the `version` type from `semver`.
 
     Example:
-
     ```python
     from pydantic import BaseModel
 
     from pydantic_extra_types.semver import _VersionPydanticAnnotation
 
+
     class appVersion(BaseModel):
         version: _VersionPydanticAnnotation
 
-    app_version = appVersion(version="1.2.3")
+
+    app_version = appVersion(version='1.2.3')
 
     print(app_version.version)
     # > 1.2.3

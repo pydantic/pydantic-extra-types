@@ -1,11 +1,10 @@
-"""
-The `pydantic_extra_types.coordinate` module provides the [`Latitude`][pydantic_extra_types.coordinate.Latitude],
+"""The `pydantic_extra_types.coordinate` module provides the [`Latitude`][pydantic_extra_types.coordinate.Latitude],
 [`Longitude`][pydantic_extra_types.coordinate.Longitude], and
 [`Coordinate`][pydantic_extra_types.coordinate.Coordinate] data types.
 """
 
 from dataclasses import dataclass
-from typing import Any, ClassVar, Tuple, Type
+from typing import Any, ClassVar
 
 from pydantic import GetCoreSchemaHandler
 from pydantic._internal import _repr
@@ -19,12 +18,14 @@ class Latitude(float):
     from pydantic import BaseModel
     from pydantic_extra_types.coordinate import Latitude
 
+
     class Location(BaseModel):
         latitude: Latitude
 
+
     location = Location(latitude=41.40338)
     print(location)
-    #> latitude=41.40338
+    # > latitude=41.40338
     ```
     """
 
@@ -32,7 +33,7 @@ class Latitude(float):
     max: ClassVar[float] = 90.00
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.float_schema(ge=cls.min, le=cls.max)
 
 
@@ -44,12 +45,14 @@ class Longitude(float):
 
     from pydantic_extra_types.coordinate import Longitude
 
+
     class Location(BaseModel):
         longitude: Longitude
 
+
     location = Location(longitude=2.17403)
     print(location)
-    #> longitude=2.17403
+    # > longitude=2.17403
     ```
     """
 
@@ -57,7 +60,7 @@ class Longitude(float):
     max: ClassVar[float] = 180.00
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.float_schema(ge=cls.min, le=cls.max)
 
 
@@ -76,26 +79,28 @@ class Coordinate(_repr.Representation):
 
     from pydantic_extra_types.coordinate import Coordinate
 
+
     class Location(BaseModel):
         coordinate: Coordinate
 
+
     location = Location(coordinate=(41.40338, 2.17403))
-    #> coordinate=Coordinate(latitude=41.40338, longitude=2.17403)
+    # > coordinate=Coordinate(latitude=41.40338, longitude=2.17403)
     ```
     """
 
-    _NULL_ISLAND: ClassVar[Tuple[float, float]] = (0.0, 0.0)
+    _NULL_ISLAND: ClassVar[tuple[float, float]] = (0.0, 0.0)
 
     latitude: Latitude
     longitude: Longitude
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         schema_chain = [
             core_schema.no_info_wrap_validator_function(cls._parse_str, core_schema.str_schema()),
             core_schema.no_info_wrap_validator_function(
                 cls._parse_tuple,
-                handler.generate_schema(Tuple[float, float]),
+                handler.generate_schema(tuple[float, float]),
             ),
             handler(source),
         ]

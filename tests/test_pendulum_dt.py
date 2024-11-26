@@ -41,9 +41,7 @@ class DurationModel(BaseModel):
     ],
 )
 def test_existing_instance(instance):
-    """
-    Verifies that constructing a model with an existing pendulum dt doesn't throw.
-    """
+    """Verifies that constructing a model with an existing pendulum dt doesn't throw."""
     model = DtModel(dt=instance)
     if isinstance(instance, datetime):
         assert model.dt == pendulum.instance(instance)
@@ -75,9 +73,7 @@ def test_existing_instance(instance):
     ],
 )
 def test_pendulum_date_existing_instance(instance):
-    """
-    Verifies that constructing a model with an existing pendulum date doesn't throw.
-    """
+    """Verifies that constructing a model with an existing pendulum date doesn't throw."""
     model = DateModel(d=instance)
     if isinstance(instance, datetime):
         assert model.d == pendulum.instance(instance).date()
@@ -101,9 +97,7 @@ def test_pendulum_date_existing_instance(instance):
     ],
 )
 def test_duration_timedelta__existing_instance(instance):
-    """
-    Verifies that constructing a model with an existing pendulum duration doesn't throw.
-    """
+    """Verifies that constructing a model with an existing pendulum duration doesn't throw."""
     model = DurationModel(delta_t=instance)
 
     assert model.delta_t.total_seconds() == instance.total_seconds()
@@ -119,9 +113,7 @@ def test_duration_timedelta__existing_instance(instance):
     ],
 )
 def test_pendulum_dt_from_serialized(dt):
-    """
-    Verifies that building an instance from serialized, well-formed strings decode properly.
-    """
+    """Verifies that building an instance from serialized, well-formed strings decode properly."""
     dt_actual = pendulum.parse(dt)
     model = DtModel(dt=dt)
     assert model.dt == dt_actual
@@ -137,8 +129,7 @@ def test_pendulum_dt_from_serialized(dt):
     ],
 )
 def test_pendulum_dt_from_serialized_preserves_timezones(dt):
-    """
-    Verifies that building an instance from serialized, well-formed strings decode
+    """Verifies that building an instance from serialized, well-formed strings decode
     properly and preserves the timezone information across all of the Pendulum DateTime
     properties.  Regression test for pydantic/pydantic-extra-types#188.
     """
@@ -165,9 +156,7 @@ def test_pendulum_dt_from_serialized_preserves_timezones(dt):
     ],
 )
 def test_pendulum_dt_not_strict_from_serialized(dt):
-    """
-    Verifies that building an instance from serialized, well-formed strings decode properly.
-    """
+    """Verifies that building an instance from serialized, well-formed strings decode properly."""
     dt_actual = pendulum.parse(dt, strict=False)
     model = DtModelNotStrict(dt=dt)
     assert model.dt == dt_actual
@@ -200,9 +189,7 @@ def test_pendulum_dt_not_strict_from_serialized(dt):
     ],
 )
 def test_pendulum_dt_from_str_unix_timestamp(dt):
-    """
-    Verifies that building an instance from serialized, well-formed strings decode properly.
-    """
+    """Verifies that building an instance from serialized, well-formed strings decode properly."""
     dt_actual = pendulum.instance(DtTypeAdapter.validate_python(dt))
     model = DtModel(dt=dt)
     assert model.dt == dt_actual
@@ -233,9 +220,7 @@ def test_pendulum_dt_from_str_unix_timestamp(dt):
     ],
 )
 def test_pendulum_dt_from_str_unix_timestamp_is_utc(dt):
-    """
-    Verifies that without timezone information, it is coerced to UTC. As in pendulum
-    """
+    """Verifies that without timezone information, it is coerced to UTC. As in pendulum"""
     model = DtModel(dt=dt)
     assert model.dt.tzinfo.tzname(model.dt) == 'UTC'
 
@@ -245,9 +230,7 @@ def test_pendulum_dt_from_str_unix_timestamp_is_utc(dt):
     [pendulum.now().date().isoformat(), pendulum.now().to_w3c_string(), pendulum.now().to_iso8601_string()],
 )
 def test_pendulum_date_from_serialized(d):
-    """
-    Verifies that building an instance from serialized, well-formed strings decode properly.
-    """
+    """Verifies that building an instance from serialized, well-formed strings decode properly."""
     date_actual = pendulum.parse(d).date()
     model = DateModel(d=d)
     assert model.d == date_actual
@@ -266,9 +249,7 @@ def test_pendulum_date_from_serialized(d):
     ],
 )
 def test_pendulum_duration_from_serialized(delta_t_str):
-    """
-    Verifies that building an instance from serialized, well-formed strings decode properly.
-    """
+    """Verifies that building an instance from serialized, well-formed strings decode properly."""
     true_delta_t = pendulum.parse(delta_t_str)
     model = DurationModel(delta_t=delta_t_str)
     assert model.delta_t == true_delta_t
@@ -315,27 +296,21 @@ dt_strict.append(pendulum.now().to_iso8601_string()[:5])
     dt_strict,
 )
 def test_pendulum_dt_malformed(dt):
-    """
-    Verifies that the instance fails to validate if malformed dt is passed.
-    """
+    """Verifies that the instance fails to validate if malformed dt is passed."""
     with pytest.raises(ValidationError):
         DtModel(dt=dt)
 
 
 @pytest.mark.parametrize('dt', get_invalid_dt_common())
 def test_pendulum_dt_non_strict_malformed(dt):
-    """
-    Verifies that the instance fails to validate if malformed dt are passed.
-    """
+    """Verifies that the instance fails to validate if malformed dt are passed."""
     with pytest.raises(ValidationError):
         DtModelNotStrict(dt=dt)
 
 
 @pytest.mark.parametrize('invalid_value', [None, 'malformed', pendulum.today().to_iso8601_string()[:5], 'P10Y10M10D'])
 def test_pendulum_date_malformed(invalid_value):
-    """
-    Verifies that the instance fails to validate if malformed date are passed.
-    """
+    """Verifies that the instance fails to validate if malformed date are passed."""
     with pytest.raises(ValidationError):
         DateModel(d=invalid_value)
 
@@ -345,9 +320,7 @@ def test_pendulum_date_malformed(invalid_value):
     [None, 'malformed', pendulum.today().to_iso8601_string()[:5], 42, '12m', '2021-01-01T12:00:00'],
 )
 def test_pendulum_duration_malformed(delta_t):
-    """
-    Verifies that the instance fails to validate if malformed durations are passed.
-    """
+    """Verifies that the instance fails to validate if malformed durations are passed."""
     with pytest.raises(ValidationError):
         DurationModel(delta_t=delta_t)
 

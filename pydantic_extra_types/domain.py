@@ -1,26 +1,23 @@
-"""
-The `domain_str` module provides the `DomainStr` data type.
+"""The `domain_str` module provides the `DomainStr` data type.
 This class depends on the `pydantic` package and implements custom validation for domain string format.
 """
 
 from __future__ import annotations
 
 import re
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
 
 class DomainStr(str):
-    """
-    A string subclass with custom validation for domain string format.
-    """
+    """A string subclass with custom validation for domain string format."""
 
     @classmethod
     def validate(cls, __input_value: Any, _: Any) -> str:
-        """
-        Validate a domain name from the provided value.
+        """Validate a domain name from the provided value.
 
         Args:
             __input_value: The value to be validated.

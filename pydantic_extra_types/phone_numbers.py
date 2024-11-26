@@ -1,5 +1,4 @@
-"""
-The `pydantic_extra_types.phone_numbers` module provides the
+"""The `pydantic_extra_types.phone_numbers` module provides the
 [`PhoneNumber`][pydantic_extra_types.phone_numbers.PhoneNumber] data type.
 
 This class depends on the [phonenumbers] package, which is a Python port of Google's [libphonenumber].
@@ -7,9 +6,10 @@ This class depends on the [phonenumbers] package, which is a Python port of Goog
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from functools import partial
-from typing import Any, ClassVar, Optional, Sequence
+from typing import Any, ClassVar, Optional
 
 from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
@@ -25,8 +25,7 @@ except ModuleNotFoundError as e:  # pragma: no cover
 
 
 class PhoneNumber(str):
-    """
-    A wrapper around [phonenumbers](https://pypi.org/project/phonenumbers/) package, which
+    """A wrapper around [phonenumbers](https://pypi.org/project/phonenumbers/) package, which
     is a Python port of Google's [libphonenumber](https://github.com/google/libphonenumber/).
     """
 
@@ -79,8 +78,7 @@ class PhoneNumber(str):
 
 @dataclass(frozen=True)
 class PhoneNumberValidator:
-    """
-    A pydantic before validator for phone numbers using the [phonenumbers](https://pypi.org/project/phonenumbers/) package,
+    """A pydantic before validator for phone numbers using the [phonenumbers](https://pypi.org/project/phonenumbers/) package,
     a Python port of Google's [libphonenumber](https://github.com/google/libphonenumber/).
 
     Intended to be used to create custom pydantic data types using the `typing.Annotated` type construct.
@@ -90,6 +88,7 @@ class PhoneNumberValidator:
             If `None` (default), the region must be supplied in the phone number as an international prefix.
         number_format (str): The format of the phone number to return. See `phonenumbers.PhoneNumberFormat` for valid values.
         supported_regions (list[str]): The supported regions. If empty, all regions are supported (default).
+
     Returns:
         str: The formatted phone number.
 

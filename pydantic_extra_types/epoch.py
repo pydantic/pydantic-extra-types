@@ -50,12 +50,14 @@ class Number(_Base):
 
     from pydantic_extra_types import epoch
 
+
     class LogEntry(BaseModel):
         timestamp: epoch.Number
 
+
     logentry = LogEntry(timestamp=1.1)
     print(logentry)
-    #> timestamp=datetime.datetime(1970, 1, 1, 0, 0, 1, 100000, tzinfo=datetime.timezone.utc)
+    # > timestamp=datetime.datetime(1970, 1, 1, 0, 0, 1, 100000, tzinfo=datetime.timezone.utc)
     ```
     """
 

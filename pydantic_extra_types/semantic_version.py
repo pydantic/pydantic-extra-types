@@ -1,6 +1,4 @@
-"""
-SemanticVersion definition that is based on the Semantiv Versioning Specification [semver](https://semver.org/).
-"""
+"""SemanticVersion definition that is based on the Semantiv Versioning Specification [semver](https://semver.org/)."""
 
 from typing import Any, Callable
 
@@ -17,9 +15,7 @@ except ModuleNotFoundError as e:  # pragma: no cover
 
 
 class SemanticVersion(semver.Version):
-    """
-    Semantic version based on the official [semver thread](https://python-semver.readthedocs.io/en/latest/advanced/combine-pydantic-and-semver.html).
-    """
+    """Semantic version based on the official [semver thread](https://python-semver.readthedocs.io/en/latest/advanced/combine-pydantic-and-semver.html)."""
 
     @classmethod
     def __get_pydantic_core_schema__(

@@ -1,5 +1,4 @@
-"""
-The MAC address module provides functionality to parse and validate MAC addresses in different
+"""The MAC address module provides functionality to parse and validate MAC addresses in different
 formats, such as IEEE 802 MAC-48, EUI-48, EUI-64, or a 20-octet format.
 """
 
@@ -24,16 +23,15 @@ class MacAddress(str):
         mac_address: MacAddress
 
 
-    network = Network(mac_address="00:00:5e:00:53:01")
+    network = Network(mac_address='00:00:5e:00:53:01')
     print(network)
-    #> mac_address='00:00:5e:00:53:01'
+    # > mac_address='00:00:5e:00:53:01'
     ```
     """
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        """
-        Return a Pydantic CoreSchema with the MAC address validation.
+        """Return a Pydantic CoreSchema with the MAC address validation.
 
         Args:
             source: The source type to be converted.
@@ -50,8 +48,7 @@ class MacAddress(str):
 
     @classmethod
     def _validate(cls, __input_value: str, _: Any) -> str:
-        """
-        Validate a MAC Address from the provided str value.
+        """Validate a MAC Address from the provided str value.
 
         Args:
             __input_value: The str value to be validated.
@@ -65,9 +62,7 @@ class MacAddress(str):
 
     @staticmethod
     def validate_mac_address(value: bytes) -> str:
-        """
-        Validate a MAC Address from the provided byte value.
-        """
+        """Validate a MAC Address from the provided byte value."""
         if len(value) < 14:
             raise PydanticCustomError(
                 'mac_address_len',

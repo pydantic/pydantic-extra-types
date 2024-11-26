@@ -1,5 +1,4 @@
-"""
-Color definitions are used as per the CSS3
+"""Color definitions are used as per the CSS3
 [CSS Color Module Level 3](http://www.w3.org/TR/css3-color/#svg-color) specification.
 
 A few colors have multiple names referring to the sames colors, eg. `grey` and `gray` or `aqua` and `cyan`.
@@ -13,22 +12,20 @@ from __future__ import annotations
 import math
 import re
 from colorsys import hls_to_rgb, rgb_to_hls
-from typing import Any, Callable, Literal, Tuple, Union, cast
+from typing import Any, Callable, Literal, Union, cast
 
 from pydantic import GetJsonSchemaHandler
 from pydantic._internal import _repr
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
-ColorTuple = Union[Tuple[int, int, int], Tuple[int, int, int, float]]
+ColorTuple = Union[tuple[int, int, int], tuple[int, int, int, float]]
 ColorType = Union[ColorTuple, str, 'Color']
-HslColorTuple = Union[Tuple[float, float, float], Tuple[float, float, float, float]]
+HslColorTuple = Union[tuple[float, float, float], tuple[float, float, float, float]]
 
 
 class RGBA:
-    """
-    Internal use only as a representation of a color.
-    """
+    """Internal use only as a representation of a color."""
 
     __slots__ = 'r', 'g', 'b', 'alpha', '_tuple'
 
@@ -67,9 +64,7 @@ rads = 2 * math.pi
 
 
 class Color(_repr.Representation):
-    """
-    Represents a color.
-    """
+    """Represents a color."""
 
     __slots__ = '_original', '_rgba'
 
@@ -101,14 +96,11 @@ class Color(_repr.Representation):
         return field_schema
 
     def original(self) -> ColorType:
-        """
-        Original value passed to `Color`.
-        """
+        """Original value passed to `Color`."""
         return self._original
 
     def as_named(self, *, fallback: bool = False) -> str:
-        """
-        Returns the name of the color if it can be found in `COLORS_BY_VALUE` dictionary,
+        """Returns the name of the color if it can be found in `COLORS_BY_VALUE` dictionary,
         otherwise returns the hexadecimal representation of the color or raises `ValueError`.
 
         Args:
@@ -123,7 +115,7 @@ class Color(_repr.Representation):
         """
         if self._rgba.alpha is not None:
             return self.as_hex()
-        rgb = cast(Tuple[int, int, int], self.as_rgb_tuple())
+        rgb = cast(tuple[int, int, int], self.as_rgb_tuple())
 
         if rgb in COLORS_BY_VALUE:
             return COLORS_BY_VALUE[rgb]
@@ -152,9 +144,7 @@ class Color(_repr.Representation):
         return f'#{as_hex}'
 
     def as_rgb(self) -> str:
-        """
-        Color as an `rgb(<r>, <g>, <b>)` or `rgba(<r>, <g>, <b>, <a>)` string.
-        """
+        """Color as an `rgb(<r>, <g>, <b>)` or `rgba(<r>, <g>, <b>, <a>)` string."""
         if self._rgba.alpha is None:
             return f'rgb({float_to_255(self._rgba.r)}, {float_to_255(self._rgba.g)}, {float_to_255(self._rgba.b)})'
         else:
@@ -164,8 +154,7 @@ class Color(_repr.Representation):
             )
 
     def as_rgb_tuple(self, *, alpha: bool | None = None) -> ColorTuple:
-        """
-        Returns the color as an RGB or RGBA tuple.
+        """Returns the color as an RGB or RGBA tuple.
 
         Args:
             alpha: Whether to include the alpha channel. There are three options for this input:
@@ -185,9 +174,7 @@ class Color(_repr.Representation):
             return r, g, b, self._alpha_float()
 
     def as_hsl(self) -> str:
-        """
-        Color as an `hsl(<h>, <s>, <l>)` or `hsl(<h>, <s>, <l>, <a>)` string.
-        """
+        """Color as an `hsl(<h>, <s>, <l>)` or `hsl(<h>, <s>, <l>, <a>)` string."""
         if self._rgba.alpha is None:
             h, s, li = self.as_hsl_tuple(alpha=False)  # type: ignore
             return f'hsl({h * 360:0.0f}, {s:0.0%}, {li:0.0%})'
@@ -196,8 +183,7 @@ class Color(_repr.Representation):
             return f'hsl({h * 360:0.0f}, {s:0.0%}, {li:0.0%}, {round(a, 2)})'
 
     def as_hsl_tuple(self, *, alpha: bool | None = None) -> HslColorTuple:
-        """
-        Returns the color as an HSL or HSLA tuple.
+        """Returns the color as an HSL or HSLA tuple.
 
         Args:
             alpha: Whether to include the alpha channel.
@@ -272,8 +258,7 @@ def parse_tuple(value: tuple[Any, ...]) -> RGBA:
 
 
 def parse_str(value: str) -> RGBA:
-    """
-    Parse a string representing a color to an RGBA tuple.
+    """Parse a string representing a color to an RGBA tuple.
 
     Possible formats for the input string include:
 
@@ -293,7 +278,6 @@ def parse_str(value: str) -> RGBA:
     Raises:
         ValueError: If the input string cannot be parsed to an RGBA tuple.
     """
-
     value_lower = value.lower()
     if value_lower in COLORS_BY_NAME:
         r, g, b = COLORS_BY_NAME[value_lower]
@@ -336,8 +320,7 @@ def ints_to_rgba(
     b: int | str,
     alpha: float | None = None,
 ) -> RGBA:
-    """
-    Converts integer or string values for RGB color and an optional alpha value to an `RGBA` object.
+    """Converts integer or string values for RGB color and an optional alpha value to an `RGBA` object.
 
     Args:
         r: An integer or string representing the red color value.
@@ -357,8 +340,7 @@ def ints_to_rgba(
 
 
 def parse_color_value(value: int | str, max_val: int = 255) -> float:
-    """
-    Parse the color value provided and return a number between 0 and 1.
+    """Parse the color value provided and return a number between 0 and 1.
 
     Args:
         value: An integer or string color value.
@@ -388,8 +370,7 @@ def parse_color_value(value: int | str, max_val: int = 255) -> float:
 
 
 def parse_float_alpha(value: None | str | float | int) -> float | None:
-    """
-    Parse an alpha value checking it's a valid float in the range 0 to 1.
+    """Parse an alpha value checking it's a valid float in the range 0 to 1.
 
     Args:
         value: The input value to parse.
@@ -425,8 +406,7 @@ def parse_float_alpha(value: None | str | float | int) -> float | None:
 
 
 def parse_hsl(h: str, h_units: str, sat: str, light: str, alpha: float | None = None) -> RGBA:
-    """
-    Parse raw hue, saturation, lightness, and alpha values and convert to RGBA.
+    """Parse raw hue, saturation, lightness, and alpha values and convert to RGBA.
 
     Args:
         h: The hue value.
@@ -454,8 +434,7 @@ def parse_hsl(h: str, h_units: str, sat: str, light: str, alpha: float | None = 
 
 
 def float_to_255(c: float) -> int:
-    """
-    Converts a float value between 0 and 1 (inclusive) to an integer between 0 and 255 (inclusive).
+    """Converts a float value between 0 and 1 (inclusive) to an integer between 0 and 255 (inclusive).
 
     Args:
         c: The float value to be converted. Must be between 0 and 1 (inclusive).
