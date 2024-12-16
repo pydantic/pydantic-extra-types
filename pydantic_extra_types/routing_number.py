@@ -2,6 +2,8 @@
 [`ABARoutingNumber`][pydantic_extra_types.routing_number.ABARoutingNumber] data type.
 """
 
+from __future__ import annotations
+
 from typing import Any, ClassVar
 
 from pydantic import GetCoreSchemaHandler
@@ -54,7 +56,7 @@ class ABARoutingNumber(str):
         )
 
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> 'ABARoutingNumber':
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> ABARoutingNumber:
         return cls(__input_value)
 
     @classmethod
