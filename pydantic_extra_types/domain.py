@@ -5,7 +5,6 @@ This class depends on the `pydantic` package and implements custom validation fo
 from __future__ import annotations
 
 import re
-from collections.abc import Mapping
 from typing import Any
 
 from pydantic import GetCoreSchemaHandler
@@ -54,5 +53,5 @@ class DomainStr(str):
     @classmethod
     def __get_pydantic_json_schema__(
         cls, schema: core_schema.CoreSchema, handler: GetCoreSchemaHandler
-    ) -> Mapping[str, Any]:
+    ) -> dict[str, Any]:
         return handler(schema)

@@ -2,6 +2,8 @@
 CoreSchema implementation. This allows Pydantic to validate the DateTime object.
 """
 
+from __future__ import annotations
+
 try:
     from pendulum import Date as _Date
     from pendulum import DateTime as _DateTime
@@ -63,7 +65,7 @@ class DateTime(_DateTime, metaclass=DateTimeSettings):
         return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.datetime_schema())
 
     @classmethod
-    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> 'DateTime':
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> DateTime:
         """Validate the datetime object and return it.
 
         Args:
@@ -128,7 +130,7 @@ class Date(_Date):
         return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.date_schema())
 
     @classmethod
-    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> 'Date':
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Date:
         """Validate the date object and return it.
 
         Args:
@@ -187,7 +189,7 @@ class Duration(_Duration):
         return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.timedelta_schema())
 
     @classmethod
-    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> 'Duration':
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Duration:
         """Validate the Duration object and return it.
 
         Args:

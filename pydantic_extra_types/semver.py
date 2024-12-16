@@ -4,12 +4,13 @@ This class depends on the [semver](https://python-semver.readthedocs.io/en/lates
 """
 
 import warnings
-from typing import Annotated, Any, Callable
+from typing import Any, Callable
 
 from pydantic import GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
 from semver import Version
+from typing_extensions import Annotated
 
 warnings.warn(
     'Use from pydantic_extra_types.semver import SemanticVersion instead. Will be removed in 3.0.0.', DeprecationWarning

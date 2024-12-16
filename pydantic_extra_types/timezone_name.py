@@ -57,7 +57,7 @@ def get_timezones() -> set[str]:
 class TimeZoneNameSettings(type):
     def __new__(cls, name: str, bases: tuple[type, ...], dct: dict[str, Any], **kwargs: Any) -> type[TimeZoneName]:
         dct['strict'] = kwargs.pop('strict', True)
-        return cast(type[TimeZoneName], super().__new__(cls, name, bases, dct))
+        return cast('type[TimeZoneName]', super().__new__(cls, name, bases, dct))
 
     def __init__(cls, name: str, bases: tuple[type, ...], dct: dict[str, Any], **kwargs: Any) -> None:
         super().__init__(name, bases, dct)

@@ -3,12 +3,7 @@ from typing import Union
 import pycountry
 import pytest
 from pydantic import BaseModel
-
-try:
-    from typing import Annotated
-except ImportError:
-    # Python 3.8
-    from typing import Annotated
+from typing_extensions import Annotated
 
 import pydantic_extra_types
 from pydantic_extra_types import epoch
