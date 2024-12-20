@@ -1,16 +1,10 @@
 from typing import Any, Optional, Union
 
-try:
-    from typing import Annotated
-except ImportError:
-    # Python 3.8
-    from typing import Annotated
-
-
 import phonenumbers
 import pytest
 from phonenumbers import PhoneNumber
 from pydantic import BaseModel, TypeAdapter, ValidationError
+from typing_extensions import Annotated
 
 from pydantic_extra_types.phone_numbers import PhoneNumberValidator
 

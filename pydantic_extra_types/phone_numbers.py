@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 from functools import partial
-from typing import Any, ClassVar, Optional
+from typing import Any, ClassVar
 
 from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
@@ -107,9 +107,9 @@ class PhoneNumberValidator:
             us_number: USNumberType
     """
 
-    default_region: Optional[str] = None
+    default_region: str | None = None
     number_format: str = 'RFC3966'
-    supported_regions: Optional[Sequence[str]] = None
+    supported_regions: Sequence[str] | None = None
 
     def __post_init__(self) -> None:
         if self.default_region and self.default_region not in phonenumbers.SUPPORTED_REGIONS:
@@ -131,7 +131,7 @@ class PhoneNumberValidator:
     def _parse(
         region: str | None,
         number_format: str,
-        supported_regions: Optional[Sequence[str]],
+        supported_regions: Sequence[str] | None,
         phone_number: Any,
     ) -> str:
         if not phone_number:

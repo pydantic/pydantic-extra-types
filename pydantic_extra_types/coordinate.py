@@ -3,8 +3,10 @@
 [`Coordinate`][pydantic_extra_types.coordinate.Coordinate] data types.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import Any, ClassVar
+from typing import Any, ClassVar, Tuple
 
 from pydantic import GetCoreSchemaHandler
 from pydantic._internal import _repr
@@ -89,7 +91,7 @@ class Coordinate(_repr.Representation):
     ```
     """
 
-    _NULL_ISLAND: ClassVar[tuple[float, float]] = (0.0, 0.0)
+    _NULL_ISLAND: ClassVar[Tuple[float, float]] = (0.0, 0.0)
 
     latitude: Latitude
     longitude: Longitude
@@ -100,7 +102,7 @@ class Coordinate(_repr.Representation):
             core_schema.no_info_wrap_validator_function(cls._parse_str, core_schema.str_schema()),
             core_schema.no_info_wrap_validator_function(
                 cls._parse_tuple,
-                handler.generate_schema(tuple[float, float]),
+                handler.generate_schema(Tuple[float, float]),
             ),
             handler(source),
         ]
