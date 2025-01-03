@@ -199,9 +199,25 @@ class Duration(_Duration):
         Returns:
             The validated value or raises a PydanticCustomError.
         """
-        # if we are passed an existing instance, pass it straight through.
-        if isinstance(value, (_Duration, timedelta)):
-            return Duration(seconds=value.total_seconds())
+
+        if isinstance(value, _Duration):
+            return Duration(
+                years=value.years,
+                months=value.months,
+                weeks=value.weeks,
+                days=value.remaining_days,
+                hours=value.hours,
+                minutes=value.minutes,
+                seconds=value.remaining_seconds,
+                microseconds=value.microseconds,
+            )
+
+        if isinstance(value, timedelta):
+            return Duration(
+                days=value.days,
+                seconds=value.seconds,
+                microseconds=value.microseconds,
+            )
 
         try:
             parsed = parse(value, exact=True)

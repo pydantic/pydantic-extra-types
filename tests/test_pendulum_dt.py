@@ -92,8 +92,30 @@ def test_pendulum_date_existing_instance(instance):
     [
         pendulum.duration(days=42, hours=13, minutes=37),
         pendulum.duration(days=-42, hours=13, minutes=37),
+        pendulum.duration(weeks=97),
+        pendulum.duration(days=463),
+        pendulum.duration(milliseconds=90122),
+        pendulum.duration(microseconds=90122),
+        pendulum.duration(
+            years=2,
+            months=3,
+            weeks=19,
+            days=1,
+            hours=25,
+            seconds=732,
+            milliseconds=123,
+            microseconds=1324,
+        ),
         timedelta(days=42, hours=13, minutes=37),
         timedelta(days=-42, hours=13, minutes=37),
+        timedelta(
+            weeks=19,
+            days=1,
+            hours=25,
+            seconds=732,
+            milliseconds=123,
+            microseconds=1324,
+        ),
     ],
 )
 def test_duration_timedelta__existing_instance(instance):
@@ -227,7 +249,11 @@ def test_pendulum_dt_from_str_unix_timestamp_is_utc(dt):
 
 @pytest.mark.parametrize(
     'd',
-    [pendulum.now().date().isoformat(), pendulum.now().to_w3c_string(), pendulum.now().to_iso8601_string()],
+    [
+        pendulum.now().date().isoformat(),
+        pendulum.now().to_w3c_string(),
+        pendulum.now().to_iso8601_string(),
+    ],
 )
 def test_pendulum_date_from_serialized(d):
     """Verifies that building an instance from serialized, well-formed strings decode properly."""
@@ -308,7 +334,10 @@ def test_pendulum_dt_non_strict_malformed(dt):
         DtModelNotStrict(dt=dt)
 
 
-@pytest.mark.parametrize('invalid_value', [None, 'malformed', pendulum.today().to_iso8601_string()[:5], 'P10Y10M10D'])
+@pytest.mark.parametrize(
+    'invalid_value',
+    [None, 'malformed', pendulum.today().to_iso8601_string()[:5], 'P10Y10M10D'],
+)
 def test_pendulum_date_malformed(invalid_value):
     """Verifies that the instance fails to validate if malformed date are passed."""
     with pytest.raises(ValidationError):
@@ -317,7 +346,14 @@ def test_pendulum_date_malformed(invalid_value):
 
 @pytest.mark.parametrize(
     'delta_t',
-    [None, 'malformed', pendulum.today().to_iso8601_string()[:5], 42, '12m', '2021-01-01T12:00:00'],
+    [
+        None,
+        'malformed',
+        pendulum.today().to_iso8601_string()[:5],
+        42,
+        '12m',
+        '2021-01-01T12:00:00',
+    ],
 )
 def test_pendulum_duration_malformed(delta_t):
     """Verifies that the instance fails to validate if malformed durations are passed."""
@@ -344,3 +380,9 @@ def test_date_type_adapter(input_type: type, value, is_instance: type):
     assert type(validated) is input_type
     assert isinstance(validated, input_type)
     assert isinstance(validated, is_instance)
+
+
+def test_pendulum_duration_months_are_preserved():
+    m = DurationModel(delta_t=pendulum.Duration(months=1))
+
+    assert m.delta_t.months == 1
