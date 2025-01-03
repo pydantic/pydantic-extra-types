@@ -22,12 +22,12 @@ from pydantic_core import PydanticCustomError, core_schema
 
 class DateTimeSettings(type):
     def __new__(cls, name, bases, dct, **kwargs):  # type: ignore[no-untyped-def]
-        dct["strict"] = kwargs.pop("strict", True)
+        dct['strict'] = kwargs.pop('strict', True)
         return super().__new__(cls, name, bases, dct)
 
     def __init__(cls, name, bases, dct, **kwargs):  # type: ignore[no-untyped-def]
         super().__init__(name, bases, dct)
-        cls.strict = kwargs.get("strict", True)
+        cls.strict = kwargs.get('strict', True)
 
 
 class DateTime(_DateTime, metaclass=DateTimeSettings):
@@ -52,9 +52,7 @@ class DateTime(_DateTime, metaclass=DateTimeSettings):
     __slots__: list[str] = []
 
     @classmethod
-    def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
-    ) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         """Return a Pydantic CoreSchema with the Datetime validation
 
         Args:
@@ -64,14 +62,10 @@ class DateTime(_DateTime, metaclass=DateTimeSettings):
         Returns:
             A Pydantic CoreSchema with the Datetime validation.
         """
-        return core_schema.no_info_wrap_validator_function(
-            cls._validate, core_schema.datetime_schema()
-        )
+        return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.datetime_schema())
 
     @classmethod
-    def _validate(
-        cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler
-    ) -> DateTime:
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> DateTime:
         """Validate the datetime object and return it.
 
         Args:
@@ -94,13 +88,11 @@ class DateTime(_DateTime, metaclass=DateTimeSettings):
                 value = parse(value, strict=cls.strict)
                 if isinstance(value, _DateTime):
                     return DateTime.instance(value)
-                raise ValueError(f"value is not a valid datetime it is a {type(value)}")
+                raise ValueError(f'value is not a valid datetime it is a {type(value)}')
             except ValueError:
                 raise
             except Exception as exc:
-                raise PydanticCustomError(
-                    "value_error", "value is not a valid datetime"
-                ) from exc
+                raise PydanticCustomError('value_error', 'value is not a valid datetime') from exc
 
 
 class Date(_Date):
@@ -125,9 +117,7 @@ class Date(_Date):
     __slots__: list[str] = []
 
     @classmethod
-    def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
-    ) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         """Return a Pydantic CoreSchema with the Date validation
 
         Args:
@@ -137,14 +127,10 @@ class Date(_Date):
         Returns:
             A Pydantic CoreSchema with the Date validation.
         """
-        return core_schema.no_info_wrap_validator_function(
-            cls._validate, core_schema.date_schema()
-        )
+        return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.date_schema())
 
     @classmethod
-    def _validate(
-        cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler
-    ) -> Date:
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Date:
         """Validate the date object and return it.
 
         Args:
@@ -163,11 +149,9 @@ class Date(_Date):
             parsed = parse(value)
             if isinstance(parsed, (_DateTime, _Date)):
                 return Date(parsed.year, parsed.month, parsed.day)
-            raise ValueError("value is not a valid date it is a {type(parsed)}")
+            raise ValueError('value is not a valid date it is a {type(parsed)}')
         except Exception as exc:
-            raise PydanticCustomError(
-                "value_error", "value is not a valid date"
-            ) from exc
+            raise PydanticCustomError('value_error', 'value is not a valid date') from exc
 
 
 class Duration(_Duration):
@@ -192,9 +176,7 @@ class Duration(_Duration):
     __slots__: list[str] = []
 
     @classmethod
-    def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
-    ) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         """Return a Pydantic CoreSchema with the Duration validation
 
         Args:
@@ -204,14 +186,10 @@ class Duration(_Duration):
         Returns:
             A Pydantic CoreSchema with the Duration validation.
         """
-        return core_schema.no_info_wrap_validator_function(
-            cls._validate, core_schema.timedelta_schema()
-        )
+        return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.timedelta_schema())
 
     @classmethod
-    def _validate(
-        cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler
-    ) -> Duration:
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Duration:
         """Validate the Duration object and return it.
 
         Args:
@@ -244,11 +222,7 @@ class Duration(_Duration):
         try:
             parsed = parse(value, exact=True)
             if not isinstance(parsed, timedelta):
-                raise ValueError(
-                    f"value is not a valid duration it is a {type(parsed)}"
-                )
+                raise ValueError(f'value is not a valid duration it is a {type(parsed)}')
             return Duration(seconds=parsed.total_seconds())
         except Exception as exc:
-            raise PydanticCustomError(
-                "value_error", "value is not a valid duration"
-            ) from exc
+            raise PydanticCustomError('value_error', 'value is not a valid duration') from exc

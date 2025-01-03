@@ -33,7 +33,7 @@ class DurationModel(BaseModel):
 
 
 @pytest.mark.parametrize(
-    "instance",
+    'instance',
     [
         pendulum.now(),
         datetime.now(),
@@ -66,7 +66,7 @@ def test_existing_instance(instance):
 
 
 @pytest.mark.parametrize(
-    "instance",
+    'instance',
     [
         pendulum.today(),
         date.today(),
@@ -88,7 +88,7 @@ def test_pendulum_date_existing_instance(instance):
 
 
 @pytest.mark.parametrize(
-    "instance",
+    'instance',
     [
         pendulum.duration(days=42, hours=13, minutes=37),
         pendulum.duration(days=-42, hours=13, minutes=37),
@@ -128,7 +128,7 @@ def test_duration_timedelta__existing_instance(instance):
 
 
 @pytest.mark.parametrize(
-    "dt",
+    'dt',
     [
         pendulum.now().to_iso8601_string(),
         pendulum.now().to_w3c_string(),
@@ -144,7 +144,7 @@ def test_pendulum_dt_from_serialized(dt):
 
 
 @pytest.mark.parametrize(
-    "dt",
+    'dt',
     [
         pendulum.now().to_iso8601_string(),
         pendulum.now().to_w3c_string(),
@@ -165,20 +165,16 @@ def test_pendulum_dt_from_serialized_preserves_timezones(dt):
     assert model.dt.tz is not None
     assert model.dt.tz.utcoffset(model.dt) == dt_actual.tz.utcoffset(dt_actual)
     assert model.dt.timezone is not None
-    assert model.dt.timezone.utcoffset(model.dt) == dt_actual.timezone.utcoffset(
-        dt_actual
-    )
+    assert model.dt.timezone.utcoffset(model.dt) == dt_actual.timezone.utcoffset(dt_actual)
 
 
 @pytest.mark.parametrize(
-    "dt",
+    'dt',
     [
         pendulum.now().to_iso8601_string(),
         pendulum.now().to_w3c_string(),
-        "Sat Oct 11 17:13:46 UTC 2003",  # date util parsing
-        pendulum.now().to_iso8601_string()[
-            :5
-        ],  # actualy valid or pendulum.parse(dt, strict=False) would fail here
+        'Sat Oct 11 17:13:46 UTC 2003',  # date util parsing
+        pendulum.now().to_iso8601_string()[:5],  # actualy valid or pendulum.parse(dt, strict=False) would fail here
     ],
 )
 def test_pendulum_dt_not_strict_from_serialized(dt):
@@ -191,7 +187,7 @@ def test_pendulum_dt_not_strict_from_serialized(dt):
 
 
 @pytest.mark.parametrize(
-    "dt",
+    'dt',
     [
         pendulum.now().to_iso8601_string(),
         pendulum.now().to_w3c_string(),
@@ -199,17 +195,17 @@ def test_pendulum_dt_not_strict_from_serialized(dt):
         1718096578.5,
         -5,
         -5.5,
-        float("-0"),
-        "1718096578",
-        "1718096578.5",
-        "-5",
-        "-5.5",
-        "-0",
-        "-0.0",
-        "+0.0",
-        "+1718096578.5",
-        float("-2e10") - 1.0,
-        float("2e10") + 1.0,
+        float('-0'),
+        '1718096578',
+        '1718096578.5',
+        '-5',
+        '-5.5',
+        '-0',
+        '-0.0',
+        '+0.0',
+        '+1718096578.5',
+        float('-2e10') - 1.0,
+        float('2e10') + 1.0,
         -2e10 - 1,
         2e10 + 1,
     ],
@@ -224,23 +220,23 @@ def test_pendulum_dt_from_str_unix_timestamp(dt):
 
 
 @pytest.mark.parametrize(
-    "dt",
+    'dt',
     [
         1718096578,
         1718096578.5,
         -5,
         -5.5,
-        float("-0"),
-        "1718096578",
-        "1718096578.5",
-        "-5",
-        "-5.5",
-        "-0",
-        "-0.0",
-        "+0.0",
-        "+1718096578.5",
-        float("-2e10") - 1.0,
-        float("2e10") + 1.0,
+        float('-0'),
+        '1718096578',
+        '1718096578.5',
+        '-5',
+        '-5.5',
+        '-0',
+        '-0.0',
+        '+0.0',
+        '+1718096578.5',
+        float('-2e10') - 1.0,
+        float('2e10') + 1.0,
         -2e10 - 1,
         2e10 + 1,
     ],
@@ -248,11 +244,11 @@ def test_pendulum_dt_from_str_unix_timestamp(dt):
 def test_pendulum_dt_from_str_unix_timestamp_is_utc(dt):
     """Verifies that without timezone information, it is coerced to UTC. As in pendulum"""
     model = DtModel(dt=dt)
-    assert model.dt.tzinfo.tzname(model.dt) == "UTC"
+    assert model.dt.tzinfo.tzname(model.dt) == 'UTC'
 
 
 @pytest.mark.parametrize(
-    "d",
+    'd',
     [
         pendulum.now().date().isoformat(),
         pendulum.now().to_w3c_string(),
@@ -269,13 +265,13 @@ def test_pendulum_date_from_serialized(d):
 
 
 @pytest.mark.parametrize(
-    "delta_t_str",
+    'delta_t_str',
     [
-        "P3.14D",
-        "PT404H",
-        "P1DT25H",
-        "P2W",
-        "P10Y10M10D",
+        'P3.14D',
+        'PT404H',
+        'P1DT25H',
+        'P2W',
+        'P10Y10M10D',
     ],
 )
 def test_pendulum_duration_from_serialized(delta_t_str):
@@ -290,30 +286,30 @@ def test_pendulum_duration_from_serialized(delta_t_str):
 def get_invalid_dt_common():
     return [
         None,
-        "malformed",
-        "P10Y10M10D",
-        float("inf"),
-        float("-inf"),
-        "inf",
-        "-inf",
-        "INF",
-        "-INF",
-        "+inf",
-        "Infinity",
-        "+Infinity",
-        "-Infinity",
-        "INFINITY",
-        "+INFINITY",
-        "-INFINITY",
-        "infinity",
-        "+infinity",
-        "-infinity",
-        float("nan"),
-        "nan",
-        "NaN",
-        "NAN",
-        "+nan",
-        "-nan",
+        'malformed',
+        'P10Y10M10D',
+        float('inf'),
+        float('-inf'),
+        'inf',
+        '-inf',
+        'INF',
+        '-INF',
+        '+inf',
+        'Infinity',
+        '+Infinity',
+        '-Infinity',
+        'INFINITY',
+        '+INFINITY',
+        '-INFINITY',
+        'infinity',
+        '+infinity',
+        '-infinity',
+        float('nan'),
+        'nan',
+        'NaN',
+        'NAN',
+        '+nan',
+        '-nan',
     ]
 
 
@@ -322,7 +318,7 @@ dt_strict.append(pendulum.now().to_iso8601_string()[:5])
 
 
 @pytest.mark.parametrize(
-    "dt",
+    'dt',
     dt_strict,
 )
 def test_pendulum_dt_malformed(dt):
@@ -331,7 +327,7 @@ def test_pendulum_dt_malformed(dt):
         DtModel(dt=dt)
 
 
-@pytest.mark.parametrize("dt", get_invalid_dt_common())
+@pytest.mark.parametrize('dt', get_invalid_dt_common())
 def test_pendulum_dt_non_strict_malformed(dt):
     """Verifies that the instance fails to validate if malformed dt are passed."""
     with pytest.raises(ValidationError):
@@ -339,8 +335,8 @@ def test_pendulum_dt_non_strict_malformed(dt):
 
 
 @pytest.mark.parametrize(
-    "invalid_value",
-    [None, "malformed", pendulum.today().to_iso8601_string()[:5], "P10Y10M10D"],
+    'invalid_value',
+    [None, 'malformed', pendulum.today().to_iso8601_string()[:5], 'P10Y10M10D'],
 )
 def test_pendulum_date_malformed(invalid_value):
     """Verifies that the instance fails to validate if malformed date are passed."""
@@ -349,14 +345,14 @@ def test_pendulum_date_malformed(invalid_value):
 
 
 @pytest.mark.parametrize(
-    "delta_t",
+    'delta_t',
     [
         None,
-        "malformed",
+        'malformed',
         pendulum.today().to_iso8601_string()[:5],
         42,
-        "12m",
-        "2021-01-01T12:00:00",
+        '12m',
+        '2021-01-01T12:00:00',
     ],
 )
 def test_pendulum_duration_malformed(delta_t):
@@ -366,15 +362,15 @@ def test_pendulum_duration_malformed(delta_t):
 
 
 @pytest.mark.parametrize(
-    "input_type, value, is_instance",
+    'input_type, value, is_instance',
     [
-        (Date, "2021-01-01", pendulum.Date),
+        (Date, '2021-01-01', pendulum.Date),
         (Date, date(2021, 1, 1), pendulum.Date),
         (Date, pendulum.date(2021, 1, 1), pendulum.Date),
-        (DateTime, "2021-01-01T12:00:00", pendulum.DateTime),
+        (DateTime, '2021-01-01T12:00:00', pendulum.DateTime),
         (DateTime, datetime(2021, 1, 1, 12, 0, 0), pendulum.DateTime),
         (DateTime, pendulum.datetime(2021, 1, 1, 12, 0, 0), pendulum.DateTime),
-        (Duration, "P1DT25H", pendulum.Duration),
+        (Duration, 'P1DT25H', pendulum.Duration),
         (Duration, timedelta(days=1, hours=25), pendulum.Duration),
         (Duration, pendulum.duration(days=1, hours=25), pendulum.Duration),
     ],
