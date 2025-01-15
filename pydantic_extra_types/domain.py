@@ -54,4 +54,5 @@ class DomainStr(str):
     def __get_pydantic_json_schema__(
         cls, schema: core_schema.CoreSchema, handler: GetCoreSchemaHandler
     ) -> dict[str, Any]:
-        return handler(schema)
+        # Cast the return value to dict[str, Any]
+        return dict(handler(schema))

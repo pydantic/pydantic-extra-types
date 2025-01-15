@@ -25,6 +25,10 @@ lint:
 	uv run ruff format --check
 	uv run ruff check
 
+.PHONY: typecheck  # Typecheck the code
+typecheck:
+	uv run mypy pydantic_extra_types
+
 .PHONY: test
 test:
 	uv run pytest
