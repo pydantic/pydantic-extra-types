@@ -90,7 +90,7 @@ class PhoneNumberValidator:
         supported_regions (list[str]): The supported regions. If empty, all regions are supported (default).
 
     Returns:
-        str: The formatted phone number.
+        The formatted phone number.
 
     Example:
         MyNumberType = Annotated[

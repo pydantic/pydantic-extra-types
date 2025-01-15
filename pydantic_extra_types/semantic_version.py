@@ -7,14 +7,14 @@ from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
 
 try:
-    import semver  # type: ignore
+    import semver
 except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
         'The `semantic_version` module requires "semver" to be installed. You can install it with "pip install semver".'
     ) from e
 
 
-class SemanticVersion(semver.Version):  # type: ignore[misc]
+class SemanticVersion(semver.Version):
     """Semantic version based on the official [semver thread](https://python-semver.readthedocs.io/en/latest/advanced/combine-pydantic-and-semver.html)."""
 
     @classmethod
@@ -24,7 +24,7 @@ class SemanticVersion(semver.Version):  # type: ignore[misc]
         _handler: Callable[[Any], core_schema.CoreSchema],
     ) -> core_schema.CoreSchema:
         def validate_from_str(value: str) -> SemanticVersion:
-            return cls.parse(value)  # type: ignore[no-any-return]
+            return cls.parse(value)
 
         from_str_schema = core_schema.chain_schema(
             [
@@ -56,4 +56,4 @@ class SemanticVersion(semver.Version):  # type: ignore[misc]
 
     @classmethod
     def validate_from_str(cls, value: str) -> 'SemanticVersion':
-        return cls.parse(value)  # type: ignore[no-any-return]
+        return cls.parse(value)

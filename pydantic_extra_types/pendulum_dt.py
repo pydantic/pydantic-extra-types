@@ -5,7 +5,7 @@ CoreSchema implementation. This allows Pydantic to validate the DateTime object.
 from __future__ import annotations
 
 try:
-    from pendulum import Date as _Date  # type: ignore
+    from pendulum import Date as _Date
     from pendulum import DateTime as _DateTime
     from pendulum import Duration as _Duration
     from pendulum import parse
@@ -30,7 +30,7 @@ class DateTimeSettings(type):
         cls.strict = kwargs.get('strict', True)
 
 
-class DateTime(_DateTime, metaclass=DateTimeSettings):  # type: ignore[misc]
+class DateTime(_DateTime, metaclass=DateTimeSettings):
     """A `pendulum.DateTime` object. At runtime, this type decomposes into pendulum.DateTime automatically.
     This type exists because Pydantic throws a fit on unknown types.
 
@@ -77,7 +77,7 @@ class DateTime(_DateTime, metaclass=DateTimeSettings):  # type: ignore[misc]
         """
         # if we are passed an existing instance, pass it straight through.
         if isinstance(value, (_DateTime, datetime)):
-            return DateTime.instance(value)  # type: ignore[no-any-return]
+            return DateTime.instance(value)
         try:
             # probably the best way to have feature parity with
             # https://docs.pydantic.dev/latest/api/standard_library_types/#datetimedatetime
@@ -95,7 +95,7 @@ class DateTime(_DateTime, metaclass=DateTimeSettings):  # type: ignore[misc]
                 raise PydanticCustomError('value_error', 'value is not a valid datetime') from exc
 
 
-class Date(_Date):  # type: ignore[misc]
+class Date(_Date):
     """A `pendulum.Date` object. At runtime, this type decomposes into pendulum.Date automatically.
     This type exists because Pydantic throws a fit on unknown types.
 
@@ -154,7 +154,7 @@ class Date(_Date):  # type: ignore[misc]
             raise PydanticCustomError('value_error', 'value is not a valid date') from exc
 
 
-class Duration(_Duration):  # type: ignore[misc]
+class Duration(_Duration):
     """A `pendulum.Duration` object. At runtime, this type decomposes into pendulum.Duration automatically.
     This type exists because Pydantic throws a fit on unknown types.
 

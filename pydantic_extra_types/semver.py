@@ -9,7 +9,7 @@ from typing import Any, Callable
 from pydantic import GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
-from semver import Version  # type: ignore
+from semver import Version
 from typing_extensions import Annotated
 
 warnings.warn(
@@ -17,7 +17,7 @@ warnings.warn(
 )
 
 
-class _VersionPydanticAnnotation(Version):  # type: ignore[misc]
+class _VersionPydanticAnnotation(Version):
     """Represents a Semantic Versioning (SemVer).
 
     Wraps the `version` type from `semver`.
