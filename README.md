@@ -16,8 +16,8 @@ Install this library with the desired extras dependencies as listed in [project.
 For example, if pendulum support was desired:
 
 ```shell
-# via poetry
-$ poetry add "pydantic-extra-types[pendulum]"
+# via uv
+$ uv add "pydantic-extra-types[pendulum]"
 
 # via pip
 $ pip install -U "pydantic-extra-types[pendulum]"
