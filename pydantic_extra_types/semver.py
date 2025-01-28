@@ -13,7 +13,8 @@ from semver import Version
 from typing_extensions import Annotated
 
 warnings.warn(
-    'Use from pydantic_extra_types.semantic_version import SemanticVersion instead. Will be removed in 3.0.0.', DeprecationWarning
+    'Use from pydantic_extra_types.semantic_version import SemanticVersion instead. Will be removed in 3.0.0.',
+    DeprecationWarning,
 )
 
 
