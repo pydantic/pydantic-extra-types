@@ -7,7 +7,7 @@ sources = pydantic_extra_types tests
 
 .PHONY: install  ## Install the package, dependencies, and pre-commit for local development
 install: .uv
-	uv sync --frozen --group all --all-extras
+	uv sync --frozen --all-groups --all-extras
 	uv pip install pre-commit
 	pre-commit install --install-hooks
 
