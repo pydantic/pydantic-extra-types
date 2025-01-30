@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Any, Dict, Union
 
 import pycountry
 import pytest
@@ -15,6 +15,7 @@ from pydantic_extra_types.domain import DomainStr
 from pydantic_extra_types.isbn import ISBN
 from pydantic_extra_types.language_code import ISO639_3, ISO639_5, LanguageAlpha2, LanguageName
 from pydantic_extra_types.mac_address import MacAddress
+from pydantic_extra_types.mongo_object_id import MongoObjectId
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
 from pydantic_extra_types.phone_numbers import PhoneNumber, PhoneNumberValidator
@@ -494,9 +495,27 @@ USNumberE164 = Annotated[
                 ],
             },
         ),
+        (
+            MongoObjectId,
+            {
+                'title': 'Model',
+                'type': 'object',
+                'properties': {
+                    'x': {
+                        'maxLength': MongoObjectId.OBJECT_ID_LENGTH,
+                        'minLength': MongoObjectId.OBJECT_ID_LENGTH,
+                        'title': 'X',
+                        'type': 'string',
+                    },
+                },
+                'required': ['x'],
+            },
+        ),
     ],
 )
-def test_json_schema(cls, expected):
+def test_json_schema(cls: Any, expected: Dict[str, Any]) -> None:
+    """Test the model_json_schema implementation for all extra types."""
+
     class Model(BaseModel):
         x: cls
 

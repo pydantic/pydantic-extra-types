@@ -1,7 +1,8 @@
 """Tests for the mongo_object_id module."""
 
 import pytest
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, GetCoreSchemaHandler, ValidationError
+from pydantic.json_schema import JsonSchemaMode
 
 from pydantic_extra_types.mongo_object_id import MongoObjectId
 
@@ -36,17 +37,35 @@ def test_format_for_object_id(object_id: str, result: str, valid: bool) -> None:
             MongoObjectId.validate(object_id)
 
 
-def test_json_schema() -> None:
+@pytest.mark.parametrize(
+    'schema_mode',
+    [
+        'validation',
+        'serialization',
+    ],
+)
+def test_json_schema(schema_mode: JsonSchemaMode) -> None:
     """Test the MongoObjectId model_json_schema implementation."""
-    assert MongoDocument.model_json_schema(mode='validation') == {
-        'properties': {'object_id': {'maxLength': 24, 'minLength': 24, 'title': 'Object Id', 'type': 'string'}},
+    expected_json_schema = {
+        'properties': {
+            'object_id': {
+                'maxLength': MongoObjectId.OBJECT_ID_LENGTH,
+                'minLength': MongoObjectId.OBJECT_ID_LENGTH,
+                'title': 'Object Id',
+                'type': 'string',
+            }
+        },
         'required': ['object_id'],
         'title': 'MongoDocument',
         'type': 'object',
     }
-    assert MongoDocument.model_json_schema(mode='serialization') == {
-        'properties': {'object_id': {'maxLength': 24, 'minLength': 24, 'title': 'Object Id', 'type': 'string'}},
-        'required': ['object_id'],
-        'title': 'MongoDocument',
-        'type': 'object',
-    }
+    assert MongoDocument.model_json_schema(mode=schema_mode) == expected_json_schema
+
+
+def test_get_pydantic_core_schema() -> None:
+    """Test the __get_pydantic_core_schema__ method override."""
+    schema = MongoObjectId.__get_pydantic_core_schema__(MongoObjectId, GetCoreSchemaHandler())
+    assert isinstance(schema, dict)
+    assert 'json_schema' in schema
+    assert 'python_schema' in schema
+    assert schema['json_schema']['type'] == 'str'

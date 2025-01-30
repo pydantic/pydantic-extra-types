@@ -11,7 +11,7 @@ from pydantic_core import core_schema
 
 try:
     from bson import ObjectId
-except ModuleNotFoundError as e:
+except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
         'The `mongo_object_id` module requires "pymongo" to be installed. You can install it with "pip install '
         'pymongo".'
@@ -43,7 +43,7 @@ class MongoObjectId(str):
     OBJECT_ID_LENGTH = 24
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source: Any, handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, _: Any, __: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.json_or_python_schema(
             json_schema=core_schema.str_schema(min_length=cls.OBJECT_ID_LENGTH, max_length=cls.OBJECT_ID_LENGTH),
             python_schema=core_schema.union_schema(
