@@ -21,11 +21,8 @@ def isbn10_digit_calc(isbn: str) -> str:
         The calculated last digit of the ISBN-10 value.
     """
     total = sum(int(digit) * (10 - idx) for idx, digit in enumerate(isbn[:9]))
-
-    for check_digit in range(1, 11):
-        if (total + check_digit) % 11 == 0:
-            valid_check_digit = 'X' if check_digit == 10 else str(check_digit)
-
+    diff = (11 - total) % 11
+    valid_check_digit = 'X' if diff == 10 else str(diff)
     return valid_check_digit
 
 

@@ -122,6 +122,7 @@ isbn_last_digit_test_cases = [
     ('080442957X', '9780804429573', True),  # ISBN-10 ending in "X" as input
     ('9788584390670', '9788584390670', True),  # ISBN-13 Starting with 978
     ('9790306406156', '9790306406156', True),  # ISBN-13 starting with 979
+    ('8306018060', '9788306018066', True),  # ISBN-10 as input
     # Invalid ISBNs
     ('8537809663', None, False),  # ISBN-10 as input with wrong last digit
     ('9788537809661', None, False),  # ISBN-13 as input with wrong last digit
