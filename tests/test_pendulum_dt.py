@@ -283,6 +283,31 @@ def test_pendulum_duration_from_serialized(delta_t_str):
     assert isinstance(model.delta_t, pendulum.Duration)
 
 
+@pytest.mark.parametrize(
+    'duration',
+    [
+        (Duration(months=1)),
+        (Duration(weeks=1)),
+        (Duration(milliseconds=1)),
+        (Duration(microseconds=1)),
+        (Duration(days=1)),
+        (Duration(hours=1)),
+        (Duration(minutes=1)),
+        (Duration(seconds=1)),
+        (Duration(months=2, days=5)),
+        (Duration(weeks=3, hours=12)),
+        (Duration(days=10, minutes=30)),
+        (Duration(weeks=1, days=2, hours=3)),
+        (Duration(seconds=30, milliseconds=500)),
+    ],
+)
+def test_pendulum_duration_serialization_roundtrip(duration):
+    adapter = TypeAdapter(Duration)
+    serialized = adapter.dump_python(duration)
+    deserialized = TypeAdapter.validate_python(adapter, serialized)
+    assert deserialized == duration
+
+
 def get_invalid_dt_common():
     return [
         None,
