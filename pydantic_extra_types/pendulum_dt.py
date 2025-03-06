@@ -190,7 +190,7 @@ class Duration(_Duration):
             cls._validate,
             core_schema.timedelta_schema(),
             serialization=core_schema.plain_serializer_function_ser_schema(
-                lambda instance: instance.to_iso8601_string()
+                lambda instance: instance.to_iso8601_string(), when_used='json-unless-none'
             ),
         )
 
