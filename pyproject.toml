@@ -44,7 +44,7 @@ dynamic = ['version']
 
 [project.optional-dependencies]
 all = [
-    'phonenumbers>=8,<9',
+    'phonenumbers>=8,<10',
     'pycountry>=23',
     'semver>=3.0.2',
     'python-ulid>=1,<2; python_version<"3.9"',
@@ -55,7 +55,7 @@ all = [
     'semver~=3.0.2',
     'tzdata>=2024.1',
 ]
-phonenumbers = ['phonenumbers>=8,<9']
+phonenumbers = ['phonenumbers>=8,<10']
 pycountry = ['pycountry>=23']
 semver = ['semver>=3.0.2']
 python_ulid = [
