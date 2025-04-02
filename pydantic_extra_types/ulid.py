@@ -47,6 +47,8 @@ class ULID(_repr.Representation):
     @classmethod
     def _validate_ulid(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
         ulid: _ULID
+        if isinstance(value, bool):
+            raise PydanticCustomError('ulid_format', 'Unrecognized format')
         try:
             if isinstance(value, int):
                 ulid = _ULID.from_int(value)
