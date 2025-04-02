@@ -37,6 +37,9 @@ class Something(BaseModel):
         (109667145845879622871206540411193812282, '2JG4FVY7N8XS4GFVHPXGJZ8S9T', True),
         (109667145845879622871206540411193812283, '2JG4FVY7N8XS4GFVHPXGJZ8S9V', True),
         (109667145845879622871206540411193812284, '2JG4FVY7N8XS4GFVHPXGJZ8S9W', True),
+        # Invalid ULID for bool format
+        (True, None, False),
+        (False, None, False),
     ],
 )
 def test_format_for_ulid(ulid: Any, result: Any, valid: bool):
