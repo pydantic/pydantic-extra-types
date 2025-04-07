@@ -14,6 +14,8 @@ from pydantic_core import PydanticCustomError, core_schema
 class DomainStr(str):
     """A string subclass with custom validation for domain string format."""
 
+    _domain_re_pattern = r'(?=^.{1,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)'
+
     @classmethod
     def validate(cls, __input_value: Any, _: Any) -> str:
         """Validate a domain name from the provided value.
@@ -37,8 +39,7 @@ class DomainStr(str):
         if len(v) < 1 or len(v) > 253:
             raise PydanticCustomError('domain_length', 'Domain must be between 1 and 253 characters')
 
-        pattern = r'^([a-z0-9-]+(\.[a-z0-9-]+)+)$'
-        if not re.match(pattern, v):
+        if not re.match(cls._domain_re_pattern, v):
             raise PydanticCustomError('domain_format', 'Invalid domain format')
 
         return cls(v)

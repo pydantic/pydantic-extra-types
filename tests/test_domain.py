@@ -27,6 +27,8 @@ invalid_domains = [
     'exam ple.com',  # Space in domain
     'exa_mple.com',  # Underscore in domain
     'example.com.',  # Trailing dot
+    '192.168.1.23',  # Ip address
+    '192.168.1.0/23',  # CIDR
 ]
 
 very_long_domains = [
