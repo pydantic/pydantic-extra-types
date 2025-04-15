@@ -63,6 +63,7 @@ python_ulid = [
     'python-ulid>=1,<4; python_version>="3.9"',
 ]
 pendulum = ['pendulum>=3.0.0,<4.0.0']
+whenever = ['whenever>=0.6.0,<0.8.0; python_version>="3.9"']
 
 [dependency-groups]
 dev = [
