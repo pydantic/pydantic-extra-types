@@ -354,7 +354,7 @@ def parse_color_value(value: int | str, max_val: int = 255) -> float:
     """
     try:
         color = float(value)
-    except ValueError as e:
+    except (ValueError, TypeError) as e:
         raise PydanticCustomError(
             'color_error',
             'value is not a valid color: color values must be a valid number',
