@@ -9,7 +9,7 @@ sources = pydantic_extra_types tests
 install: .uv
 	uv sync --frozen --all-groups --all-extras
 	uv pip install pre-commit
-	pre-commit install --install-hooks
+	uv run pre-commit install --install-hooks
 
 .PHONY: rebuild-lockfiles  ## Rebuild lockfiles from scratch, updating all dependencies
 rebuild-lockfiles: .uv
