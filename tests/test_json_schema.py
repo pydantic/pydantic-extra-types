@@ -139,10 +139,11 @@ USNumberE164 = Annotated[
             {
                 'properties': {
                     'x': {
-                        'maximum': 90.0,
-                        'minimum': -90.0,
+                        'anyOf': [
+                            {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
+                            {'type': 'string'},
+                        ],
                         'title': 'X',
-                        'type': 'number',
                     }
                 },
                 'required': ['x'],
@@ -155,10 +156,11 @@ USNumberE164 = Annotated[
             {
                 'properties': {
                     'x': {
-                        'maximum': 180.0,
-                        'minimum': -180.0,
+                        'anyOf': [
+                            {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
+                            {'type': 'string'},
+                        ],
                         'title': 'X',
-                        'type': 'number',
                     }
                 },
                 'required': ['x'],
@@ -172,8 +174,20 @@ USNumberE164 = Annotated[
                 '$defs': {
                     'Coordinate': {
                         'properties': {
-                            'latitude': {'maximum': 90.0, 'minimum': -90.0, 'title': 'Latitude', 'type': 'number'},
-                            'longitude': {'maximum': 180.0, 'minimum': -180.0, 'title': 'Longitude', 'type': 'number'},
+                            'latitude': {
+                                'anyOf': [
+                                    {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
+                                    {'type': 'string'},
+                                ],
+                                'title': 'Latitude',
+                            },
+                            'longitude': {
+                                'anyOf': [
+                                    {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
+                                    {'type': 'string'},
+                                ],
+                                'title': 'Longitude',
+                            },
                         },
                         'required': ['latitude', 'longitude'],
                         'title': 'Coordinate',
@@ -188,8 +202,8 @@ USNumberE164 = Annotated[
                                 'maxItems': 2,
                                 'minItems': 2,
                                 'prefixItems': [
-                                    {'type': 'number'},
-                                    {'type': 'number'},
+                                    {'anyOf': [{'type': 'number'}, {'type': 'string'}]},
+                                    {'anyOf': [{'type': 'number'}, {'type': 'string'}]},
                                 ],
                                 'type': 'array',
                             },
