@@ -245,7 +245,7 @@ class Duration(_Duration):
             iso_duration = '-' + iso_duration
 
         if iso_duration == 'P':
-            iso_duration += 'P0D'
+            iso_duration = 'P0D'
 
         return iso_duration
 
