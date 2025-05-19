@@ -414,3 +414,35 @@ def test_pendulum_duration_months_are_preserved():
     m = DurationModel(delta_t=pendulum.Duration(months=1))
 
     assert m.delta_t.months == 1
+
+
+@pytest.mark.parametrize(
+    'zero_duration',
+    [
+        Duration(),
+        Duration(years=0, months=0, days=0, hours=0, minutes=0, seconds=0),
+        Duration(0),
+        pendulum.duration(),
+    ],
+)
+def test_zero_duration_serialization_and_validation(zero_duration):
+    """Zero durations should serialize as 'P0D' and round-trip without error."""
+    model = DurationModel(delta_t=zero_duration)
+    json_dump = model.model_dump_json()
+    assert json_dump == '{"delta_t":"P0D"}'
+    loaded = DurationModel.model_validate_json(json_dump)
+    assert loaded.delta_t == zero_duration
+    assert isinstance(loaded.delta_t, Duration)
+
+
+def test_zero_duration_from_string():
+    """'P0D' string should be accepted and produce a zero Duration."""
+    model = DurationModel(delta_t='P0D')
+    assert model.delta_t == Duration()
+    assert isinstance(model.delta_t, Duration)
+
+
+def test_invalid_zero_duration_string():
+    """'P' is not a valid ISO 8601 duration and should raise a validation error."""
+    with pytest.raises(ValidationError):
+        DurationModel(delta_t='P')

@@ -244,6 +244,9 @@ class Duration(_Duration):
         if self.total_seconds() < 0:
             iso_duration = '-' + iso_duration
 
+        if iso_duration == 'P':
+            iso_duration = 'P0D'
+
         return iso_duration
 
     @classmethod
