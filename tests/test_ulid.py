@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime, timezone
 from typing import Any
 
@@ -27,6 +28,9 @@ class Something(BaseModel):
         # Invalid ULID for str format
         ('01BTGNYV6HRNK8K8VKZASZCFP', None, False),  # Invalid ULID (short length)
         ('01BTGNYV6HRNK8K8VKZASZCFPEA', None, False),  # Invalid ULID (long length)
+        # Valid ULID for UUID format
+        (uuid.UUID('0196FEB3-9C99-8D8C-B3F3-4301C5E9DCE1'), '01JVZB774SHP6B7WT3072YKQ71', True),
+        (uuid.UUID('0196FEB3-CD14-4B50-0015-C1E09BF7B221'), '01JVZB7K8M9D8005E1W2DZFCH1', True),
         # Valid ULID for _ULID format
         (_ULID.from_str('01BTGNYV6HRNK8K8VKZASZCFPE'), '01BTGNYV6HRNK8K8VKZASZCFPE', True),
         (_ULID.from_str('01BTGNYV6HRNK8K8VKZASZCFPF'), '01BTGNYV6HRNK8K8VKZASZCFPF', True),
@@ -62,7 +66,12 @@ def test_json_schema():
     assert Something.model_json_schema(mode='validation') == {
         'properties': {
             'ulid': {
-                'anyOf': [{'type': 'integer'}, {'format': 'binary', 'type': 'string'}, {'type': 'string'}],
+                'anyOf': [
+                    {'type': 'integer'},
+                    {'format': 'binary', 'type': 'string'},
+                    {'type': 'string'},
+                    {'format': 'uuid', 'type': 'string'},
+                ],
                 'title': 'Ulid',
             }
         },
@@ -73,7 +82,12 @@ def test_json_schema():
     assert Something.model_json_schema(mode='serialization') == {
         'properties': {
             'ulid': {
-                'anyOf': [{'type': 'integer'}, {'format': 'binary', 'type': 'string'}, {'type': 'string'}],
+                'anyOf': [
+                    {'type': 'integer'},
+                    {'format': 'binary', 'type': 'string'},
+                    {'type': 'string'},
+                    {'format': 'uuid', 'type': 'string'},
+                ],
                 'title': 'Ulid',
             }
         },
