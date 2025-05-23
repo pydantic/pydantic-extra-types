@@ -62,7 +62,12 @@ def test_json_schema():
     assert Something.model_json_schema(mode='validation') == {
         'properties': {
             'ulid': {
-                'anyOf': [{'type': 'integer'}, {'format': 'binary', 'type': 'string'}, {'type': 'string'}],
+                'anyOf': [
+                    {'type': 'integer'},
+                    {'format': 'binary', 'type': 'string'},
+                    {'type': 'string'},
+                    {'format': 'uuid', 'type': 'string'},
+                ],
                 'title': 'Ulid',
             }
         },
@@ -73,7 +78,12 @@ def test_json_schema():
     assert Something.model_json_schema(mode='serialization') == {
         'properties': {
             'ulid': {
-                'anyOf': [{'type': 'integer'}, {'format': 'binary', 'type': 'string'}, {'type': 'string'}],
+                'anyOf': [
+                    {'type': 'integer'},
+                    {'format': 'binary', 'type': 'string'},
+                    {'type': 'string'},
+                    {'format': 'uuid', 'type': 'string'},
+                ],
                 'title': 'Ulid',
             }
         },
