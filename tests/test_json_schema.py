@@ -222,7 +222,12 @@ USNumberE164 = Annotated[
             {
                 'properties': {
                     'x': {
-                        'anyOf': [{'type': 'integer'}, {'format': 'binary', 'type': 'string'}, {'type': 'string'}],
+                        'anyOf': [
+                            {'type': 'integer'},
+                            {'format': 'binary', 'type': 'string'},
+                            {'type': 'string'},
+                            {'format': 'uuid', 'type': 'string'},
+                        ],
                         'title': 'X',
                     }
                 },

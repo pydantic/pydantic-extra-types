@@ -5,6 +5,7 @@ This class depends on the [python-ulid] package, which is a validate by the [ULI
 
 from __future__ import annotations
 
+import uuid
 from dataclasses import dataclass
 from typing import Any, Union
 
@@ -40,6 +41,7 @@ class ULID(_repr.Representation):
                     core_schema.int_schema(),
                     core_schema.bytes_schema(),
                     core_schema.str_schema(),
+                    core_schema.uuid_schema(),
                 ]
             ),
         )
@@ -54,6 +56,8 @@ class ULID(_repr.Representation):
                 ulid = _ULID.from_int(value)
             elif isinstance(value, str):
                 ulid = _ULID.from_str(value)
+            elif isinstance(value, uuid.UUID):
+                ulid = _ULID.from_uuid(value)
             elif isinstance(value, _ULID):
                 ulid = value
             else:
