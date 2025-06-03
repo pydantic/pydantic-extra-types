@@ -25,6 +25,7 @@ class PaymentCardBrand(str, Enum):
     troy = 'Troy'
     unionpay = 'UnionPay'
     jcb = 'JCB'
+    diners_club = 'Diners Club'
     other = 'other'
 
     def __str__(self) -> str:
@@ -185,6 +186,12 @@ class PaymentCardNumber(str):
         elif 3528 <= int(card_number[:4]) <= 3589:
             brand = PaymentCardBrand.jcb
             required_length = [16, 19]
+        elif card_number[:2] in {'30', '36', '38', '39'}:
+            brand = PaymentCardBrand.diners_club
+            required_length = list(range(14, 20))
+        elif card_number.startswith('55'):
+            brand = PaymentCardBrand.diners_club
+            required_length = [16]
 
         valid = len(card_number) in required_length if brand != PaymentCardBrand.other else True
 
