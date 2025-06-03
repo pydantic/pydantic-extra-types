@@ -147,7 +147,7 @@ class PaymentCardNumber(str):
         if card_number[0] == '4':
             brand = PaymentCardBrand.visa
             required_length = [13, 16, 19]
-        elif 51 <= int(card_number[:2]) <= 55:
+        elif (51 <= int(card_number[:2]) <= 55) or (2221 <= int(card_number[:4]) <= 2720):
             brand = PaymentCardBrand.mastercard
             required_length = [16]
         elif card_number[:2] in {'34', '37'}:
