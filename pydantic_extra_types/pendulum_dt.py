@@ -200,11 +200,8 @@ class Duration(_Duration):
 
         In addition to the standard ISO 8601 format, this method also supports the representation of fractions of a second and negative durations.
 
-        Args:
-            duration (Duration): The Duration object.
-
         Returns:
-            str: The ISO 8601 string representation of the duration.
+            The ISO 8601 string representation of the duration.
         """
         # Extracting components from the Duration object
         years = self.years
