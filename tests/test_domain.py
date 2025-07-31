@@ -77,20 +77,22 @@ def test_invalid_domain_types(domain: Any):
     with pytest.raises(ValidationError, match='Value must be a string'):
         MyModel(domain=domain)
 
+
 def test_domainstr_with_punycode():
     class Model(BaseModel):
         domain: DomainStr
 
-    valid = "xn--7-7sbirhro.xn--80ahmohdapg.xn--80asehdb"
+    valid = 'xn--7-7sbirhro.xn--80ahmohdapg.xn--80asehdb'
     model = Model(domain=valid)
     assert model.domain == valid
+
 
 def test_domainstr_invalid():
     class Model(BaseModel):
         domain: DomainStr
 
     try:
-        Model(domain="invalid_domain")
-        assert False, "Expected ValidationError"
+        Model(domain='invalid_domain')
+        assert False, 'Expected ValidationError'
     except ValidationError:
         pass
