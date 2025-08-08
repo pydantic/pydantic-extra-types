@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Any, Dict, Union
 
 import pycountry
 import pytest
@@ -15,6 +15,7 @@ from pydantic_extra_types.domain import DomainStr
 from pydantic_extra_types.isbn import ISBN
 from pydantic_extra_types.language_code import ISO639_3, ISO639_5, LanguageAlpha2, LanguageName
 from pydantic_extra_types.mac_address import MacAddress
+from pydantic_extra_types.mongo_object_id import MongoObjectId
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
 from pydantic_extra_types.phone_numbers import PhoneNumber, PhoneNumberValidator
@@ -138,10 +139,11 @@ USNumberE164 = Annotated[
             {
                 'properties': {
                     'x': {
-                        'maximum': 90.0,
-                        'minimum': -90.0,
+                        'anyOf': [
+                            {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
+                            {'type': 'string'},
+                        ],
                         'title': 'X',
-                        'type': 'number',
                     }
                 },
                 'required': ['x'],
@@ -154,10 +156,11 @@ USNumberE164 = Annotated[
             {
                 'properties': {
                     'x': {
-                        'maximum': 180.0,
-                        'minimum': -180.0,
+                        'anyOf': [
+                            {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
+                            {'type': 'string'},
+                        ],
                         'title': 'X',
-                        'type': 'number',
                     }
                 },
                 'required': ['x'],
@@ -171,8 +174,20 @@ USNumberE164 = Annotated[
                 '$defs': {
                     'Coordinate': {
                         'properties': {
-                            'latitude': {'maximum': 90.0, 'minimum': -90.0, 'title': 'Latitude', 'type': 'number'},
-                            'longitude': {'maximum': 180.0, 'minimum': -180.0, 'title': 'Longitude', 'type': 'number'},
+                            'latitude': {
+                                'anyOf': [
+                                    {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
+                                    {'type': 'string'},
+                                ],
+                                'title': 'Latitude',
+                            },
+                            'longitude': {
+                                'anyOf': [
+                                    {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
+                                    {'type': 'string'},
+                                ],
+                                'title': 'Longitude',
+                            },
                         },
                         'required': ['latitude', 'longitude'],
                         'title': 'Coordinate',
@@ -187,8 +202,8 @@ USNumberE164 = Annotated[
                                 'maxItems': 2,
                                 'minItems': 2,
                                 'prefixItems': [
-                                    {'type': 'number'},
-                                    {'type': 'number'},
+                                    {'anyOf': [{'type': 'number'}, {'type': 'string'}]},
+                                    {'anyOf': [{'type': 'number'}, {'type': 'string'}]},
                                 ],
                                 'type': 'array',
                             },
@@ -207,7 +222,12 @@ USNumberE164 = Annotated[
             {
                 'properties': {
                     'x': {
-                        'anyOf': [{'type': 'integer'}, {'format': 'binary', 'type': 'string'}, {'type': 'string'}],
+                        'anyOf': [
+                            {'type': 'integer'},
+                            {'format': 'binary', 'type': 'string'},
+                            {'type': 'string'},
+                            {'format': 'uuid', 'type': 'string'},
+                        ],
                         'title': 'X',
                     }
                 },
@@ -494,9 +514,27 @@ USNumberE164 = Annotated[
                 ],
             },
         ),
+        (
+            MongoObjectId,
+            {
+                'title': 'Model',
+                'type': 'object',
+                'properties': {
+                    'x': {
+                        'maxLength': MongoObjectId.OBJECT_ID_LENGTH,
+                        'minLength': MongoObjectId.OBJECT_ID_LENGTH,
+                        'title': 'X',
+                        'type': 'string',
+                    },
+                },
+                'required': ['x'],
+            },
+        ),
     ],
 )
-def test_json_schema(cls, expected):
+def test_json_schema(cls: Any, expected: Dict[str, Any]) -> None:
+    """Test the model_json_schema implementation for all extra types."""
+
     class Model(BaseModel):
         x: cls
 

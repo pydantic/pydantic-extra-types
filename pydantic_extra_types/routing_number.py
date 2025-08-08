@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import itertools as it
 from typing import Any, ClassVar
 
 from pydantic import GetCoreSchemaHandler
@@ -83,11 +84,7 @@ class ABARoutingNumber(str):
         Raises:
             PydanticCustomError: If the routing number is incorrect.
         """
-        checksum = (
-            3 * (sum(map(int, [routing_number[0], routing_number[3], routing_number[6]])))
-            + 7 * (sum(map(int, [routing_number[1], routing_number[4], routing_number[7]])))
-            + sum(map(int, [routing_number[2], routing_number[5], routing_number[8]]))
-        )
-        if checksum % 10 != 0:
+        checksum = sum(int(digit) * factor for digit, factor in zip(routing_number, it.cycle((3, 7, 1))))
+        if checksum % 10:
             raise PydanticCustomError('aba_routing_number', 'Incorrect ABA routing transit number')
         return routing_number

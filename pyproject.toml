@@ -44,17 +44,18 @@ dynamic = ['version']
 
 [project.optional-dependencies]
 all = [
-    'phonenumbers>=8,<9',
+    'phonenumbers>=8,<10',
     'pycountry>=23',
     'semver>=3.0.2',
     'python-ulid>=1,<2; python_version<"3.9"',
     'python-ulid>=1,<4; python_version>="3.9"',
     'pendulum>=3.0.0,<4.0.0',
+    'pymongo>=4.0.0,<5.0.0',
     'pytz>=2024.1',
     'semver~=3.0.2',
     'tzdata>=2024.1',
 ]
-phonenumbers = ['phonenumbers>=8,<9']
+phonenumbers = ['phonenumbers>=8,<10']
 pycountry = ['pycountry>=23']
 semver = ['semver>=3.0.2']
 python_ulid = [

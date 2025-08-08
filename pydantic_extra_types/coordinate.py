@@ -6,17 +6,25 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, ClassVar, Tuple
+from decimal import Decimal
+from typing import Any, ClassVar, Tuple, Union
 
 from pydantic import GetCoreSchemaHandler
 from pydantic._internal import _repr
 from pydantic_core import ArgsKwargs, PydanticCustomError, core_schema
 
+LatitudeType = Union[float, Decimal]
+LongitudeType = Union[float, Decimal]
+CoordinateType = Tuple[LatitudeType, LongitudeType]
+
 
 class Latitude(float):
     """Latitude value should be between -90 and 90, inclusive.
 
+    Supports both float and Decimal types.
+
     ```py
+    from decimal import Decimal
     from pydantic import BaseModel
     from pydantic_extra_types.coordinate import Latitude
 
@@ -25,9 +33,10 @@ class Latitude(float):
         latitude: Latitude
 
 
-    location = Location(latitude=41.40338)
-    print(location)
-    # > latitude=41.40338
+    # Using float
+    location1 = Location(latitude=41.40338)
+    # Using Decimal
+    location2 = Location(latitude=Decimal('41.40338'))
     ```
     """
 
@@ -36,13 +45,21 @@ class Latitude(float):
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        return core_schema.float_schema(ge=cls.min, le=cls.max)
+        return core_schema.union_schema(
+            [
+                core_schema.float_schema(ge=cls.min, le=cls.max),
+                core_schema.decimal_schema(ge=Decimal(cls.min), le=Decimal(cls.max)),
+            ]
+        )
 
 
 class Longitude(float):
     """Longitude value should be between -180 and 180, inclusive.
 
+    Supports both float and Decimal types.
+
     ```py
+    from decimal import Decimal
     from pydantic import BaseModel
 
     from pydantic_extra_types.coordinate import Longitude
@@ -52,9 +69,10 @@ class Longitude(float):
         longitude: Longitude
 
 
-    location = Location(longitude=2.17403)
-    print(location)
-    # > longitude=2.17403
+    # Using float
+    location1 = Location(longitude=2.17403)
+    # Using Decimal
+    location2 = Location(longitude=Decimal('2.17403'))
     ```
     """
 
@@ -63,7 +81,12 @@ class Longitude(float):
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        return core_schema.float_schema(ge=cls.min, le=cls.max)
+        return core_schema.union_schema(
+            [
+                core_schema.float_schema(ge=cls.min, le=cls.max),
+                core_schema.decimal_schema(ge=Decimal(cls.min), le=Decimal(cls.max)),
+            ]
+        )
 
 
 @dataclass
@@ -73,10 +96,11 @@ class Coordinate(_repr.Representation):
     You can use the `Coordinate` data type for storing coordinates. Coordinates can be
     defined using one of the following formats:
 
-    1. Tuple: `(Latitude, Longitude)`. For example: `(41.40338, 2.17403)`.
+    1. Tuple: `(Latitude, Longitude)`. For example: `(41.40338, 2.17403)` or `(Decimal('41.40338'), Decimal('2.17403'))`.
     2. `Coordinate` instance: `Coordinate(latitude=Latitude, longitude=Longitude)`.
 
     ```py
+    from decimal import Decimal
     from pydantic import BaseModel
 
     from pydantic_extra_types.coordinate import Coordinate
@@ -86,7 +110,12 @@ class Coordinate(_repr.Representation):
         coordinate: Coordinate
 
 
-    location = Location(coordinate=(41.40338, 2.17403))
+    # Using float values
+    location1 = Location(coordinate=(41.40338, 2.17403))
+    # > coordinate=Coordinate(latitude=41.40338, longitude=2.17403)
+
+    # Using Decimal values
+    location2 = Location(coordinate=(Decimal('41.40338'), Decimal('2.17403')))
     # > coordinate=Coordinate(latitude=41.40338, longitude=2.17403)
     ```
     """
@@ -102,7 +131,7 @@ class Coordinate(_repr.Representation):
             core_schema.no_info_wrap_validator_function(cls._parse_str, core_schema.str_schema()),
             core_schema.no_info_wrap_validator_function(
                 cls._parse_tuple,
-                handler.generate_schema(Tuple[float, float]),
+                handler.generate_schema(CoordinateType),
             ),
             handler(source),
         ]

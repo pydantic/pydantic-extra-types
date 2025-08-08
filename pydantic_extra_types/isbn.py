@@ -5,6 +5,7 @@ ISBN (International Standard Book Number) is a numeric commercial book identifie
 
 from __future__ import annotations
 
+import itertools as it
 from typing import Any
 
 from pydantic import GetCoreSchemaHandler
@@ -21,11 +22,8 @@ def isbn10_digit_calc(isbn: str) -> str:
         The calculated last digit of the ISBN-10 value.
     """
     total = sum(int(digit) * (10 - idx) for idx, digit in enumerate(isbn[:9]))
-
-    for check_digit in range(1, 11):
-        if (total + check_digit) % 11 == 0:
-            valid_check_digit = 'X' if check_digit == 10 else str(check_digit)
-
+    diff = (11 - total) % 11
+    valid_check_digit = 'X' if diff == 10 else str(diff)
     return valid_check_digit
 
 
@@ -38,9 +36,9 @@ def isbn13_digit_calc(isbn: str) -> str:
     Returns:
         The calculated last digit of the ISBN-13 value.
     """
-    total = sum(int(digit) * (1 if idx % 2 == 0 else 3) for idx, digit in enumerate(isbn[:12]))
+    total = sum(int(digit) * factor for digit, factor in zip(isbn[:12], it.cycle((1, 3))))
 
-    check_digit = (10 - (total % 10)) % 10
+    check_digit = (10 - total) % 10
 
     return str(check_digit)
 

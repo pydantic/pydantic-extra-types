@@ -287,6 +287,34 @@ def test_pendulum_duration_from_serialized(delta_t_str):
     assert isinstance(model.delta_t, pendulum.Duration)
 
 
+@pytest.mark.parametrize(
+    'duration',
+    [
+        Duration(months=1),
+        Duration(weeks=1),
+        Duration(milliseconds=1),
+        Duration(microseconds=1),
+        Duration(days=1),
+        Duration(hours=1),
+        Duration(minutes=1),
+        Duration(seconds=1),
+        Duration(months=2, days=5),
+        Duration(weeks=3, hours=12),
+        Duration(days=10, minutes=30),
+        Duration(weeks=1, days=2, hours=3),
+        Duration(seconds=30, milliseconds=500),
+    ],
+)
+def test_pendulum_duration_serialization_roundtrip(duration):
+    adapter = TypeAdapter(Duration)
+    python_serialized = adapter.dump_python(duration)
+    json_serialized = adapter.dump_json(duration)
+    deserialized = TypeAdapter.validate_json(adapter, json_serialized)
+    assert deserialized == python_serialized == duration
+    assert deserialized.years == python_serialized.years == duration.years
+    assert deserialized.months == python_serialized.months == duration.months
+
+
 def get_invalid_dt_common():
     return [
         None,
@@ -482,3 +510,35 @@ def test_pendulum_duration_months_are_preserved():
     m = DurationModel(delta_t=pendulum.Duration(months=1))
 
     assert m.delta_t.months == 1
+
+
+@pytest.mark.parametrize(
+    'zero_duration',
+    [
+        Duration(),
+        Duration(years=0, months=0, days=0, hours=0, minutes=0, seconds=0),
+        Duration(0),
+        pendulum.duration(),
+    ],
+)
+def test_zero_duration_serialization_and_validation(zero_duration):
+    """Zero durations should serialize as 'P0D' and round-trip without error."""
+    model = DurationModel(delta_t=zero_duration)
+    json_dump = model.model_dump_json()
+    assert json_dump == '{"delta_t":"P0D"}'
+    loaded = DurationModel.model_validate_json(json_dump)
+    assert loaded.delta_t == zero_duration
+    assert isinstance(loaded.delta_t, Duration)
+
+
+def test_zero_duration_from_string():
+    """'P0D' string should be accepted and produce a zero Duration."""
+    model = DurationModel(delta_t='P0D')
+    assert model.delta_t == Duration()
+    assert isinstance(model.delta_t, Duration)
+
+
+def test_invalid_zero_duration_string():
+    """'P' is not a valid ISO 8601 duration and should raise a validation error."""
+    with pytest.raises(ValidationError):
+        DurationModel(delta_t='P')

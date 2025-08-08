@@ -91,6 +91,7 @@ def test_color_success(raw_color, as_tuple):
         (0, 0, 1128, 0.5),
         (0, 0, 1128, -0.5),
         (0, 0, 1128, 1.5),
+        ({}, 0, 0),
         # rgb/rgba strings
         'rgb(0, 0, 1205)',
         'rgb(0, 0, 1128)',

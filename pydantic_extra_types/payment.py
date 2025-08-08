@@ -25,6 +25,7 @@ class PaymentCardBrand(str, Enum):
     troy = 'Troy'
     unionpay = 'UnionPay'
     jcb = 'JCB'
+    diners_club = 'Diners Club'
     other = 'other'
 
     def __str__(self) -> str:
@@ -126,6 +127,77 @@ class PaymentCardNumber(str):
             raise PydanticCustomError('payment_card_number_luhn', 'Card number is not luhn valid')
         return card_number
 
+    @classmethod
+    def _identify_brand(cls, card_number: str) -> tuple[PaymentCardBrand, list[int]]:
+        """Identify the brand and required length for a card number.
+
+        Args:
+            card_number: The card number to identify.
+
+        Returns:
+            A tuple of (brand, required_length)
+        """
+        # VISA
+        if card_number[0] == '4':
+            return PaymentCardBrand.visa, [13, 16, 19]
+
+        # Mastercard
+        if (51 <= int(card_number[:2]) <= 55) or (2221 <= int(card_number[:4]) <= 2720):
+            return PaymentCardBrand.mastercard, [16]
+
+        # American Express
+        if card_number[:2] in {'34', '37'}:
+            return PaymentCardBrand.amex, [15]
+
+        # MIR
+        if 2200 <= int(card_number[:4]) <= 2204:
+            return PaymentCardBrand.mir, list(range(16, 20))
+
+        # Maestro
+        if card_number[:4] in {'5018', '5020', '5038', '5893', '6304', '6759', '6761', '6762', '6763'} or card_number[
+            :6
+        ] in ('676770', '676774'):
+            return PaymentCardBrand.maestro, list(range(12, 20))
+
+        # Discover
+        if card_number.startswith('65') or 644 <= int(card_number[:3]) <= 649 or card_number.startswith('6011'):
+            return PaymentCardBrand.discover, list(range(16, 20))
+
+        # Verve
+        if (
+            506099 <= int(card_number[:6]) <= 506198
+            or 650002 <= int(card_number[:6]) <= 650027
+            or 507865 <= int(card_number[:6]) <= 507964
+        ):
+            return PaymentCardBrand.verve, [16, 18, 19]
+
+        # Dankort
+        if card_number[:4] in {'5019', '4571'}:
+            return PaymentCardBrand.dankort, [16]
+
+        # Troy
+        if card_number.startswith('9792'):
+            return PaymentCardBrand.troy, [16]
+
+        # UnionPay
+        if card_number[:2] in {'62', '81'}:
+            return PaymentCardBrand.unionpay, [16, 19]
+
+        # JCB
+        if 3528 <= int(card_number[:4]) <= 3589:
+            return PaymentCardBrand.jcb, [16, 19]
+
+        # Diners Club
+        if card_number[:2] in {'30', '36', '38', '39'}:
+            return PaymentCardBrand.diners_club, list(range(14, 20))
+
+        # More Diners Club
+        if card_number.startswith('55'):
+            return PaymentCardBrand.diners_club, [16]
+
+        # Other / Unknown
+        return PaymentCardBrand.other, []
+
     @staticmethod
     def validate_brand(card_number: str) -> PaymentCardBrand:
         """Validate length based on
@@ -141,50 +213,7 @@ class PaymentCardNumber(str):
         Raises:
             PydanticCustomError: If the card number is not valid.
         """
-        brand = PaymentCardBrand.other
-
-        if card_number[0] == '4':
-            brand = PaymentCardBrand.visa
-            required_length = [13, 16, 19]
-        elif 51 <= int(card_number[:2]) <= 55:
-            brand = PaymentCardBrand.mastercard
-            required_length = [16]
-        elif card_number[:2] in {'34', '37'}:
-            brand = PaymentCardBrand.amex
-            required_length = [15]
-        elif 2200 <= int(card_number[:4]) <= 2204:
-            brand = PaymentCardBrand.mir
-            required_length = list(range(16, 20))
-        elif card_number[:4] in {'5018', '5020', '5038', '5893', '6304', '6759', '6761', '6762', '6763'} or card_number[
-            :6
-        ] in (
-            '676770',
-            '676774',
-        ):
-            brand = PaymentCardBrand.maestro
-            required_length = list(range(12, 20))
-        elif card_number.startswith('65') or 644 <= int(card_number[:3]) <= 649 or card_number.startswith('6011'):
-            brand = PaymentCardBrand.discover
-            required_length = list(range(16, 20))
-        elif (
-            506099 <= int(card_number[:6]) <= 506198
-            or 650002 <= int(card_number[:6]) <= 650027
-            or 507865 <= int(card_number[:6]) <= 507964
-        ):
-            brand = PaymentCardBrand.verve
-            required_length = [16, 18, 19]
-        elif card_number[:4] in {'5019', '4571'}:
-            brand = PaymentCardBrand.dankort
-            required_length = [16]
-        elif card_number.startswith('9792'):
-            brand = PaymentCardBrand.troy
-            required_length = [16]
-        elif card_number[:2] in {'62', '81'}:
-            brand = PaymentCardBrand.unionpay
-            required_length = [16, 19]
-        elif 3528 <= int(card_number[:4]) <= 3589:
-            brand = PaymentCardBrand.jcb
-            required_length = [16, 19]
+        brand, required_length = PaymentCardNumber._identify_brand(card_number)
 
         valid = len(card_number) in required_length if brand != PaymentCardBrand.other else True
 
