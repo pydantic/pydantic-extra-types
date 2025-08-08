@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta, time
+from datetime import date, datetime, time, timedelta
 from datetime import timezone as tz
 
 import pendulum
@@ -392,14 +392,16 @@ def test_existing_time_instance(instance):
     assert type(t) is Time
     if t.tzinfo != instance.tzinfo:
         date = Date(2022, 1, 22)
-        assert t.tzinfo.utcoffset(DateTime.combine(date, t)) == instance.tzinfo.utcoffset(DateTime.combine(date, instance))
+        assert t.tzinfo.utcoffset(DateTime.combine(date, t)) == instance.tzinfo.utcoffset(
+            DateTime.combine(date, instance)
+        )
 
 
 @pytest.mark.parametrize(
     'dt',
     [
-        "17:53:12.266369",
-        "17:53:46",
+        '17:53:12.266369',
+        '17:53:46',
     ],
 )
 def test_pendulum_time_from_serialized(dt):

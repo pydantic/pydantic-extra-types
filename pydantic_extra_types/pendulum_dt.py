@@ -14,7 +14,7 @@ except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
         'The `pendulum_dt` module requires "pendulum" to be installed. You can install it with "pip install pendulum".'
     ) from e
-from datetime import date, datetime, timedelta, time
+from datetime import date, datetime, time, timedelta
 from typing import Any
 
 from pydantic import GetCoreSchemaHandler
@@ -144,7 +144,7 @@ class Time(_Time):
         # if we are passed an existing instance, pass it straight through.
         if isinstance(value, (_Time, time)):
             return Time.instance(value, tz=value.tzinfo)
-        
+
         # otherwise, parse it.
         try:
             parsed = parse(value, exact=True)
