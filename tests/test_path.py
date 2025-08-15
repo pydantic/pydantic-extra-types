@@ -44,6 +44,10 @@ def absolute_file_path(tmp_path: pathlib.Path) -> pathlib.Path:
 
 @pytest.fixture
 def relative_file_path(absolute_file_path: pathlib.Path) -> pathlib.Path:
+    cwd = pathlib.Path.cwd()
+    if os.name == 'nt' and absolute_file_path.anchor != cwd.anchor:
+        # on windows, cant create relative path when paths are on different drives
+        return absolute_file_path
     return pathlib.Path(os.path.relpath(absolute_file_path, os.getcwd()))
 
 
@@ -56,6 +60,10 @@ def absolute_directory_path(tmp_path: pathlib.Path) -> pathlib.Path:
 
 @pytest.fixture
 def relative_directory_path(absolute_directory_path: pathlib.Path) -> pathlib.Path:
+    cwd = pathlib.Path.cwd()
+    if os.name == 'nt' and absolute_directory_path.anchor != cwd.anchor:
+        # on windows, cant create relative path when paths are on different drives
+        return absolute_directory_path
     return pathlib.Path(os.path.relpath(absolute_directory_path, os.getcwd()))
 
 
@@ -66,6 +74,10 @@ def absolute_new_path(tmp_path: pathlib.Path) -> pathlib.Path:
 
 @pytest.fixture
 def relative_new_path(absolute_new_path: pathlib.Path) -> pathlib.Path:
+    cwd = pathlib.Path.cwd()
+    if os.name == 'nt' and absolute_new_path.anchor != cwd.anchor:
+        # on windows, cant create relative path when paths are on different drives
+        return absolute_new_path
     return pathlib.Path(os.path.relpath(absolute_new_path, os.getcwd()))
 
 
