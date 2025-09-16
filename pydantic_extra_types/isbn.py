@@ -1,6 +1,6 @@
-"""The `pydantic_extra_types.isbn` module provides functionality to recieve and validate ISBN.
+"""The `pydantic_extra_types.isbn` module provides functionality to receive and validate ISBN.
 
-ISBN (International Standard Book Number) is a numeric commercial book identifier which is intended to be unique. This module provides a ISBN type for Pydantic models.
+ISBN (International Standard Book Number) is a numeric commercial book identifier which is intended to be unique. This module provides an ISBN type for Pydantic models.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ from pydantic_core import PydanticCustomError, core_schema
 
 
 def isbn10_digit_calc(isbn: str) -> str:
-    """Calc a ISBN-10 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
+    """Calculate the ISBN-10 check digit from the provided str value. More information on the validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
 
     Args:
         isbn: The str value representing the ISBN in 10 digits.
@@ -28,7 +28,7 @@ def isbn10_digit_calc(isbn: str) -> str:
 
 
 def isbn13_digit_calc(isbn: str) -> str:
-    """Calc a ISBN-13 last digit from the provided str value. More information of validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
+    """Calc a ISBN-13 last digit from the provided str value. More information on the validation algorithm on [Wikipedia](https://en.wikipedia.org/wiki/ISBN#Check_digits)
 
     Args:
         isbn: The str value representing the ISBN in 13 digits.
