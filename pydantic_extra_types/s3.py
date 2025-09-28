@@ -17,7 +17,7 @@ from pydantic_core import core_schema
 class S3Path(str):
     """An object representing a valid S3 path.
     This type also allows you to access the `bucket` and `key` component of the S3 path.
-    It also contains the `last_key` which represents the last part of the path (tipically a file).
+    It also contains the `last_key` which represents the last part of the path (typically a file).
 
     ```python
     from pydantic import BaseModel

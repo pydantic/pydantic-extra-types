@@ -1,9 +1,9 @@
 """Color definitions are used as per the CSS3
 [CSS Color Module Level 3](http://www.w3.org/TR/css3-color/#svg-color) specification.
 
-A few colors have multiple names referring to the sames colors, eg. `grey` and `gray` or `aqua` and `cyan`.
+A few colors have multiple names referring to the same colors, e.g. `grey` and `gray` or `aqua` and `cyan`.
 
-In these cases the _last_ color when sorted alphabetically takes preferences,
+In these cases the _last_ color when sorted alphabetically takes precedence.
 eg. `Color((0, 255, 255)).as_named() == 'cyan'` because "cyan" comes after "aqua".
 """
 

@@ -178,7 +178,7 @@ def test_pendulum_dt_from_serialized_preserves_timezones(dt):
         pendulum.now().to_iso8601_string(),
         pendulum.now().to_w3c_string(),
         'Sat Oct 11 17:13:46 UTC 2003',  # date util parsing
-        pendulum.now().to_iso8601_string()[:5],  # actualy valid or pendulum.parse(dt, strict=False) would fail here
+        pendulum.now().to_iso8601_string()[:5],  # actually valid or pendulum.parse(dt, strict=False) would fail here
     ],
 )
 def test_pendulum_dt_not_strict_from_serialized(dt):
