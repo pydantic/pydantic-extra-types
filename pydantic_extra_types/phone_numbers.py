@@ -172,8 +172,9 @@ class PhoneNumberValidator:
             core_schema.str_schema(),
         )
 
+    @classmethod
     def __get_pydantic_json_schema__(
-        self, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+        cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
         json_schema = handler(schema)
         json_schema.update({'format': 'phone'})
