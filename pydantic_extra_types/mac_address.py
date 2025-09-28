@@ -9,6 +9,9 @@ from typing import Any
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
+MINIMUM_LENGTH: int = 14
+ALLOWED_CHUNK_COUNTS: tuple[int, int, int] = (6, 8, 20)
+
 
 class MacAddress(str):
     """Represents a MAC address and provides methods for conversion, validation, and serialization.
@@ -63,36 +66,41 @@ class MacAddress(str):
     @staticmethod
     def validate_mac_address(value: bytes) -> str:
         """Validate a MAC Address from the provided byte value."""
-        string = value.decode()
-        if len(string) < 14:
+        raw = value.decode()
+        if len(raw) < MINIMUM_LENGTH:
             raise PydanticCustomError(
                 'mac_address_len',
                 'Length for a {mac_address} MAC address must be {required_length}',
-                {'mac_address': string, 'required_length': 14},
+                {'mac_address': raw, 'required_length': MINIMUM_LENGTH},
             )
-        for sep, partbytes in ((':', 2), ('-', 2), ('.', 4)):
-            if sep in string:
-                parts = string.split(sep)
-                if any(len(part) != partbytes for part in parts):
-                    raise PydanticCustomError(
-                        'mac_address_format',
-                        f'Must have the format xx{sep}xx{sep}xx{sep}xx{sep}xx{sep}xx',
-                    )
-                if len(parts) * partbytes // 2 not in (6, 8, 20):
-                    raise PydanticCustomError(
-                        'mac_address_format',
-                        'Length for a {mac_address} MAC address must be {required_length}',
-                        {'mac_address': string, 'required_length': (6, 8, 20)},
-                    )
-                mac_address = []
+
+        for seperator, chunk_len in ((':', 2), ('-', 2), ('.', 4)):
+            if seperator not in raw:
+                continue
+
+            parts = raw.split(seperator)
+            if any(len(p) != chunk_len for p in parts):
+                raise PydanticCustomError(
+                    'mac_address_format',
+                    f'Must have the format xx{seperator}xx{seperator}xx{seperator}xx{seperator}xx{seperator}xx',
+                )
+
+            total_bytes = (len(parts) * chunk_len) // 2
+            if total_bytes not in ALLOWED_CHUNK_COUNTS:
+                raise PydanticCustomError(
+                    'mac_address_format',
+                    'Length for a {mac_address} MAC address must be {required_length}',
+                    {'mac_address': raw, 'required_length': ALLOWED_CHUNK_COUNTS},
+                )
+
+            try:
+                mac_bytes: list[int] = []
                 for part in parts:
-                    for idx in range(0, partbytes, 2):
-                        try:
-                            byte_value = int(part[idx : idx + 2], 16)
-                        except ValueError as exc:
-                            raise PydanticCustomError('mac_address_format', 'Unrecognized format') from exc
-                        else:
-                            mac_address.append(byte_value)
-                return ':'.join(f'{b:02x}' for b in mac_address)
-        else:
-            raise PydanticCustomError('mac_address_format', 'Unrecognized format')
+                    for i in range(0, chunk_len, 2):
+                        mac_bytes.append(int(part[i:i + 2], base=16))
+            except ValueError as exc:
+                raise PydanticCustomError('mac_address_format', 'Unrecognized format') from exc
+
+            return ':'.join(f'{b:02x}' for b in mac_bytes)
+
+        raise PydanticCustomError('mac_address_format', 'Unrecognized format')
