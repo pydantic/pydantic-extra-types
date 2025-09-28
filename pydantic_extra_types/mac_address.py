@@ -97,7 +97,7 @@ class MacAddress(str):
                 mac_bytes: list[int] = []
                 for part in parts:
                     for i in range(0, chunk_len, 2):
-                        mac_bytes.append(int(part[i:i + 2], base=16))
+                        mac_bytes.append(int(part[i : i + 2], base=16))
             except ValueError as exc:
                 raise PydanticCustomError('mac_address_format', 'Unrecognized format') from exc
 
