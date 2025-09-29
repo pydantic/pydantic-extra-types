@@ -112,7 +112,7 @@ def test_limit_for_coordinate(coord: (Any, Any), error: Optional[Pattern]):
         ('-90.0', True),
         (Decimal('90.0'), True),
         (Decimal('-90.0'), True),
-        # Unvalid latitude
+        # Invalid latitude
         (91.0, False),
         (-91.0, False),
         (Decimal('91.0'), False),
@@ -144,7 +144,7 @@ def test_format_latitude(latitude: float, valid: bool):
         (-180.0, True),
         (Decimal('180.0'), True),
         (Decimal('-180.0'), True),
-        # Unvalid latitude
+        # Invalid latitude
         (181.0, False),
         (-181.0, False),
         (Decimal('181.0'), False),
