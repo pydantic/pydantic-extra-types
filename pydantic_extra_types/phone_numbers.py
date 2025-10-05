@@ -26,7 +26,66 @@ except ModuleNotFoundError as e:  # pragma: no cover
 
 
 class PhoneNumber(str):
-    """A wrapper around the `phonenumbers.PhoneNumber` object."""
+    """A wrapper around the `phonenumbers.PhoneNumber` object.
+
+    It provides class-level configuration points you can change by subclassing:
+
+    ## Examples
+
+    ### Normal usage:
+
+    ```python
+        from pydantic import BaseModel
+        from pydantic_extra_types.phone_numbers import PhoneNumber
+
+        class Contact(BaseModel):
+            name: str
+            phone: PhoneNumber
+
+        c = Contact(name='Alice', phone='+1 650-253-0000')
+        print(c.phone)
+        >> tel:+1-650-253-0000 (formatted using RFC3966 by default)
+    ```
+
+    ### Changing defaults by subclassing:
+
+    ```python
+        from pydantic_extra_types.phone_numbers import PhoneNumber
+
+        class USPhone(PhoneNumber):
+            default_region_code = 'US'
+            supported_regions = ['US']
+            phone_format = 'NATIONAL'
+
+        # Now parsing will accept national numbers for the US
+        p = USPhone('650-253-0000')
+        print(p)
+        >> 650-253-0000
+    ```
+
+    ### Changing defaults by using the provided validator annotation:
+
+    ```python
+        from typing import Annotated, Union
+        import phonenumbers
+        from pydantic import BaseModel
+        from pydantic_extra_types.phone_numbers import PhoneNumberValidator
+
+        E164NumberType = Annotated[
+            Union[str, phonenumbers.PhoneNumber], PhoneNumberValidator(number_format="E164")
+        ]
+
+
+        class Model(BaseModel):
+            phone: E164NumberType
+
+
+        m = Model(phone="+1 650-253-0000")
+        print(m.phone)
+        >> +16502530000
+    ```
+
+    """
 
     default_region_code: ClassVar[str | None] = None
     """The default region code to use when parsing phone numbers without an international prefix."""
