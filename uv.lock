@@ -206,6 +206,18 @@ toml = [
 ]
 
 [[package]]
+name = "cron-converter"
+version = "1.2.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "python-dateutil" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c7/b9/744734ae853c43f8b71510402e0ab0106ba96a741113f9e26e89fde40736/cron_converter-1.2.2.tar.gz", hash = "sha256:b987525ddf7d5ad28286620622f00dde61c73833d1f05c332a26c389a9c512c3", size = 14509, upload-time = "2025-07-21T09:25:00.01Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/62/f8/1698a37dd13fc120a96a062c10dba11cade6ebb71b68a14ee177032b4b61/cron_converter-1.2.2-py3-none-any.whl", hash = "sha256:a31c71223cc71f07f9af2533af50c4cf1b910a85a730dd06a00aed053ea250fe", size = 13434, upload-time = "2025-07-21T09:24:58.638Z" },
+]
+
+[[package]]
 name = "dirty-equals"
 version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
@@ -878,6 +890,7 @@ dependencies = [
 
 [package.optional-dependencies]
 all = [
+    { name = "cron-converter" },
     { name = "pendulum", version = "3.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
     { name = "pendulum", version = "3.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
     { name = "phonenumbers" },
@@ -889,6 +902,9 @@ all = [
     { name = "pytz" },
     { name = "semver" },
     { name = "tzdata" },
+]
+cron = [
+    { name = "cron-converter" },
 ]
 pendulum = [
     { name = "pendulum", version = "3.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
@@ -940,6 +956,8 @@ lint = [
 
 [package.metadata]
 requires-dist = [
+    { name = "cron-converter", marker = "extra == 'all'", specifier = ">=1.2.2" },
+    { name = "cron-converter", marker = "extra == 'cron'", specifier = ">=1.2.2" },
     { name = "pendulum", marker = "extra == 'all'", specifier = ">=3.0.0,<4.0.0" },
     { name = "pendulum", marker = "extra == 'pendulum'", specifier = ">=3.0.0,<4.0.0" },
     { name = "phonenumbers", marker = "extra == 'all'", specifier = ">=8,<10" },
@@ -959,7 +977,7 @@ requires-dist = [
     { name = "typing-extensions" },
     { name = "tzdata", marker = "extra == 'all'", specifier = ">=2024.1" },
 ]
-provides-extras = ["all", "pendulum", "phonenumbers", "pycountry", "python-ulid", "semver"]
+provides-extras = ["all", "cron", "pendulum", "phonenumbers", "pycountry", "python-ulid", "semver"]
 
 [package.metadata.requires-dev]
 dev = [
