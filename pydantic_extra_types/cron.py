@@ -23,7 +23,24 @@ else:
 
 
 class CronStr(str):
-    """A cron expression validated via [`cron-converter`](https://pypi.org/project/cron-converter/)."""
+    """A cron expression validated via [`cron-converter`](https://pypi.org/project/cron-converter/).
+    ## Examples
+    ```python
+        from pydantic import BaseModel
+        from pydantic_extra_types.cron import CronStr
+
+        class Schedule(BaseModel):
+            cron: CronStr
+
+        schedule = Schedule(cron="*/5 * * * *")
+        print(schedule.cron)
+        >> */5 * * * *
+        print(schedule.cron.minute)
+        >> */5
+        print(schedule.cron.next_run)
+        >> 2025-10-07T22:40:00+00:00
+    ```
+    """
 
     strip_whitespace: ClassVar[bool] = True
     """Whether to strip surrounding whitespace from the input value."""
