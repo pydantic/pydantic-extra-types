@@ -10,6 +10,7 @@ from pydantic_extra_types import epoch
 from pydantic_extra_types.color import Color
 from pydantic_extra_types.coordinate import Coordinate, Latitude, Longitude
 from pydantic_extra_types.country import CountryAlpha2, CountryAlpha3, CountryNumericCode, CountryShortName
+from pydantic_extra_types.cron import CronStr
 from pydantic_extra_types.currency_code import ISO4217, Currency
 from pydantic_extra_types.domain import DomainStr
 from pydantic_extra_types.isbn import ISBN
@@ -91,6 +92,20 @@ USNumberE164 = Annotated[
                 'required': ['x'],
                 'title': 'Model',
                 'type': 'object',
+            },
+        ),
+        (
+            CronStr,
+            {
+                'title': 'Model',
+                'type': 'object',
+                'properties': {
+                    'x': {
+                        'title': 'X',
+                        'type': 'string',
+                    }
+                },
+                'required': ['x'],
             },
         ),
         (
