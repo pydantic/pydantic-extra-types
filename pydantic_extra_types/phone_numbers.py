@@ -35,54 +35,56 @@ class PhoneNumber(str):
     ### Normal usage:
 
     ```python
-        from pydantic import BaseModel
-        from pydantic_extra_types.phone_numbers import PhoneNumber
+    from pydantic import BaseModel
+    from pydantic_extra_types.phone_numbers import PhoneNumber
 
-        class Contact(BaseModel):
-            name: str
-            phone: PhoneNumber
 
-        c = Contact(name='Alice', phone='+1 650-253-0000')
-        print(c.phone)
-        >> tel:+1-650-253-0000 (formatted using RFC3966 by default)
+    class Contact(BaseModel):
+        name: str
+        phone: PhoneNumber
+
+
+    c = Contact(name='Alice', phone='+1 650-253-0000')
+    print(c.phone)
+    # > tel:+1-650-253-0000 (formatted using RFC3966 by default)
     ```
 
     ### Changing defaults by subclassing:
 
     ```python
-        from pydantic_extra_types.phone_numbers import PhoneNumber
+    from pydantic_extra_types.phone_numbers import PhoneNumber
 
-        class USPhone(PhoneNumber):
-            default_region_code = 'US'
-            supported_regions = ['US']
-            phone_format = 'NATIONAL'
 
-        # Now parsing will accept national numbers for the US
-        p = USPhone('650-253-0000')
-        print(p)
-        >> 650-253-0000
+    class USPhone(PhoneNumber):
+        default_region_code = 'US'
+        supported_regions = ['US']
+        phone_format = 'NATIONAL'
+
+
+    # Now parsing will accept national numbers for the US
+    p = USPhone('650-253-0000')
+    print(p)
+    # > 650-253-0000
     ```
 
     ### Changing defaults by using the provided validator annotation:
 
     ```python
-        from typing import Annotated, Union
-        import phonenumbers
-        from pydantic import BaseModel
-        from pydantic_extra_types.phone_numbers import PhoneNumberValidator
+    from typing import Annotated, Union
+    import phonenumbers
+    from pydantic import BaseModel
+    from pydantic_extra_types.phone_numbers import PhoneNumberValidator
 
-        E164NumberType = Annotated[
-            Union[str, phonenumbers.PhoneNumber], PhoneNumberValidator(number_format="E164")
-        ]
+    E164NumberType = Annotated[Union[str, phonenumbers.PhoneNumber], PhoneNumberValidator(number_format='E164')]
 
 
-        class Model(BaseModel):
-            phone: E164NumberType
+    class Model(BaseModel):
+        phone: E164NumberType
 
 
-        m = Model(phone="+1 650-253-0000")
-        print(m.phone)
-        >> +16502530000
+    m = Model(phone='+1 650-253-0000')
+    print(m.phone)
+    # > +16502530000
     ```
 
     """
