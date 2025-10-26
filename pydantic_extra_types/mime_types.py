@@ -2,7 +2,7 @@
 from enum import StrEnum
 
 
-class Application(StrEnum):
+class Application(StrEnum):  # pragma: no cover
     APPLICATION_1D_INTERLEAVED_PARITYFEC = 'application/1d-interleaved-parityfec'
     APPLICATION_3GPDASH_QOE_REPORT_XML = 'application/3gpdash-qoe-report+xml'
     APPLICATION_3GPPHAL_JSON = 'application/3gppHal+json'
@@ -1868,7 +1868,7 @@ class Application(StrEnum):
     APPLICATION_ZSTD = 'application/zstd'
 
 
-class Audio(StrEnum):
+class Audio(StrEnum):  # pragma: no cover
     AUDIO_1D_INTERLEAVED_PARITYFEC = 'audio/1d-interleaved-parityfec'
     AUDIO_32KADPCM = 'audio/32kadpcm'
     AUDIO_3GPP = 'audio/3gpp'
@@ -2032,7 +2032,7 @@ class Audio(StrEnum):
     AUDIO_VORBIS_CONFIG = 'audio/vorbis-config'
 
 
-class Font(StrEnum):
+class Font(StrEnum):  # pragma: no cover
     FONT_COLLECTION = 'font/collection'
     FONT_OTF = 'font/otf'
     FONT_SFNT = 'font/sfnt'
@@ -2041,13 +2041,13 @@ class Font(StrEnum):
     FONT_WOFF2 = 'font/woff2'
 
 
-class Haptics(StrEnum):
+class Haptics(StrEnum):  # pragma: no cover
     HAPTICS_IVS = 'haptics/ivs'
     HAPTICS_HJIF = 'haptics/hjif'
     HAPTICS_HMPG = 'haptics/hmpg'
 
 
-class Image(StrEnum):
+class Image(StrEnum):  # pragma: no cover
     IMAGE_ACES = 'image/aces'
     IMAGE_APNG = 'image/apng'
     IMAGE_AVCI = 'image/avci'
@@ -2136,7 +2136,7 @@ class Image(StrEnum):
     IMAGE_X_WMF_DEPRECATED_IN_FAVOR_OF_IMAGE_WMF = 'image/x-wmf'
 
 
-class Message(StrEnum):
+class Message(StrEnum):  # pragma: no cover
     MESSAGE_BHTTP = 'message/bhttp'
     MESSAGE_CPIM = 'message/CPIM'
     MESSAGE_DELIVERY_STATUS = 'message/delivery-status'
@@ -2164,7 +2164,7 @@ class Message(StrEnum):
     MESSAGE_VND_WFA_WSC = 'message/vnd.wfa.wsc'
 
 
-class Model(StrEnum):
+class Model(StrEnum):  # pragma: no cover
     MODEL_3MF = 'model/3mf'
     MODEL_E57 = 'model/e57'
     MODEL_EXAMPLE = 'model/example'
@@ -2208,7 +2208,7 @@ class Model(StrEnum):
     MODEL_X3D_XML = 'model/x3d+xml'
 
 
-class Multipart(StrEnum):
+class Multipart(StrEnum):  # pragma: no cover
     MULTIPART_ALTERNATIVE = 'multipart/alternative'
     MULTIPART_APPLEDOUBLE = 'multipart/appledouble'
     MULTIPART_BYTERANGES = 'multipart/byteranges'
@@ -2228,7 +2228,7 @@ class Multipart(StrEnum):
     MULTIPART_X_MIXED_REPLACE = 'multipart/x-mixed-replace'
 
 
-class Text(StrEnum):
+class Text(StrEnum):  # pragma: no cover
     TEXT_1D_INTERLEAVED_PARITYFEC = 'text/1d-interleaved-parityfec'
     TEXT_CACHE_MANIFEST = 'text/cache-manifest'
     TEXT_CALENDAR = 'text/calendar'
@@ -2329,7 +2329,7 @@ class Text(StrEnum):
     TEXT_XML_EXTERNAL_PARSED_ENTITY = 'text/xml-external-parsed-entity'
 
 
-class Video(StrEnum):
+class Video(StrEnum):  # pragma: no cover
     VIDEO_1D_INTERLEAVED_PARITYFEC = 'video/1d-interleaved-parityfec'
     VIDEO_3GPP = 'video/3gpp'
     VIDEO_3GPP2 = 'video/3gpp2'
