@@ -23,7 +23,7 @@ class ISO_15924(str):
     ```py
     from pydantic import BaseModel
 
-    from pydantic_extra_types.language_code import ISO_15924
+    from pydantic_extra_types.script_code import ISO_15924
 
 
     class Script(BaseModel):
