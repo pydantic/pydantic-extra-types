@@ -48,7 +48,7 @@ class S3Path(str):
         if match is None:
             raise ValueError(f'Invalid S3 path: {value!r}')
         self.bucket: str = match.group(1)
-        self._key: str = match.group(2)
+        self.key: str = match.group(2)
         self.last_key: str = match.group(3)
 
     def __str__(self) -> str:  # pragma: no cover
