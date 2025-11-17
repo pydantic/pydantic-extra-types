@@ -8,7 +8,7 @@ It also provides the `Bucket`, `Key` component.
 from __future__ import annotations
 
 import re
-from typing import Any, ClassVar
+from typing import Any, cast, ClassVar
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import core_schema
@@ -47,7 +47,7 @@ class S3Path(str):
         match = self.patt.match(self.value)
         if match is None:
             raise ValueError(f'Invalid S3 path: {value!r}')
-        groups: tuple[str, str, str] = match.groups()
+        groups = cast(tuple[str, str, str], match.groups())
         self.bucket, self.key, self.last_key = groups
 
     def __str__(self) -> str:  # pragma: no cover
