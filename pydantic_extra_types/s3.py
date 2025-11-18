@@ -67,5 +67,4 @@ class S3Path(str):
         return core_schema.with_info_after_validator_function(
             cls._validate,
             core_schema.str_schema(pattern=cls.patt),
-            field_name=cls.__class__.__name__,
         )
