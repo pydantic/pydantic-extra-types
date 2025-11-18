@@ -1,7 +1,7 @@
 """The `pydantic_extra_types.phone_numbers` module provides the
 [`PhoneNumber`][pydantic_extra_types.phone_numbers.PhoneNumber] data type.
 
-This class depends on the [phonenumbers](https://pypi.orgt/phonenumbers/) package,
+This class depends on the [phonenumbers](https://pypi.org/project/phonenumbers/) package,
 which is a Python port of Google's [libphonenumber](https://github.com/google/libphonenumber/).
 """
 
