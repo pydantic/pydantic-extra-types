@@ -40,14 +40,16 @@ class S3Path(str):
     ```
     """
 
-    patt: ClassVar[str] = r'^s3://([^/]+)/(.*?([^/]+)/?)$'
+    patt: ClassVar[re.Pattern[str]] = re.compile(r'^s3://([^/]+)/(.*?([^/]+)/?)$')
 
     def __init__(self, value: str) -> None:
         self.value = value
-        groups: tuple[str, str, str] = re.match(self.patt, self.value).groups()  # type: ignore
-        self.bucket: str = groups[0]
-        self.key: str = groups[1]
-        self.last_key: str = groups[2]
+        match = self.patt.match(self.value)
+        if match is None:
+            raise ValueError(f'Invalid S3 path: {value!r}')
+        self.bucket: str = match.group(1)
+        self.key: str = match.group(2)
+        self.last_key: str = match.group(3)
 
     def __str__(self) -> str:  # pragma: no cover
         return self.value
@@ -65,5 +67,4 @@ class S3Path(str):
         return core_schema.with_info_after_validator_function(
             cls._validate,
             core_schema.str_schema(pattern=cls.patt),
-            field_name=cls.__class__.__name__,
         )

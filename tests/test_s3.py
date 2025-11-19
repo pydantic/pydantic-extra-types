@@ -150,3 +150,17 @@ def test_s3(raw: str, bucket: str, key: str, last_key: str):
 def test_wrong_s3():
     with pytest.raises(ValidationError):
         S3Check(path='s3/ok')
+
+
+@pytest.mark.parametrize(
+    'invalid_path',
+    [
+        's3/ok',
+        'not-an-s3-path',
+        's3://bucket-only',
+    ],
+)
+def test_wrong_s3_raises_value_error(invalid_path: str):
+    """Test that invalid S3 paths raise ValueError."""
+    with pytest.raises(ValueError, match='Invalid S3 path'):
+        S3Path(invalid_path)
