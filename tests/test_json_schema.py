@@ -156,7 +156,7 @@ USNumberE164 = Annotated[
                     'x': {
                         'anyOf': [
                             {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
-                            {'type': 'string'},
+                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
                         ],
                         'title': 'X',
                     }
@@ -173,7 +173,7 @@ USNumberE164 = Annotated[
                     'x': {
                         'anyOf': [
                             {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
-                            {'type': 'string'},
+                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
                         ],
                         'title': 'X',
                     }
@@ -192,14 +192,14 @@ USNumberE164 = Annotated[
                             'latitude': {
                                 'anyOf': [
                                     {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
-                                    {'type': 'string'},
+                                    {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
                                 ],
                                 'title': 'Latitude',
                             },
                             'longitude': {
                                 'anyOf': [
                                     {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
-                                    {'type': 'string'},
+                                    {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
                                 ],
                                 'title': 'Longitude',
                             },
@@ -217,8 +217,8 @@ USNumberE164 = Annotated[
                                 'maxItems': 2,
                                 'minItems': 2,
                                 'prefixItems': [
-                                    {'anyOf': [{'type': 'number'}, {'type': 'string'}]},
-                                    {'anyOf': [{'type': 'number'}, {'type': 'string'}]},
+                                    {'anyOf': [{'type': 'number'}, {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'}]},
+                                    {'anyOf': [{'type': 'number'}, {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'}]},
                                 ],
                                 'type': 'array',
                             },
