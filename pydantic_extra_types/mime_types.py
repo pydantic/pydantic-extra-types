@@ -1,8 +1,61 @@
-# Compiled from https://www.iana.org/assignments/media-types/media-types.xhtml
+"""MIME type definitions based on [IANA media types](https://www.iana.org/assignments/media-types/media-types.xhtml)."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
 from enum import StrEnum
+from functools import lru_cache
+from typing import Any
+
+from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
+from pydantic_core import PydanticCustomError, core_schema
 
 
-class Application(StrEnum):  # pragma: no cover
+@dataclass
+class MimeTypeInfo:
+    mime_type: str
+    category: str
+
+
+@lru_cache
+def _all_mime_types() -> list[MimeTypeInfo]:
+    """Build a list of all MIME types from the enum classes."""
+    mime_types = []
+    for enum_class, category in [
+        (_ApplicationEnum, 'application'),
+        (_AudioEnum, 'audio'),
+        (_FontEnum, 'font'),
+        (_HapticsEnum, 'haptics'),
+        (_ImageEnum, 'image'),
+        (_MessageEnum, 'message'),
+        (_ModelEnum, 'model'),
+        (_MultipartEnum, 'multipart'),
+        (_TextEnum, 'text'),
+        (_VideoEnum, 'video'),
+    ]:
+        for mime in enum_class:
+            mime_types.append(MimeTypeInfo(mime_type=mime.value, category=category))
+    return mime_types
+
+
+@lru_cache
+def _index_by_mime_type() -> dict[str, MimeTypeInfo]:
+    """Create an index of MIME types by their full type string (case-insensitive)."""
+    return {mime.mime_type.lower(): mime for mime in _all_mime_types()}
+
+
+@lru_cache
+def _index_by_category() -> dict[str, list[str]]:
+    """Create an index of MIME types grouped by category."""
+    result: dict[str, list[str]] = {}
+    for mime in _all_mime_types():
+        if mime.category not in result:
+            result[mime.category] = []
+        result[mime.category].append(mime.mime_type)
+    return result
+
+
+class _ApplicationEnum(StrEnum):  # pragma: no cover
     APPLICATION_1D_INTERLEAVED_PARITYFEC = 'application/1d-interleaved-parityfec'
     APPLICATION_3GPDASH_QOE_REPORT_XML = 'application/3gpdash-qoe-report+xml'
     APPLICATION_3GPPHAL_JSON = 'application/3gppHal+json'
@@ -1868,7 +1921,7 @@ class Application(StrEnum):  # pragma: no cover
     APPLICATION_ZSTD = 'application/zstd'
 
 
-class Audio(StrEnum):  # pragma: no cover
+class _AudioEnum(StrEnum):  # pragma: no cover
     AUDIO_1D_INTERLEAVED_PARITYFEC = 'audio/1d-interleaved-parityfec'
     AUDIO_32KADPCM = 'audio/32kadpcm'
     AUDIO_3GPP = 'audio/3gpp'
@@ -2032,7 +2085,7 @@ class Audio(StrEnum):  # pragma: no cover
     AUDIO_VORBIS_CONFIG = 'audio/vorbis-config'
 
 
-class Font(StrEnum):  # pragma: no cover
+class _FontEnum(StrEnum):  # pragma: no cover
     FONT_COLLECTION = 'font/collection'
     FONT_OTF = 'font/otf'
     FONT_SFNT = 'font/sfnt'
@@ -2041,13 +2094,13 @@ class Font(StrEnum):  # pragma: no cover
     FONT_WOFF2 = 'font/woff2'
 
 
-class Haptics(StrEnum):  # pragma: no cover
+class _HapticsEnum(StrEnum):  # pragma: no cover
     HAPTICS_IVS = 'haptics/ivs'
     HAPTICS_HJIF = 'haptics/hjif'
     HAPTICS_HMPG = 'haptics/hmpg'
 
 
-class Image(StrEnum):  # pragma: no cover
+class _ImageEnum(StrEnum):  # pragma: no cover
     IMAGE_ACES = 'image/aces'
     IMAGE_APNG = 'image/apng'
     IMAGE_AVCI = 'image/avci'
@@ -2136,7 +2189,7 @@ class Image(StrEnum):  # pragma: no cover
     IMAGE_X_WMF_DEPRECATED_IN_FAVOR_OF_IMAGE_WMF = 'image/x-wmf'
 
 
-class Message(StrEnum):  # pragma: no cover
+class _MessageEnum(StrEnum):  # pragma: no cover
     MESSAGE_BHTTP = 'message/bhttp'
     MESSAGE_CPIM = 'message/CPIM'
     MESSAGE_DELIVERY_STATUS = 'message/delivery-status'
@@ -2164,7 +2217,7 @@ class Message(StrEnum):  # pragma: no cover
     MESSAGE_VND_WFA_WSC = 'message/vnd.wfa.wsc'
 
 
-class Model(StrEnum):  # pragma: no cover
+class _ModelEnum(StrEnum):  # pragma: no cover
     MODEL_3MF = 'model/3mf'
     MODEL_E57 = 'model/e57'
     MODEL_EXAMPLE = 'model/example'
@@ -2208,7 +2261,7 @@ class Model(StrEnum):  # pragma: no cover
     MODEL_X3D_XML = 'model/x3d+xml'
 
 
-class Multipart(StrEnum):  # pragma: no cover
+class _MultipartEnum(StrEnum):  # pragma: no cover
     MULTIPART_ALTERNATIVE = 'multipart/alternative'
     MULTIPART_APPLEDOUBLE = 'multipart/appledouble'
     MULTIPART_BYTERANGES = 'multipart/byteranges'
@@ -2228,7 +2281,7 @@ class Multipart(StrEnum):  # pragma: no cover
     MULTIPART_X_MIXED_REPLACE = 'multipart/x-mixed-replace'
 
 
-class Text(StrEnum):  # pragma: no cover
+class _TextEnum(StrEnum):  # pragma: no cover
     TEXT_1D_INTERLEAVED_PARITYFEC = 'text/1d-interleaved-parityfec'
     TEXT_CACHE_MANIFEST = 'text/cache-manifest'
     TEXT_CALENDAR = 'text/calendar'
@@ -2329,7 +2382,7 @@ class Text(StrEnum):  # pragma: no cover
     TEXT_XML_EXTERNAL_PARSED_ENTITY = 'text/xml-external-parsed-entity'
 
 
-class Video(StrEnum):  # pragma: no cover
+class _VideoEnum(StrEnum):  # pragma: no cover
     VIDEO_1D_INTERLEAVED_PARITYFEC = 'video/1d-interleaved-parityfec'
     VIDEO_3GPP = 'video/3gpp'
     VIDEO_3GPP2 = 'video/3gpp2'
@@ -2426,3 +2479,70 @@ class Video(StrEnum):  # pragma: no cover
     VIDEO_VND_VIVO = 'video/vnd.vivo'
     VIDEO_VP8 = 'video/VP8'
     VIDEO_VP9 = 'video/VP9'
+
+
+class MimeType(str):
+    """MimeType validates MIME types based on [IANA media types](https://www.iana.org/assignments/media-types/media-types.xhtml).
+
+    ```py
+    from pydantic import BaseModel
+
+    from pydantic_extra_types.mime_types import MimeType
+
+
+    class Response(BaseModel):
+        content_type: MimeType
+
+
+    response = Response(content_type='application/json')
+    print(response)
+    # > content_type='application/json'
+    print(response.content_type.category)
+    # > application
+    ```
+    """
+
+    @classmethod
+    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> MimeType:
+        # Store the original mime_type for retrieval
+        mime_info = _index_by_mime_type().get(__input_value.lower())
+        if mime_info is None:
+            raise PydanticCustomError('mime_type', 'Invalid MIME type')
+        # Return the original case from the data
+        return cls(mime_info.mime_type)
+
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls, source: type[Any], handler: GetCoreSchemaHandler
+    ) -> core_schema.AfterValidatorFunctionSchema:
+        return core_schema.with_info_after_validator_function(
+            cls._validate,
+            core_schema.str_schema(),
+            serialization=core_schema.to_string_ser_schema(),
+        )
+
+    @classmethod
+    def __get_pydantic_json_schema__(
+        cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+    ) -> dict[str, Any]:
+        json_schema = handler(schema)
+        json_schema.update({'pattern': r'^[a-zA-Z0-9][a-zA-Z0-9!#$&\-\^_+.]+/[a-zA-Z0-9][a-zA-Z0-9!#$&\-\^_+.]+$'})
+        return json_schema
+
+    @property
+    def category(self) -> str:
+        """The category of the MIME type (e.g., 'application', 'audio', 'video')."""
+        return _index_by_mime_type()[self.lower()].category
+
+
+# Keep old class names for backward compatibility
+Application = _ApplicationEnum
+Audio = _AudioEnum
+Font = _FontEnum
+Haptics = _HapticsEnum
+Image = _ImageEnum
+Message = _MessageEnum
+Model = _ModelEnum
+Multipart = _MultipartEnum
+Text = _TextEnum
+Video = _VideoEnum

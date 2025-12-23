@@ -16,6 +16,7 @@ from pydantic_extra_types.domain import DomainStr
 from pydantic_extra_types.isbn import ISBN
 from pydantic_extra_types.language_code import ISO639_3, ISO639_5, LanguageAlpha2, LanguageName
 from pydantic_extra_types.mac_address import MacAddress
+from pydantic_extra_types.mime_types import MimeType
 from pydantic_extra_types.mongo_object_id import MongoObjectId
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
@@ -538,6 +539,21 @@ USNumberE164 = Annotated[
                     'x': {
                         'maxLength': MongoObjectId.OBJECT_ID_LENGTH,
                         'minLength': MongoObjectId.OBJECT_ID_LENGTH,
+                        'title': 'X',
+                        'type': 'string',
+                    },
+                },
+                'required': ['x'],
+            },
+        ),
+        (
+            MimeType,
+            {
+                'title': 'Model',
+                'type': 'object',
+                'properties': {
+                    'x': {
+                        'pattern': r'^[a-zA-Z0-9][a-zA-Z0-9!#$&\-\^_+.]+/[a-zA-Z0-9][a-zA-Z0-9!#$&\-\^_+.]+$',
                         'title': 'X',
                         'type': 'string',
                     },
