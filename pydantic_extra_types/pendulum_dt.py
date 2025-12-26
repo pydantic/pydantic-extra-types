@@ -342,6 +342,10 @@ class Duration(_Duration):
 
         assert isinstance(value, str)
         try:
+            # 'P' alone is not a valid ISO 8601 duration (must have at least one designator like P0D)
+            if value in ('P', '-P'):
+                raise ValueError('P alone is not a valid ISO 8601 duration')
+
             # https://github.com/python-pendulum/pendulum/issues/532
             if value.startswith('-'):
                 parsed = parse(value.lstrip('-'), exact=True)
