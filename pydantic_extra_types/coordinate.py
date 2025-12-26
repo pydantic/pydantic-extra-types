@@ -7,15 +7,47 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import Any, ClassVar, Union
+from typing import Annotated, Any, ClassVar, Union
 
-from pydantic import GetCoreSchemaHandler
+from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic._internal import _repr
+from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import ArgsKwargs, PydanticCustomError, core_schema
+
+# Pattern used by pydantic for decimal string validation in JSON schema
+_DECIMAL_PATTERN = r'^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$'
+
+
+class _FloatDecimalAnnotation:
+    """Annotation for Union[float, Decimal] that provides proper JSON schema with decimal pattern."""
+
+    @classmethod
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        return core_schema.union_schema(
+            [
+                core_schema.float_schema(),
+                core_schema.decimal_schema(),
+            ]
+        )
+
+    @classmethod
+    def __get_pydantic_json_schema__(
+        cls, core_schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+    ) -> JsonSchemaValue:
+        return {
+            'anyOf': [
+                {'type': 'number'},
+                {'type': 'string', 'pattern': _DECIMAL_PATTERN},
+            ]
+        }
+
+
+# Type for tuple items that properly serializes decimal JSON schema with pattern
+_CoordinateValue = Annotated[Union[float, Decimal], _FloatDecimalAnnotation]
 
 LatitudeType = Union[float, Decimal]
 LongitudeType = Union[float, Decimal]
-CoordinateType = tuple[LatitudeType, LongitudeType]
+CoordinateType = tuple[_CoordinateValue, _CoordinateValue]
 
 
 class Latitude(float):
@@ -52,6 +84,17 @@ class Latitude(float):
             ]
         )
 
+    @classmethod
+    def __get_pydantic_json_schema__(
+        cls, core_schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+    ) -> JsonSchemaValue:
+        return {
+            'anyOf': [
+                {'type': 'number', 'minimum': cls.min, 'maximum': cls.max},
+                {'type': 'string', 'pattern': _DECIMAL_PATTERN},
+            ]
+        }
+
 
 class Longitude(float):
     """Longitude value should be between -180 and 180, inclusive.
@@ -87,6 +130,17 @@ class Longitude(float):
                 core_schema.decimal_schema(ge=Decimal(cls.min), le=Decimal(cls.max)),
             ]
         )
+
+    @classmethod
+    def __get_pydantic_json_schema__(
+        cls, core_schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+    ) -> JsonSchemaValue:
+        return {
+            'anyOf': [
+                {'type': 'number', 'minimum': cls.min, 'maximum': cls.max},
+                {'type': 'string', 'pattern': _DECIMAL_PATTERN},
+            ]
+        }
 
 
 @dataclass
