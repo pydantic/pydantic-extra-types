@@ -229,10 +229,9 @@ class TestMimeTypeInModels:
 
     def test_list_of_mime_types(self):
         """Test list of MimeType fields."""
-        from typing import List
 
         class Model(BaseModel):
-            accepted_types: List[MimeType]
+            accepted_types: list[MimeType]
 
         m = Model(accepted_types=['application/json', 'text/html', 'image/png'])
         assert len(m.accepted_types) == 3

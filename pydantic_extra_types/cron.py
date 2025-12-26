@@ -19,7 +19,8 @@ if TYPE_CHECKING:
 else:
 
     class CronSeeker(Protocol):
-        def next(self) -> datetime: ...
+        def next(self) -> datetime:
+            ...
 
 
 class CronStr(str):

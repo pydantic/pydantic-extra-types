@@ -2,9 +2,21 @@
 
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass
-from enum import StrEnum
 from functools import lru_cache
+
+if sys.version_info >= (3, 11):
+    from enum import StrEnum
+else:
+    from enum import Enum
+
+    class StrEnum(str, Enum):
+        """A backport of StrEnum for Python < 3.11."""
+
+        pass
+
+
 from typing import Any
 
 from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler

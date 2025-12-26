@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import Any, ClassVar, Tuple, Union
+from typing import Any, ClassVar, Union
 
 from pydantic import GetCoreSchemaHandler
 from pydantic._internal import _repr
@@ -15,7 +15,7 @@ from pydantic_core import ArgsKwargs, PydanticCustomError, core_schema
 
 LatitudeType = Union[float, Decimal]
 LongitudeType = Union[float, Decimal]
-CoordinateType = Tuple[LatitudeType, LongitudeType]
+CoordinateType = tuple[LatitudeType, LongitudeType]
 
 
 class Latitude(float):
@@ -120,7 +120,7 @@ class Coordinate(_repr.Representation):
     ```
     """
 
-    _NULL_ISLAND: ClassVar[Tuple[float, float]] = (0.0, 0.0)
+    _NULL_ISLAND: ClassVar[tuple[float, float]] = (0.0, 0.0)
 
     latitude: Latitude
     longitude: Longitude

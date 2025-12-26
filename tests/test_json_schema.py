@@ -1,9 +1,8 @@
-from typing import Any, Dict, Union
+from typing import Annotated, Any, Union
 
 import pycountry
 import pytest
 from pydantic import BaseModel
-from typing_extensions import Annotated
 
 import pydantic_extra_types
 from pydantic_extra_types import epoch
@@ -218,8 +217,18 @@ USNumberE164 = Annotated[
                                 'maxItems': 2,
                                 'minItems': 2,
                                 'prefixItems': [
-                                    {'anyOf': [{'type': 'number'}, {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'}]},
-                                    {'anyOf': [{'type': 'number'}, {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'}]},
+                                    {
+                                        'anyOf': [
+                                            {'type': 'number'},
+                                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
+                                        ]
+                                    },
+                                    {
+                                        'anyOf': [
+                                            {'type': 'number'},
+                                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
+                                        ]
+                                    },
                                 ],
                                 'type': 'array',
                             },
@@ -563,7 +572,7 @@ USNumberE164 = Annotated[
         ),
     ],
 )
-def test_json_schema(cls: Any, expected: Dict[str, Any]) -> None:
+def test_json_schema(cls: Any, expected: dict[str, Any]) -> None:
     """Test the model_json_schema implementation for all extra types."""
 
     class Model(BaseModel):

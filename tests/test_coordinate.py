@@ -220,14 +220,14 @@ def test_json_schema():
             'latitude': {
                 'anyOf': [
                     {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
-                    {'type': 'string','pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'}
+                    {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
                 ],
                 'title': 'Latitude',
             },
             'longitude': {
                 'anyOf': [
                     {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
-                    {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'}
+                    {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
                 ],
                 'title': 'Longitude',
             },
@@ -243,18 +243,8 @@ def test_json_schema():
                 'maxItems': 2,
                 'minItems': 2,
                 'prefixItems': [
-                    {
-                        'anyOf': [
-                            {'type': 'number'},
-                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'}
-                        ]
-                    },
-                    {
-                        'anyOf': [
-                            {'type': 'number'},
-                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'}
-                        ]
-                    },
+                    {'anyOf': [{'type': 'number'}, {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'}]},
+                    {'anyOf': [{'type': 'number'}, {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'}]},
                 ],
                 'type': 'array',
             },
@@ -269,14 +259,14 @@ def test_json_schema():
                     'latitude': {
                         'anyOf': [
                             {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
-                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'}
+                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
                         ],
                         'title': 'Latitude',
                     },
                     'longitude': {
                         'anyOf': [
                             {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
-                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'}
+                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
                         ],
                         'title': 'Longitude',
                     },

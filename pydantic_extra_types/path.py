@@ -3,11 +3,11 @@ from __future__ import annotations
 import typing
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Annotated
 
 import pydantic
 from pydantic.types import PathType
 from pydantic_core import core_schema
-from typing_extensions import Annotated
 
 ExistingPath = typing.Union[pydantic.FilePath, pydantic.DirectoryPath]
 
