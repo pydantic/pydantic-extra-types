@@ -3,23 +3,17 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, ClassVar, Protocol, cast
+from typing import Any, ClassVar
 
 try:
-    from cron_converter import Cron  # type: ignore[import-untyped]
+    from cron_converter import Cron
+    from cron_converter.sub_modules.seeker import Seeker as CronSeeker
 except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
         'The `cron` module requires "cron-converter" to be installed. You can install it with "pip install cron-converter".'
     ) from e
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
-
-if TYPE_CHECKING:
-    from cron_converter.sub_modules.seeker import Seeker as CronSeeker  # type: ignore[import-untyped]
-else:
-
-    class CronSeeker(Protocol):
-        def next(self) -> datetime: ...
 
 
 class CronStr(str):
@@ -121,12 +115,12 @@ class CronStr(str):
 
     def schedule(self, start_date: datetime | None = None, timezone_str: str | None = None) -> CronSeeker:
         """Return the iterator produced by `cron-converter` for this expression."""
-        return cast(CronSeeker, self.cron_obj.schedule(start_date=start_date, timezone_str=timezone_str))
+        return self.cron_obj.schedule(start_date=start_date, timezone_str=timezone_str)
 
     def next_after(self, start_date: datetime | None = None, timezone_str: str | None = None) -> datetime:
         """Return the first run datetime after `start_date` (or now if omitted)."""
         seeker = self.schedule(start_date=start_date, timezone_str=timezone_str)
-        return cast(datetime, seeker.next())
+        return seeker.next()
 
     @property
     def next_run(self) -> str:

@@ -1,9 +1,8 @@
-from typing import Any, Dict, Union
+from typing import Annotated, Any, Union
 
 import pycountry
 import pytest
 from pydantic import BaseModel
-from typing_extensions import Annotated
 
 import pydantic_extra_types
 from pydantic_extra_types import epoch
@@ -16,6 +15,7 @@ from pydantic_extra_types.domain import DomainStr
 from pydantic_extra_types.isbn import ISBN
 from pydantic_extra_types.language_code import ISO639_3, ISO639_5, LanguageAlpha2, LanguageName
 from pydantic_extra_types.mac_address import MacAddress
+from pydantic_extra_types.mime_types import MimeType
 from pydantic_extra_types.mongo_object_id import MongoObjectId
 from pydantic_extra_types.payment import PaymentCardNumber
 from pydantic_extra_types.pendulum_dt import DateTime
@@ -156,7 +156,7 @@ USNumberE164 = Annotated[
                     'x': {
                         'anyOf': [
                             {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
-                            {'type': 'string'},
+                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
                         ],
                         'title': 'X',
                     }
@@ -173,7 +173,7 @@ USNumberE164 = Annotated[
                     'x': {
                         'anyOf': [
                             {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
-                            {'type': 'string'},
+                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
                         ],
                         'title': 'X',
                     }
@@ -192,14 +192,14 @@ USNumberE164 = Annotated[
                             'latitude': {
                                 'anyOf': [
                                     {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
-                                    {'type': 'string'},
+                                    {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
                                 ],
                                 'title': 'Latitude',
                             },
                             'longitude': {
                                 'anyOf': [
                                     {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
-                                    {'type': 'string'},
+                                    {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
                                 ],
                                 'title': 'Longitude',
                             },
@@ -217,8 +217,18 @@ USNumberE164 = Annotated[
                                 'maxItems': 2,
                                 'minItems': 2,
                                 'prefixItems': [
-                                    {'anyOf': [{'type': 'number'}, {'type': 'string'}]},
-                                    {'anyOf': [{'type': 'number'}, {'type': 'string'}]},
+                                    {
+                                        'anyOf': [
+                                            {'type': 'number'},
+                                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
+                                        ]
+                                    },
+                                    {
+                                        'anyOf': [
+                                            {'type': 'number'},
+                                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
+                                        ]
+                                    },
                                 ],
                                 'type': 'array',
                             },
@@ -545,9 +555,24 @@ USNumberE164 = Annotated[
                 'required': ['x'],
             },
         ),
+        (
+            MimeType,
+            {
+                'title': 'Model',
+                'type': 'object',
+                'properties': {
+                    'x': {
+                        'pattern': r'^[a-zA-Z0-9][a-zA-Z0-9!#$&\-\^_+.]+/[a-zA-Z0-9][a-zA-Z0-9!#$&\-\^_+.]+$',
+                        'title': 'X',
+                        'type': 'string',
+                    },
+                },
+                'required': ['x'],
+            },
+        ),
     ],
 )
-def test_json_schema(cls: Any, expected: Dict[str, Any]) -> None:
+def test_json_schema(cls: Any, expected: dict[str, Any]) -> None:
     """Test the model_json_schema implementation for all extra types."""
 
     class Model(BaseModel):

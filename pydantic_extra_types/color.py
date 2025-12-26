@@ -12,16 +12,16 @@ from __future__ import annotations
 import math
 import re
 from colorsys import hls_to_rgb, rgb_to_hls
-from typing import Any, Callable, Literal, Tuple, Union, cast
+from typing import Any, Callable, Literal, Union, cast
 
 from pydantic import GetJsonSchemaHandler
 from pydantic._internal import _repr
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
-ColorTuple = Union[Tuple[int, int, int], Tuple[int, int, int, float]]
+ColorTuple = Union[tuple[int, int, int], tuple[int, int, int, float]]
 ColorType = Union[ColorTuple, str, 'Color']
-HslColorTuple = Union[Tuple[float, float, float], Tuple[float, float, float, float]]
+HslColorTuple = Union[tuple[float, float, float], tuple[float, float, float, float]]
 
 
 class RGBA:

@@ -2,49 +2,99 @@
 
 ## Latest Changes
 
+## 2.10.6
+
+* feat: update credit card brands by @LorhanSohaky in <https://github.com/pydantic/pydantic-extra-types/pull/325>
+* Fix various documentation layout issues by @Viicos in <https://github.com/pydantic/pydantic-extra-types/pull/328>
+* Added test coverage for DomainStr validation including punycode and invalid inputs by @rhealakhotia in <https://github.com/pydantic/pydantic-extra-types/pull/330>
+* ✨ Add time parsing to `pendulum` by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/331>
+* Fix relative path creation on Windows for fixtures by @denini08 in <https://github.com/pydantic/pydantic-extra-types/pull/333>
+* ⬆ Bump samuelcolvin/check-python-version from 4.1 to 5 by @dependabot[bot] in <https://github.com/pydantic/pydantic-extra-types/pull/336>
+* ⬆ Bump actions/checkout from 4 to 5 by @dependabot[bot] in <https://github.com/pydantic/pydantic-extra-types/pull/334>
+* ⬆ Bump actions/download-artifact from 4 to 5 by @dependabot[bot] in <https://github.com/pydantic/pydantic-extra-types/pull/335>
+* docs: fix-isbn-typos by @gem7318 in <https://github.com/pydantic/pydantic-extra-types/pull/337>
+* ♻️ refactor `mac_address` validation logic by @Stormageddon37 in <https://github.com/pydantic/pydantic-extra-types/pull/338>
+* 🐛 set `@classmethod` in `phone_numbers` schema by @Stormageddon37 in <https://github.com/pydantic/pydantic-extra-types/pull/339>
+* 📝 chore: fix random typos by @Stormageddon37 in <https://github.com/pydantic/pydantic-extra-types/pull/340>
+* 📝 docs: enhance docstring for `PhoneNumber` class with usage examples by @hengky-kurniawan-1 in <https://github.com/pydantic/pydantic-extra-types/pull/341>
+* Added cron type by @Neko1313 in <https://github.com/pydantic/pydantic-extra-types/pull/343>
+* 🔖 Release version 2.10.6 by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/344>
+
+## 2.10.5
+
+* ⬆ Bump astral-sh/setup-uv from 5 to 6 by @dependabot in <https://github.com/pydantic/pydantic-extra-types/pull/314>
+* fix: Install `pre-commit` hooks with uv by @karta9821 in <https://github.com/pydantic/pydantic-extra-types/pull/315>
+* bump uv lockfile by @07pepa in <https://github.com/pydantic/pydantic-extra-types/pull/317>
+* Add path types by @irtimir in <https://github.com/pydantic/pydantic-extra-types/pull/318>
+* feat: Support `Decimal` type in coordinates by @karta9821 in <https://github.com/pydantic/pydantic-extra-types/pull/319>
+* 🐛 fix: serialize Pendulum zero Duration as valid ISO 8601 'P0D' by @dreglad in <https://github.com/pydantic/pydantic-extra-types/pull/320>
+* Allow constructing an ULID from an `uuid.UUID` by @abhiaagarwal in <https://github.com/pydantic/pydantic-extra-types/pull/322>
+* 🔖 Release version 2.10.5 by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/323>
+
+## 2.10.4
+
+* Fix serialization of mongo_object_id by @MaximilianClemens in <https://github.com/pydantic/pydantic-extra-types/pull/302>
+* Default to using system zoneinfo if available by @jelly in <https://github.com/pydantic/pydantic-extra-types/pull/303>
+* fix: disallow bool as input value for ULID by @glowskir in <https://github.com/pydantic/pydantic-extra-types/pull/305>
+* ⬆ Update phonenumbers requirement from <9,>=8 to >=8,<10 in the python-packages group by @dependabot in <https://github.com/pydantic/pydantic-extra-types/pull/304>
+* :recycle: change the Package ecosystem to `uv` by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/306>
+* ♻️ Fix regex pattern for Domain by @rosscdh-tpg in <https://github.com/pydantic/pydantic-extra-types/pull/308>
+* Fix color parsing when TypeError by @irtimir in <https://github.com/pydantic/pydantic-extra-types/pull/312>
+* 🔖 Release version 2.10.4 by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/313>
+
+## 2.10.3
+
+* Add support for pymongo bson ObjectId by @Ale-Cas in <https://github.com/pydantic/pydantic-extra-types/pull/290>
+* Fix checkdigit calculation for ISBN10 by @eumiro in <https://github.com/pydantic/pydantic-extra-types/pull/292>
+* Make checksum calculation more descriptive by @eumiro in <https://github.com/pydantic/pydantic-extra-types/pull/293>
+* Refactor validate_mac_address method by @eumiro in <https://github.com/pydantic/pydantic-extra-types/pull/294>
+* fix (de-)serialization of pendulum durations by @hoesler in <https://github.com/pydantic/pydantic-extra-types/pull/296>
+* limit iso8601 serialization of duration to json by @hoesler in <https://github.com/pydantic/pydantic-extra-types/pull/297>
+* 🔖 Release version 2.10.3 by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/298>
+
 ## 2.10.2
 
-* Add back Python 3.8 support by @Viicos in https://github.com/pydantic/pydantic-extra-types/pull/249
-* ⬆ Bump astral-sh/setup-uv from 4 to 5 by @dependabot in https://github.com/pydantic/pydantic-extra-types/pull/282
-* Preserve months when using the Pendulum Duration type by @gareththackeray in https://github.com/pydantic/pydantic-extra-types/pull/283
-* ✨ Add type checking support and improve type hints across the codebase by @yezz123 in https://github.com/pydantic/pydantic-extra-types/pull/285
-* 📝 Add additional installation information to README by @oakhan3 in https://github.com/pydantic/pydantic-extra-types/pull/233
+* Add back Python 3.8 support by @Viicos in <https://github.com/pydantic/pydantic-extra-types/pull/249>
+* ⬆ Bump astral-sh/setup-uv from 4 to 5 by @dependabot in <https://github.com/pydantic/pydantic-extra-types/pull/282>
+* Preserve months when using the Pendulum Duration type by @gareththackeray in <https://github.com/pydantic/pydantic-extra-types/pull/283>
+* ✨ Add type checking support and improve type hints across the codebase by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/285>
+* 📝 Add additional installation information to README by @oakhan3 in <https://github.com/pydantic/pydantic-extra-types/pull/233>
 
 ## 2.10.1
 
-* Allow build with python-ulid 3.0.0 by @sunpoet in https://github.com/pydantic/pydantic-extra-types/pull/225
-* 🔨 added automatic syntax-upgrade hook ~ pyupgrade by @janas-adam in https://github.com/pydantic/pydantic-extra-types/pull/229
-* :fire: Revert adding pyupgrade as a hook in pre-commit by @yezz123 in https://github.com/pydantic/pydantic-extra-types/pull/230
-* isolate url in Currency by @edasubert in https://github.com/pydantic/pydantic-extra-types/pull/235
-* lower case currency is valid by @edasubert in https://github.com/pydantic/pydantic-extra-types/pull/236
-* Update SemanticVersion by @viccie30 in https://github.com/pydantic/pydantic-extra-types/pull/237
-* Epoch - unix timestamp by @commonism in https://github.com/pydantic/pydantic-extra-types/pull/240
-* :recycle: Migrate Pydantic Extra Types to use uv by @yezz123 in https://github.com/pydantic/pydantic-extra-types/pull/241
-* ⬆ Bump astral-sh/setup-uv from 3 to 4 by @dependabot in https://github.com/pydantic/pydantic-extra-types/pull/245
-* ⬆ Bump pre-commit/action from 3.0.0 to 3.0.1 by @dependabot in https://github.com/pydantic/pydantic-extra-types/pull/244
-* 🔖 Release version 2.10.1 by @yezz123 in https://github.com/pydantic/pydantic-extra-types/pull/246
-* Fix check python version for release by @hramezani in https://github.com/pydantic/pydantic-extra-types/pull/247
+* Allow build with python-ulid 3.0.0 by @sunpoet in <https://github.com/pydantic/pydantic-extra-types/pull/225>
+* 🔨 added automatic syntax-upgrade hook ~ pyupgrade by @janas-adam in <https://github.com/pydantic/pydantic-extra-types/pull/229>
+* :fire: Revert adding pyupgrade as a hook in pre-commit by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/230>
+* isolate url in Currency by @edasubert in <https://github.com/pydantic/pydantic-extra-types/pull/235>
+* lower case currency is valid by @edasubert in <https://github.com/pydantic/pydantic-extra-types/pull/236>
+* Update SemanticVersion by @viccie30 in <https://github.com/pydantic/pydantic-extra-types/pull/237>
+* Epoch - unix timestamp by @commonism in <https://github.com/pydantic/pydantic-extra-types/pull/240>
+* :recycle: Migrate Pydantic Extra Types to use uv by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/241>
+* ⬆ Bump astral-sh/setup-uv from 3 to 4 by @dependabot in <https://github.com/pydantic/pydantic-extra-types/pull/245>
+* ⬆ Bump pre-commit/action from 3.0.0 to 3.0.1 by @dependabot in <https://github.com/pydantic/pydantic-extra-types/pull/244>
+* 🔖 Release version 2.10.1 by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/246>
+* Fix check python version for release by @hramezani in <https://github.com/pydantic/pydantic-extra-types/pull/247>
 
 ## 2.10.0
 
 ### Types
 
-* Add semantic version type by @jbkroner in https://github.com/pydantic/pydantic-extra-types/pull/199
-* feat: add S3Path by @lucianosrp in https://github.com/pydantic/pydantic-extra-types/pull/206
+* Add semantic version type by @jbkroner in <https://github.com/pydantic/pydantic-extra-types/pull/199>
+* feat: add S3Path by @lucianosrp in <https://github.com/pydantic/pydantic-extra-types/pull/206>
 
 ### Refactor
 
-* feature: Improve phone number validator by @mZbZ in https://github.com/pydantic/pydantic-extra-types/pull/202
-* Feature: Add phone number validator by @mZbZ in https://github.com/pydantic/pydantic-extra-types/pull/203
-* Domain name string type by @matter1-git in https://github.com/pydantic/pydantic-extra-types/pull/212
-* Adjust test_json_schema() for Pydantic 2.9 by @musicinmybrain in https://github.com/pydantic/pydantic-extra-types/pull/215
-* Allow python-ulid 3.0 by @musicinmybrain in https://github.com/pydantic/pydantic-extra-types/pull/222
+* feature: Improve phone number validator by @mZbZ in <https://github.com/pydantic/pydantic-extra-types/pull/202>
+* Feature: Add phone number validator by @mZbZ in <https://github.com/pydantic/pydantic-extra-types/pull/203>
+* Domain name string type by @matter1-git in <https://github.com/pydantic/pydantic-extra-types/pull/212>
+* Adjust test_json_schema() for Pydantic 2.9 by @musicinmybrain in <https://github.com/pydantic/pydantic-extra-types/pull/215>
+* Allow python-ulid 3.0 by @musicinmybrain in <https://github.com/pydantic/pydantic-extra-types/pull/222>
 
 ### Dependencies
 
-* ⬆ Bump the python-packages group with 5 updates by @dependabot in https://github.com/pydantic/pydantic-extra-types/pull/201
-* ✨ deprecate `semver` in favor of `semantic_version` by @07pepa in https://github.com/pydantic/pydantic-extra-types/pull/209
-* 🔖 Release version 2.10.0 by @yezz123 in https://github.com/pydantic/pydantic-extra-types/pull/224
+* ⬆ Bump the python-packages group with 5 updates by @dependabot in <https://github.com/pydantic/pydantic-extra-types/pull/201>
+* ✨ deprecate `semver` in favor of `semantic_version` by @07pepa in <https://github.com/pydantic/pydantic-extra-types/pull/209>
+* 🔖 Release version 2.10.0 by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/224>
 
 ## 2.9.0
 
