@@ -19,12 +19,12 @@ classifiers = [
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3 :: Only',
-    'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3.12',
     'Programming Language :: Python :: 3.13',
+    'Programming Language :: Python :: 3.14',
     'Intended Audience :: Developers',
     'Intended Audience :: Information Technology',
     'Intended Audience :: System Administrators',
@@ -38,7 +38,7 @@ classifiers = [
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: Internet',
 ]
-requires-python = '>=3.8'
+requires-python = '>=3.9'
 dependencies = ['pydantic>=2.5.2','typing-extensions']
 dynamic = ['version']
 
@@ -95,7 +95,7 @@ keep-runtime-typing = true
 
 [tool.ruff]
 line-length = 120
-target-version = 'py38'
+target-version = 'py39'
 
 [tool.ruff.lint]
 extend-select = [
