@@ -40,6 +40,7 @@ test-all-python:
 	UV_PROJECT_ENVIRONMENT=.venv311 uv run --python 3.11 coverage run -p -m pytest
 	UV_PROJECT_ENVIRONMENT=.venv312 uv run --python 3.12 coverage run -p -m pytest
 	UV_PROJECT_ENVIRONMENT=.venv313 uv run --python 3.13 coverage run -p -m pytest
+	UV_PROJECT_ENVIRONMENT=.venv314 uv run --python 3.14 coverage run -p -m pytest
 	@uv run coverage combine
 	@uv run coverage report
 
