@@ -40,8 +40,12 @@ def test_cron_str_next_after() -> None:
     cron_value = CronStr('15 8 * * 1-5')
     next_run = cron_value.next_after(datetime(2024, 1, 1, 7, 0))
     assert next_run == datetime(2024, 1, 1, 8, 15)
-    current_year = datetime.now(timezone.utc).year
-    assert cron_value.next_run.startswith(str(current_year))  # sanity check for property access
+    now = datetime.now(timezone.utc)
+    current_year = now.year
+    if now.month == 12 and now.day == 31:  # "If it's Dec 31, the next invocation is actually in the new year
+        assert cron_value.next_run.startswith(str(current_year + 1))
+    else:
+        assert cron_value.next_run.startswith(str(current_year))  # sanity check for property access
 
 
 def test_cron_str_strips_whitespace() -> None:
