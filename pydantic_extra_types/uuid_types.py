@@ -1,18 +1,11 @@
-"""UUID version 6, 7, and 8 types for Pydantic.
-
-Provides UUID version-specific validation types and generation functions.
-For UUID generation on Python < 3.14, requires the optional ``uuid-utils`` package.
-On Python >= 3.14, uses the standard library ``uuid`` module.
-
-Ref: https://github.com/pydantic/pydantic-extra-types/issues/204
-"""
+"""The `pydantic_extra_types.uuid_types` module provides UUID version 6, 7, and 8 types."""
 
 from __future__ import annotations
 
 import sys
 import uuid
 from datetime import datetime, timezone
-from typing import Any, Callable
+from typing import Annotated, Any, Callable
 
 from pydantic import GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
@@ -22,8 +15,6 @@ _UUID7_TIMESTAMP_BITMASK = (1 << 48) - 1
 
 
 class _UuidVersion:
-    """Marker class to attach version-specific UUID schema to an Annotated type."""
-
     def __init__(self, version: int) -> None:
         self.version = version
 
@@ -53,12 +44,6 @@ class _UuidVersion:
         return NotImplemented
 
 
-if sys.version_info >= (3, 9):
-    from typing import Annotated
-else:
-    from typing_extensions import Annotated  # pragma: no cover
-
-
 UUID6 = Annotated[uuid.UUID, _UuidVersion(6)]
 """A UUID that must be version 6 (reordered time-based).
 
@@ -82,9 +67,6 @@ print(m.id.version)
 
 UUID7 = Annotated[uuid.UUID, _UuidVersion(7)]
 """A UUID that must be version 7 (Unix Epoch time-based, sortable).
-
-UUIDv7 embeds a Unix timestamp in milliseconds in the high 48 bits,
-making it naturally sortable by creation time.
 
 ```py
 from pydantic import BaseModel
@@ -122,24 +104,8 @@ class Model(BaseModel):
 def uuid7() -> uuid.UUID:
     """Generate a new UUID version 7.
 
-    Uses the standard library ``uuid.uuid7()`` on Python 3.14+.
-    On older Python versions, uses the ``uuid-utils`` package.
-
-    Returns:
-        A new UUID version 7 instance.
-
-    Raises:
-        ImportError: If running on Python < 3.14 and ``uuid-utils`` is not installed.
-
-    ```py
-    from pydantic_extra_types.uuid_types import uuid7
-
-    new_id = uuid7()
-    print(new_id)
-    # > 018f0e8c-7a6a-7b1c-a3e4-fdf3e0ef7a4a  (example)
-    print(new_id.version)
-    # > 7
-    ```
+    On Python 3.14+, uses ``uuid.uuid7()`` from the standard library.
+    On older versions, requires the ``uuid-utils`` package.
     """
     if sys.version_info >= (3, 14):
         return uuid.uuid7()
@@ -156,18 +122,7 @@ def uuid7() -> uuid.UUID:
 
 
 def uuid7_to_datetime(value: uuid.UUID) -> datetime:
-    """Extract the datetime from a UUID version 7.
-
-    UUIDv7 encodes a Unix timestamp in milliseconds in the high 48 bits.
-
-    Args:
-        value: A UUID version 7 instance.
-
-    Returns:
-        A timezone-aware datetime (UTC) corresponding to the embedded timestamp.
-
-    Raises:
-        ValueError: If the UUID is not version 7.
+    """Extract the embedded datetime from a UUID version 7.
 
     ```py
     import uuid
