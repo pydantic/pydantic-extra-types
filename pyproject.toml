@@ -55,6 +55,7 @@ all = [
     'semver~=3.0.2',
     'tzdata>=2024.1',
     "cron-converter>=1.2.2",
+    'uuid-utils>=0.6.0; python_version<"3.14"',
 ]
 phonenumbers = ['phonenumbers>=8,<10']
 pycountry = ['pycountry>=23']
@@ -65,6 +66,7 @@ python_ulid = [
 ]
 pendulum = ['pendulum>=3.0.0,<4.0.0']
 cron = ['cron-converter>=1.2.2']
+uuid_utils = ['uuid-utils>=0.6.0; python_version<"3.14"']
 
 [dependency-groups]
 dev = [
