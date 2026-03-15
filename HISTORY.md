@@ -2,6 +2,19 @@
 
 ## Latest Changes
 
+## 2.11.0
+
+* 📝 docs: improve example formatting in PhoneNumber documentation by @hengky-kurniawan-1 in <https://github.com/pydantic/pydantic-extra-types/pull/347>
+* Fix import typo in the script code's documentation by @wesley312 in <https://github.com/pydantic/pydantic-extra-types/pull/349>
+* ⬆ Bump actions/upload-artifact from 4 to 5 by @dependabot[bot] in <https://github.com/pydantic/pydantic-extra-types/pull/350>
+* ⬆ Bump astral-sh/setup-uv from 6 to 7 by @dependabot[bot] in <https://github.com/pydantic/pydantic-extra-types/pull/352>
+* ⬆ Bump actions/download-artifact from 5 to 6 by @dependabot[bot] in <https://github.com/pydantic/pydantic-extra-types/pull/351>
+* 🐛 fix: url typo in docstring by @lch in <https://github.com/pydantic/pydantic-extra-types/pull/355>
+* ♻️ raise `ValueError` instead of `AttributeError` on wrong `S3Path` value by @Danipulok in <https://github.com/pydantic/pydantic-extra-types/pull/354>
+* ⬆ Bump actions/checkout from 5 to 6 by @dependabot[bot] in <https://github.com/pydantic/pydantic-extra-types/pull/357>
+* Refactor type hints to use built-in tuple syntax  by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/359>
+* Update version number for release 2.11.0 by @yezz123 in <https://github.com/pydantic/pydantic-extra-types/pull/360>
+
 ## 2.10.6
 
 * feat: update credit card brands by @LorhanSohaky in <https://github.com/pydantic/pydantic-extra-types/pull/325>
