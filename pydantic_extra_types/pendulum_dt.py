@@ -266,15 +266,18 @@ class Duration(_Duration):
         Returns:
             The ISO 8601 string representation of the duration.
         """
-        # Extracting components from the Duration object
-        years = self.years
-        months = self.months
-        days = self._days
-        hours = self.hours
-        minutes = self.minutes
-        seconds = self.remaining_seconds
-        milliseconds = self.microseconds // 1000
-        microseconds = self.microseconds % 1000
+        # Determine if the duration is negative
+        is_negative = self.total_seconds() < 0
+
+        # Extracting components from the Duration object (use abs for negative durations)
+        years = abs(self.years) if is_negative else self.years
+        months = abs(self.months) if is_negative else self.months
+        days = abs(self._days) if is_negative else self._days
+        hours = abs(self.hours) if is_negative else self.hours
+        minutes = abs(self.minutes) if is_negative else self.minutes
+        seconds = abs(self.remaining_seconds) if is_negative else self.remaining_seconds
+        milliseconds = abs(self.microseconds) // 1000 if is_negative else self.microseconds // 1000
+        microseconds = abs(self.microseconds) % 1000 if is_negative else self.microseconds % 1000
 
         # Constructing the ISO 8601 duration string
         iso_duration = 'P'
@@ -301,7 +304,7 @@ class Duration(_Duration):
                 iso_duration += 'S'
 
         # Prefix with '-' if the duration is negative
-        if self.total_seconds() < 0:
+        if is_negative:
             iso_duration = '-' + iso_duration
 
         if iso_duration == 'P':
