@@ -57,6 +57,70 @@ def get_timezones() -> set[str]:
         raise ImportError('No timezone provider found. Please install tzdata with "pip install tzdata"')
 
 
+# Common timezone abbreviations that may not appear in available_timezones() but are widely used.
+# These are added to the allowed values so that both EST and EDT (and similar pairs) are accepted consistently.
+_COMMON_TZ_ABBREVIATIONS: set[str] = {
+    # US timezones
+    'EST',
+    'EDT',
+    'CST',
+    'CDT',
+    'MST',
+    'MDT',
+    'PST',
+    'PDT',
+    'AKST',
+    'AKDT',
+    'HST',
+    # European timezones
+    'GMT',
+    'BST',
+    'CET',
+    'CEST',
+    'EET',
+    'EEST',
+    'WET',
+    'WEST',
+    'IST',
+    # Asia-Pacific timezones
+    'KST',
+    'JST',
+    'AEST',
+    'AEDT',
+    'ACST',
+    'ACDT',
+    'AWST',
+    'NZST',
+    'NZDT',
+    'IST',
+    'PKT',
+    'WIB',
+    'WITA',
+    'WIT',
+    'HKT',
+    'SGT',
+    'PHT',
+    'MYT',
+    # Other common abbreviations
+    'UTC',
+    'CAT',
+    'EAT',
+    'WAT',
+    'SAST',
+    'ART',
+    'BRT',
+    'CLT',
+    'COT',
+    'PET',
+    'UYT',
+    'VET',
+    'AST',
+    'ADT',
+    'NST',
+    'NDT',
+}
+
+
 class TimeZoneNameSettings(type):
     def __new__(cls, name: str, bases: tuple[type, ...], dct: dict[str, Any], **kwargs: Any) -> type[TimeZoneName]:
         dct['strict'] = kwargs.pop('strict', True)
@@ -123,7 +187,7 @@ class TimeZoneName(str):
     """
 
     __slots__: list[str] = []
-    allowed_values: set[str] = set(get_timezones())
+    allowed_values: set[str] = set(get_timezones()) | _COMMON_TZ_ABBREVIATIONS
     allowed_values_list: list[str] = sorted(allowed_values)
     allowed_values_upper_to_correct: dict[str, str] = {val.upper(): val for val in allowed_values}
     strict: bool

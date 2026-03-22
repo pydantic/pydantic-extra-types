@@ -203,6 +203,15 @@ def test_timezone_name_hash():
     assert len(tz_set) == 2
 
 
+def test_common_timezone_abbreviations():
+    """Test that common timezone abbreviations like EDT are accepted (issue #374)."""
+    abbreviations = ['EST', 'EDT', 'CST', 'CDT', 'MST', 'MDT', 'PST', 'PDT', 'GMT', 'CET', 'CEST', 'UTC']
+    for abbr in abbreviations:
+        assert abbr in TimeZoneName.allowed_values, f'{abbr} should be in allowed_values'
+        result = TimeZoneName._validate(abbr, None)
+        assert result == abbr, f'{abbr} should validate successfully'
+
+
 def test_timezone_name_slots():
     tz = TimeZoneName('America/New_York')
     with pytest.raises(AttributeError):
