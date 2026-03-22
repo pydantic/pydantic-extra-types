@@ -315,6 +315,39 @@ def test_pendulum_duration_serialization_roundtrip(duration):
     assert deserialized.months == python_serialized.months == duration.months
 
 
+@pytest.mark.parametrize(
+    'duration',
+    [
+        Duration(days=-1),
+        Duration(days=-10),
+        Duration(seconds=-10),
+        Duration(hours=-5),
+        Duration(weeks=-2),
+        Duration(months=-3),
+        Duration(years=-1),
+        Duration(days=-1, hours=-2, minutes=-30),
+    ],
+)
+def test_pendulum_negative_duration_serialization_roundtrip(duration):
+    """Verifies that negative durations serialize and deserialize correctly."""
+    adapter = TypeAdapter(Duration)
+    json_serialized = adapter.dump_json(duration)
+    deserialized = TypeAdapter.validate_json(adapter, json_serialized)
+    assert deserialized == duration
+    assert deserialized.total_seconds() == duration.total_seconds()
+
+
+def test_pendulum_duration_iso8601_negative():
+    """Verifies that to_iso8601_string produces valid ISO 8601 for negative durations."""
+    d = Duration(days=-10)
+    iso = d.to_iso8601_string()
+    assert iso == '-P10D', f'Expected "-P10D", got "{iso}"'
+
+    d2 = Duration(seconds=-10)
+    iso2 = d2.to_iso8601_string()
+    assert iso2 == '-PT10S', f'Expected "-PT10S", got "{iso2}"'
+
+
 def get_invalid_dt_common():
     return [
         None,
