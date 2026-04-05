@@ -374,7 +374,7 @@ class Duration(_Duration):
             raise PydanticCustomError('value_error', 'value is not a valid duration') from exc
 
 
-class Interval(_Interval):
+class Interval(_Interval[Any]):
     """A `pendulum.Interval` object. At runtime, this type decomposes into pendulum.Interval automatically.
     This type exists because Pydantic throws a fit on unknown types.
 
@@ -409,7 +409,7 @@ class Interval(_Interval):
         return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.str_schema())
 
     @classmethod
-    def _instance(cls, value: _Interval) -> Interval:
+    def _instance(cls, value: _Interval[Any]) -> Interval:
         return Interval(value.start, value.end, absolute=getattr(value, '_absolute', False))
 
     @classmethod
