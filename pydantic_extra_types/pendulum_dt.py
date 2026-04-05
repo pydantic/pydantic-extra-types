@@ -8,6 +8,7 @@ try:
     from pendulum import Date as _Date
     from pendulum import DateTime as _DateTime
     from pendulum import Duration as _Duration
+    from pendulum import Interval as _Interval
     from pendulum import Time as _Time
     from pendulum import parse
 except ModuleNotFoundError as e:  # pragma: no cover
@@ -371,3 +372,66 @@ class Duration(_Duration):
             )
         except Exception as exc:
             raise PydanticCustomError('value_error', 'value is not a valid duration') from exc
+
+
+class Interval(_Interval):
+    """A `pendulum.Interval` object. At runtime, this type decomposes into pendulum.Interval automatically.
+    This type exists because Pydantic throws a fit on unknown types.
+
+    ```python
+    from pydantic import BaseModel
+    from pydantic_extra_types.pendulum_dt import Interval
+
+
+    class test_model(BaseModel):
+        interval: Interval
+
+
+    print(test_model(interval='2021-01-01T00:00:00+00:00/2021-01-02T00:00:00+00:00'))
+
+    # > test_model(interval=<Interval [2021-01-01 00:00:00+00:00 -> 2021-01-02 00:00:00+00:00]>)
+    ```
+    """
+
+    __slots__: list[str] = []
+
+    @classmethod
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        """Return a Pydantic CoreSchema with the Interval validation.
+
+        Args:
+            source: The source type to be converted.
+            handler: The handler to get the CoreSchema.
+
+        Returns:
+            A Pydantic CoreSchema with the Interval validation.
+        """
+        return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.str_schema())
+
+    @classmethod
+    def _instance(cls, value: _Interval) -> Interval:
+        return Interval(value.start, value.end, absolute=getattr(value, '_absolute', False))
+
+    @classmethod
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Interval:
+        """Validate the interval object and return it.
+
+        Args:
+            value: The value to validate.
+            handler: The handler to get the CoreSchema.
+
+        Returns:
+            The validated value or raises a PydanticCustomError.
+        """
+        # if we are passed an existing instance, pass it straight through.
+        if isinstance(value, _Interval):
+            return cls._instance(value)
+
+        # otherwise, parse it.
+        try:
+            parsed = parse(value)
+            if isinstance(parsed, _Interval):
+                return cls._instance(parsed)
+            raise ValueError(f'value is not a valid interval it is a {type(parsed)}')
+        except Exception as exc:
+            raise PydanticCustomError('value_error', 'value is not a valid interval') from exc
