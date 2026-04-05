@@ -287,6 +287,15 @@ USNumberE164 = Annotated[
                             {'additionalProperties': True, 'type': 'object'},
                         ],
                         'title': 'X',
+                        'type': 'string',
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
             ISIN,
             {
                 'properties': {
