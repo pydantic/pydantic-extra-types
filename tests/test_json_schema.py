@@ -287,7 +287,6 @@ USNumberE164 = Annotated[
                             {'additionalProperties': True, 'type': 'object'},
                         ],
                         'title': 'X',
-                        'type': 'string',
                     }
                 },
                 'required': ['x'],
