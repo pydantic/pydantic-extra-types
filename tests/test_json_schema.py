@@ -13,8 +13,8 @@ from pydantic_extra_types.cron import CronStr
 from pydantic_extra_types.currency_code import ISO4217, Currency
 from pydantic_extra_types.domain import DomainStr
 from pydantic_extra_types.isbn import ISBN
-from pydantic_extra_types.json_schema import JsonSchema
 from pydantic_extra_types.isin import ISIN
+from pydantic_extra_types.json_schema import JsonSchema
 from pydantic_extra_types.language_code import ISO639_3, ISO639_5, LanguageAlpha2, LanguageName
 from pydantic_extra_types.mac_address import MacAddress
 from pydantic_extra_types.mime_types import MimeType
