@@ -909,12 +909,16 @@ extra = [
     { name = "pytest", version = "9.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "pytest-pretty" },
     { name = "ruff" },
+    { name = "types-jsonschema", version = "4.26.0.20260202", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "types-jsonschema", version = "4.26.0.20260402", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "types-pytz" },
 ]
 lint = [
     { name = "annotated-types" },
     { name = "mypy" },
     { name = "ruff" },
+    { name = "types-jsonschema", version = "4.26.0.20260202", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "types-jsonschema", version = "4.26.0.20260402", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "types-pytz" },
 ]
 
@@ -962,12 +966,14 @@ extra = [
     { name = "pytest", specifier = ">=8.3.2" },
     { name = "pytest-pretty", specifier = ">=1.2.0" },
     { name = "ruff", specifier = ">=0.7.4" },
+    { name = "types-jsonschema", specifier = ">=4.23.0.20241208" },
     { name = "types-pytz", specifier = ">=2024.1.0.20240417" },
 ]
 lint = [
     { name = "annotated-types", specifier = ">=0.7.0" },
     { name = "mypy", specifier = ">=0.910" },
     { name = "ruff", specifier = ">=0.7.4" },
+    { name = "types-jsonschema", specifier = ">=4.23.0.20241208" },
     { name = "types-pytz", specifier = ">=2024.1.0.20240417" },
 ]
 
@@ -1576,6 +1582,36 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/7e/46/cc36c679f09f27ded940281c38607716c86cf8ba4a518d524e349c8b4874/tomli-2.3.0-cp314-cp314t-win32.whl", hash = "sha256:a1f7f282fe248311650081faafa5f4732bdbfef5d45fe3f2e702fbc6f2d496e0", size = 107563, upload-time = "2025-10-08T22:01:44.233Z" },
     { url = "https://files.pythonhosted.org/packages/84/ff/426ca8683cf7b753614480484f6437f568fd2fda2edbdf57a2d3d8b27a0b/tomli-2.3.0-cp314-cp314t-win_amd64.whl", hash = "sha256:70a251f8d4ba2d9ac2542eecf008b3c8a9fc5c3f9f02c56a9d7952612be2fdba", size = 119756, upload-time = "2025-10-08T22:01:45.234Z" },
     { url = "https://files.pythonhosted.org/packages/77/b8/0135fadc89e73be292b473cb820b4f5a08197779206b33191e801feeae40/tomli-2.3.0-py3-none-any.whl", hash = "sha256:e95b1af3c5b07d9e643909b5abbec77cd9f1217e6d0bca72b0234736b9fb1f1b", size = 14408, upload-time = "2025-10-08T22:01:46.04Z" },
+]
+
+[[package]]
+name = "types-jsonschema"
+version = "4.26.0.20260202"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version < '3.10'",
+]
+dependencies = [
+    { name = "referencing", version = "0.36.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a1/07/68f63e715eb327ed2f5292e29e8be99785db0f72c7664d2c63bd4dbdc29d/types_jsonschema-4.26.0.20260202.tar.gz", hash = "sha256:29831baa4308865a9aec547a61797a06fc152b0dac8dddd531e002f32265cb07", size = 16168, upload-time = "2026-02-02T04:11:22.585Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c1/06/962d4f364f779d7389cd31a1bb581907b057f52f0ace2c119a8dd8409db6/types_jsonschema-4.26.0.20260202-py3-none-any.whl", hash = "sha256:41c95343abc4de9264e333a55e95dfb4d401e463856d0164eec9cb182e8746da", size = 15914, upload-time = "2026-02-02T04:11:21.61Z" },
+]
+
+[[package]]
+name = "types-jsonschema"
+version = "4.26.0.20260402"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.10'",
+]
+dependencies = [
+    { name = "referencing", version = "0.37.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/98/d3/026e247db60c9cb7db2dee659793ca46fe33bcac53f00f318a688fb176a3/types_jsonschema-4.26.0.20260402.tar.gz", hash = "sha256:03d0f697a9930970033e29e91da45accf287ee44d5eed6f7a238b99e608b23f4", size = 16520, upload-time = "2026-04-02T04:20:19.135Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ca/5e/02f58a194ffe7ac02657ca590c46348220c04a76a62e2ceb45a5ac0cd666/types_jsonschema-4.26.0.20260402-py3-none-any.whl", hash = "sha256:0e8ebd94b257fc978b41b89c7b9bc76232e104e5125ec19009c4f60844c96e0a", size = 16082, upload-time = "2026-04-02T04:20:17.922Z" },
 ]
 
 [[package]]
