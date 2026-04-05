@@ -46,6 +46,7 @@ dynamic = ['version']
 all = [
     'phonenumbers>=8,<10',
     'pycountry>=23',
+    'jsonschema>=4.0.0',
     'semver>=3.0.2',
     'python-ulid>=1,<2; python_version<"3.9"',
     'python-ulid>=1,<4; python_version>="3.9"',
@@ -59,6 +60,7 @@ all = [
 ]
 phonenumbers = ['phonenumbers>=8,<10']
 pycountry = ['pycountry>=23']
+jsonschema = ['jsonschema>=4.0.0']
 semver = ['semver>=3.0.2']
 python_ulid = [
     'python-ulid>=1,<2; python_version<"3.9"',
@@ -79,6 +81,7 @@ lint = [
     "ruff>=0.7.4",
     "mypy>=0.910",
     "annotated-types>=0.7.0",
+    "types-jsonschema>=4.23.0.20241208",
     "types-pytz>=2024.1.0.20240417",
 ]
 extra = [
