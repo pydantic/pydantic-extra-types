@@ -2,6 +2,31 @@
 
 ## Latest Changes
 
+## 2.11.2
+
+* fix: accept common timezone abbreviations like EDT in TimeZoneName validator by @r266-tech in https://github.com/pydantic/pydantic-extra-types/pull/376
+* fix: correct ISO 8601 serialization for negative pendulum Duration values by @r266-tech in https://github.com/pydantic/pydantic-extra-types/pull/377
+* ⬆ Bump the python-packages group with 3 updates by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/378
+* fix(python): add missing Pendulum Interval wrapper support by @RedZapdos123 in https://github.com/pydantic/pydantic-extra-types/pull/379
+* feat(isin): add ISIN type with checksum validation by @RedZapdos123 in https://github.com/pydantic/pydantic-extra-types/pull/380
+* feat(json_schema): add JsonSchema type validated by jsonschema by @RedZapdos123 in https://github.com/pydantic/pydantic-extra-types/pull/381
+* 🔖 Release version 2.11.2  by @yezz123 in https://github.com/pydantic/pydantic-extra-types/pull/382
+
+## 2.11.1
+
+* 🐛 fix Cron Tests (Happy New Year 🎉 ) by @anthonycicc in https://github.com/pydantic/pydantic-extra-types/pull/361
+* ⬆ Bump actions/upload-artifact from 5 to 6 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/362
+* ⬆ Bump actions/download-artifact from 6 to 7 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/363
+* ⬆ Bump the python-packages group with 4 updates by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/365
+* Add UUID v7 support (and v6/v8) by @sshaheerkhann in https://github.com/pydantic/pydantic-extra-types/pull/367
+* feat: migrate DSN types from pydantic.networks by @bBlazewavE in https://github.com/pydantic/pydantic-extra-types/pull/368
+* Export `Color` from package `__init__.py` by @bBlazewavE in https://github.com/pydantic/pydantic-extra-types/pull/373
+* ⬆ Bump the python-packages group with 2 updates by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/371
+* ⬆ Bump actions/download-artifact from 7 to 8 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/370
+* ⬆ Bump actions/upload-artifact from 6 to 7 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/369
+* feat: add IBAN (International Bank Account Number) type by @toroleapinc in https://github.com/pydantic/pydantic-extra-types/pull/372
+* 🔖 Release version 2.11.1  by @yezz123 in https://github.com/pydantic/pydantic-extra-types/pull/375
+
 ## 2.11.0
 
 * 📝 docs: improve example formatting in PhoneNumber documentation by @hengky-kurniawan-1 in <https://github.com/pydantic/pydantic-extra-types/pull/347>
