@@ -5,7 +5,7 @@ import pendulum
 import pytest
 from pydantic import BaseModel, TypeAdapter, ValidationError
 
-from pydantic_extra_types.pendulum_dt import Date, DateTime, Duration, Time
+from pydantic_extra_types.pendulum_dt import Date, DateTime, Duration, Interval, Time
 
 UTC = tz.utc
 
@@ -34,6 +34,10 @@ class DateModel(BaseModel):
 
 class DurationModel(BaseModel):
     delta_t: Duration
+
+
+class IntervalModel(BaseModel):
+    interval: Interval
 
 
 @pytest.mark.parametrize(
@@ -287,6 +291,31 @@ def test_pendulum_duration_from_serialized(delta_t_str):
     assert isinstance(model.delta_t, pendulum.Duration)
 
 
+def test_pendulum_interval_existing_instance():
+    """Verifies that constructing a model with an existing pendulum interval doesn't throw."""
+    start = pendulum.datetime(2024, 1, 1, tz='UTC')
+    end = pendulum.datetime(2024, 1, 2, tz='UTC')
+    interval = end - start
+
+    model = IntervalModel(interval=interval)
+
+    assert type(model.interval) is Interval
+    assert isinstance(model.interval, pendulum.Interval)
+    assert model.interval.start == start
+    assert model.interval.end == end
+
+
+def test_pendulum_interval_from_serialized():
+    """Verifies that interval strings are parsed into pendulum interval objects."""
+    interval_str = '2024-01-01T00:00:00Z/2024-01-02T00:00:00Z'
+    parsed = pendulum.parse(interval_str)
+    model = IntervalModel(interval=interval_str)
+
+    assert parsed == model.interval
+    assert type(model.interval) is Interval
+    assert isinstance(model.interval, pendulum.Interval)
+
+
 @pytest.mark.parametrize(
     'duration',
     [
@@ -518,6 +547,22 @@ def test_pendulum_duration_malformed(delta_t):
 
 
 @pytest.mark.parametrize(
+    'interval',
+    [
+        None,
+        'malformed',
+        pendulum.today().to_iso8601_string()[:5],
+        42,
+        'P1DT25H',
+    ],
+)
+def test_pendulum_interval_malformed(interval):
+    """Verifies that the instance fails to validate if malformed intervals are passed."""
+    with pytest.raises(ValidationError):
+        IntervalModel(interval=interval)
+
+
+@pytest.mark.parametrize(
     'input_type, value, is_instance',
     [
         (Date, '2021-01-01', pendulum.Date),
@@ -532,6 +577,12 @@ def test_pendulum_duration_malformed(delta_t):
         (Duration, 'P1DT25H', pendulum.Duration),
         (Duration, timedelta(days=1, hours=25), pendulum.Duration),
         (Duration, pendulum.duration(days=1, hours=25), pendulum.Duration),
+        (Interval, '2024-01-01T00:00:00Z/2024-01-02T00:00:00Z', pendulum.Interval),
+        (
+            Interval,
+            pendulum.datetime(2024, 1, 2, tz='UTC') - pendulum.datetime(2024, 1, 1, tz='UTC'),
+            pendulum.Interval,
+        ),
     ],
 )
 def test_date_type_adapter(input_type: type, value, is_instance: type):
