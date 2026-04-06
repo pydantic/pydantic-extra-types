@@ -18,7 +18,7 @@ except ModuleNotFoundError as e:  # pragma: no cover
     ) from e
 
 
-class Series(pd.Series):  # type: ignore[misc]
+class Series(pd.Series):
     """A pandas `Series` with Pydantic validation support.
 
     ```py
@@ -67,7 +67,7 @@ class Series(pd.Series):  # type: ignore[misc]
         )
 
 
-class DataFrame(pd.DataFrame):  # type: ignore[misc]
+class DataFrame(pd.DataFrame):
     """A pandas `DataFrame` with Pydantic validation support.
 
     ```py
