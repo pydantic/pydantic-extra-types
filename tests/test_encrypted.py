@@ -1,4 +1,6 @@
-from typing import Annotated
+from __future__ import annotations
+
+from typing import Annotated, Optional
 
 import pytest
 from pydantic import BaseModel, Field, ValidationError
@@ -29,7 +31,7 @@ class ConstrainedDecryptModel(BaseModel):
 
 
 class OptionalEncryptModel(BaseModel):
-    value: Annotated[str | None, CipherString.encrypt(encrypt)]
+    value: Annotated[Optional[str], CipherString.encrypt(encrypt)]
 
 
 def test_encrypt_after_validation() -> None:
