@@ -1,33 +1,39 @@
 repos:
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0
-  hooks:
-  - id: no-commit-to-branch # prevent direct commits to the `main` branch
-  - id: check-yaml
-  - id: check-toml
-  - id: end-of-file-fixer
-  - id: trailing-whitespace
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: no-commit-to-branch # prevent direct commits to the `main` branch
+      - id: check-yaml
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
 
-- repo: local
-  hooks:
-    - id: format
-      name: Format
-      entry: make
-      args: [format]
-      language: system
-      types: [python]
-      pass_filenames: false
-    - id: lint
-      name: Lint
-      entry: make
-      args: [lint]
-      types: [python]
-      language: system
-      pass_filenames: false
-    - id: Typecheck
-      name: Typecheck
-      entry: make
-      args: [typecheck]
-      types: [python]
-      language: system
-      pass_filenames: false
+  - repo: https://github.com/google/yamlfmt
+    # Configuration for yamlfmt is in yamlfmt.yaml
+    rev: v0.21.0
+    hooks:
+      - id: yamlfmt
+
+  - repo: local
+    hooks:
+      - id: format
+        name: Format
+        entry: make
+        args: [format]
+        language: system
+        types: [python]
+        pass_filenames: false
+      - id: lint
+        name: Lint
+        entry: make
+        args: [lint]
+        types: [python]
+        language: system
+        pass_filenames: false
+      - id: Typecheck
+        name: Typecheck
+        entry: make
+        args: [typecheck]
+        types: [python]
+        language: system
+        pass_filenames: false
