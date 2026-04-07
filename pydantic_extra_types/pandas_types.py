@@ -76,9 +76,25 @@ class Series(pd.Series):  # type: ignore[misc]
 
 
 class Index:
-    """Stub — to be implemented (Tasks 5/6)."""
+    """
+    A `pandas.Index` with Pydantic validation support.
 
-    @classmethod
+    Supports both untyped and typed usage:
+
+    ```python
+    from pydantic import BaseModel
+    from pydantic_extra_types.pandas_types import Index
+
+    class MyModel(BaseModel):
+        idx: Index[str]
+
+    model = MyModel(idx=['a', 'b', 'c'])
+    print(model.idx.tolist())  # ['a', 'b', 'c']
+    ```
+    """
+
+    _item_type: ClassVar[type | None] = None
+
     def __class_getitem__(cls, item: type) -> type:
         return type(f'Index[{item.__name__}]', (cls,), {'_item_type': item})
 
@@ -86,10 +102,38 @@ class Index:
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.CoreSchema:
-        def _not_implemented(v: Any) -> None:
-            raise NotImplementedError('Index validation not yet implemented')
+        if cls._item_type is not None:
+            item_schema = handler.generate_schema(cls._item_type)
+        else:
+            item_schema = core_schema.any_schema()
 
-        return core_schema.no_info_plain_validator_function(_not_implemented)
+        list_schema = core_schema.list_schema(item_schema)
+
+        return core_schema.no_info_wrap_validator_function(
+            cls._validate,
+            list_schema,
+            serialization=core_schema.plain_serializer_function_ser_schema(
+                lambda v: v.tolist(),
+                info_arg=False,
+                return_schema=core_schema.list_schema(item_schema),
+            ),
+        )
+
+    @classmethod
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> pd.Index:
+        if isinstance(value, pd.Index):
+            value = value.tolist()
+        elif not isinstance(value, list):
+            try:
+                value = list(value)
+            except Exception as exc:
+                raise PydanticCustomError(
+                    'index_invalid',
+                    'Value must be list-like or a pandas Index, got {type}',
+                    {'type': type(value).__name__},
+                ) from exc
+        validated: list[Any] = handler(value)
+        return pd.Index(validated)
 
 
 class DataFrame:
