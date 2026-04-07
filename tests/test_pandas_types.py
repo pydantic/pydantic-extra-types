@@ -8,7 +8,6 @@ from pydantic import BaseModel, ValidationError
 
 from pydantic_extra_types.pandas_types import DataFrame, Index, Series
 
-
 # ---------------------------------------------------------------------------
 # Series
 # ---------------------------------------------------------------------------

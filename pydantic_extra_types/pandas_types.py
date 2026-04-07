@@ -5,7 +5,7 @@ try:
 except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
         'The `pandas_types` module requires "pandas" to be installed. '
-        "You can install it with \"pip install 'pydantic-extra-types[pandas]'\"."
+        'You can install it with "pip install \'pydantic-extra-types[pandas]\'".'
     )
 
 from typing import Any, ClassVar
@@ -24,8 +24,10 @@ class Series(pd.Series):  # type: ignore[misc]
     from pydantic import BaseModel
     from pydantic_extra_types.pandas_types import Series
 
+
     class MyModel(BaseModel):
         values: Series[int]
+
 
     model = MyModel(values=[1, 2, 3])
     print(model.values.tolist())  # [1, 2, 3]
@@ -38,9 +40,7 @@ class Series(pd.Series):  # type: ignore[misc]
         return type(f'Series[{item.__name__}]', (cls,), {'_item_type': item})
 
     @classmethod
-    def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
-    ) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         if cls._item_type is not None:
             item_schema = handler.generate_schema(cls._item_type)
         else:
@@ -85,8 +85,10 @@ class Index:
     from pydantic import BaseModel
     from pydantic_extra_types.pandas_types import Index
 
+
     class MyModel(BaseModel):
         idx: Index[str]
+
 
     model = MyModel(idx=['a', 'b', 'c'])
     print(model.idx.tolist())  # ['a', 'b', 'c']
@@ -99,9 +101,7 @@ class Index:
         return type(f'Index[{item.__name__}]', (cls,), {'_item_type': item})
 
     @classmethod
-    def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
-    ) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         if cls._item_type is not None:
             item_schema = handler.generate_schema(cls._item_type)
         else:
@@ -148,12 +148,15 @@ class DataFrame:
     from pydantic import BaseModel
     from pydantic_extra_types.pandas_types import DataFrame
 
+
     class MySchema(TypedDict):
         name: str
         age: int
 
+
     class MyModel(BaseModel):
         people: DataFrame[MySchema]
+
 
     model = MyModel(people={'name': ['Alice', 'Bob'], 'age': [30, 25]})
     print(model.people)
@@ -166,15 +169,11 @@ class DataFrame:
         return type(f'DataFrame[{schema_cls.__name__}]', (cls,), {'_schema_cls': schema_cls})
 
     @classmethod
-    def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
-    ) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         if cls._schema_cls is not None:
             annotations = cls._schema_cls.__annotations__
             fields = {
-                col: core_schema.typed_dict_field(
-                    core_schema.list_schema(handler.generate_schema(col_type))
-                )
+                col: core_schema.typed_dict_field(core_schema.list_schema(handler.generate_schema(col_type)))
                 for col, col_type in annotations.items()
             }
             inner_schema: core_schema.CoreSchema = core_schema.typed_dict_schema(fields)
