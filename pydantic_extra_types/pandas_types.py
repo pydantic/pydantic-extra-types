@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 try:
-    import pandas as pd
+    import pandas as pd  # type: ignore[import-untyped]
 except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
         'The `pandas_types` module requires "pandas" to be installed. '
@@ -36,7 +36,7 @@ class Series(pd.Series):  # type: ignore[misc]
 
     _item_type: ClassVar[type | None] = None
 
-    def __class_getitem__(cls, item: type) -> type:  # type: ignore[override]
+    def __class_getitem__(cls, item: type) -> type:
         return type(f'Series[{item.__name__}]', (cls,), {'_item_type': item})
 
     @classmethod
