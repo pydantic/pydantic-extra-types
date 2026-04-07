@@ -137,17 +137,80 @@ class Index:
 
 
 class DataFrame:
-    """Stub — to be implemented (Tasks 5/6)."""
+    """
+    A `pandas.DataFrame` with Pydantic validation support.
 
-    @classmethod
-    def __class_getitem__(cls, item: type) -> type:
-        return type(f'DataFrame[{item.__name__}]', (cls,), {'_schema_type': item})
+    Accepts a TypedDict (or any class with ``__annotations__``) as a type parameter
+    to validate column names and element types:
+
+    ```python
+    from typing import TypedDict
+    from pydantic import BaseModel
+    from pydantic_extra_types.pandas_types import DataFrame
+
+    class MySchema(TypedDict):
+        name: str
+        age: int
+
+    class MyModel(BaseModel):
+        people: DataFrame[MySchema]
+
+    model = MyModel(people={'name': ['Alice', 'Bob'], 'age': [30, 25]})
+    print(model.people)
+    ```
+    """
+
+    _schema_cls: ClassVar[type | None] = None
+
+    def __class_getitem__(cls, schema_cls: type) -> type:
+        return type(f'DataFrame[{schema_cls.__name__}]', (cls,), {'_schema_cls': schema_cls})
 
     @classmethod
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: GetCoreSchemaHandler
     ) -> core_schema.CoreSchema:
-        def _not_implemented(v: Any) -> None:
-            raise NotImplementedError('DataFrame validation not yet implemented')
+        if cls._schema_cls is not None:
+            annotations = cls._schema_cls.__annotations__
+            fields = {
+                col: core_schema.typed_dict_field(
+                    core_schema.list_schema(handler.generate_schema(col_type))
+                )
+                for col, col_type in annotations.items()
+            }
+            inner_schema: core_schema.CoreSchema = core_schema.typed_dict_schema(fields)
+        else:
+            inner_schema = core_schema.any_schema()
 
-        return core_schema.no_info_plain_validator_function(_not_implemented)
+        return core_schema.no_info_wrap_validator_function(
+            cls._validate,
+            inner_schema,
+            serialization=core_schema.plain_serializer_function_ser_schema(
+                lambda v: {col: v[col].tolist() for col in v.columns},
+                info_arg=False,
+            ),
+        )
+
+    @classmethod
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> pd.DataFrame:
+        extra_data: dict[str, Any] = {}
+
+        if isinstance(value, pd.DataFrame):
+            if cls._schema_cls is not None:
+                known_cols = set(cls._schema_cls.__annotations__.keys())
+                extra_cols = [c for c in value.columns if c not in known_cols]
+                extra_data = {c: value[c].tolist() for c in extra_cols}
+                value = {c: value[c].tolist() for c in value.columns if c in known_cols}
+            else:
+                value = {c: value[c].tolist() for c in value.columns}
+        elif not isinstance(value, dict):
+            raise PydanticCustomError(
+                'dataframe_invalid',
+                'Value must be a dict or pandas DataFrame, got {type}',
+                {'type': type(value).__name__},
+            )
+
+        validated = handler(value)
+        result = pd.DataFrame(validated)
+        for col, data in extra_data.items():
+            result[col] = data
+        return result
