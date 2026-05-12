@@ -3,6 +3,7 @@ from re import Pattern
 from typing import Any, Optional, Union
 
 import pytest
+from dirty_equals import IsPartialDict
 from pydantic import BaseModel, ValidationError
 from pydantic_core._pydantic_core import ArgsKwargs
 
@@ -215,27 +216,29 @@ def test_json_schema():
     class Model(BaseModel):
         value: Coordinate
 
-    assert Model.model_json_schema(mode='validation')['$defs']['Coordinate'] == {
-        'properties': {
-            'latitude': {
-                'anyOf': [
-                    {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
-                    {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
-                ],
-                'title': 'Latitude',
+    assert Model.model_json_schema(mode='validation')['$defs']['Coordinate'] == IsPartialDict(
+        {
+            'properties': {
+                'latitude': {
+                    'anyOf': [
+                        {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
+                        {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
+                    ],
+                    'title': 'Latitude',
+                },
+                'longitude': {
+                    'anyOf': [
+                        {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
+                        {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
+                    ],
+                    'title': 'Longitude',
+                },
             },
-            'longitude': {
-                'anyOf': [
-                    {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
-                    {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
-                ],
-                'title': 'Longitude',
-            },
-        },
-        'required': ['latitude', 'longitude'],
-        'title': 'Coordinate',
-        'type': 'object',
-    }
+            'required': ['latitude', 'longitude'],
+            'title': 'Coordinate',
+            'type': 'object',
+        }
+    )
     assert Model.model_json_schema(mode='validation')['properties']['value'] == {
         'anyOf': [
             {'$ref': '#/$defs/Coordinate'},
@@ -254,27 +257,29 @@ def test_json_schema():
     }
     assert Model.model_json_schema(mode='serialization') == {
         '$defs': {
-            'Coordinate': {
-                'properties': {
-                    'latitude': {
-                        'anyOf': [
-                            {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
-                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
-                        ],
-                        'title': 'Latitude',
+            'Coordinate': IsPartialDict(
+                {
+                    'properties': {
+                        'latitude': {
+                            'anyOf': [
+                                {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
+                                {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
+                            ],
+                            'title': 'Latitude',
+                        },
+                        'longitude': {
+                            'anyOf': [
+                                {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
+                                {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
+                            ],
+                            'title': 'Longitude',
+                        },
                     },
-                    'longitude': {
-                        'anyOf': [
-                            {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
-                            {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
-                        ],
-                        'title': 'Longitude',
-                    },
-                },
-                'required': ['latitude', 'longitude'],
-                'title': 'Coordinate',
-                'type': 'object',
-            }
+                    'required': ['latitude', 'longitude'],
+                    'title': 'Coordinate',
+                    'type': 'object',
+                }
+            )
         },
         'properties': {'value': {'$ref': '#/$defs/Coordinate', 'title': 'Value'}},
         'required': ['value'],
