@@ -2,6 +2,7 @@ from typing import Annotated, Any, Union
 
 import pycountry
 import pytest
+from dirty_equals import IsPartialDict
 from pydantic import BaseModel
 
 import pydantic_extra_types
@@ -189,27 +190,29 @@ USNumberE164 = Annotated[
             Coordinate,
             {
                 '$defs': {
-                    'Coordinate': {
-                        'properties': {
-                            'latitude': {
-                                'anyOf': [
-                                    {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
-                                    {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
-                                ],
-                                'title': 'Latitude',
+                    'Coordinate': IsPartialDict(
+                        {
+                            'properties': {
+                                'latitude': {
+                                    'anyOf': [
+                                        {'maximum': 90.0, 'minimum': -90.0, 'type': 'number'},
+                                        {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
+                                    ],
+                                    'title': 'Latitude',
+                                },
+                                'longitude': {
+                                    'anyOf': [
+                                        {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
+                                        {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
+                                    ],
+                                    'title': 'Longitude',
+                                },
                             },
-                            'longitude': {
-                                'anyOf': [
-                                    {'maximum': 180.0, 'minimum': -180.0, 'type': 'number'},
-                                    {'type': 'string', 'pattern': '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'},
-                                ],
-                                'title': 'Longitude',
-                            },
+                            'required': ['latitude', 'longitude'],
+                            'title': 'Coordinate',
+                            'type': 'object',
                         },
-                        'required': ['latitude', 'longitude'],
-                        'title': 'Coordinate',
-                        'type': 'object',
-                    }
+                    )
                 },
                 'properties': {
                     'x': {
