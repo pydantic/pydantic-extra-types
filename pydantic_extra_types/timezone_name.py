@@ -81,6 +81,8 @@ _COMMON_TZ_ABBREVIATIONS: set[str] = {
     'EEST',
     'WET',
     'WEST',
+    # 'IST' is ambiguous (Irish / Israel / India Standard Time);
+    # a single entry covers membership checks for all three.
     'IST',
     # Asia-Pacific timezones
     'KST',
@@ -92,7 +94,6 @@ _COMMON_TZ_ABBREVIATIONS: set[str] = {
     'AWST',
     'NZST',
     'NZDT',
-    'IST',
     'PKT',
     'WIB',
     'WITA',
