@@ -18,7 +18,7 @@ class CurrencyCheckingModel(BaseModel):
 forbidden_currencies = sorted(currency_code._CODES_FOR_BONDS_METAL_TESTING)
 
 
-@pytest.mark.parametrize('currency', map(lambda code: code.alpha_3, pycountry.currencies))
+@pytest.mark.parametrize('currency', [code.alpha_3 for code in pycountry.currencies])
 def test_ISO4217_code_ok(currency: str):
     model = ISO4217CheckingModel(currency=currency)
     assert model.currency == currency
@@ -33,10 +33,7 @@ def test_ISO4217_code_ok_lower_case(currency: str):
 
 @pytest.mark.parametrize(
     'currency',
-    filter(
-        lambda code: code not in currency_code._CODES_FOR_BONDS_METAL_TESTING,
-        map(lambda code: code.alpha_3, pycountry.currencies),
-    ),
+    [code.alpha_3 for code in pycountry.currencies if code.alpha_3 not in currency_code._CODES_FOR_BONDS_METAL_TESTING],
 )
 def test_everyday_code_ok(currency: str):
     model = CurrencyCheckingModel(currency=currency)

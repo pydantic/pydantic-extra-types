@@ -70,14 +70,14 @@ def test_invalid_name(name: str, MovieName):
         MovieName(audio_lang=name)
 
 
-@pytest.mark.parametrize('lang', map(lambda lang: lang.alpha_3, pycountry.languages))
+@pytest.mark.parametrize('lang', [lang.alpha_3 for lang in pycountry.languages])
 def test_iso_ISO639_3_code_ok(lang: str):
     model = ISO3CheckingModel(lang=lang)
     assert model.lang == lang
     assert model.model_dump() == {'lang': lang}  # test serialization
 
 
-@pytest.mark.parametrize('lang', map(lambda lang: lang.alpha_3, pycountry.language_families))
+@pytest.mark.parametrize('lang', [lang.alpha_3 for lang in pycountry.language_families])
 def test_iso_639_5_code_ok(lang: str):
     model = ISO5CheckingModel(lang=lang)
     assert model.lang == lang
