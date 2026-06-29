@@ -11,7 +11,7 @@ class ScriptCheck(BaseModel):
     script: ISO_15924
 
 
-@pytest.mark.parametrize('script', map(lambda lang: lang.alpha_4, pycountry.scripts))
+@pytest.mark.parametrize('script', [lang.alpha_4 for lang in pycountry.scripts])
 def test_ISO_15924_code_ok(script: str):
     model = ScriptCheck(script=script)
     assert model.script == script
