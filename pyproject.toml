@@ -43,6 +43,9 @@ dependencies = ['pydantic>=2.5.2','typing-extensions']
 dynamic = ['version']
 
 [project.optional-dependencies]
+pandas = [
+    'pandas>=2.0.0',
+]
 all = [
     'phonenumbers>=8,<10',
     'pycountry>=23',
@@ -57,6 +60,7 @@ all = [
     'tzdata>=2024.1',
     "cron-converter>=1.2.2",
     'uuid-utils>=0.6.0; python_version<"3.14"',
+    'pandas>=2.0.0',
 ]
 phonenumbers = ['phonenumbers>=8,<10']
 pycountry = ['pycountry>=23']
