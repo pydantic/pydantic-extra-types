@@ -39,3 +39,9 @@ def test_valid_routing_number(routing_number: str) -> None:
 def test_raises_error_when_not_a_string() -> None:
     with pytest.raises(ValidationError, match='routing number is not all digits'):
         Model(routing_number='A12210515')
+
+
+@pytest.mark.parametrize('routing_number', ['١٢٢١٠٥١٥٥', '１２２１０５１５５', '12210515²'])
+def test_rejects_non_ascii_digits(routing_number: str) -> None:
+    with pytest.raises(ValidationError, match='routing number is not all digits'):
+        Model(routing_number=routing_number)
