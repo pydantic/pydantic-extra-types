@@ -70,7 +70,7 @@ class ABARoutingNumber(str):
         Raises:
             PydanticCustomError: If the routing number is not all digits.
         """
-        if not routing_number.isdigit():
+        if not routing_number.isascii() or not routing_number.isdecimal():
             raise PydanticCustomError('aba_routing_number', 'routing number is not all digits')
 
     @classmethod
