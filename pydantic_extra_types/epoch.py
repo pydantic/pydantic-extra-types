@@ -35,7 +35,14 @@ class _Base(datetime.datetime):
 
     @classmethod
     def _validate(cls, __input_value: Any, _: Any) -> datetime.datetime:
-        return EPOCH + datetime.timedelta(seconds=__input_value)
+        try:
+            return EPOCH + datetime.timedelta(seconds=__input_value)
+        except (OverflowError, OSError) as e:
+            # A too-large timestamp (e.g. a JS millisecond epoch fed to a seconds field)
+            # overflows past datetime.max and raises OverflowError, which is not a
+            # ValueError subclass and so escapes as a raw exception instead of a
+            # pydantic ValidationError. Convert it so callers can handle it normally.
+            raise ValueError('timestamp is out of the supported datetime range') from e
 
     @classmethod
     def _f(cls, value: Any, serializer: Callable[[Any], Any]) -> Any:  # pragma: no cover
