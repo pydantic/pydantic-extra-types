@@ -44,6 +44,7 @@ class ULID(_repr.Representation):
                     core_schema.uuid_schema(),
                 ]
             ),
+            serialization=core_schema.plain_serializer_function_ser_schema(str, when_used='json'),
         )
 
     @classmethod
