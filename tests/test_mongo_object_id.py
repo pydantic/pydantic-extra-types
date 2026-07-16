@@ -1,6 +1,7 @@
 """Tests for the mongo_object_id module."""
 
 import pytest
+from bson import ObjectId
 from pydantic import BaseModel, GetCoreSchemaHandler, ValidationError
 from pydantic.json_schema import JsonSchemaMode
 
@@ -38,6 +39,29 @@ def test_format_for_object_id(object_id: str, result: str, valid: bool) -> None:
 
 
 @pytest.mark.parametrize(
+    'object_id, valid',
+    [
+        ('611827f2878b88b49ebb69fc', True),
+        ('z' * 24, False),  # right length, not hex
+        ('611827f2878b88b49ebb69f', False),  # too short
+    ],
+)
+def test_validate_json_matches_python(object_id: str, valid: bool) -> None:
+    """JSON validation must apply the same checks as Python validation.
+
+    The json schema only constrained the string length, so a 24-character
+    non-hex value was accepted and left as a str instead of an ObjectId.
+    """
+    payload = f'{{"object_id": "{object_id}"}}'
+
+    if valid:
+        assert MongoDocument.model_validate_json(payload).object_id == ObjectId(object_id)
+    else:
+        with pytest.raises(ValidationError):
+            MongoDocument.model_validate_json(payload)
+
+
+@pytest.mark.parametrize(
     'schema_mode',
     [
         'validation',
@@ -68,4 +92,7 @@ def test_get_pydantic_core_schema() -> None:
     assert isinstance(schema, dict)
     assert 'json_schema' in schema
     assert 'python_schema' in schema
-    assert schema['json_schema']['type'] == 'str'
+    # The JSON branch validates the string and then runs cls.validate, so the
+    # outer schema is the after-validator wrapping the length-checked str.
+    assert schema['json_schema']['type'] == 'function-after'
+    assert schema['json_schema']['schema']['type'] == 'str'

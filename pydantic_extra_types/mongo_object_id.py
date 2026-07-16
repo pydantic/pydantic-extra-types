@@ -44,17 +44,16 @@ class MongoObjectId(str):
 
     @classmethod
     def __get_pydantic_core_schema__(cls, _: Any, __: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        from_str_schema = core_schema.no_info_after_validator_function(
+            cls.validate,
+            core_schema.str_schema(min_length=cls.OBJECT_ID_LENGTH, max_length=cls.OBJECT_ID_LENGTH),
+        )
         return core_schema.json_or_python_schema(
-            json_schema=core_schema.str_schema(min_length=cls.OBJECT_ID_LENGTH, max_length=cls.OBJECT_ID_LENGTH),
+            json_schema=from_str_schema,
             python_schema=core_schema.union_schema(
                 [
                     core_schema.is_instance_schema(ObjectId),
-                    core_schema.chain_schema(
-                        [
-                            core_schema.str_schema(min_length=cls.OBJECT_ID_LENGTH, max_length=cls.OBJECT_ID_LENGTH),
-                            core_schema.no_info_plain_validator_function(cls.validate),
-                        ]
-                    ),
+                    from_str_schema,
                 ]
             ),
             serialization=core_schema.plain_serializer_function_ser_schema(lambda x: str(x), when_used='json'),
