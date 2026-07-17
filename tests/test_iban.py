@@ -1,3 +1,5 @@
+from typing import Any
+
 import pytest
 from pydantic import BaseModel, ValidationError
 
@@ -104,3 +106,9 @@ def test_iban_normalizes_spaces_and_case() -> None:
     account = BankAccount(iban='gb29 nwbk 6016 1331 9268 19')
     assert account.iban == 'GB29NWBK60161331926819'
     assert isinstance(account.iban, str)
+
+
+@pytest.mark.parametrize('iban_value', [None, 12345, 1.5, b'bytes', [], {}])
+def test_iban_requires_string(iban_value: Any) -> None:
+    with pytest.raises(ValidationError, match='Value must be a string'):
+        BankAccount(iban=iban_value)

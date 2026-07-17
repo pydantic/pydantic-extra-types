@@ -50,17 +50,20 @@ class MacAddress(str):
         )
 
     @classmethod
-    def _validate(cls, __input_value: str, _: Any) -> str:
-        """Validate a MAC Address from the provided str value.
+    def _validate(cls, __input_value: Any, _: Any) -> str:
+        """Validate a MAC Address from the provided value.
 
         Args:
-            __input_value: The str value to be validated.
+            __input_value: The value to be validated.
             _: The source type to be converted.
 
         Returns:
             str: The parsed MAC address.
 
         """
+        if not isinstance(__input_value, str):
+            raise PydanticCustomError('mac_address_type', 'Value must be a string')
+
         return cls.validate_mac_address(__input_value.encode())
 
     @staticmethod
