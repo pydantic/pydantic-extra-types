@@ -86,6 +86,9 @@ def test_color_success(raw_color, as_tuple):
         (0, 0, 'x'),
         (0, 0, 0, 1.5),
         (0, 0, 0, 'x'),
+        # Alpha types float() cannot take at all: a ValidationError, not a raw TypeError
+        (0, 0, 0, []),
+        (0, 0, 0, {}),
         (0, 0, 1280),
         (0, 0, 1205, 0.1),
         (0, 0, 1128, 0.5),

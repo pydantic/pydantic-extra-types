@@ -44,6 +44,11 @@ class Something(BaseModel):
         # Invalid ULID for bool format
         (True, None, False),
         (False, None, False),
+        # Types _ULID cannot construct from: must be a ValidationError, not a raw TypeError
+        (1.5, None, False),
+        (None, None, False),
+        ([], None, False),
+        ({}, None, False),
     ],
 )
 def test_format_for_ulid(ulid: Any, result: Any, valid: bool):
