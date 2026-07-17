@@ -95,3 +95,18 @@ def test_json_schema():
         'title': 'Something',
         'type': 'object',
     }
+
+
+def test_json_serialization():
+    """A ULID field must be serializable to JSON.
+
+    The schema advertises integer/string/binary/uuid in serialization mode, but
+    the union's leading is_instance_schema carried no serializer, so
+    model_dump_json raised PydanticSerializationError.
+    """
+    something = Something(ulid='01BTGNYV6HRNK8K8VKZASZCFPE')
+
+    assert something.model_dump_json() == '{"ulid":"01BTGNYV6HRNK8K8VKZASZCFPE"}'
+    assert Something.model_validate_json(something.model_dump_json()).ulid == something.ulid
+    # Python mode still yields the underlying ULID object, not a string
+    assert isinstance(something.model_dump()['ulid'], _ULID)
