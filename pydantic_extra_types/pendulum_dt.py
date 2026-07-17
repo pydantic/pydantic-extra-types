@@ -406,7 +406,14 @@ class Interval(_Interval[Any]):
         Returns:
             A Pydantic CoreSchema with the Interval validation.
         """
-        return core_schema.no_info_wrap_validator_function(cls._validate, core_schema.str_schema())
+        return core_schema.no_info_wrap_validator_function(
+            cls._validate,
+            core_schema.str_schema(),
+            serialization=core_schema.plain_serializer_function_ser_schema(
+                lambda instance: f'{instance.start.isoformat()}/{instance.end.isoformat()}',
+                when_used='json-unless-none',
+            ),
+        )
 
     @classmethod
     def _instance(cls, value: _Interval[Any]) -> Interval:

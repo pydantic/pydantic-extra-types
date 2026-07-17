@@ -317,6 +317,30 @@ def test_pendulum_interval_from_serialized():
 
 
 @pytest.mark.parametrize(
+    'interval_str',
+    [
+        '2024-01-01T00:00:00+00:00/2024-01-02T00:00:00+00:00',
+        '2021-05-06T12:30:00+00:00/2021-05-06T13:45:30+00:00',
+        '2020-02-28T00:00:00+00:00/2020-03-01T00:00:00+00:00',
+    ],
+)
+def test_pendulum_interval_serialization_roundtrip(interval_str):
+    """Verifies that an Interval survives a JSON serialize/deserialize round-trip.
+
+    Regression: without a serialization schema the Interval was serialized as a
+    bare duration (e.g. ``"P1D"``), dropping the start/end boundaries, and the
+    resulting string then failed to re-validate.
+    """
+    adapter = TypeAdapter(Interval)
+    interval = adapter.validate_python(interval_str)
+    json_serialized = adapter.dump_json(interval)
+    deserialized = adapter.validate_json(json_serialized)
+    assert deserialized.start == interval.start
+    assert deserialized.end == interval.end
+    assert deserialized == interval
+
+
+@pytest.mark.parametrize(
     'duration',
     [
         Duration(months=1),
