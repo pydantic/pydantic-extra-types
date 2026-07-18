@@ -142,3 +142,9 @@ def test_model_validation():
             'type': 'mac_address_len',
         }
     ]
+
+
+@pytest.mark.parametrize('mac_address_value', [None, 12345, 1.5, b'bytes', [], {}])
+def test_mac_address_requires_string(mac_address_value: Any) -> None:
+    with pytest.raises(ValidationError, match='Value must be a string'):
+        Network(mac_address=mac_address_value)

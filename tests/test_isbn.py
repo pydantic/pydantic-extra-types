@@ -153,3 +153,9 @@ isbn_conversion_test_cases = [
 @pytest.mark.parametrize('input_isbn, output_isbn', isbn_conversion_test_cases)
 def test_isbn_conversion(input_isbn: Any, output_isbn: str) -> None:
     assert Book(isbn=ISBN(input_isbn)).isbn == output_isbn
+
+
+@pytest.mark.parametrize('isbn_value', [None, 12345, 1.5, b'bytes', [], {}])
+def test_isbn_requires_string(isbn_value: Any) -> None:
+    with pytest.raises(ValidationError, match='Value must be a string'):
+        Book(isbn=isbn_value)

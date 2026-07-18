@@ -80,11 +80,11 @@ class ISBN(str):
         )
 
     @classmethod
-    def _validate(cls, __input_value: str, _: Any) -> str:
-        """Validate a ISBN from the provided str value.
+    def _validate(cls, __input_value: Any, _: Any) -> str:
+        """Validate a ISBN from the provided value.
 
         Args:
-            __input_value: The str value to be validated.
+            __input_value: The value to be validated.
             _: The source type to be converted.
 
         Returns:
@@ -93,6 +93,9 @@ class ISBN(str):
         Raises:
             PydanticCustomError: If the ISBN is not valid.
         """
+        if not isinstance(__input_value, str):
+            raise PydanticCustomError('isbn_type', 'Value must be a string')
+
         cls.validate_isbn_format(__input_value)
 
         return cls.convert_isbn10_to_isbn13(__input_value)
