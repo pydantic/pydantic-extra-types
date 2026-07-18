@@ -112,3 +112,9 @@ def test_iban_normalizes_spaces_and_case() -> None:
 def test_iban_requires_string(iban_value: Any) -> None:
     with pytest.raises(ValidationError, match='Value must be a string'):
         BankAccount(iban=iban_value)
+
+
+@pytest.mark.parametrize('iban', ['GB29NWBK٦0161331926819', 'GB29NWBK6016133192681²'])
+def test_iban_rejects_non_ascii_digits(iban: str) -> None:
+    with pytest.raises(ValidationError, match='iban_invalid_characters'):
+        BankAccount(iban=iban)

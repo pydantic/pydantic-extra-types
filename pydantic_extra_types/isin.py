@@ -127,7 +127,7 @@ class ISIN(str):
         if isin_length != 12:
             raise PydanticCustomError('isin_length', f'Length for ISIN must be 12 characters, not {isin_length}')
 
-        if not value.isalnum():
+        if not value.isascii() or not value.isalnum():
             raise PydanticCustomError('isin_invalid_characters', 'All characters of ISIN must be letters or digits')
 
         if not value[:2].isalpha():

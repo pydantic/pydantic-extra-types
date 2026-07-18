@@ -187,7 +187,7 @@ class IBAN(str):
             )
 
         # Check that remaining characters are alphanumeric
-        if not iban[2:].isalnum():
+        if not iban[2:].isascii() or not iban[2:].isalnum():
             raise PydanticCustomError(
                 'iban_invalid_characters',
                 'Invalid IBAN: must contain only alphanumeric characters',

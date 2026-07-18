@@ -62,3 +62,9 @@ def test_isin_invalid_check_digit(input_isin: str) -> None:
 def test_isin_requires_string(isin_value: Any) -> None:
     with pytest.raises(ValidationError, match='Input should be a valid string'):
         Security(isin=isin_value)
+
+
+@pytest.mark.parametrize('isin_value', ['US03783२1005', 'US037833100٥', 'US037833100²'])
+def test_isin_rejects_non_ascii_digits(isin_value: str) -> None:
+    with pytest.raises(ValidationError, match='isin_invalid_characters'):
+        Security(isin=isin_value)
