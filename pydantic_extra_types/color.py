@@ -388,7 +388,7 @@ def parse_float_alpha(value: None | str | float | int) -> float | None:
             alpha = float(value[:-1]) / 100
         else:
             alpha = float(value)
-    except ValueError as e:
+    except (ValueError, TypeError) as e:
         raise PydanticCustomError(
             'color_error',
             'value is not a valid color: alpha values must be a valid float',
