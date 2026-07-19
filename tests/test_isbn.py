@@ -159,3 +159,15 @@ def test_isbn_conversion(input_isbn: Any, output_isbn: str) -> None:
 def test_isbn_requires_string(isbn_value: Any) -> None:
     with pytest.raises(ValidationError, match='Value must be a string'):
         Book(isbn=isbn_value)
+
+
+@pytest.mark.parametrize('isbn_value', ['97885٣7809662', '97885３7809662', '978853780966²'])
+def test_isbn13_rejects_non_ascii_digits(isbn_value: str) -> None:
+    with pytest.raises(ValidationError, match='isbn13_invalid_characters'):
+        Book(isbn=isbn_value)
+
+
+@pytest.mark.parametrize('isbn_value', ['08044295٧X', '0804４2957X'])
+def test_isbn10_rejects_non_ascii_digits(isbn_value: str) -> None:
+    with pytest.raises(ValidationError, match='isbn10_invalid_characters'):
+        Book(isbn=isbn_value)
