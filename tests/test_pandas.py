@@ -1,4 +1,4 @@
-from typing import Annotated, Any
+from typing import Annotated
 
 import pandas as pd
 import pytest

@@ -150,10 +150,6 @@ def _validate_dataframe(
     return value
 
 
-from dataclasses import dataclass
-from functools import partial
-
-
 @dataclass(frozen=True)
 class PandasDataFrameValidator:
     """An annotation to validate `pd.DataFrame` objects with column constraints.
@@ -248,78 +244,3 @@ class PandasSeries:
             )
 
         return value
-
-
-from dataclasses import dataclass
-from functools import partial
-
-
-@dataclass(frozen=True)
-class PandasDataFrameValidator:
-    """An annotation to validate `pd.DataFrame` objects with column constraints.
-
-    Example:
-        ```python
-        from typing import Annotated
-        import pandas as pd
-        from pydantic import BaseModel
-        from pydantic_extra_types.pandas import PandasDataFrameValidator
-
-        UserFrame = Annotated[pd.DataFrame, PandasDataFrameValidator(required_columns=['name', 'email'])]
-
-
-        class Model(BaseModel):
-            df: UserFrame
-
-
-        m = Model(df=pd.DataFrame({'name': ['Alice'], 'email': ['alice@example.com']}))
-        ```
-    """
-
-    required_columns: list[str] | None = None
-    """An optional list of column names that the DataFrame must contain."""
-
-    def __get_pydantic_core_schema__(
-        self, source: type[Any], handler: GetCoreSchemaHandler
-    ) -> core_schema.CoreSchema:
-        return core_schema.no_info_before_validator_function(
-            partial(
-                _validate_dataframe,
-                self.required_columns,
-            ),
-            core_schema.any_schema(),
-        )
-
-    @classmethod
-    def __get_pydantic_json_schema__(
-        cls, schema: core_schema.CoreSchema, handler: GetCoreSchemaHandler
-    ) -> dict[str, Any]:
-        json_schema = handler(schema)
-        json_schema.update({'type': 'object', 'title': 'DataFrame'})
-        return json_schema
-
-    def __hash__(self) -> int:
-        return super().__hash__()
-
-
-def _validate_dataframe(
-    required_columns: list[str] | None,
-    value: Any,
-) -> pd.DataFrame:
-    """Validate that *value* is a ``pd.DataFrame`` and (optionally) that it
-    contains *required_columns*."""
-    if not isinstance(value, pd.DataFrame):
-        raise PydanticCustomError(
-            'value_error',
-            'value is not a valid pandas DataFrame',
-        )
-
-    if required_columns:
-        missing = [col for col in required_columns if col not in value.columns]
-        if missing:
-            raise PydanticCustomError(
-                'value_error',
-                'DataFrame is missing required columns: {}'.format(', '.join(missing)),
-            )
-
-    return value
