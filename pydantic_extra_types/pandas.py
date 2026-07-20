@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from functools import partial
 from typing import Any
 
-from pydantic import GetCoreSchemaHandler
+from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
 try:
@@ -99,7 +99,7 @@ class PandasDataFrame:
 
     @classmethod
     def __get_pydantic_json_schema__(
-        cls, schema: core_schema.CoreSchema, handler: GetCoreSchemaHandler
+        cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
         json_schema = handler(schema)
         json_schema.update({'type': 'object', 'title': 'DataFrame'})
@@ -183,7 +183,7 @@ class PandasDataFrameValidator:
 
     @classmethod
     def __get_pydantic_json_schema__(
-        cls, schema: core_schema.CoreSchema, handler: GetCoreSchemaHandler
+        cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
         json_schema = handler(schema)
         json_schema.update({'type': 'object', 'title': 'DataFrame'})
@@ -222,7 +222,7 @@ class PandasSeries:
 
     @classmethod
     def __get_pydantic_json_schema__(
-        cls, schema: core_schema.CoreSchema, handler: GetCoreSchemaHandler
+        cls, schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
     ) -> dict[str, Any]:
         json_schema = handler(schema)
         json_schema.update({'type': 'array', 'title': 'Series'})
