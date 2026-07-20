@@ -17,8 +17,7 @@ try:
     import pandas as pd
 except ModuleNotFoundError as e:
     raise RuntimeError(
-        '`PandasDataFrame` requires "pandas" to be installed. '
-        'You can install it with "pip install pandas"'
+        '`PandasDataFrame` requires "pandas" to be installed. You can install it with "pip install pandas"'
     ) from e
 
 
@@ -92,9 +91,7 @@ class PandasDataFrame:
     """An optional list of column names that the DataFrame must contain."""
 
     @classmethod
-    def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
-    ) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.with_info_after_validator_function(
             cls._validate,
             core_schema.any_schema(),
@@ -175,9 +172,7 @@ class PandasDataFrameValidator:
     required_columns: list[str] | None = None
     """An optional list of column names that the DataFrame must contain."""
 
-    def __get_pydantic_core_schema__(
-        self, source: type[Any], handler: GetCoreSchemaHandler
-    ) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(self, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.no_info_before_validator_function(
             partial(
                 _validate_dataframe,
@@ -219,9 +214,7 @@ class PandasSeries:
     """
 
     @classmethod
-    def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
-    ) -> core_schema.CoreSchema:
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.with_info_after_validator_function(
             cls._validate,
             core_schema.any_schema(),
