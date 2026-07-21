@@ -14,7 +14,7 @@ from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
 
 try:
-    import pandas as pd
+    import pandas as pd  # type: ignore[import-untyped]
 except ModuleNotFoundError as e:
     raise RuntimeError(
         '`PandasDataFrame` requires "pandas" to be installed. You can install it with "pip install pandas"'
