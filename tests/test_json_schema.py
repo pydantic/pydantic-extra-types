@@ -32,6 +32,7 @@ from pydantic_extra_types.ulid import ULID
 
 try:
     from pydantic_extra_types.pandas import PandasDataFrame, PandasSeries
+
     pandas_available = True
 except RuntimeError:
     pandas_available = False
