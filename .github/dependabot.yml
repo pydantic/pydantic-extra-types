@@ -10,8 +10,8 @@ updates:
       prefix: ⬆
     cooldown:
       default-days: 7
-  # Python
   - package-ecosystem: 'uv'
+    # Python
     directory: '/'
     schedule:
       interval: 'monthly'

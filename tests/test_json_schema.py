@@ -30,6 +30,13 @@ from pydantic_extra_types.semver import _VersionPydanticAnnotation
 from pydantic_extra_types.timezone_name import TimeZoneName
 from pydantic_extra_types.ulid import ULID
 
+try:
+    from pydantic_extra_types.pandas import PandasDataFrame, PandasSeries
+
+    pandas_available = True
+except RuntimeError:
+    pandas_available = False
+
 languages = [lang.alpha_3 for lang in pycountry.languages]
 language_families = [lang.alpha_3 for lang in pycountry.language_families]
 languages.sort()
@@ -606,7 +613,41 @@ USNumberE164 = Annotated[
                 'required': ['x'],
             },
         ),
-    ],
+    ]
+    + (
+        [
+            (
+                PandasDataFrame,
+                {
+                    'title': 'Model',
+                    'type': 'object',
+                    'properties': {
+                        'x': {
+                            'title': 'DataFrame',
+                            'type': 'object',
+                        },
+                    },
+                    'required': ['x'],
+                },
+            ),
+            (
+                PandasSeries,
+                {
+                    'title': 'Model',
+                    'type': 'object',
+                    'properties': {
+                        'x': {
+                            'title': 'Series',
+                            'type': 'array',
+                        },
+                    },
+                    'required': ['x'],
+                },
+            ),
+        ]
+        if pandas_available
+        else []
+    ),
 )
 def test_json_schema(cls: Any, expected: dict[str, Any]) -> None:
     """Test the model_json_schema implementation for all extra types."""
