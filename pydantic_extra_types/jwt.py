@@ -54,7 +54,7 @@ class JWTStr(str):
 
     def __new__(cls, value: Any) -> JWTStr:
         cls._validate(value)
-        return cast('JWTStr', super().__new__(cls, value))
+        return super().__new__(cls, value)
 
     @classmethod
     def validate(cls, value: Any, _: core_schema.ValidationInfo) -> JWTStr:
@@ -97,12 +97,12 @@ class JWTStr(str):
     @property
     def header(self) -> dict[str, Any]:
         """Return the decoded JWT header."""
-        return json.loads(self._decode_segment(self.split('.')[0]).decode())
+        return cast('dict[str, Any]', json.loads(self._decode_segment(self.split('.')[0]).decode()))
 
     @property
     def payload(self) -> dict[str, Any]:
         """Return the decoded JWT payload."""
-        return json.loads(self._decode_segment(self.split('.')[1]).decode())
+        return cast('dict[str, Any]', json.loads(self._decode_segment(self.split('.')[1]).decode()))
 
     @property
     def signature(self) -> bytes:
