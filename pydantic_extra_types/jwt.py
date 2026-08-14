@@ -91,7 +91,7 @@ class JWTStr(str):
             raise PydanticCustomError('jwt_type', 'Payload must be a JSON object')
 
         alg = header.get('alg')
-        if not alg or not isinstance(alg, str):
+        if not alg or not isinstance(alg, str) or alg.lower() == 'none':
             raise PydanticCustomError('jwt_format', 'Header must contain non-empty alg')
 
     @property

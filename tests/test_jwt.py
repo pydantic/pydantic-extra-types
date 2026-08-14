@@ -52,6 +52,10 @@ class JWTTest(BaseModel):
             'e30.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dGVzdA',  # alg is missed in header
             False,
         ),
+        (
+            'eyJhbGciOiAibm9uZSJ9.eyJhbGciOiAibm9uZSJ9.eyJhbGciOiAibm9uZSJ9', # alg is none
+            False,
+        ),
     ],
 )
 def test_jwt(jwt: str, valid: bool):
