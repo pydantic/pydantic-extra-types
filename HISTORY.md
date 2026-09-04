@@ -2,6 +2,8 @@
 
 ## Latest Changes
 
+* fix(mac_address): reject MAC octets with a sign or whitespace (e.g. `-a:...`, `+a:...`, ` a:...`) that `int(..., 16)` accepted.
+
 ## 2.11.2
 
 * fix: accept common timezone abbreviations like EDT in TimeZoneName validator by @r266-tech in https://github.com/pydantic/pydantic-extra-types/pull/376
