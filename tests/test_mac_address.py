@@ -56,6 +56,11 @@ class Network(BaseModel):
         ('00.00.5e.00.53.01.', None, False),  # Extra separator at the end
         ('00:00:5e:00:53:', None, False),  # Incomplete MAC address
         (float(12345678910111213), None, False),
+        # int(..., 16) accepts a sign or whitespace; a MAC octet must not.
+        ('-a:-b:-c:-d:-e:-f', None, False),
+        ('+a:+b:+c:+d:+e:+f', None, False),
+        (' a: b: c: d: e: f', None, False),
+        ('-aaa.-bbb.-ccc', None, False),
     ],
 )
 def test_format_for_mac_address(mac_address: Any, result: str, valid: bool):

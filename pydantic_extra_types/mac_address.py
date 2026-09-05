@@ -4,6 +4,7 @@ formats, such as IEEE 802 MAC-48, EUI-48, EUI-64, or a 20-octet format.
 
 from __future__ import annotations
 
+import string
 from typing import Any
 
 from pydantic import GetCoreSchemaHandler
@@ -100,7 +101,12 @@ class MacAddress(str):
                 mac_bytes: list[int] = []
                 for part in parts:
                     for i in range(0, chunk_len, 2):
-                        mac_bytes.append(int(part[i : i + 2], base=16))
+                        octet = part[i : i + 2]
+                        # int(octet, 16) also accepts a sign or whitespace,
+                        # which are not valid MAC octets.
+                        if not all(char in string.hexdigits for char in octet):
+                            raise ValueError(octet)
+                        mac_bytes.append(int(octet, base=16))
             except ValueError as exc:
                 raise PydanticCustomError('mac_address_format', 'Unrecognized format') from exc
 
