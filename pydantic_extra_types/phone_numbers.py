@@ -3,6 +3,8 @@
 
 This class depends on the [phonenumbers](https://pypi.org/project/phonenumbers/) package,
 which is a Python port of Google's [libphonenumber](https://github.com/google/libphonenumber/).
+The lighter `phonenumberslite` distribution is also supported; install it with
+`pip install 'pydantic-extra-types[phonenumberslite]'` instead of the full phone extra.
 """
 
 from __future__ import annotations

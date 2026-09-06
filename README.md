@@ -22,3 +22,10 @@ $ uv add "pydantic-extra-types[pendulum]"
 # via pip
 $ pip install -U "pydantic-extra-types[pendulum]"
 ```
+
+For phone numbers, choose `pydantic-extra-types[phonenumbers]` or
+`pydantic-extra-types[phonenumberslite]`. Both support `PhoneNumber` and
+`PhoneNumberValidator`. The lite distribution omits geocoder, carrier, and
+timezone data that these types do not use. Install only one phone distribution:
+they provide the same `phonenumbers` import namespace. The `all` extra continues
+to include the full distribution.

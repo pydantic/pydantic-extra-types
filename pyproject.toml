@@ -60,6 +60,7 @@ all = [
     'pandas>=2.0.0,<4.0.0',
 ]
 phonenumbers = ['phonenumbers>=8,<10']
+phonenumberslite = ['phonenumberslite>=8,<10']
 pycountry = ['pycountry>=23']
 jsonschema = ['jsonschema>=4.0.0']
 semver = ['semver>=3.0.2']
