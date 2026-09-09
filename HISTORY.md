@@ -2,6 +2,7 @@
 
 ## Latest Changes
 
+* fix(pendulum_dt): stop `DateTime` defaulting a timezone-naive input to UTC; it now stays naive, matching pydantic's stdlib `datetime` contract.
 * fix(mac_address): reject MAC octets with a sign or whitespace (e.g. `-a:...`, `+a:...`, ` a:...`) that `int(..., 16)` accepted.
 
 ## 2.11.2

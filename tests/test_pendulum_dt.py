@@ -49,12 +49,12 @@ class IntervalModel(BaseModel):
     ],
 )
 def test_existing_instance(instance):
-    """Verifies that constructing a model with an existing pendulum dt doesn't throw."""
+    """Verifies that constructing a model with an existing pendulum dt doesn't throw, and that
+    a naive instance stays naive (pydantic/pydantic-extra-types#414) instead of being defaulted
+    to UTC."""
     model = DtModel(dt=instance)
     if isinstance(instance, datetime):
-        assert model.dt == pendulum.instance(instance)
-        if instance.tzinfo is None and isinstance(instance, datetime):
-            instance = model.dt.replace(tzinfo=UTC)  # pendulum defaults to UTC
+        assert model.dt == pendulum.instance(instance, tz=None)
         dt = model.dt
     else:
         assert model.dt == instance
@@ -179,6 +179,30 @@ def test_pendulum_dt_from_serialized_preserves_timezones(dt):
 @pytest.mark.parametrize(
     'dt',
     [
+        '2026-07-24',
+        '2026-07-24T10:00:00',
+    ],
+)
+def test_pendulum_dt_from_serialized_naive_stays_naive(dt):
+    """A timezone-naive string must not be defaulted to UTC. Regression test for
+    pydantic/pydantic-extra-types#414.
+    """
+    model = DtModel(dt=dt)
+    assert model.dt.tzinfo is None
+
+
+def test_pendulum_dt_from_serialized_aware_keeps_its_offset():
+    """A non-UTC offset in the input string must survive unchanged; naive inputs (#414) and
+    the pre-existing #188 fix for aware inputs are two branches of the same invariant.
+    """
+    model = DtModel(dt='2026-07-24T10:00:00+05:00')
+    assert model.dt.tzinfo is not None
+    assert model.dt.tzinfo.utcoffset(model.dt) == timedelta(hours=5)
+
+
+@pytest.mark.parametrize(
+    'dt',
+    [
         pendulum.now().to_iso8601_string(),
         pendulum.now().to_w3c_string(),
         'Sat Oct 11 17:13:46 UTC 2003',  # date util parsing
@@ -186,8 +210,9 @@ def test_pendulum_dt_from_serialized_preserves_timezones(dt):
     ],
 )
 def test_pendulum_dt_not_strict_from_serialized(dt):
-    """Verifies that building an instance from serialized, well-formed strings decode properly."""
-    dt_actual = pendulum.parse(dt, strict=False)
+    """Verifies that building an instance from serialized, well-formed strings decode properly,
+    without defaulting a naive result to UTC (pydantic/pydantic-extra-types#414)."""
+    dt_actual = pendulum.parse(dt, strict=False, tz=None)
     model = DtModelNotStrict(dt=dt)
     assert model.dt == dt_actual
     assert type(model.dt) is DateTime

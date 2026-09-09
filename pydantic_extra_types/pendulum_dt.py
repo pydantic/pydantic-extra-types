@@ -77,19 +77,22 @@ class DateTime(_DateTime, metaclass=DateTimeSettings):
         Returns:
             The validated value or raises a PydanticCustomError.
         """
-        # if we are passed an existing instance, pass it straight through.
+        # if we are passed an existing instance, pass it straight through. `tz=None` keeps a
+        # naive value naive instead of defaulting it to UTC; an aware value keeps its own tzinfo.
         if isinstance(value, (_DateTime, datetime)):
-            return DateTime.instance(value)
+            return DateTime.instance(value, tz=None)
         try:
             # probably the best way to have feature parity with
             # https://docs.pydantic.dev/latest/api/standard_library_types/#datetimedatetime
             value = handler(value)
-            return DateTime.instance(value)
+            return DateTime.instance(value, tz=None)
         except ValueError:
             try:
-                value = parse(value, strict=cls.strict)
+                # `parse` itself defaults a naive string to UTC before `DateTime.instance` ever
+                # sees it, so `tz=None` has to be passed here too, not just below.
+                value = parse(value, strict=cls.strict, tz=None)
                 if isinstance(value, _DateTime):
-                    return DateTime.instance(value)
+                    return DateTime.instance(value, tz=None)
                 raise ValueError(f'value is not a valid datetime it is a {type(value)}')
             except ValueError:
                 raise
