@@ -118,3 +118,23 @@ def test_iban_requires_string(iban_value: Any) -> None:
 def test_iban_rejects_non_ascii_digits(iban: str) -> None:
     with pytest.raises(ValidationError, match='iban_invalid_characters'):
         BankAccount(iban=iban)
+
+
+@pytest.mark.parametrize(
+    'iban',
+    [
+        'BI4210000100010000332045181',
+        'DJ2110002010010409943020008',
+        'FK88SC123456789012',
+        'HN54PISA00000000000000123124',
+        'LY83002048000020100120361',
+        'MN121234123456789123',
+        'NI45BAPR00000013000003558124',
+        'OM810180000001299123456',
+        'RU0204452560040702810412345678901',
+        'SO211000001001000100141',
+        'YE09CBKU0000000000001234560101',
+    ],
+)
+def test_valid_iban_newly_supported_countries(iban: str) -> None:
+    assert BankAccount(iban=iban).iban == iban
