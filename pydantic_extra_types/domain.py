@@ -15,7 +15,7 @@ class DomainStr(str):
     """A string subclass with custom validation for domain string format."""
 
     _domain_re_pattern = (
-        r'(?=^.{1,253}$)' r'(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+' r'([a-zA-Z]{2,63}|xn--[a-zA-Z0-9]{2,59})$)'
+        r'(?=^.{1,253}$)' r'(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+' r'([a-zA-Z]{2,63}|xn--[a-zA-Z0-9-]{2,59}(?<!-))$)'
     )
 
     @classmethod
