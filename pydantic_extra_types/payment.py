@@ -159,10 +159,6 @@ class PaymentCardNumber(str):
         ] in ('676770', '676774'):
             return PaymentCardBrand.maestro, list(range(12, 20))
 
-        # Discover
-        if card_number.startswith('65') or 644 <= int(card_number[:3]) <= 649 or card_number.startswith('6011'):
-            return PaymentCardBrand.discover, list(range(16, 20))
-
         # Verve
         if (
             506099 <= int(card_number[:6]) <= 506198
@@ -170,6 +166,10 @@ class PaymentCardNumber(str):
             or 507865 <= int(card_number[:6]) <= 507964
         ):
             return PaymentCardBrand.verve, [16, 18, 19]
+
+        # Discover (check the more specific Verve ranges first)
+        if card_number.startswith('65') or 644 <= int(card_number[:3]) <= 649 or card_number.startswith('6011'):
+            return PaymentCardBrand.discover, list(range(16, 20))
 
         # Dankort
         if card_number[:4] in {'5019', '4571'}:
