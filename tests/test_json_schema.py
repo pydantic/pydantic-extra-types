@@ -27,6 +27,7 @@ from pydantic_extra_types.s3 import S3Path
 from pydantic_extra_types.script_code import ISO_15924
 from pydantic_extra_types.semantic_version import SemanticVersion
 from pydantic_extra_types.semver import _VersionPydanticAnnotation
+from pydantic_extra_types.sha256 import Sha256Str
 from pydantic_extra_types.timezone_name import TimeZoneName
 from pydantic_extra_types.ulid import ULID
 
@@ -309,6 +310,21 @@ USNumberE164 = Annotated[
             {
                 'properties': {
                     'x': {
+                        'title': 'X',
+                        'type': 'string',
+                    }
+                },
+                'required': ['x'],
+                'title': 'Model',
+                'type': 'object',
+            },
+        ),
+        (
+            Sha256Str,
+            {
+                'properties': {
+                    'x': {
+                        'pattern': '^[0-9a-fA-F]{64}$',
                         'title': 'X',
                         'type': 'string',
                     }
