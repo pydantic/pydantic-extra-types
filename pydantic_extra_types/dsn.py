@@ -210,6 +210,8 @@ ClickHouseDsn = Annotated[
             'clickhouses',
             'clickhouse+native',
             'clickhouse+asynch',
+            'clickhouse+http',
+            'clickhousedb',
         ],
         default_host='localhost',
         default_port=8123,
@@ -219,7 +221,8 @@ ClickHouseDsn = Annotated[
 
 * Host not required (defaults to `localhost`)
 * Default port: 8123
-* Supported schemes: `clickhouse`, `clickhouses`, `clickhouse+native`, `clickhouse+asynch`
+* Supported schemes: `clickhouse`, `clickhouses`, `clickhouse+native`, `clickhouse+asynch`,
+  `clickhouse+http`, `clickhousedb`
 
 ```python
 from pydantic import BaseModel
@@ -328,7 +331,7 @@ print(m.db)
 NatsDsn = Annotated[
     MultiHostUrl,
     UrlConstraints(
-        allowed_schemes=['nats', 'tls', 'ws'],
+        allowed_schemes=['nats', 'tls', 'ws', 'wss'],
         default_host='localhost',
         default_port=4222,
     ),
@@ -338,7 +341,7 @@ NatsDsn = Annotated[
 * Host not required (defaults to `localhost`)
 * Default port: 4222
 * Supports multiple hosts
-* Supported schemes: `nats`, `tls`, `ws`
+* Supported schemes: `nats`, `tls`, `ws`, `wss`
 
 ```python
 from pydantic import BaseModel

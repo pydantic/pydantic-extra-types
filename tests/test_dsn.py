@@ -197,6 +197,15 @@ def test_nats_dsn_valid(dsn: str) -> None:
     assert str(m.broker) == dsn
 
 
+@pytest.mark.parametrize('scheme', ['ws', 'wss'])
+def test_nats_dsn_websocket(scheme: str) -> None:
+    m = NatsModel(broker=f'{scheme}://user:pass@nats.example.com:8443')
+    assert m.broker.scheme == scheme
+    assert m.broker.hosts() == [
+        {'username': 'user', 'password': 'pass', 'host': 'nats.example.com', 'port': 8443},
+    ]
+
+
 # --- MySQLDsn ---
 
 
@@ -262,6 +271,8 @@ class ClickHouseModel(BaseModel):
         'clickhouses://user:pass@ch.example.com:8443/mydb',
         'clickhouse+native://user:pass@localhost:9000/mydb',
         'clickhouse+asynch://user:pass@localhost:8123/mydb',
+        'clickhouse+http://user:pass@localhost:8123/mydb',
+        'clickhousedb://user:pass@localhost:8123/mydb',
     ],
 )
 def test_clickhouse_dsn_valid(dsn: str) -> None:
