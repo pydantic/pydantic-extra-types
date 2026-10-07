@@ -41,6 +41,11 @@ class Something(BaseModel):
         (109667145845879622871206540411193812282, '2JG4FVY7N8XS4GFVHPXGJZ8S9T', True),
         (109667145845879622871206540411193812283, '2JG4FVY7N8XS4GFVHPXGJZ8S9V', True),
         (109667145845879622871206540411193812284, '2JG4FVY7N8XS4GFVHPXGJZ8S9W', True),
+        (0, '00000000000000000000000000', True),
+        (2**128 - 1, '7ZZZZZZZZZZZZZZZZZZZZZZZZZ', True),
+        # Invalid ULID for int format: outside the 128-bit range
+        (-1, None, False),
+        (2**128, None, False),
         # Invalid ULID for bool format
         (True, None, False),
         (False, None, False),
