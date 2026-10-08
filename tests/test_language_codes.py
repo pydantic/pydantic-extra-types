@@ -70,10 +70,12 @@ def test_invalid_name(name: str, MovieName):
         MovieName(audio_lang=name)
 
 
-@pytest.mark.parametrize('lang', [lang.alpha_3 for lang in pycountry.languages])
-def test_iso_ISO639_3_code_ok(lang: str):
+@pytest.mark.parametrize('lang, language_data', list(_index_by_alpha3().items()))
+def test_iso_ISO639_3_code_ok(lang: str, language_data: LanguageInfo):
     model = ISO3CheckingModel(lang=lang)
-    assert model.lang == lang
+    assert model.lang == language_data.alpha3
+    assert model.lang.alpha2 == language_data.alpha2
+    assert model.lang.name == language_data.name
     assert model.model_dump() == {'lang': lang}  # test serialization
 
 
