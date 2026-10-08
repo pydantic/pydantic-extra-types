@@ -296,6 +296,16 @@ class ISO639_3(str):
         json_schema.update({'enum': cls.allowed_values_list})
         return json_schema
 
+    @property
+    def alpha2(self) -> Union[str, None]:
+        """The language code in the [ISO 639-1 alpha-2](https://en.wikipedia.org/wiki/ISO_639-1) format. Does not exist for all languages."""
+        return _index_by_alpha3()[self].alpha2
+
+    @property
+    def name(self) -> str:
+        """The language name."""
+        return _index_by_alpha3()[self].name
+
 
 class ISO639_5(str):
     """ISO639_5 parses Language in the [ISO 639-5 alpha-3](https://en.wikipedia.org/wiki/ISO_639-5_alpha-3)
