@@ -51,3 +51,19 @@ def test_cron_str_next_after() -> None:
 def test_cron_str_strips_whitespace() -> None:
     cron_value = CronStr(' 0 12 * * * ')
     assert str(cron_value) == '0 12 * * *'
+
+
+def test_cron_str_preserves_explicit_slash_step() -> None:
+    # https://github.com/pydantic/pydantic-extra-types/issues/418
+    # `cron-converter`'s ``to_string()`` drops the `/step` for non-wildcard bases
+    # (e.g. ``30/5`` -> ``30``), which would silently change the schedule when the
+    # expression is serialised and re-parsed. The validated input must be kept.
+    model = CronModel(cron='30/5 * * * *')
+    assert str(model.cron) == '30/5 * * * *'
+    assert model.cron.minute == '30/5'
+
+    assert str(CronModel(cron='0/5 * * * *').cron) == '0/5 * * * *'
+
+    # Wildcard-based steps and whitespace normalisation are unaffected.
+    assert str(CronModel(cron='*/5 * * * *').cron) == '*/5 * * * *'
+    assert str(CronModel(cron='  30/5   *  *  *  *  ').cron) == '30/5 * * * *'
