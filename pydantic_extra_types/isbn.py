@@ -96,9 +96,12 @@ class ISBN(str):
         if not isinstance(__input_value, str):
             raise PydanticCustomError('isbn_type', 'Value must be a string')
 
-        cls.validate_isbn_format(__input_value)
+        # ISBNs are usually printed with hyphens or spaces between their parts (ISO 2108)
+        value = __input_value.replace('-', '').replace(' ', '')
 
-        return cls.convert_isbn10_to_isbn13(__input_value)
+        cls.validate_isbn_format(value)
+
+        return cls.convert_isbn10_to_isbn13(value)
 
     @staticmethod
     def validate_isbn_format(value: str) -> None:

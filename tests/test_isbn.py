@@ -17,12 +17,17 @@ isbn_length_test_cases = [
     ('080442957X', '9780804429573', True),  # ISBN-10 ending in "X" as input
     ('9788584390670', '9788584390670', True),  # ISBN-13 Starting with 978
     ('9790306406156', '9790306406156', True),  # ISBN-13 starting with 979
+    ('978-3-16-148410-0', '9783161484100', True),  # ISBN-13 with hyphens
+    ('978 3 16 148410 0', '9783161484100', True),  # ISBN-13 with spaces
+    ('0-306-40615-2', '9780306406157', True),  # ISBN-10 with hyphens
+    ('0-8044-2957-X', '9780804429573', True),  # ISBN-10 with hyphens, ending in "X"
     # Invalid ISBNs
     ('97885843906701', None, False),  # Length: 14 (Higher)
     ('978858439067', None, False),  # Length: 12 (In Between)
     ('97885843906', None, False),  # Length: 11 (In Between)
     ('978858439', None, False),  # Length: 9 (Lower)
     ('', None, False),  # Length: 0 (Lower)
+    ('978-858-439-0670-1', None, False),  # Length: 14 without the hyphens
 ]
 
 
