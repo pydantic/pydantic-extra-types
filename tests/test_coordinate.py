@@ -1,6 +1,6 @@
 from decimal import Decimal
 from re import Pattern
-from typing import Any, Optional, Union
+from typing import Any
 
 import pytest
 from dirty_equals import IsPartialDict
@@ -41,8 +41,8 @@ class Lng(BaseModel):
         ((Decimal('-90.0'), Decimal('0.0')), (Decimal('-90.0'), Decimal('0.0')), None),
         ((Decimal('45.678'), Decimal('-123.456')), (Decimal('45.678'), Decimal('-123.456')), None),
         (Coordinate(Decimal('20.0'), Decimal('10.0')), (Decimal('20.0'), Decimal('10.0')), None),
-        (Coordinate(latitude=Decimal('0'), longitude=Decimal('0')), (Decimal('0'), Decimal('0')), None),
-        (ArgsKwargs(args=(Decimal('1'), Decimal('0.0'))), (Decimal('1.0'), Decimal('0.0')), None),
+        (Coordinate(latitude=Decimal(0), longitude=Decimal(0)), (Decimal(0), Decimal(0)), None),
+        (ArgsKwargs(args=(Decimal(1), Decimal('0.0'))), (Decimal('1.0'), Decimal('0.0')), None),
         # Invalid coordinates
         ((), None, 'Field required'),  # Empty tuple
         ((10.0,), None, 'Field required'),  # Tuple with only one value
@@ -58,16 +58,14 @@ class Lng(BaseModel):
         (2, None, 'Input should be a dictionary or an instance of Coordinate'),  # Wrong type
     ],
 )
-def test_format_for_coordinate(
-    coord: (Any, Any), result: (Union[float, Decimal], Union[float, Decimal]), error: Optional[Pattern]
-):
+def test_format_for_coordinate(coord: (Any, Any), result: (float | Decimal, float | Decimal), error: Pattern | None):
     if error is None:
         _coord: Coordinate = Coord(coord=coord).coord
         assert _coord.latitude == result[0]
         assert _coord.longitude == result[1]
     else:
         with pytest.raises(ValidationError, match=error):
-            Coord(coord=coord).coord
+            Coord(coord=coord)
 
 
 @pytest.mark.parametrize(
@@ -91,14 +89,14 @@ def test_format_for_coordinate(
         ((Decimal('0.0'), Decimal('-180.1')), 'Input should be greater than or equal to -180'),
     ],
 )
-def test_limit_for_coordinate(coord: (Any, Any), error: Optional[Pattern]):
+def test_limit_for_coordinate(coord: (Any, Any), error: Pattern | None):
     if error is None:
         _coord: Coordinate = Coord(coord=coord).coord
         assert _coord.latitude == coord[0]
         assert _coord.longitude == coord[1]
     else:
         with pytest.raises(ValidationError, match=error):
-            Coord(coord=coord).coord
+            Coord(coord=coord)
 
 
 @pytest.mark.parametrize(

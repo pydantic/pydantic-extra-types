@@ -92,7 +92,7 @@ class PhoneNumber(str):
     default_region_code: ClassVar[str | None] = None
     """The default region code to use when parsing phone numbers without an international prefix."""
 
-    supported_regions: list[str] = []
+    supported_regions: ClassVar[list[str]] = []
     """The supported regions. If empty, all regions are supported."""
 
     phone_format: str = 'RFC3966'
@@ -130,7 +130,7 @@ class PhoneNumber(str):
 
         return phonenumbers.format_number(parsed_number, getattr(phonenumbers.PhoneNumberFormat, cls.phone_format))
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         return super().__eq__(other)
 
     def __hash__(self) -> int:

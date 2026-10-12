@@ -1,6 +1,10 @@
+import importlib.util
+import sys
+
 import pytest
 from pydantic import BaseModel, ValidationError
 
+import pydantic_extra_types.mime_types as mime_types_module
 from pydantic_extra_types.mime_types import (
     Application,
     Audio,
@@ -216,10 +220,9 @@ class TestMimeTypeInModels:
 
     def test_optional_mime_type(self):
         """Test optional MimeType field."""
-        from typing import Optional
 
         class Model(BaseModel):
-            content_type: Optional[MimeType] = None
+            content_type: MimeType | None = None
 
         m1 = Model()
         assert m1.content_type is None
@@ -248,3 +251,16 @@ class TestMimeTypeInModels:
         m = Model(content_type='application/json')
         assert m.model_dump() == {'content_type': 'application/json'}
         assert m.model_dump_json() == '{"content_type":"application/json"}'
+
+
+def test_str_enum_backport_before_python_311(monkeypatch: pytest.MonkeyPatch) -> None:
+    module_name = 'mime_types_python310'
+    spec = importlib.util.spec_from_file_location(module_name, mime_types_module.__file__)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    monkeypatch.setitem(sys.modules, module_name, module)
+    monkeypatch.setattr(sys, 'version_info', (3, 10))
+
+    spec.loader.exec_module(module)
+
+    assert issubclass(module.StrEnum, str)

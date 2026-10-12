@@ -1,6 +1,7 @@
 """SemanticVersion definition that is based on the Semantiv Versioning Specification [semver](https://semver.org/)."""
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from pydantic import GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue

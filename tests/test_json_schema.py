@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Union
+from typing import Annotated, Any
 
 import pycountry
 import pytest
@@ -57,9 +57,9 @@ timezone_names = TimeZoneName.allowed_values_list
 
 everyday_currencies.sort()
 
-AnyNumberRFC3966 = Annotated[Union[str, PhoneNumber], PhoneNumberValidator()]
+AnyNumberRFC3966 = Annotated[str | PhoneNumber, PhoneNumberValidator()]
 USNumberE164 = Annotated[
-    Union[str, PhoneNumber],
+    str | PhoneNumber,
     PhoneNumberValidator(
         supported_regions=['US'],
         default_region='US',

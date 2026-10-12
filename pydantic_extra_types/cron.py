@@ -14,6 +14,7 @@ except ModuleNotFoundError as e:  # pragma: no cover
     ) from e
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
+from typing_extensions import Self
 
 
 class CronStr(str):
@@ -54,7 +55,7 @@ class CronStr(str):
     day_of_the_week: str
     cron_obj: Cron
 
-    def __new__(cls, cron_expression: str, *, _cron: Cron | None = None) -> CronStr:
+    def __new__(cls, cron_expression: str, *, _cron: Cron | None = None) -> Self:
         if _cron is None:
             cron_expression, cron_obj = cls._validate(cron_expression)
         else:
@@ -101,7 +102,7 @@ class CronStr(str):
         return ' '.join(parts), cron_obj
 
     @classmethod
-    def validate(cls, __input_value: Any, _: core_schema.ValidationInfo) -> CronStr:
+    def validate(cls, __input_value: Any, /, _: core_schema.ValidationInfo) -> CronStr:
         cron_expression, cron_obj = cls._validate(__input_value)
         return cls(cron_expression, _cron=cron_obj)
 

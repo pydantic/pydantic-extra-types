@@ -524,6 +524,12 @@ def test_pendulum_time_from_serialized(dt):
     assert isinstance(model.t, pendulum.Time)
 
 
+def test_pendulum_time_from_datetime_string():
+    model = TimeModel(t='2024-01-01T17:53:12')
+    assert type(model.t) is Time
+    assert (model.t.hour, model.t.minute, model.t.second) == (17, 53, 12)
+
+
 def get_invalid_dt_common():
     return [
         None,

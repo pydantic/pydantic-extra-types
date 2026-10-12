@@ -40,7 +40,7 @@ class JsonSchema(dict[str, Any]):
     """
 
     @classmethod
-    def _validate(cls, __input_value: str | dict[str, Any], _: core_schema.ValidationInfo) -> JsonSchema:
+    def _validate(cls, __input_value: str | dict[str, Any], /, _: core_schema.ValidationInfo) -> JsonSchema:
         if isinstance(__input_value, str):
             try:
                 schema = json.loads(__input_value)

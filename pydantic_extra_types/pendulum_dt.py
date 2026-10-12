@@ -359,7 +359,7 @@ class Duration(_Duration):
             else:
                 parsed = parse(value, exact=True)
             if not isinstance(parsed, _Duration):
-                raise ValueError(f'value is not a valid duration it is a {type(parsed)}')
+                raise TypeError(f'value is not a valid duration it is a {type(parsed)}')
             if value.startswith('-'):
                 parsed = -parsed
 

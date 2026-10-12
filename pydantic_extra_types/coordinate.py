@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import Annotated, Any, ClassVar, Union
+from typing import Annotated, Any, ClassVar
 
 from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic._internal import _repr
@@ -43,10 +43,10 @@ class _FloatDecimalAnnotation:
 
 
 # Type for tuple items that properly serializes decimal JSON schema with pattern
-_CoordinateValue = Annotated[Union[float, Decimal], _FloatDecimalAnnotation]
+_CoordinateValue = Annotated[float | Decimal, _FloatDecimalAnnotation]
 
-LatitudeType = Union[float, Decimal]
-LongitudeType = Union[float, Decimal]
+LatitudeType = float | Decimal
+LongitudeType = float | Decimal
 CoordinateType = tuple[_CoordinateValue, _CoordinateValue]
 
 
@@ -227,7 +227,7 @@ class Coordinate(_repr.Representation):
     def __str__(self) -> str:
         return f'{self.latitude},{self.longitude}'
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         return isinstance(other, Coordinate) and self.latitude == other.latitude and self.longitude == other.longitude
 
     def __hash__(self) -> int:

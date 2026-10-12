@@ -19,7 +19,7 @@ class DomainStr(str):
     )
 
     @classmethod
-    def validate(cls, __input_value: Any, _: Any) -> str:
+    def validate(cls, __input_value: Any, /, _: Any) -> str:
         """Validate a domain name from the provided value.
 
         Args:

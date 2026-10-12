@@ -51,7 +51,7 @@ class MacAddress(str):
         )
 
     @classmethod
-    def _validate(cls, __input_value: Any, _: Any) -> str:
+    def _validate(cls, __input_value: Any, /, _: Any) -> str:
         """Validate a MAC Address from the provided value.
 
         Args:

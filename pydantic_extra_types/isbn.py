@@ -80,7 +80,7 @@ class ISBN(str):
         )
 
     @classmethod
-    def _validate(cls, __input_value: Any, _: Any) -> str:
+    def _validate(cls, __input_value: Any, /, _: Any) -> str:
         """Validate a ISBN from the provided value.
 
         Args:

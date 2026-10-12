@@ -19,12 +19,12 @@ classifiers = [
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3 :: Only',
-    'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3.12',
     'Programming Language :: Python :: 3.13',
     'Programming Language :: Python :: 3.14',
+    'Programming Language :: Python :: 3.15',
     'Intended Audience :: Developers',
     'Intended Audience :: Information Technology',
     'Intended Audience :: System Administrators',
@@ -38,8 +38,8 @@ classifiers = [
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: Internet',
 ]
-requires-python = '>=3.9'
-dependencies = ['pydantic>=2.5.2','typing-extensions']
+requires-python = '>=3.10'
+dependencies = ['pydantic>=2.14.0','typing-extensions']
 dynamic = ['version']
 
 [project.optional-dependencies]
@@ -63,10 +63,7 @@ phonenumbers = ['phonenumbers>=8,<10']
 pycountry = ['pycountry>=23']
 jsonschema = ['jsonschema>=4.0.0']
 semver = ['semver>=3.0.2']
-python_ulid = [
-    'python-ulid>=1,<2; python_version<"3.9"',
-    'python-ulid>=1,<5; python_version>="3.9"',
-]
+python_ulid = ['python-ulid>=1,<5']
 pendulum = ['pendulum>=3.0.0,<4.0.0']
 cron = ['cron-converter>=1.2.2']
 uuid_utils = ['uuid-utils>=0.6.0; python_version<"3.14"']
@@ -102,7 +99,7 @@ keep-runtime-typing = true
 
 [tool.ruff]
 line-length = 120
-target-version = 'py39'
+target-version = 'py310'
 
 [tool.ruff.lint]
 extend-select = [

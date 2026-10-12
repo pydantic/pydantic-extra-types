@@ -11,23 +11,24 @@ from __future__ import annotations
 
 import math
 import re
+from collections.abc import Callable
 from colorsys import hls_to_rgb, rgb_to_hls
-from typing import Any, Callable, Literal, Union, cast
+from typing import Any, Literal, Union, cast
 
 from pydantic import GetJsonSchemaHandler
 from pydantic._internal import _repr
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 
-ColorTuple = Union[tuple[int, int, int], tuple[int, int, int, float]]
+ColorTuple = tuple[int, int, int] | tuple[int, int, int, float]
 ColorType = Union[ColorTuple, str, 'Color']
-HslColorTuple = Union[tuple[float, float, float], tuple[float, float, float, float]]
+HslColorTuple = tuple[float, float, float] | tuple[float, float, float, float]
 
 
 class RGBA:
     """Internal use only as a representation of a color."""
 
-    __slots__ = 'r', 'g', 'b', 'alpha', '_tuple'
+    __slots__ = '_tuple', 'alpha', 'b', 'g', 'r'
 
     def __init__(self, r: float, g: float, b: float, alpha: float | None):
         self.r = r
@@ -219,7 +220,7 @@ class Color(_repr.Representation):
         )
 
     @classmethod
-    def _validate(cls, __input_value: Any, _: Any) -> Color:
+    def _validate(cls, __input_value: Any, /, _: Any) -> Color:
         return cls(__input_value)
 
     def __str__(self) -> str:
@@ -228,7 +229,7 @@ class Color(_repr.Representation):
     def __repr_args__(self) -> _repr.ReprArgs:
         return [(None, self.as_named(fallback=True)), ('rgb', self.as_rgb_tuple())]
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         return isinstance(other, Color) and self.as_rgb_tuple() == other.as_rgb_tuple()
 
     def __hash__(self) -> int:
@@ -369,7 +370,7 @@ def parse_color_value(value: int | str, max_val: int = 255) -> float:
         )
 
 
-def parse_float_alpha(value: None | str | float | int) -> float | None:
+def parse_float_alpha(value: None | str | float) -> float | None:
     """Parse an alpha value checking it's a valid float in the range 0 to 1.
 
     Args:

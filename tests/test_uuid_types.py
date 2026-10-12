@@ -87,6 +87,18 @@ def test_uuid6_json_schema() -> None:
     assert schema['properties']['id']['format'] == 'uuid'
 
 
+def test_uuid_version_metadata_methods() -> None:
+    metadata = UUID6.__metadata__[0]
+    same_version = type(metadata)(6)
+    other_version = type(metadata)(7)
+
+    assert repr(metadata) == 'UuidVersion(uuid_version=6)'
+    assert hash(metadata) == hash(6)
+    assert metadata == same_version
+    assert metadata != other_version
+    assert metadata != object()
+
+
 VALID_UUID8_STR = '00112233-4455-8677-8899-aabbccddeeff'
 
 

@@ -57,7 +57,7 @@ class ABARoutingNumber(str):
         )
 
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> ABARoutingNumber:
+    def _validate(cls, __input_value: str, /, _: core_schema.ValidationInfo) -> ABARoutingNumber:
         return cls(__input_value)
 
     @classmethod

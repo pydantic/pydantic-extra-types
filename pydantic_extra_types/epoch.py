@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import datetime
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 import pydantic_core.core_schema
 from pydantic import GetJsonSchemaHandler
@@ -34,7 +35,7 @@ class _Base(datetime.datetime):
         )
 
     @classmethod
-    def _validate(cls, __input_value: Any, _: Any) -> datetime.datetime:
+    def _validate(cls, __input_value: Any, /, _: Any) -> datetime.datetime:
         try:
             return EPOCH + datetime.timedelta(seconds=__input_value)
         except (OverflowError, OSError) as e:

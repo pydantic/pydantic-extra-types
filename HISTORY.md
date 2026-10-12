@@ -2,9 +2,51 @@
 
 ## Latest Changes
 
-* feat(sha256): add `Sha256Str` for hex-encoded SHA-256 digests, normalized to lowercase.
-* fix(pendulum_dt): stop `DateTime` defaulting a timezone-naive input to UTC; it now stays naive, matching pydantic's stdlib `datetime` contract.
-* fix(mac_address): reject MAC octets with a sign or whitespace (e.g. `-a:...`, `+a:...`, ` a:...`) that `int(..., 16)` accepted.
+* Add support for Python 3.15 by @yezz123 in https://github.com/pydantic/pydantic-extra-types/pull/441
+* fix(cron): preserve explicit /step when serializing CronStr by @linhongyu510 in https://github.com/pydantic/pydantic-extra-types/pull/439
+* fix(isbn): accept hyphens and spaces between the parts of an ISBN by @RavSinghChandan in https://github.com/pydantic/pydantic-extra-types/pull/440
+* Add convenient lookup to ISO639_3 for alpha2 and name by @cthoyt in https://github.com/pydantic/pydantic-extra-types/pull/437
+* fix(ulid): raise ValidationError for ints outside the 128-bit range by @ara-stock in https://github.com/pydantic/pydantic-extra-types/pull/435
+* Bump `samuelcolvin/check-python-version` action to v5.1 by @Viicos in https://github.com/pydantic/pydantic-extra-types/pull/438
+* fix(dsn): accept schemes dropped in the migration from pydantic.networks by @ara-stock in https://github.com/pydantic/pydantic-extra-types/pull/434
+* Add Sha256Str type by @dualfroz in https://github.com/pydantic/pydantic-extra-types/pull/433
+* ⬆ Bump pypa/gh-action-pypi-publish from 1.14.1 to 1.14.2 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/421
+* ⬆ Bump re-actors/alls-green from 1.2.2 to 1.3.0 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/423
+* ⬆ Bump astral-sh/setup-uv from 9.0.0 to 10.2.0 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/432
+* Preserve newlines when parsing S3 object keys by @charan-rathore in https://github.com/pydantic/pydantic-extra-types/pull/430
+* Accept internal hyphens in punycode top-level domains by @charan-rathore in https://github.com/pydantic/pydantic-extra-types/pull/431
+* Identify Verve cards before the broader Discover prefix by @charan-rathore in https://github.com/pydantic/pydantic-extra-types/pull/429
+* feat(iban): add the 11 missing SWIFT registry countries by @vmaerten in https://github.com/pydantic/pydantic-extra-types/pull/428
+* fix(pendulum_dt): stop DateTime defaulting a naive input to UTC by @AmirF194 in https://github.com/pydantic/pydantic-extra-types/pull/427
+* Fix MacAddress accepting octets with a sign or whitespace by @dualfroz in https://github.com/pydantic/pydantic-extra-types/pull/424
+* ⬆ Bump pypa/gh-action-pypi-publish from 1.14.0 to 1.14.1 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/417
+* ⬆ Bump astral-sh/setup-uv from 8.3.2 to 9.0.0 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/416
+* ⬆ Bump actions/checkout from 7.0.0 to 7.0.1 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/415
+* ⬆ Bump astral-sh/setup-uv from 8.2.0 to 8.3.2 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/413
+* feat: add PandasDataFrame and PandasSeries types by @falscherwiener1-svg in https://github.com/pydantic/pydantic-extra-types/pull/411
+* Allow python-ulid version 4.x by @musicinmybrain in https://github.com/pydantic/pydantic-extra-types/pull/412
+* fix(isin, isbn, iban): reject non-ASCII digits by @chuenchen309 in https://github.com/pydantic/pydantic-extra-types/pull/410
+* fix(ulid, color): raise ValidationError for types float()/from_bytes reject by @chuenchen309 in https://github.com/pydantic/pydantic-extra-types/pull/409
+* fix(isbn, iban, mac_address): raise ValidationError for non-string input by @chuenchen309 in https://github.com/pydantic/pydantic-extra-types/pull/408
+* fix(pendulum_dt): preserve Interval boundaries on JSON serialization by @chuenchen309 in https://github.com/pydantic/pydantic-extra-types/pull/407
+* fix(ulid): make ULID serializable to JSON by @chuenchen309 in https://github.com/pydantic/pydantic-extra-types/pull/406
+* fix(mongo_object_id): validate ObjectId when parsing from JSON by @chuenchen309 in https://github.com/pydantic/pydantic-extra-types/pull/405
+* fix(epoch): raise ValidationError for out-of-range timestamps by @chuenchen309 in https://github.com/pydantic/pydantic-extra-types/pull/404
+* fix: reject non-ASCII ABA routing digits by @Sanjays2402 in https://github.com/pydantic/pydantic-extra-types/pull/403
+* test: assert specific IBAN validation errors and cover the check-digit helper by @eeshsaxena in https://github.com/pydantic/pydantic-extra-types/pull/401
+* ⬆ Bump astral-sh/setup-uv from 8.1.0 to 8.2.0 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/398
+* ⬆ Bump actions/checkout from 6.0.2 to 7.0.0 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/399
+* ⬆ Bump the python-packages group with 2 updates by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/400
+* ⬆ Bump astral-sh/setup-uv from 8.0.0 to 8.1.0 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/390
+* ⬆ Bump actions/upload-artifact from 7.0.0 to 7.0.1 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/391
+* ⬆ Bump pypa/gh-action-pypi-publish from 1.13.0 to 1.14.0 by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/392
+* ⬆ Bump the python-packages group across 1 directory with 6 updates by @dependabot[bot] in https://github.com/pydantic/pydantic-extra-types/pull/396
+* Don't parameterize tests using non-Collection iterables by @cjwatson in https://github.com/pydantic/pydantic-extra-types/pull/397
+* fix: remove duplicate 'IST' entry in _COMMON_TZ_ABBREVIATIONS by @joymadhu49 in https://github.com/pydantic/pydantic-extra-types/pull/395
+* fix: Adjust tests for Pydantic 2.13 by @cjwatson in https://github.com/pydantic/pydantic-extra-types/pull/394
+* Remove extra lists concatenation in `Color.__repr_args__` by @sobolevn in https://github.com/pydantic/pydantic-extra-types/pull/388
+* Introduce zizmor by @Viicos in https://github.com/pydantic/pydantic-extra-types/pull/387
+* Introduce yamlfmt by @Viicos in https://github.com/pydantic/pydantic-extra-types/pull/385
 
 ## 2.11.2
 

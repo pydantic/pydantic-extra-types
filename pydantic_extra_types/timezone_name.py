@@ -5,7 +5,8 @@ from __future__ import annotations
 import importlib
 import sys
 import warnings
-from typing import Any, Callable, cast
+from collections.abc import Callable
+from typing import Any, ClassVar, cast
 
 from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
@@ -190,11 +191,11 @@ class TimeZoneName(str):
     __slots__: list[str] = []
     allowed_values: set[str] = set(get_timezones()) | _COMMON_TZ_ABBREVIATIONS
     allowed_values_list: list[str] = sorted(allowed_values)
-    allowed_values_upper_to_correct: dict[str, str] = {val.upper(): val for val in allowed_values}
+    allowed_values_upper_to_correct: ClassVar[dict[str, str]] = {val.upper(): val for val in allowed_values}
     strict: bool
 
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> TimeZoneName:
+    def _validate(cls, __input_value: str, /, _: core_schema.ValidationInfo) -> TimeZoneName:
         """Validate a time zone name from the provided str value.
 
         Args:

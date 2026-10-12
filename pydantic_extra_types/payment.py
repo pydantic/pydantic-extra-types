@@ -67,7 +67,7 @@ class PaymentCardNumber(str):
         )
 
     @classmethod
-    def validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> PaymentCardNumber:
+    def validate(cls, __input_value: str, /, _: core_schema.ValidationInfo) -> PaymentCardNumber:
         """Validate the `PaymentCardNumber` instance.
 
         Args:
@@ -168,7 +168,7 @@ class PaymentCardNumber(str):
             return PaymentCardBrand.verve, [16, 18, 19]
 
         # Discover (check the more specific Verve ranges first)
-        if card_number.startswith('65') or 644 <= int(card_number[:3]) <= 649 or card_number.startswith('6011'):
+        if card_number.startswith(('65', '6011')) or 644 <= int(card_number[:3]) <= 649:
             return PaymentCardBrand.discover, list(range(16, 20))
 
         # Dankort
@@ -190,10 +190,6 @@ class PaymentCardNumber(str):
         # Diners Club
         if card_number[:2] in {'30', '36', '38', '39'}:
             return PaymentCardBrand.diners_club, list(range(14, 20))
-
-        # More Diners Club
-        if card_number.startswith('55'):
-            return PaymentCardBrand.diners_club, [16]
 
         # Other / Unknown
         return PaymentCardBrand.other, []
