@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Optional, Union
+from typing import Annotated, Any
 
 import phonenumbers
 import pytest
@@ -7,16 +7,16 @@ from pydantic import BaseModel, TypeAdapter, ValidationError
 
 from pydantic_extra_types.phone_numbers import PhoneNumberValidator
 
-Number = Annotated[Union[str, PhoneNumber], PhoneNumberValidator()]
+Number = Annotated[str | PhoneNumber, PhoneNumberValidator()]
 NANumber = Annotated[
-    Union[str, PhoneNumber],
+    str | PhoneNumber,
     PhoneNumberValidator(
         supported_regions=['US', 'CA'],
         default_region='US',
     ),
 ]
 UKNumber = Annotated[
-    Union[str, PhoneNumber],
+    str | PhoneNumber,
     PhoneNumberValidator(
         supported_regions=['GB'],
         default_region='GB',
@@ -28,9 +28,9 @@ number_adapter = TypeAdapter(Number)
 
 
 class Numbers(BaseModel):
-    phone_number: Optional[Number] = None
-    na_number: Optional[NANumber] = None
-    uk_number: Optional[UKNumber] = None
+    phone_number: Number | None = None
+    na_number: NANumber | None = None
+    uk_number: UKNumber | None = None
 
 
 def test_validator_constructor() -> None:

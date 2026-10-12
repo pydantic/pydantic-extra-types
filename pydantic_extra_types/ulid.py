@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass
-from typing import Any, Union
+from typing import Any
 
 from pydantic import GetCoreSchemaHandler
 from pydantic._internal import _repr
@@ -20,7 +20,7 @@ except ModuleNotFoundError as e:  # pragma: no cover
         'The `ulid` module requires "python-ulid" to be installed. You can install it with "pip install python-ulid".'
     ) from e
 
-UlidType = Union[str, bytes, int]
+UlidType = str | bytes | int
 
 
 @dataclass

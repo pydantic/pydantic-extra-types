@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Any, Union
+from typing import Any, ClassVar
 
 from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
@@ -28,7 +28,7 @@ class LanguageInfo:
         name: The language name.
     """
 
-    alpha2: Union[str, None]
+    alpha2: str | None
     alpha3: str
     name: str
 
@@ -90,7 +90,7 @@ class LanguageAlpha2(str):
     """
 
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> LanguageAlpha2:
+    def _validate(cls, __input_value: str, /, _: core_schema.ValidationInfo) -> LanguageAlpha2:
         """Validate a language code in the ISO 639-1 alpha-2 format from the provided str value.
 
         Args:
@@ -172,7 +172,7 @@ class LanguageName(str):
     """
 
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> LanguageName:
+    def _validate(cls, __input_value: str, /, _: core_schema.ValidationInfo) -> LanguageName:
         """Validate a language name from the provided str value.
 
         Args:
@@ -206,7 +206,7 @@ class LanguageName(str):
         )
 
     @property
-    def alpha2(self) -> Union[str, None]:
+    def alpha2(self) -> str | None:
         """The language code in the [ISO 639-1 alpha-2](https://en.wikipedia.org/wiki/ISO_639-1) format. Does not exist for all languages."""
         return _index_by_name()[self].alpha2
 
@@ -236,11 +236,11 @@ class ISO639_3(str):
     ```
     """
 
-    allowed_values_list = [lang.alpha_3 for lang in pycountry.languages]
-    allowed_values = set(allowed_values_list)
+    allowed_values_list: ClassVar[list[str]] = [lang.alpha_3 for lang in pycountry.languages]
+    allowed_values: ClassVar[set[str]] = set(allowed_values_list)
 
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> ISO639_3:
+    def _validate(cls, __input_value: str, /, _: core_schema.ValidationInfo) -> ISO639_3:
         """Validate a ISO 639-3 language code from the provided str value.
 
         Args:
@@ -297,7 +297,7 @@ class ISO639_3(str):
         return json_schema
 
     @property
-    def alpha2(self) -> Union[str, None]:
+    def alpha2(self) -> str | None:
         """The language code in the [ISO 639-1 alpha-2](https://en.wikipedia.org/wiki/ISO_639-1) format. Does not exist for all languages."""
         return _index_by_alpha3()[self].alpha2
 
@@ -327,12 +327,12 @@ class ISO639_5(str):
     ```
     """
 
-    allowed_values_list = [lang.alpha_3 for lang in pycountry.language_families]
+    allowed_values_list: ClassVar[list[str]] = [lang.alpha_3 for lang in pycountry.language_families]
     allowed_values_list.sort()
-    allowed_values = set(allowed_values_list)
+    allowed_values: ClassVar[set[str]] = set(allowed_values_list)
 
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> ISO639_5:
+    def _validate(cls, __input_value: str, /, _: core_schema.ValidationInfo) -> ISO639_5:
         """Validate a ISO 639-5 language code from the provided str value.
 
         Args:

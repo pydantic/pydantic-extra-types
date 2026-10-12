@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import typing
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Annotated
@@ -9,7 +8,7 @@ import pydantic
 from pydantic.types import PathType
 from pydantic_core import core_schema
 
-ExistingPath = typing.Union[pydantic.FilePath, pydantic.DirectoryPath]
+ExistingPath = pydantic.FilePath | pydantic.DirectoryPath
 
 
 @dataclass
@@ -57,4 +56,4 @@ class ResolvedPathType(PathType):
 ResolvedFilePath = Annotated[Path, ResolvedPathType('file')]
 ResolvedDirectoryPath = Annotated[Path, ResolvedPathType('dir')]
 ResolvedNewPath = Annotated[Path, ResolvedPathType('new')]
-ResolvedExistingPath = typing.Union[ResolvedFilePath, ResolvedDirectoryPath]
+ResolvedExistingPath = ResolvedFilePath | ResolvedDirectoryPath

@@ -158,7 +158,7 @@ class IBAN(str):
         )
 
     @classmethod
-    def _validate(cls, __input_value: Any, _: Any) -> IBAN:
+    def _validate(cls, __input_value: Any, /, _: Any) -> IBAN:
         if not isinstance(__input_value, str):
             raise PydanticCustomError('iban_type', 'Value must be a string')
 

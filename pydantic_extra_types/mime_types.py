@@ -14,8 +14,6 @@ else:
     class StrEnum(str, Enum):
         """A backport of StrEnum for Python < 3.11."""
 
-        pass
-
 
 from typing import Any
 
@@ -2515,7 +2513,7 @@ class MimeType(str):
     """
 
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> MimeType:
+    def _validate(cls, __input_value: str, /, _: core_schema.ValidationInfo) -> MimeType:
         # Store the original mime_type for retrieval
         mime_info = _index_by_mime_type().get(__input_value.lower())
         if mime_info is None:

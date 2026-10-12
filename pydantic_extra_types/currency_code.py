@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar
 
 from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
@@ -50,8 +50,8 @@ class ISO4217(str):
     ```
     """
 
-    allowed_countries_list = [country.alpha_3 for country in pycountry.currencies]
-    allowed_currencies = set(allowed_countries_list)
+    allowed_countries_list: ClassVar[list[str]] = [country.alpha_3 for country in pycountry.currencies]
+    allowed_currencies: ClassVar[set[str]] = set(allowed_countries_list)
 
     @classmethod
     def _validate(cls, currency_code: str, _: core_schema.ValidationInfo) -> str:
@@ -109,10 +109,10 @@ class Currency(str):
         ```
     """
 
-    allowed_countries_list = list(
+    allowed_countries_list: ClassVar[list[str]] = list(
         filter(lambda x: x not in _CODES_FOR_BONDS_METAL_TESTING, ISO4217.allowed_countries_list)
     )
-    allowed_currencies = set(allowed_countries_list)
+    allowed_currencies: ClassVar[set[str]] = set(allowed_countries_list)
 
     @classmethod
     def _validate(cls, currency_symbol: str, _: core_schema.ValidationInfo) -> str:

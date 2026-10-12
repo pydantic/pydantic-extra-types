@@ -104,6 +104,7 @@ def test_validate_luhn_check_digit(card_number: str, valid: bool):
         (VALID_VISA_16, PaymentCardBrand.visa, True),
         (VALID_VISA_19, PaymentCardBrand.visa, True),
         (VALID_MC, PaymentCardBrand.mastercard, True),
+        ('5500000000000000', PaymentCardBrand.mastercard, True),
         (VALID_AMEX, PaymentCardBrand.amex, True),
         (VALID_MIR_16, PaymentCardBrand.mir, True),
         (VALID_MIR_17, PaymentCardBrand.mir, True),

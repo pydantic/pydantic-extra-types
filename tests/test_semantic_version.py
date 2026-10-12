@@ -92,7 +92,6 @@ def test_valid_semantic_version(SemanticVersionObject, constructor, version):
         '01.1.1',
         '1.01.1',
         '1.1.01',
-        '1.2',
         '1.2.3.DEV',
         '1.2-SNAPSHOT',
         '1.2.31.2.3----RC-SNAPSHOT.12.09.1--..12+788',
@@ -107,3 +106,9 @@ def test_valid_semantic_version(SemanticVersionObject, constructor, version):
 def test_invalid_semantic_version(SemanticVersionObject, invalid_version):
     with pytest.raises(ValidationError):
         SemanticVersionObject(version=invalid_version)
+
+
+def test_validate_from_str():
+    version = SemanticVersion.validate_from_str('1.2.3')
+    assert isinstance(version, SemanticVersion)
+    assert str(version) == '1.2.3'

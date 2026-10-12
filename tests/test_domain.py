@@ -54,7 +54,7 @@ def test_valid_domains(domain: str):
 def test_invalid_domains(domain: str):
     try:
         MyModel.model_validate({'domain': domain})
-        raise Exception(
+        pytest.fail(
             f"This test case has only samples that should raise a ValidationError. This domain '{domain}' did not raise such an exception."
         )
     except ValidationError:

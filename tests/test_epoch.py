@@ -23,7 +23,7 @@ def test_type(type_, cls_):
     v = b.model_dump()
     assert v['epoch'] == ts
 
-    c = A.model_validate(dict(epoch=ts))
+    c = A.model_validate({'epoch': ts})
     v = c.model_dump()
     assert v['epoch'] == ts
 

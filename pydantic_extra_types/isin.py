@@ -95,7 +95,7 @@ class ISIN(str):
         )
 
     @classmethod
-    def _validate(cls, __input_value: str, _: Any) -> ISIN:
+    def _validate(cls, __input_value: str, /, _: Any) -> ISIN:
         """Validate an ISIN from the provided str value.
 
         Args:

@@ -36,14 +36,12 @@ class Network(BaseModel):
             True,
         ),
         # Invalid MAC addresses
+        ('abcdefghijklmn', None, False),
         ('0200.5e10.0000.001', None, False),
         ('00-00-5e-00-53-0', None, False),
         ('00:00:5e:00:53:1', None, False),
         ('02:00:5e:10:00:00:00:1', None, False),
-        ('00:00:00:00:fe:80:00:00:00:00:00:00:02:00:5e:10:00:00:00:1', None, False),
-        ('0200.5e10.0000.001', None, False),  # Invalid length
-        ('00-00-5e-00-53-0', None, False),  # Missing character
-        ('00:00:5e:00:53:1', None, False),  # Missing leading zero
+        ('00:00:00:00:fe:80:00:00:00:00:00:00:02:00:5e:10:00:00:00:1', None, False),  # Invalid length
         ('00:00:5g:00:53:01', None, False),  # Invalid hex digit 'g'
         ('00.00.5e.0.3.01.0.0.5e.0.53.01', None, False),
         ('00-00-5e-00-53-01:', None, False),  # Extra separator at the end

@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 import pytest
 from cron_converter import Cron
 from pydantic import BaseModel, ValidationError
+from pydantic_core import PydanticCustomError
 
 from pydantic_extra_types.cron import CronStr
 
@@ -28,6 +29,12 @@ def test_cron_str_rejects_invalid_components() -> None:
     with pytest.raises(ValidationError) as exc:
         CronModel(cron='* * * *')
     assert 'Cron expression must contain 5 space separated components' in str(exc.value)
+
+
+@pytest.mark.parametrize('expression', [None, ''])
+def test_cron_str_rejects_non_string_or_empty_input(expression: str | None) -> None:
+    with pytest.raises(PydanticCustomError):
+        CronStr(expression)
 
 
 def test_cron_str_rejects_invalid_expression() -> None:

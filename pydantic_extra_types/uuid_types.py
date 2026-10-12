@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import sys
 import uuid
+from collections.abc import Callable
 from datetime import datetime, timezone
-from typing import Annotated, Any, Callable
+from typing import Annotated, Any
 
 from pydantic import GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue

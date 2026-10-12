@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar
 
 from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
@@ -36,11 +36,11 @@ class ISO_15924(str):
     ```
     """
 
-    allowed_values_list = [script.alpha_4 for script in pycountry.scripts]
-    allowed_values = set(allowed_values_list)
+    allowed_values_list: ClassVar[list[str]] = [script.alpha_4 for script in pycountry.scripts]
+    allowed_values: ClassVar[set[str]] = set(allowed_values_list)
 
     @classmethod
-    def _validate(cls, __input_value: str, _: core_schema.ValidationInfo) -> ISO_15924:
+    def _validate(cls, __input_value: str, /, _: core_schema.ValidationInfo) -> ISO_15924:
         """Validate a ISO 15924 language code from the provided str value.
 
         Args:
