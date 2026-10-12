@@ -58,8 +58,10 @@ class CronStr(str):
         if _cron is None:
             cron_expression, cron_obj = cls._validate(cron_expression)
         else:
+            # ``validate()`` already performed the whitespace-normalised canonicalisation
+            # in ``_validate()``; reuse that string instead of re-deriving it with the
+            # lossy ``cron_obj.to_string()`` (which drops `/step`, see issue #418).
             cron_obj = _cron
-            cron_expression = cron_obj.to_string()
 
         obj = super().__new__(cls, cron_expression)
         obj._apply_cron(cron_obj)
@@ -91,9 +93,12 @@ class CronStr(str):
         except (TypeError, ValueError) as exc:
             raise PydanticCustomError('cron_str_invalid', str(exc)) from exc
 
-        # `cron-converter` may normalise components (e.g. remove duplicate spaces),
-        # so we reuse its canonical representation.
-        return cron_obj.to_string(), cron_obj
+        # Normalise whitespace without relying on `cron-converter`'s `to_string()`.
+        # `to_string()` silently drops the `/step` for non-wildcard bases (e.g. `30/5`
+        # serialises as `30`), which changes the schedule on round-trip; re-joining the
+        # already-validated components preserves them while still collapsing duplicate
+        # whitespace. See https://github.com/pydantic/pydantic-extra-types/issues/418.
+        return ' '.join(parts), cron_obj
 
     @classmethod
     def validate(cls, __input_value: Any, _: core_schema.ValidationInfo) -> CronStr:
