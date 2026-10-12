@@ -279,7 +279,8 @@ def parse_str(value: str) -> RGBA:
     Raises:
         ValueError: If the input string cannot be parsed to an RGBA tuple.
     """
-    value_lower = value.lower()
+    # surrounding whitespace is allowed, as in the hex and functional formats
+    value_lower = value.strip().lower()
     if value_lower in COLORS_BY_NAME:
         r, g, b = COLORS_BY_NAME[value_lower]
         return ints_to_rgba(r, g, b, None)
