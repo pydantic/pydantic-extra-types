@@ -77,6 +77,25 @@ jobs:
           path: coverage
           include-hidden-files: true
 
+  test-phonenumberslite:
+    name: test phonenumberslite extra
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          enable-cache: true # zizmor: ignore[cache-poisoning] -- Job does not produce release artifacts and does not have sensitive permissions
+
+      - name: Install dependencies
+        run: uv sync --extra phonenumberslite --group dev
+
+      - name: Run phone number tests
+        run: uv run --frozen pytest tests/test_phone_numbers.py tests/test_phone_numbers_validator.py
+
   coverage:
     runs-on: ubuntu-latest
     needs: [test]
@@ -102,7 +121,7 @@ jobs:
   # https://github.com/marketplace/actions/alls-green#why used for branch protection checks
   check:
     if: always()
-    needs: [lint, test, coverage]
+    needs: [lint, test, test-phonenumberslite, coverage]
     runs-on: ubuntu-latest
     steps:
       - name: Decide whether the needed jobs succeeded or failed
