@@ -1,8 +1,9 @@
 """The `pydantic_extra_types.phone_numbers` module provides the
 [`PhoneNumber`][pydantic_extra_types.phone_numbers.PhoneNumber] data type.
 
-This class depends on the [phonenumbers](https://pypi.org/project/phonenumbers/) package,
-which is a Python port of Google's [libphonenumber](https://github.com/google/libphonenumber/).
+This class depends on either the [phonenumbers](https://pypi.org/project/phonenumbers/) package or its
+smaller [phonenumberslite](https://pypi.org/project/phonenumberslite/) distribution. Both provide a Python port of
+Google's [libphonenumber](https://github.com/google/libphonenumber/).
 """
 
 from __future__ import annotations
@@ -21,7 +22,9 @@ try:
     from phonenumbers.phonenumberutil import NumberParseException
 except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
-        '`PhoneNumber` requires "phonenumbers" to be installed. You can install it with "pip install phonenumbers"'
+        '`PhoneNumber` requires either "phonenumbers" or "phonenumberslite" to be installed. '
+        'You can install one with `pip install "pydantic-extra-types[phonenumbers]"` or '
+        '`pip install "pydantic-extra-types[phonenumberslite]"`.'
     ) from e
 
 
