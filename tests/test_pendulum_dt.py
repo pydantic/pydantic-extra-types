@@ -597,8 +597,9 @@ def test_pendulum_date_malformed(invalid_value):
 )
 def test_pendulum_duration_malformed(delta_t):
     """Verifies that the instance fails to validate if malformed durations are passed."""
-    with pytest.raises(ValidationError):
+    with pytest.raises(ValidationError) as exc_info:
         DurationModel(delta_t=delta_t)
+    assert exc_info.value.errors()[0]['type'] == 'value_error'
 
 
 @pytest.mark.parametrize(

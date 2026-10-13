@@ -347,7 +347,8 @@ class Duration(_Duration):
                 microseconds=value.microseconds,
             )
 
-        assert isinstance(value, str)
+        if not isinstance(value, str):
+            raise PydanticCustomError('value_error', 'value is not a valid duration')
         try:
             # 'P' alone is not a valid ISO 8601 duration (must have at least one designator like P0D)
             if value in ('P', '-P'):
