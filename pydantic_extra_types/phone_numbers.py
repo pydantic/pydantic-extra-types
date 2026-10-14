@@ -28,6 +28,19 @@ except ModuleNotFoundError as e:  # pragma: no cover
     ) from e
 
 
+def _format_number(number: BasePhoneNumber, number_format: str, region: str | None) -> str:
+    """Format `number`, falling back to `INTERNATIONAL` where `NATIONAL` would drop the country code.
+
+    A `NATIONAL` string can only be parsed back to the same number using `region`, so it is only used
+    when `number` shares the country calling code of `region`.
+    """
+    if number_format == 'NATIONAL' and (
+        region is None or number.country_code != phonenumbers.country_code_for_region(region)
+    ):
+        number_format = 'INTERNATIONAL'
+    return phonenumbers.format_number(number, getattr(phonenumbers.PhoneNumberFormat, number_format))
+
+
 class PhoneNumber(str):
     """A wrapper around the `phonenumbers.PhoneNumber` object.
 
@@ -55,6 +68,7 @@ class PhoneNumber(str):
     ### Changing defaults by subclassing:
 
     ```python
+    from pydantic import BaseModel
     from pydantic_extra_types.phone_numbers import PhoneNumber
 
 
@@ -64,10 +78,14 @@ class PhoneNumber(str):
         phone_format = 'NATIONAL'
 
 
+    class Contact(BaseModel):
+        phone: USPhone
+
+
     # Now parsing will accept national numbers for the US
-    p = USPhone('650-253-0000')
-    print(p)
-    # > 650-253-0000
+    c = Contact(phone='650-253-0000')
+    print(c.phone)
+    # > (650) 253-0000
     ```
 
     ### Changing defaults by using the provided validator annotation:
@@ -99,7 +117,11 @@ class PhoneNumber(str):
     """The supported regions. If empty, all regions are supported."""
 
     phone_format: str = 'RFC3966'
-    """The format of the phone number."""
+    """The format of the phone number.
+
+    With `'NATIONAL'`, numbers that don't share the country calling code of `default_region_code` are returned in
+    `'INTERNATIONAL'` format instead, so that the country code isn't lost.
+    """
 
     @classmethod
     def __get_pydantic_json_schema__(
@@ -131,7 +153,7 @@ class PhoneNumber(str):
         ):
             raise PydanticCustomError('value_error', 'value is not from a supported region')
 
-        return phonenumbers.format_number(parsed_number, getattr(phonenumbers.PhoneNumberFormat, cls.phone_format))
+        return _format_number(parsed_number, cls.phone_format, cls.default_region_code)
 
     def __eq__(self, other: object) -> bool:
         return super().__eq__(other)
@@ -172,7 +194,11 @@ class PhoneNumberValidator:
     """
 
     number_format: str = 'RFC3966'
-    """The format of the phone number to return. See `phonenumbers.PhoneNumberFormat` for valid values."""
+    """The format of the phone number to return. See `phonenumbers.PhoneNumberFormat` for valid values.
+
+    With `'NATIONAL'`, numbers that don't share the country calling code of `default_region` are returned in
+    `'INTERNATIONAL'` format instead, so that the country code isn't lost.
+    """
 
     supported_regions: Sequence[str] | None = None
     """The supported regions. If empty (the default), all regions are supported."""
@@ -223,7 +249,7 @@ class PhoneNumberValidator:
         ):
             raise PydanticCustomError('value_error', 'value is not from a supported region')
 
-        return phonenumbers.format_number(parsed_number, getattr(phonenumbers.PhoneNumberFormat, number_format))
+        return _format_number(parsed_number, number_format, region)
 
     def __get_pydantic_core_schema__(self, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.no_info_before_validator_function(

@@ -30,9 +30,9 @@ def test_formats_phone_number() -> None:
     assert result.phone_number == 'tel:+1-901-555-1212;ext=12533'
 
 
-def test_supported_regions() -> None:
+def test_supported_regions(monkeypatch: pytest.MonkeyPatch) -> None:
     assert PhoneNumber.supported_regions == []
-    PhoneNumber.supported_regions = ['US']
+    monkeypatch.setattr(PhoneNumber, 'supported_regions', ['US'])
 
     assert Something(phone_number='+1 901 555 1212')
 
@@ -70,3 +70,25 @@ def test_eq() -> None:
     assert PhoneNumber('555-1212') == '555-1212'
     assert PhoneNumber('555-1212') != '555-1213'
     assert PhoneNumber('555-1212') != PhoneNumber('555-1213')
+
+
+class GBNationalPhoneNumber(PhoneNumber):
+    default_region_code = 'GB'
+    phone_format = 'NATIONAL'
+
+
+class SomethingGB(BaseModel):
+    phone_number: GBNationalPhoneNumber
+
+
+@pytest.mark.parametrize(
+    'input_number,expected',
+    [
+        ('+44 20 7946 0958', '020 7946 0958'),
+        ('+1 650 253 0000', '+1 650-253-0000'),
+    ],
+)
+def test_national_format_keeps_country_code_outside_default_region(input_number: str, expected: str) -> None:
+    result = SomethingGB(phone_number=input_number)
+    assert result.phone_number == expected
+    assert SomethingGB.model_validate_json(result.model_dump_json()) == result
