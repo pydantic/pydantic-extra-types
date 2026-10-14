@@ -99,3 +99,35 @@ def test_parse_error() -> None:
 def test_parsed_but_not_a_valid_number() -> None:
     with pytest.raises(ValidationError, match='value is not a valid phone number'):
         Numbers(phone_number='+1 555-1212')
+
+
+@pytest.mark.parametrize(
+    'input_number,expected',
+    [
+        ('+44 20 7946 0958', '020 7946 0958'),
+        ('020 7946 0958', '020 7946 0958'),
+        ('+1 650 253 0000', '+1 650-253-0000'),
+        ('+33 1 23 45 67 89', '+33 1 23 45 67 89'),
+        ('+49 30 901820', '+49 30 901820'),
+        ('+91 22 2778 8888', '+91 22 2778 8888'),
+    ],
+)
+def test_national_format_keeps_country_code_outside_default_region(input_number: str, expected: str) -> None:
+    adapter = TypeAdapter(Annotated[str, PhoneNumberValidator(default_region='GB', number_format='NATIONAL')])
+    result = adapter.validate_python(input_number)
+    assert result == expected
+    assert adapter.validate_python(result) == result
+
+
+def test_national_format_shared_country_code() -> None:
+    # CA shares +1 with US, so the national form still parses back to the same number
+    adapter = TypeAdapter(Annotated[str, PhoneNumberValidator(default_region='US', number_format='NATIONAL')])
+    assert adapter.validate_python('+1 416 555 0123') == '(416) 555-0123'
+    assert adapter.validate_python('(416) 555-0123') == '(416) 555-0123'
+
+
+def test_national_format_without_default_region() -> None:
+    adapter = TypeAdapter(Annotated[str, PhoneNumberValidator(number_format='NATIONAL')])
+    result = adapter.validate_python('+44 20 7946 0958')
+    assert result == '+44 20 7946 0958'
+    assert adapter.validate_python(result) == result
