@@ -13,6 +13,7 @@ from pydantic_extra_types.color import Color
         # named colors
         ('aliceblue', (240, 248, 255)),
         ('Antiquewhite', (250, 235, 215)),
+        ('RebeccaPurple', (102, 51, 153)),
         ('transparent', (0, 0, 0, 0)),
         (' aliceblue', (240, 248, 255)),
         ('Antiquewhite ', (250, 235, 215)),
@@ -204,6 +205,7 @@ def test_as_hex_long():
 def test_as_named():
     assert Color((0, 255, 255)).as_named() == 'cyan'
     assert Color('#808000').as_named() == 'olive'
+    assert Color('#663399').as_named() == 'rebeccapurple'
     assert Color('hsl(180, 100%, 50%)').as_named() == 'cyan'
 
     assert Color((240, 248, 255)).as_named() == 'aliceblue'
