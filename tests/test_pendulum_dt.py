@@ -684,3 +684,9 @@ def test_invalid_zero_duration_string():
     """'P' is not a valid ISO 8601 duration and should raise a validation error."""
     with pytest.raises(ValidationError):
         DurationModel(delta_t='P')
+
+
+@pytest.mark.parametrize('value', ['--P1D', '---P1D', '--PT1S', '---PT1S'])
+def test_pendulum_duration_rejects_repeated_minus(value: str) -> None:
+    with pytest.raises(ValidationError):
+        DurationModel(delta_t=value)
