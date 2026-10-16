@@ -144,6 +144,24 @@ def test_model_validation():
     ]
 
 
+@pytest.mark.parametrize(
+    'color',
+    [
+        (10**1000, 0, 0),
+        (-(10**1000), 0, 0),
+        (0, 0, 0, 10**1000),
+        (0, 0, 0, -(10**1000)),
+    ],
+)
+def test_color_large_integer_validation(color):
+    class Model(BaseModel):
+        color: Color
+
+    with pytest.raises(ValidationError) as exc_info:
+        Model(color=color)
+    assert exc_info.value.errors()[0]['type'] == 'color_error'
+
+
 def test_as_rgb():
     assert Color('bad').as_rgb() == 'rgb(187, 170, 221)'
     assert Color((1, 2, 3, 0.123456)).as_rgb() == 'rgba(1, 2, 3, 0.12)'
