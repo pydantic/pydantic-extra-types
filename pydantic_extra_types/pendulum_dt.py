@@ -356,7 +356,7 @@ class Duration(_Duration):
 
             # https://github.com/python-pendulum/pendulum/issues/532
             if value.startswith('-'):
-                parsed = parse(value.lstrip('-'), exact=True)
+                parsed = parse(value[1:], exact=True)
             else:
                 parsed = parse(value, exact=True)
             if not isinstance(parsed, _Duration):
