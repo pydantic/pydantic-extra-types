@@ -356,7 +356,7 @@ def parse_color_value(value: int | str, max_val: int = 255) -> float:
     """
     try:
         color = float(value)
-    except (ValueError, TypeError) as e:
+    except (ValueError, TypeError, OverflowError) as e:
         raise PydanticCustomError(
             'color_error',
             'value is not a valid color: color values must be a valid number',
@@ -390,7 +390,7 @@ def parse_float_alpha(value: None | str | float) -> float | None:
             alpha = float(value[:-1]) / 100
         else:
             alpha = float(value)
-    except (ValueError, TypeError) as e:
+    except (ValueError, TypeError, OverflowError) as e:
         raise PydanticCustomError(
             'color_error',
             'value is not a valid color: alpha values must be a valid float',
