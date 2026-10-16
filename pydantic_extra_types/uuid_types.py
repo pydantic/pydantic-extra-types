@@ -139,4 +139,5 @@ def uuid7_to_datetime(value: uuid.UUID) -> datetime:
         raise ValueError(f'Expected UUID version 7, got version {value.version}')
 
     timestamp_ms = value.int >> 80 & _UUID7_TIMESTAMP_BITMASK
-    return datetime.fromtimestamp(timestamp_ms / 1000.0, tz=timezone.utc)
+    seconds, milliseconds = divmod(timestamp_ms, 1000)
+    return datetime.fromtimestamp(seconds, tz=timezone.utc).replace(microsecond=milliseconds * 1000)

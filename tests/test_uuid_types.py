@@ -157,6 +157,19 @@ def test_uuid7_to_datetime() -> None:
     assert dt == expected_dt
 
 
+@pytest.mark.parametrize(
+    'timestamp_ms, expected',
+    [
+        (0, datetime(1970, 1, 1, tzinfo=timezone.utc)),
+        (10_000_000_000_001, datetime(2286, 11, 20, 17, 46, 40, 1000, tzinfo=timezone.utc)),
+        (253_402_300_799_999, datetime(9999, 12, 31, 23, 59, 59, 999000, tzinfo=timezone.utc)),
+    ],
+)
+def test_uuid7_to_datetime_preserves_milliseconds(timestamp_ms: int, expected: datetime) -> None:
+    value = uuid.UUID(int=(timestamp_ms << 80) | (7 << 76) | (2 << 62))
+    assert uuid7_to_datetime(value) == expected
+
+
 def test_uuid7_to_datetime_roundtrip() -> None:
     generated = uuid7()
     dt = uuid7_to_datetime(generated)
