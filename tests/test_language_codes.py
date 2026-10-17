@@ -108,3 +108,19 @@ def test_iso5_language_fail():
         ),
     ):
         ISO5CheckingModel(lang='LOL')
+
+
+@pytest.mark.parametrize(
+    'language_type, value, expected',
+    [
+        (LanguageAlpha2, ' EN ', 'en'),
+        (LanguageName, 'English\n', 'English'),
+        (language_code.ISO639_3, ' eng', 'eng'),
+        (language_code.ISO639_5, 'ber ', 'ber'),
+    ],
+)
+def test_surrounding_whitespace_is_ignored(language_type, value: str, expected: str):
+    class Movie(BaseModel):
+        audio_lang: language_type
+
+    assert Movie(audio_lang=value).audio_lang == expected

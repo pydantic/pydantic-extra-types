@@ -78,7 +78,7 @@ class ISO4217(str):
     def __get_pydantic_core_schema__(cls, _: type[Any], __: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(min_length=3, max_length=3),
+            core_schema.str_schema(min_length=3, max_length=3, strip_whitespace=True),
         )
 
     @classmethod
@@ -156,7 +156,7 @@ class Currency(str):
         """
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(min_length=3, max_length=3),
+            core_schema.str_schema(min_length=3, max_length=3, strip_whitespace=True),
         )
 
     @classmethod

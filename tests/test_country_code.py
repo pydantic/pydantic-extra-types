@@ -108,3 +108,19 @@ def test_valid_numeric_code(numeric_code: str, country_data: CountryInfo, Produc
 def test_invalid_numeric_code(numeric_code: str, ProductNumericCode):
     with pytest.raises(ValidationError, match='Invalid country numeric code'):
         ProductNumericCode(made_in=numeric_code)
+
+
+@pytest.mark.parametrize(
+    'country_type, value, expected',
+    [
+        (CountryAlpha2, ' in ', 'IN'),
+        (CountryAlpha3, 'IND\n', 'IND'),
+        (CountryNumericCode, ' 356', '356'),
+        (CountryShortName, ' India ', 'India'),
+    ],
+)
+def test_surrounding_whitespace_is_ignored(country_type, value: str, expected: str):
+    class Product(BaseModel):
+        made_in: country_type
+
+    assert Product(made_in=value).made_in == expected
