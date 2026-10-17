@@ -119,7 +119,7 @@ class LanguageAlpha2(str):
         """
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(to_lower=True),
+            core_schema.str_schema(to_lower=True, strip_whitespace=True),
         )
 
     @classmethod
@@ -201,7 +201,7 @@ class LanguageName(str):
         """
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(),
+            core_schema.str_schema(strip_whitespace=True),
             serialization=core_schema.to_string_ser_schema(),
         )
 
@@ -275,7 +275,7 @@ class ISO639_3(str):
         """
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(min_length=3, max_length=3),
+            core_schema.str_schema(min_length=3, max_length=3, strip_whitespace=True),
         )
 
     @classmethod
@@ -367,7 +367,7 @@ class ISO639_5(str):
         """
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(min_length=3, max_length=3),
+            core_schema.str_schema(min_length=3, max_length=3, strip_whitespace=True),
         )
 
     @classmethod

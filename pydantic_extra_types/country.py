@@ -90,7 +90,7 @@ class CountryAlpha2(str):
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(to_upper=True),
+            core_schema.str_schema(to_upper=True, strip_whitespace=True),
         )
 
     @classmethod
@@ -149,7 +149,7 @@ class CountryAlpha3(str):
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(to_upper=True),
+            core_schema.str_schema(to_upper=True, strip_whitespace=True),
             serialization=core_schema.to_string_ser_schema(),
         )
 
@@ -209,7 +209,7 @@ class CountryNumericCode(str):
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(to_upper=True),
+            core_schema.str_schema(to_upper=True, strip_whitespace=True),
             serialization=core_schema.to_string_ser_schema(),
         )
 
@@ -268,7 +268,7 @@ class CountryShortName(str):
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(),
+            core_schema.str_schema(strip_whitespace=True),
             serialization=core_schema.to_string_ser_schema(),
         )
 

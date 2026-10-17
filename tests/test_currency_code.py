@@ -25,10 +25,10 @@ def test_ISO4217_code_ok(currency: str):
     assert model.model_dump() == {'currency': currency}  # test serialization
 
 
-@pytest.mark.parametrize('currency', ['USD', 'usd', 'UsD'])
+@pytest.mark.parametrize('currency', ['USD', 'usd', 'UsD', ' USD', 'usd ', '\tUsD\n'])
 def test_ISO4217_code_ok_lower_case(currency: str):
     model = ISO4217CheckingModel(currency=currency)
-    assert model.currency == currency.upper()
+    assert model.currency == currency.strip().upper()
 
 
 @pytest.mark.parametrize(
@@ -41,10 +41,10 @@ def test_everyday_code_ok(currency: str):
     assert model.model_dump() == {'currency': currency}  # test serialization
 
 
-@pytest.mark.parametrize('currency', ['USD', 'usd', 'UsD'])
+@pytest.mark.parametrize('currency', ['USD', 'usd', 'UsD', ' USD', 'usd ', '\tUsD\n'])
 def test_everyday_code_ok_lower_case(currency: str):
     model = CurrencyCheckingModel(currency=currency)
-    assert model.currency == currency.upper()
+    assert model.currency == currency.strip().upper()
 
 
 def test_ISO4217_fails():
