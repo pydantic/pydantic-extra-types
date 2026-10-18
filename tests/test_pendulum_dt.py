@@ -1,3 +1,4 @@
+import warnings
 from datetime import date, datetime, time, timedelta
 from datetime import timezone as tz
 
@@ -363,6 +364,25 @@ def test_pendulum_interval_serialization_roundtrip(interval_str):
     assert deserialized.start == interval.start
     assert deserialized.end == interval.end
     assert deserialized == interval
+
+
+def test_pendulum_interval_python_dump_has_no_serializer_warning() -> None:
+    """Verifies that dumping an Interval in Python mode does not warn.
+
+    The core schema described the validated value as a ``str``, while validation
+    returns an ``Interval``. Python-mode serialization therefore warned that it
+    expected a ``str``, which turns into an error whenever warnings are escalated
+    (as they are in this test suite through ``filterwarnings = error``).
+    """
+    interval_str = '2024-01-01T00:00:00+00:00/2024-01-02T00:00:00+00:00'
+    model = IntervalModel(interval=interval_str)
+
+    with warnings.catch_warnings():
+        warnings.simplefilter('error')
+        dumped = model.model_dump()
+
+    assert isinstance(dumped['interval'], Interval)
+    assert dumped['interval'] == model.interval
 
 
 @pytest.mark.parametrize(
