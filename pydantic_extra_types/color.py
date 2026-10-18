@@ -45,7 +45,7 @@ class RGBA:
 # these are not compiled here to avoid import slowdown, they'll be compiled the first time they're used, then cached
 _r_255 = r'(\d{1,3}(?:\.\d+)?)'
 _r_comma = r'\s*,\s*'
-_r_alpha = r'(\d(?:\.\d+)?|\.\d+|\d{1,2}%)'
+_r_alpha = r'(\d(?:\.\d+)?|\.\d+|\d{1,3}(?:\.\d+)?%)'
 _r_h = r'(-?\d+(?:\.\d+)?|-?\.\d+)(deg|rad|turn)?'
 _r_sl = r'(\d{1,3}(?:\.\d+)?)%'
 r_hex_short = r'\s*(?:#|0x)?([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])?\s*'
