@@ -412,7 +412,12 @@ class Interval(_Interval[Any]):
         """
         return core_schema.no_info_wrap_validator_function(
             cls._validate,
-            core_schema.str_schema(),
+            core_schema.union_schema(
+                [
+                    core_schema.is_instance_schema(_Interval),
+                    core_schema.str_schema(),
+                ]
+            ),
             serialization=core_schema.plain_serializer_function_ser_schema(
                 lambda instance: f'{instance.start.isoformat()}/{instance.end.isoformat()}',
                 when_used='json-unless-none',
