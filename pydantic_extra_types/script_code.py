@@ -53,11 +53,14 @@ class ISO_15924(str):
         Raises:
             PydanticCustomError: If the ISO 15924 script code is not valid.
         """
-        if __input_value not in cls.allowed_values:
+        # Script codes are written with an initial capital ("Latn"), so any other
+        # letter case is accepted and normalised, as the country and language codes do
+        value = __input_value.capitalize()
+        if value not in cls.allowed_values:
             raise PydanticCustomError(
                 'ISO_15924', 'Invalid ISO 15924 script code. See https://en.wikipedia.org/wiki/ISO_15924'
             )
-        return cls(__input_value)
+        return cls(value)
 
     @classmethod
     def __get_pydantic_core_schema__(
@@ -75,7 +78,7 @@ class ISO_15924(str):
         """
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(min_length=4, max_length=4),
+            core_schema.str_schema(min_length=4, max_length=4, strip_whitespace=True),
         )
 
     @classmethod
