@@ -51,3 +51,21 @@ def test_ISO_15924_code_fail_not_existing():
         ),
     ):
         ScriptCheck(script='Klin')
+
+
+@pytest.mark.parametrize(
+    'value',
+    [
+        pytest.param('latn', id='lower-case'),
+        pytest.param('LATN', id='upper-case'),
+        pytest.param(' Latn ', id='surrounding-whitespace'),
+        pytest.param('latn\n', id='lower-case-with-newline'),
+    ],
+)
+def test_ISO_15924_code_any_case_and_surrounding_whitespace(value: str):
+    assert ScriptCheck(script=value).script == 'Latn'
+
+
+def test_ISO_15924_code_fail_inner_whitespace():
+    with pytest.raises(ValidationError, match='Invalid ISO 15924 script code'):
+        ScriptCheck(script='La n')
