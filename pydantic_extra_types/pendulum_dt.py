@@ -151,12 +151,15 @@ class Time(_Time):
 
         # otherwise, parse it.
         try:
-            parsed = parse(value, exact=True)
+            try:
+                parsed = handler(value) if isinstance(value, str) else parse(value, exact=True)
+            except ValueError:
+                parsed = parse(value, exact=True)
             if isinstance(parsed, _DateTime):
                 dt = DateTime.instance(parsed)
-                return Time.instance(dt.time())
-            if isinstance(parsed, _Time):
-                return Time.instance(parsed)
+                return Time.instance(dt.timetz(), tz=dt.tzinfo)
+            if isinstance(parsed, (_Time, time)):
+                return Time.instance(parsed, tz=parsed.tzinfo or 'UTC')
             raise ValueError(f'value is not a valid time it is a {type(parsed)}')
         except Exception as exc:
             raise PydanticCustomError('value_error', 'value is not a valid time') from exc
