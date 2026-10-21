@@ -14,6 +14,7 @@ from pydantic_core import PydanticCustomError, core_schema
 try:
     from jsonschema import Draft202012Validator
     from jsonschema.exceptions import SchemaError
+    from jsonschema.validators import validator_for
 except ModuleNotFoundError as e:  # pragma: no cover
     raise RuntimeError(
         'The `json_schema` module requires "jsonschema" to be installed. You can install it with "pip install jsonschema".'
@@ -53,7 +54,7 @@ class JsonSchema(dict[str, Any]):
             raise PydanticCustomError('json_schema_type', 'JSON Schema must be a JSON object')
 
         try:
-            Draft202012Validator.check_schema(schema)
+            validator_for(schema, default=Draft202012Validator).check_schema(schema)
         except SchemaError as exc:
             raise PydanticCustomError(
                 'json_schema_invalid',
