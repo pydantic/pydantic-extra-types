@@ -42,6 +42,44 @@ def test_json_schema_rejects_invalid_schema() -> None:
         JsonSchemaModel(json_schema={'type': 'unsupported'})
 
 
+@pytest.mark.parametrize('as_json_string', [False, True])
+@pytest.mark.parametrize(
+    'input_schema',
+    [
+        {
+            '$schema': 'http://json-schema.org/draft-07/schema#',
+            'type': 'array',
+            'items': [{'type': 'string'}, {'type': 'integer'}],
+        },
+        {
+            '$schema': 'http://json-schema.org/draft-04/schema#',
+            'type': 'number',
+            'minimum': 0,
+            'exclusiveMinimum': True,
+        },
+    ],
+)
+def test_json_schema_uses_declared_draft(input_schema, as_json_string) -> None:
+    value = json.dumps(input_schema) if as_json_string else input_schema
+
+    assert JsonSchemaModel(json_schema=value).json_schema == input_schema
+
+
+def test_json_schema_rejects_invalid_declared_draft_schema() -> None:
+    with pytest.raises(ValidationError, match='json_schema_invalid'):
+        JsonSchemaModel(
+            json_schema={
+                '$schema': 'http://json-schema.org/draft-07/schema#',
+                'items': [{'type': 'unsupported'}],
+            }
+        )
+
+
+def test_json_schema_defaults_to_draft_2020_12() -> None:
+    with pytest.raises(ValidationError, match='json_schema_invalid'):
+        JsonSchemaModel(json_schema={'items': [{'type': 'string'}]})
+
+
 def test_json_schema_model_dump_serializes_dict() -> None:
     input_schema = {'type': 'object', 'properties': {'x': {'type': 'number'}}}
     model = JsonSchemaModel(json_schema=input_schema)
