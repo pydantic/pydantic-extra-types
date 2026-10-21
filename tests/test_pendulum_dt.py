@@ -550,6 +550,17 @@ def test_pendulum_time_from_datetime_string():
     assert (model.t.hour, model.t.minute, model.t.second) == (17, 53, 12)
 
 
+@pytest.mark.parametrize('prefix', ['', '2024-01-01T'])
+@pytest.mark.parametrize('offset', ['+05:30', '-03:30', 'Z'])
+def test_pendulum_time_preserves_serialized_offset(prefix, offset):
+    value = f'{prefix}12:34:56.123456{offset}'
+    model = TimeModel(t=value)
+    expected = time.fromisoformat(f'12:34:56.123456{offset.replace("Z", "+00:00")}')
+
+    assert model.t.isoformat() == expected.isoformat()
+    assert TimeModel.model_validate_json(model.model_dump_json()).t.isoformat() == expected.isoformat()
+
+
 def get_invalid_dt_common():
     return [
         None,
