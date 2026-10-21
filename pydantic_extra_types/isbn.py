@@ -122,10 +122,10 @@ class ISBN(str):
             if (
                 not value[:-1].isascii()
                 or not value[:-1].isdigit()
-                or ((value[-1] != 'X') and (not value[-1].isascii() or not value[-1].isdigit()))
+                or ((value[-1] not in ('X', 'x')) and (not value[-1].isascii() or not value[-1].isdigit()))
             ):
                 raise PydanticCustomError('isbn10_invalid_characters', 'First 9 digits of ISBN-10 must be integers')
-            if isbn10_digit_calc(value) != value[-1]:
+            if isbn10_digit_calc(value) != value[-1].upper():
                 raise PydanticCustomError('isbn_invalid_digit_check_isbn10', 'Provided digit is invalid for given ISBN')
 
         if isbn_length == 13:

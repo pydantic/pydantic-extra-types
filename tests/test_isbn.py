@@ -44,6 +44,7 @@ isbn10_digits_test_cases = [
     # Valid ISBNs
     ('8537809667', '9788537809662', True),  # ISBN-10 as input
     ('080442957X', '9780804429573', True),  # ISBN-10 ending in "X" as input
+    ('080442957x', '9780804429573', True),  # ISBN-10 ending in lowercase "x" as input
     # Invalid ISBNs
     ('@80442957X', None, False),  # Non Integer in [0] position
     ('8@37809667', None, False),  # Non Integer in [1] position
@@ -128,10 +129,12 @@ isbn_last_digit_test_cases = [
     ('9788584390670', '9788584390670', True),  # ISBN-13 Starting with 978
     ('9790306406156', '9790306406156', True),  # ISBN-13 starting with 979
     ('8306018060', '9788306018066', True),  # ISBN-10 as input
+    ('0-8044-2957-x', '9780804429573', True),  # ISBN-10 with hyphens, ending in lowercase "x"
     # Invalid ISBNs
     ('8537809663', None, False),  # ISBN-10 as input with wrong last digit
     ('9788537809661', None, False),  # ISBN-13 as input with wrong last digit
     ('080442953X', None, False),  # ISBN-10 ending in "X" as input with wrong last digit
+    ('080442953x', None, False),  # ISBN-10 ending in lowercase "x" as input with wrong last digit
     ('9788584390671', None, False),  # ISBN-13 Starting with 978 with wrong last digit
     ('9790306406155', None, False),  # ISBN-13 starting with 979 with wrong last digit
 ]
