@@ -62,8 +62,16 @@ class MacAddress(str):
             str: The parsed MAC address.
 
         """
+        if isinstance(__input_value, (bytes, bytearray)):
+            if len(__input_value) not in ALLOWED_CHUNK_COUNTS:
+                raise PydanticCustomError(
+                    'mac_address_len',
+                    'Packed MAC addresses must contain {required_length} bytes',
+                    {'required_length': ALLOWED_CHUNK_COUNTS},
+                )
+            return __input_value.hex(':')
         if not isinstance(__input_value, str):
-            raise PydanticCustomError('mac_address_type', 'Value must be a string')
+            raise PydanticCustomError('mac_address_type', 'Value must be a string or packed bytes')
 
         return cls.validate_mac_address(__input_value.encode())
 

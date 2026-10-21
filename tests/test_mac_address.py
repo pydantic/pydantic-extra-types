@@ -147,7 +147,29 @@ def test_model_validation():
     ]
 
 
-@pytest.mark.parametrize('mac_address_value', [None, 12345, 1.5, b'bytes', [], {}])
+@pytest.mark.parametrize('mac_address_value', [None, 12345, 1.5, [], {}])
 def test_mac_address_requires_string(mac_address_value: Any) -> None:
     with pytest.raises(ValidationError, match='Value must be a string'):
         Network(mac_address=mac_address_value)
+
+
+@pytest.mark.parametrize('packed_type', [bytes, bytearray])
+@pytest.mark.parametrize(
+    'address',
+    [
+        '00:00:5e:00:53:01',
+        '02:00:5e:10:00:00:00:01',
+        '00:00:00:00:fe:80:00:00:00:00:00:00:02:00:5e:10:00:00:00:01',
+    ],
+)
+def test_mac_address_accepts_packed_bytes(address, packed_type) -> None:
+    model = Network(mac_address=packed_type.fromhex(address.replace(':', '')))
+
+    assert model.mac_address == address
+    assert Network.model_validate_json(model.model_dump_json()).mac_address == address
+
+
+@pytest.mark.parametrize('length', [0, 5, 7, 9, 19, 21])
+def test_mac_address_rejects_invalid_packed_length(length) -> None:
+    with pytest.raises(ValidationError, match='Packed MAC addresses must contain'):
+        Network(mac_address=bytes(length))
