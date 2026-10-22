@@ -448,7 +448,7 @@ class Interval(_Interval[Any]):
 
         # otherwise, parse it.
         try:
-            parsed = parse(value)
+            parsed = parse(value, tz=None)
             if isinstance(parsed, _Interval):
                 return cls._instance(parsed)
             raise ValueError(f'value is not a valid interval it is a {type(parsed)}')

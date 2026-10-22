@@ -366,6 +366,25 @@ def test_pendulum_interval_serialization_roundtrip(interval_str):
     assert deserialized == interval
 
 
+@pytest.mark.parametrize('microsecond', [0, 123456])
+@pytest.mark.parametrize(
+    'timezone', [None, UTC, tz(timedelta(hours=5, minutes=30)), tz(timedelta(hours=-3, minutes=-30))]
+)
+def test_pendulum_interval_roundtrip_preserves_endpoint_timezones(timezone, microsecond):
+    start = pendulum.datetime(2024, 1, 1, 12, 30, 0, microsecond, tz=timezone)
+    end = start.add(days=1)
+    adapter = TypeAdapter(Interval)
+    interval = adapter.validate_python(pendulum.interval(start, end))
+
+    restored = adapter.validate_json(adapter.dump_json(interval))
+
+    assert type(restored) is Interval
+    for actual, expected in [(restored.start, start), (restored.end, end)]:
+        assert actual.isoformat() == expected.isoformat()
+        assert actual.utcoffset() == expected.utcoffset()
+        assert actual == expected
+
+
 def test_pendulum_interval_python_dump_has_no_serializer_warning() -> None:
     """Verifies that dumping an Interval in Python mode does not warn.
 
