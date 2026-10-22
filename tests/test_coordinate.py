@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 from dirty_equals import IsPartialDict
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, TypeAdapter, ValidationError
 from pydantic_core._pydantic_core import ArgsKwargs
 
 from pydantic_extra_types.coordinate import Coordinate, Latitude, Longitude
@@ -208,6 +208,19 @@ def test_hashable():
     assert hash(Coord(coord=(Decimal('20.000'), Decimal('10.000'))).coord) == hash(
         Coord(coord=(Decimal('20.0'), Decimal('10.0'))).coord
     )
+
+
+@pytest.mark.parametrize('value', ['[20.0, 10.0]', '["20.0", "10.0"]'])
+def test_coordinate_json_array(value: str):
+    expected = Coordinate(20.0, 10.0)
+    assert TypeAdapter(Coordinate).validate_json(value) == expected
+    assert Coord.model_validate_json(f'{{"coord": {value}}}').coord == expected
+
+
+@pytest.mark.parametrize('value', ['[]', '[20.0]', '[20.0, 10.0, 30.0]', '[91.0, 0.0]', '[0.0, 181.0]'])
+def test_coordinate_invalid_json_array(value: str):
+    with pytest.raises(ValidationError):
+        TypeAdapter(Coordinate).validate_json(value)
 
 
 def test_json_schema():
