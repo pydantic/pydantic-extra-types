@@ -222,7 +222,7 @@ class Coordinate(_repr.Representation):
 
     @classmethod
     def _parse_tuple(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
-        return ArgsKwargs(args=handler(value)) if isinstance(value, tuple) else value
+        return ArgsKwargs(args=handler(value)) if isinstance(value, (tuple, list)) else value
 
     def __str__(self) -> str:
         return f'{self.latitude},{self.longitude}'
