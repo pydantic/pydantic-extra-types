@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from typing import Annotated, Any, ClassVar
 
 from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
@@ -22,12 +22,28 @@ class _FloatDecimalAnnotation:
     """Annotation for Union[float, Decimal] that provides proper JSON schema with decimal pattern."""
 
     @classmethod
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+        """Keep Decimal values as Decimal so the enclosing field can check their bounds exactly.
+
+        Pydantic's smart-union fallback would otherwise convert an out-of-range Decimal to a
+        lossy float before ``Latitude``/``Longitude`` sees it.
+        """
+        if isinstance(value, Decimal):
+            return value if value.is_finite() else handler(value)
+        if isinstance(value, str):
+            try:
+                decimal_value = Decimal(value)
+            except (InvalidOperation, ValueError):
+                return handler(value)
+            if decimal_value.is_finite():
+                return decimal_value
+        return handler(value)
+
+    @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        return core_schema.union_schema(
-            [
-                core_schema.float_schema(),
-                core_schema.decimal_schema(),
-            ]
+        return core_schema.no_info_wrap_validator_function(
+            cls._validate,
+            core_schema.float_schema(),
         )
 
     @classmethod
@@ -48,6 +64,45 @@ _CoordinateValue = Annotated[float | Decimal, _FloatDecimalAnnotation]
 LatitudeType = float | Decimal
 LongitudeType = float | Decimal
 CoordinateType = tuple[_CoordinateValue, _CoordinateValue]
+
+
+def _check_decimal_range(value: Decimal, minimum: float, maximum: float) -> None:
+    """Raise the same bound errors as pydantic's constrained decimal schema."""
+    if value < Decimal(str(minimum)):
+        raise PydanticCustomError(
+            'greater_than_equal',
+            'Input should be greater than or equal to {minimum}',
+            {'minimum': minimum},
+        )
+    if value > Decimal(str(maximum)):
+        raise PydanticCustomError(
+            'less_than_equal',
+            'Input should be less than or equal to {maximum}',
+            {'maximum': maximum},
+        )
+
+
+def _reject_lossy_decimal(value: Any, minimum: float, maximum: float) -> None:
+    """Reject an out-of-range Decimal that the float branch would have rounded into range."""
+    if isinstance(value, Decimal):
+        decimal_value = value
+    elif isinstance(value, str):
+        try:
+            decimal_value = Decimal(value)
+        except (InvalidOperation, ValueError):
+            return
+    else:
+        return
+    if not decimal_value.is_finite():
+        return
+    if Decimal(str(minimum)) <= decimal_value <= Decimal(str(maximum)):
+        return
+    try:
+        float_value = float(value)
+    except (ValueError, OverflowError):
+        return
+    if minimum <= float_value <= maximum:
+        _check_decimal_range(decimal_value, minimum, maximum)
 
 
 class Latitude(float):
@@ -76,12 +131,21 @@ class Latitude(float):
     max: ClassVar[float] = 90.00
 
     @classmethod
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+        """Reject the lossy float fallback before validating the normal float/Decimal union."""
+        _reject_lossy_decimal(value, cls.min, cls.max)
+        return handler(value)
+
+    @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        return core_schema.union_schema(
-            [
-                core_schema.float_schema(ge=cls.min, le=cls.max),
-                core_schema.decimal_schema(ge=Decimal(cls.min), le=Decimal(cls.max)),
-            ]
+        return core_schema.no_info_wrap_validator_function(
+            cls._validate,
+            core_schema.union_schema(
+                [
+                    core_schema.float_schema(ge=cls.min, le=cls.max),
+                    core_schema.decimal_schema(ge=Decimal(cls.min), le=Decimal(cls.max)),
+                ]
+            ),
         )
 
     @classmethod
@@ -123,12 +187,21 @@ class Longitude(float):
     max: ClassVar[float] = 180.00
 
     @classmethod
+    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+        """Reject the lossy float fallback before validating the normal float/Decimal union."""
+        _reject_lossy_decimal(value, cls.min, cls.max)
+        return handler(value)
+
+    @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
-        return core_schema.union_schema(
-            [
-                core_schema.float_schema(ge=cls.min, le=cls.max),
-                core_schema.decimal_schema(ge=Decimal(cls.min), le=Decimal(cls.max)),
-            ]
+        return core_schema.no_info_wrap_validator_function(
+            cls._validate,
+            core_schema.union_schema(
+                [
+                    core_schema.float_schema(ge=cls.min, le=cls.max),
+                    core_schema.decimal_schema(ge=Decimal(cls.min), le=Decimal(cls.max)),
+                ]
+            ),
         )
 
     @classmethod

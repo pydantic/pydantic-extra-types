@@ -297,3 +297,40 @@ def test_json_schema():
         'title': 'Model',
         'type': 'object',
     }
+
+
+@pytest.mark.parametrize(
+    'model, field, value',
+    [
+        (Lat, 'lat', Decimal('90.0000000000000000001')),
+        (Lat, 'lat', Decimal('-90.0000000000000000001')),
+        (Lng, 'lng', Decimal('180.0000000000000000001')),
+        (Lng, 'lng', Decimal('-180.0000000000000000001')),
+    ],
+)
+def test_decimal_out_of_bounds_is_rejected(model, field, value):
+    # A Decimal that is only slightly out of range must not be rounded into range by the
+    # float branch of the union.
+    with pytest.raises(ValidationError):
+        model(**{field: value})
+
+
+@pytest.mark.parametrize(
+    'type_, value',
+    [
+        (Latitude, '90.0000000000000000001'),
+        (Longitude, '180.0000000000000000001'),
+    ],
+)
+def test_decimal_string_out_of_bounds_is_rejected(type_, value):
+    with pytest.raises(ValidationError):
+        TypeAdapter(type_).validate_json(f'"{value}"')
+
+
+def test_coordinate_tuple_rejects_out_of_range_decimal():
+    for coordinate in [
+        (Decimal('90.0000000000000000001'), Decimal(0)),
+        (Decimal(0), Decimal('180.0000000000000000001')),
+    ]:
+        with pytest.raises(ValidationError):
+            Coord(coord=coordinate)
