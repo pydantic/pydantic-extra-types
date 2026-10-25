@@ -54,6 +54,8 @@ class JsonSchema(dict[str, Any]):
             raise PydanticCustomError('json_schema_type', 'JSON Schema must be a JSON object')
 
         try:
+            if '$schema' in schema and not isinstance(schema['$schema'], str):
+                raise SchemaError('$schema must be a string')
             validator_for(schema, default=Draft202012Validator).check_schema(schema)
         except SchemaError as exc:
             raise PydanticCustomError(

@@ -85,3 +85,15 @@ def test_json_schema_model_dump_serializes_dict() -> None:
     model = JsonSchemaModel(json_schema=input_schema)
 
     assert model.model_dump() == {'json_schema': input_schema}
+
+
+@pytest.mark.parametrize('as_json_string', [False, True])
+@pytest.mark.parametrize('schema_value', [[], {}, 42, 3.5, True, False, None])
+def test_json_schema_rejects_non_string_draft(schema_value, as_json_string) -> None:
+    input_schema = {'$schema': schema_value, 'type': 'object'}
+    value = json.dumps(input_schema) if as_json_string else input_schema
+
+    with pytest.raises(ValidationError, match='json_schema_invalid') as exc_info:
+        JsonSchemaModel(json_schema=value)
+
+    assert exc_info.value.errors()[0]['type'] == 'json_schema_invalid'
