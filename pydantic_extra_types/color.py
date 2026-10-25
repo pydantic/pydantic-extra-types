@@ -43,7 +43,7 @@ class RGBA:
 
 
 # these are not compiled here to avoid import slowdown, they'll be compiled the first time they're used, then cached
-_r_255 = r'(\d{1,3}(?:\.\d+)?)'
+_r_255 = r'(\d{1,3}(?:\.\d+)?%?)'
 _r_comma = r'\s*,\s*'
 _r_alpha = r'(\d(?:\.\d+)?|\.\d+|\d{1,3}(?:\.\d+)?%)'
 _r_h = r'(-?\d+(?:\.\d+)?|-?\.\d+)(deg|rad|turn)?'
@@ -345,7 +345,8 @@ def parse_color_value(value: int | str, max_val: int = 255) -> float:
     """Parse the color value provided and return a number between 0 and 1.
 
     Args:
-        value: An integer or string color value.
+        value: An integer or string color value. A string ending in `%` is a
+            percentage of `max_val`, as in CSS `rgb(100%, 0%, 0%)`.
         max_val: Maximum range value. Defaults to 255.
 
     Raises:
@@ -355,7 +356,10 @@ def parse_color_value(value: int | str, max_val: int = 255) -> float:
         A number between 0 and 1.
     """
     try:
-        color = float(value)
+        if isinstance(value, str) and value.endswith('%'):
+            color = float(value[:-1]) / 100 * max_val
+        else:
+            color = float(value)
     except (ValueError, TypeError, OverflowError) as e:
         raise PydanticCustomError(
             'color_error',
