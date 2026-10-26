@@ -25,6 +25,10 @@ class Something(BaseModel):
         # Valid ULID for str format
         ('01BTGNYV6HRNK8K8VKZASZCFPE', '01BTGNYV6HRNK8K8VKZASZCFPE', True),
         ('01BTGNYV6HRNK8K8VKZASZCFPF', '01BTGNYV6HRNK8K8VKZASZCFPF', True),
+        # The string representation is case insensitive
+        ('01btgnyv6hrnk8k8vkzaszcfpe', '01BTGNYV6HRNK8K8VKZASZCFPE', True),
+        ('01BTGNYV6hrnk8k8vkzaszcfpe', '01BTGNYV6HRNK8K8VKZASZCFPE', True),
+        ('01BTGNYV6HRNK8K8VKZAſZCFPE', None, False),  # 'ſ'.upper() == 'S'
         # Invalid ULID for str format
         ('01BTGNYV6HRNK8K8VKZASZCFP', None, False),  # Invalid ULID (short length)
         ('01BTGNYV6HRNK8K8VKZASZCFPEA', None, False),  # Invalid ULID (long length)
