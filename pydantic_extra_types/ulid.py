@@ -56,7 +56,10 @@ class ULID(_repr.Representation):
             if isinstance(value, int):
                 ulid = _ULID.from_int(value)
             elif isinstance(value, str):
-                ulid = _ULID.from_str(value)
+                # The ULID spec makes the Crockford base32 string case insensitive,
+                # but python-ulid only decodes the uppercase alphabet. Only ASCII is
+                # uppercased, so e.g. 'ſ' is not turned into a valid 'S'.
+                ulid = _ULID.from_str(value.upper() if value.isascii() else value)
             elif isinstance(value, uuid.UUID):
                 ulid = _ULID.from_uuid(value)
             elif isinstance(value, _ULID):
