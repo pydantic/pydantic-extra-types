@@ -69,10 +69,25 @@ class Color(_repr.Representation):
 
     __slots__ = '_original', '_rgba'
 
-    def __init__(self, value: ColorType) -> None:
+    def __init__(
+        self,
+        value: ColorType | None = None,
+        *,
+        rgb: tuple[int, int, int] | tuple[int, int, int, float] | None = None,
+    ) -> None:
         self._rgba: RGBA
         self._original: ColorType
-        if isinstance(value, (tuple, list)):
+
+        if value is None:
+            if rgb is not None:
+                value = rgb
+            else:
+                raise PydanticCustomError(
+                    'color_error',
+                    'value is not a valid color: value must be a tuple, list or string',
+                )
+
+        if isinstance(value, tuple | list):
             self._rgba = parse_tuple(value)
         elif isinstance(value, str):
             self._rgba = parse_str(value)
@@ -84,6 +99,14 @@ class Color(_repr.Representation):
                 'color_error',
                 'value is not a valid color: value must be a tuple, list or string',
             )
+
+        if rgb is not None:
+            parsed_rgb = parse_tuple(rgb)
+            if self._rgba[: len(rgb)] != parsed_rgb[: len(rgb)]:
+                raise PydanticCustomError(
+                    'color_error',
+                    'provided rgb keyword argument does not match value',
+                )
 
         # if we've got here value must be a valid color
         self._original = value
