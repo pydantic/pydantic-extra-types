@@ -274,3 +274,25 @@ def test_color_hashable():
     assert hash(Color('red')) != hash(Color('blue'))
     assert hash(Color('red')) == hash(Color((255, 0, 0)))
     assert hash(Color('red')) != hash(Color((255, 0, 0, 0.5)))
+
+
+def test_repr_roundtrip_and_rgb_kwarg():
+    # Issue #140: Color repr should be valid for initialization
+    c = Color('red')
+    assert eval(repr(c)) == c
+
+    c_tuple = Color((1, 2, 3))
+    assert eval(repr(c_tuple)) == c_tuple
+
+    # Test initialization with rgb keyword argument
+    c_rgb = Color(rgb=(255, 0, 0))
+    assert c_rgb == Color('red')
+
+    c_both = Color('red', rgb=(255, 0, 0))
+    assert c_both == Color('red')
+
+    with pytest.raises(PydanticCustomError, match='provided rgb keyword argument does not match value'):
+        Color('red', rgb=(0, 255, 0))
+
+    with pytest.raises(PydanticCustomError, match='value is not a valid color'):
+        Color()
