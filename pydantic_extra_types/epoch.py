@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+import math
 from collections.abc import Callable
 from typing import Any
 
@@ -36,6 +37,8 @@ class _Base(datetime.datetime):
 
     @classmethod
     def _validate(cls, __input_value: Any, /, _: Any) -> datetime.datetime:
+        if not math.isfinite(__input_value):
+            raise ValueError('timestamp must be a finite number')
         try:
             return EPOCH + datetime.timedelta(seconds=__input_value)
         except (OverflowError, OSError) as e:
