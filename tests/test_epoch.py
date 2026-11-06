@@ -49,3 +49,12 @@ def test_out_of_range_raises_validation_error(cls_):
     ta = TypeAdapter(cls_)
     with pytest.raises(ValidationError):
         ta.validate_python(1_721_000_000_000)
+
+
+@pytest.mark.parametrize('value', [float('nan'), float('inf'), float('-inf')])
+def test_non_finite_raises_validation_error(value):
+    from pydantic import TypeAdapter, ValidationError
+
+    ta = TypeAdapter(epoch.Number)
+    with pytest.raises(ValidationError, match='timestamp must be a finite number'):
+        ta.validate_python(value)
