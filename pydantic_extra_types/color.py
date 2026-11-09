@@ -43,11 +43,11 @@ class RGBA:
 
 
 # these are not compiled here to avoid import slowdown, they'll be compiled the first time they're used, then cached
-_r_255 = r'(\d{1,3}(?:\.\d+)?%?)'
+_r_255 = r'((?:\d{1,3}(?:\.\d+)?|\.\d+)%?)'
 _r_comma = r'\s*,\s*'
-_r_alpha = r'(\d(?:\.\d+)?|\.\d+|\d{1,3}(?:\.\d+)?%)'
+_r_alpha = r'(\d(?:\.\d+)?|\.\d+|(?:\d{1,3}(?:\.\d+)?|\.\d+)%)'
 _r_h = r'(-?\d+(?:\.\d+)?|-?\.\d+)(deg|rad|turn)?'
-_r_sl = r'(\d{1,3}(?:\.\d+)?)%'
+_r_sl = r'((?:\d{1,3}(?:\.\d+)?|\.\d+))%'
 r_hex_short = r'\s*(?:#|0x)?([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])?\s*'
 r_hex_long = r'\s*(?:#|0x)?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?\s*'
 # CSS3 RGB examples: rgb(0, 0, 0), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 50%)
