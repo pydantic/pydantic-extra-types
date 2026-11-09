@@ -469,9 +469,12 @@ def float_to_255(c: float) -> int:
         c: The float value to be converted. Must be between 0 and 1 (inclusive).
 
     Returns:
-        The integer equivalent of the given float value rounded to the nearest whole number.
+        The integer equivalent of the given float value rounded to the nearest whole number, where a value
+        exactly halfway between two whole numbers is rounded up, as in CSS.
     """
-    return round(c * 255)
+    # `c * 255` carries float noise (25.5 can come out as 25.499999999999996) which would decide which way a
+    # half goes, and Python's `round` sends exact halves to the even number instead of up
+    return math.floor(round(c * 255, 9) + 0.5)
 
 
 COLORS_BY_NAME = {
