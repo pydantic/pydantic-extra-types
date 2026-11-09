@@ -26,10 +26,23 @@ class PaymentCardBrand(str, Enum):
     unionpay = 'UnionPay'
     jcb = 'JCB'
     diners_club = 'Diners Club'
+    uzcard = 'UzCard'
+    humo = 'HUMO'
     other = 'other'
 
     def __str__(self) -> str:
         return self.value
+
+
+"""Brands identified by an exact 4-digit IIN prefix that only issue 16-digit cards."""
+_FOUR_DIGIT_PREFIX_16_DIGIT_BRANDS: dict[str, PaymentCardBrand] = {
+    '5019': PaymentCardBrand.dankort,
+    '4571': PaymentCardBrand.dankort,
+    '9792': PaymentCardBrand.troy,
+    '8600': PaymentCardBrand.uzcard,
+    '5614': PaymentCardBrand.uzcard,
+    '9860': PaymentCardBrand.humo,
+}
 
 
 class PaymentCardNumber(str):
@@ -171,13 +184,10 @@ class PaymentCardNumber(str):
         if card_number.startswith(('65', '6011')) or 644 <= int(card_number[:3]) <= 649:
             return PaymentCardBrand.discover, list(range(16, 20))
 
-        # Dankort
-        if card_number[:4] in {'5019', '4571'}:
-            return PaymentCardBrand.dankort, [16]
-
-        # Troy
-        if card_number.startswith('9792'):
-            return PaymentCardBrand.troy, [16]
+        # Dankort, Troy, UzCard, HUMO
+        brand = _FOUR_DIGIT_PREFIX_16_DIGIT_BRANDS.get(card_number[:4])
+        if brand is not None:
+            return brand, [16]
 
         # UnionPay
         if card_number[:2] in {'62', '81'}:
