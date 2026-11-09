@@ -34,6 +34,7 @@ class PaymentCardBrand(str, Enum):
         return self.value
 
 
+"""Brands identified by an exact 4-digit IIN prefix that only issue 16-digit cards."""
 _FOUR_DIGIT_PREFIX_16_DIGIT_BRANDS: dict[str, PaymentCardBrand] = {
     '5019': PaymentCardBrand.dankort,
     '4571': PaymentCardBrand.dankort,
@@ -42,7 +43,6 @@ _FOUR_DIGIT_PREFIX_16_DIGIT_BRANDS: dict[str, PaymentCardBrand] = {
     '5614': PaymentCardBrand.uzcard,
     '9860': PaymentCardBrand.humo,
 }
-"""Brands identified by an exact 4-digit IIN prefix that only issue 16-digit cards."""
 
 
 class PaymentCardNumber(str):
