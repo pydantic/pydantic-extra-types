@@ -27,6 +27,12 @@ VALID_JCB_16 = '3528000000000001'
 VALID_JCB_19 = '3528000000000000001'
 VALID_MAESTRO = '6759649826438453'
 VALID_TROY = '9792000000000001'
+VALID_UZCARD = '8600000000000001'
+VALID_UZCARD_5614 = '5614000000000001'
+LEN_INVALID_UZCARD = '86000000000000001'
+LEN_INVALID_UZCARD_5614 = '56140000000000002'
+VALID_HUMO = '9860000000000001'
+LEN_INVALID_HUMO = '98600000000000002'
 VALID_OTHER = '2000000000000000008'
 VALID_DINERS_CLUB_14 = '30500000000000'
 VALID_DINERS_CLUB_16 = '3050000000000009'
@@ -122,6 +128,12 @@ def test_validate_luhn_check_digit(card_number: str, valid: bool):
         (LEN_INVALID, PaymentCardBrand.visa, False),
         (VALID_MAESTRO, PaymentCardBrand.maestro, True),
         (VALID_TROY, PaymentCardBrand.troy, True),
+        (VALID_UZCARD, PaymentCardBrand.uzcard, True),
+        (LEN_INVALID_UZCARD, PaymentCardBrand.uzcard, False),
+        (VALID_UZCARD_5614, PaymentCardBrand.uzcard, True),
+        (LEN_INVALID_UZCARD_5614, PaymentCardBrand.uzcard, False),
+        (VALID_HUMO, PaymentCardBrand.humo, True),
+        (LEN_INVALID_HUMO, PaymentCardBrand.humo, False),
         (VALID_DINERS_CLUB_14, PaymentCardBrand.diners_club, True),
         (VALID_DINERS_CLUB_16, PaymentCardBrand.diners_club, True),
         (VALID_DINERS_CLUB_19, PaymentCardBrand.diners_club, True),
@@ -157,6 +169,9 @@ def test_length_for_brand(card_number: str, brand: PaymentCardBrand, valid: bool
         (VALID_DINERS_CLUB_17, PaymentCardBrand.diners_club),
         (VALID_DINERS_CLUB_19, PaymentCardBrand.diners_club),
         (VALID_TROY, PaymentCardBrand.troy),
+        (VALID_UZCARD, PaymentCardBrand.uzcard),
+        (VALID_UZCARD_5614, PaymentCardBrand.uzcard),
+        (VALID_HUMO, PaymentCardBrand.humo),
     ],
 )
 def test_get_brand(card_number: str, brand: PaymentCardBrand):
