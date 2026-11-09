@@ -296,3 +296,34 @@ def test_repr_roundtrip_and_rgb_kwarg():
 
     with pytest.raises(PydanticCustomError, match='value is not a valid color'):
         Color()
+
+
+@pytest.mark.parametrize(
+    'raw_color, as_tuple',
+    [
+        # a CSS number may start with the decimal point, as the alpha and the hue already could
+        ('rgb(.25, .75, .9)', (0, 1, 1)),
+        ('rgb(.25 .75 .9)', (0, 1, 1)),
+        ('rgba(.25, .75, 100, .5)', (0, 1, 100, 0.5)),
+        ('rgb(.5%, 40%, 100%)', (1, 102, 255)),
+        ('rgb(.5% .5% .5%)', (1, 1, 1)),
+        ('hsl(120, .5%, 50%)', (127, 128, 127)),
+        ('hsl(120, 50%, .5%)', (1, 2, 1)),
+        ('hsl(120 .5% 50%)', (127, 128, 127)),
+        ('hsla(120, 50%, 50%, .5%)', (64, 191, 64, 0.005)),
+        ('rgba(0, 0, 0, .5%)', (0, 0, 0, 0.005)),
+        ('rgb(0 0 0 / .5%)', (0, 0, 0, 0.005)),
+    ],
+)
+def test_color_numbers_without_a_leading_digit(raw_color, as_tuple):
+    assert Color(raw_color).as_rgb_tuple() == as_tuple
+
+
+@pytest.mark.parametrize(
+    'color',
+    ['rgb(1., 1, 1)', 'rgb(.%, 1, 1)', 'rgb(0.5., 1, 1)', 'rgb(. 5, 1, 1)', 'hsl(120, ., 50%)', 'hsl(120, 50%, .%)'],
+)
+def test_color_misplaced_decimal_point_fail(color):
+    with pytest.raises(PydanticCustomError) as exc_info:
+        Color(color)
+    assert exc_info.value.type == 'color_error'
