@@ -36,6 +36,21 @@ def test_valid_routing_number(routing_number: str) -> None:
     Model(routing_number=routing_number)
 
 
+@pytest.mark.parametrize(
+    'routing_number', ['130000006', '200000004', '330000000', '400000008', '500000005', '990000000']
+)
+def test_invalid_routing_number_prefix(routing_number: str) -> None:
+    with pytest.raises(ValidationError, match='Incorrect ABA routing transit number'):
+        Model(routing_number=routing_number)
+
+
+@pytest.mark.parametrize(
+    'routing_number', ['000000000', '211274450', '322271627', '610000005', '720000005', '800000006']
+)
+def test_valid_routing_number_prefix(routing_number: str) -> None:
+    Model(routing_number=routing_number)
+
+
 def test_raises_error_when_not_a_string() -> None:
     with pytest.raises(ValidationError, match='routing number is not all digits'):
         Model(routing_number='A12210515')
