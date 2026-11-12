@@ -51,6 +51,19 @@ def test_out_of_range_raises_validation_error(cls_):
         ta.validate_python(1_721_000_000_000)
 
 
+@pytest.mark.parametrize(
+    'value', [10**400, -(10**400), '1' + '0' * 400], ids=['positive', 'negative', 'numeric-string']
+)
+def test_integer_too_large_for_float_raises_validation_error(value):
+    # math.isfinite() cannot convert an int this large to a float and raises
+    # OverflowError, which must not escape validate_python.
+    from pydantic import TypeAdapter, ValidationError
+
+    ta = TypeAdapter(epoch.Integer)
+    with pytest.raises(ValidationError, match='timestamp is out of the supported datetime range'):
+        ta.validate_python(value)
+
+
 @pytest.mark.parametrize('value', [float('nan'), float('inf'), float('-inf')])
 def test_non_finite_raises_validation_error(value):
     from pydantic import TypeAdapter, ValidationError
