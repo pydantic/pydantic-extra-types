@@ -84,6 +84,9 @@ class ABARoutingNumber(str):
         Raises:
             PydanticCustomError: If the routing number is incorrect.
         """
+        prefix = int(routing_number[:2])
+        if not (prefix <= 12 or 21 <= prefix <= 32 or 61 <= prefix <= 72 or prefix == 80):
+            raise PydanticCustomError('aba_routing_number', 'Incorrect ABA routing transit number')
         checksum = sum(int(digit) * factor for digit, factor in zip(routing_number, it.cycle((3, 7, 1))))
         if checksum % 10:
             raise PydanticCustomError('aba_routing_number', 'Incorrect ABA routing transit number')
