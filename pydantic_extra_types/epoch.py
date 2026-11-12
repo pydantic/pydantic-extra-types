@@ -37,7 +37,13 @@ class _Base(datetime.datetime):
 
     @classmethod
     def _validate(cls, __input_value: Any, /, _: Any) -> datetime.datetime:
-        if not math.isfinite(__input_value):
+        try:
+            # math.isfinite() itself raises OverflowError for an int too large to
+            # convert to a float, so it has to run inside the try block too.
+            finite = math.isfinite(__input_value)
+        except OverflowError as e:
+            raise ValueError('timestamp is out of the supported datetime range') from e
+        if not finite:
             raise ValueError('timestamp must be a finite number')
         try:
             return EPOCH + datetime.timedelta(seconds=__input_value)
