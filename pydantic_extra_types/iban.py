@@ -124,7 +124,7 @@ def _validate_iban_check_digits(iban: str) -> bool:
             numeric += char
         else:
             numeric += str(ord(char) - ord('A') + 10)
-    return int(numeric) % 97 == 1
+    return '02' <= iban[2:4] <= '98' and int(numeric) % 97 == 1
 
 
 class IBAN(str):

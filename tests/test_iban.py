@@ -102,6 +102,33 @@ def test_validate_iban_check_digits_rejects_invalid(iban: str) -> None:
     assert _validate_iban_check_digits(iban) is False
 
 
+@pytest.mark.parametrize(
+    'iban',
+    [
+        'GB01NWBK60161331926838',
+        'GB00NWBK60161331926856',
+        'GB99NWBK60161331926820',
+    ],
+)
+def test_iban_rejects_check_digits_outside_02_to_98(iban: str) -> None:
+    assert _validate_iban_check_digits(iban) is False
+    with pytest.raises(ValidationError) as exc_info:
+        BankAccount(iban=iban)
+    assert exc_info.value.errors()[0]['type'] == 'iban_invalid_checksum'
+
+
+@pytest.mark.parametrize(
+    'iban',
+    [
+        'GB98NWBK60161331926838',
+        'GB97NWBK60161331926856',
+        'GB02NWBK60161331926820',
+    ],
+)
+def test_iban_accepts_check_digits_at_range_bounds(iban: str) -> None:
+    assert BankAccount(iban=iban).iban == iban
+
+
 def test_iban_normalizes_spaces_and_case() -> None:
     account = BankAccount(iban='gb29 nwbk 6016 1331 9268 19')
     assert account.iban == 'GB29NWBK60161331926819'
