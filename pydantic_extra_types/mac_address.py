@@ -73,7 +73,7 @@ class MacAddress(str):
         if not isinstance(__input_value, str):
             raise PydanticCustomError('mac_address_type', 'Value must be a string or packed bytes')
 
-        return cls.validate_mac_address(__input_value.encode())
+        return cls.validate_mac_address(__input_value.strip().encode())
 
     @staticmethod
     def validate_mac_address(value: bytes) -> str:
