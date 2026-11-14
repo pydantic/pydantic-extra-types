@@ -5,7 +5,7 @@ from __future__ import annotations
 import sys
 import uuid
 from collections.abc import Callable
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Annotated, Any
 
 from pydantic import GetJsonSchemaHandler
@@ -139,5 +139,4 @@ def uuid7_to_datetime(value: uuid.UUID) -> datetime:
         raise ValueError(f'Expected UUID version 7, got version {value.version}')
 
     timestamp_ms = value.int >> 80 & _UUID7_TIMESTAMP_BITMASK
-    seconds, milliseconds = divmod(timestamp_ms, 1000)
-    return datetime.fromtimestamp(seconds, tz=timezone.utc).replace(microsecond=milliseconds * 1000)
+    return datetime(1970, 1, 1, tzinfo=timezone.utc) + timedelta(milliseconds=timestamp_ms)
