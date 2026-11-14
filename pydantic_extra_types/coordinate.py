@@ -284,14 +284,17 @@ class Coordinate(_repr.Representation):
     def _parse_str(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
         if not isinstance(value, str):
             return value
+        components = value.split(',')
         try:
-            value = tuple(float(x) for x in value.split(','))
+            for component in components:
+                float(component)
         except ValueError as e:
             raise PydanticCustomError(
                 'coordinate_error',
                 'value is not a valid coordinate: string is not recognized as a valid coordinate',
             ) from e
-        return ArgsKwargs(args=value)
+        # Keep the original precision for Latitude/Longitude's exact bound checks.
+        return ArgsKwargs(args=tuple(components))
 
     @classmethod
     def _parse_tuple(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
