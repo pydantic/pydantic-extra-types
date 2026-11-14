@@ -195,7 +195,7 @@ class PaymentCardNumber(str):
 
         # JCB
         if 3528 <= int(card_number[:4]) <= 3589:
-            return PaymentCardBrand.jcb, [16, 19]
+            return PaymentCardBrand.jcb, list(range(16, 20))
 
         # Diners Club
         if card_number[:2] in {'30', '36', '38', '39'}:
