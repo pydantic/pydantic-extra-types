@@ -538,7 +538,7 @@ USNumberE164 = Annotated[
                 'type': 'object',
                 'properties': {
                     'x': {
-                        'pattern': '^s3://([^/]+)/(.*?([^/]+)/?)$',
+                        'pattern': r'^s3://([^/]+)/([\s\S]+)$',
                         'title': 'X',
                         'type': 'string',
                     },
