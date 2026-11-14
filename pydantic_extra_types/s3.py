@@ -40,7 +40,7 @@ class S3Path(str):
     ```
     """
 
-    patt: ClassVar[re.Pattern[str]] = re.compile(r'^s3://([^/]+)/(.*?([^/]+)/?)$', re.DOTALL)
+    patt: ClassVar[re.Pattern[str]] = re.compile(r'^s3://([^/]+)/([\s\S]+)$')
 
     def __init__(self, value: str) -> None:
         self.value = value
@@ -49,7 +49,7 @@ class S3Path(str):
             raise ValueError(f'Invalid S3 path: {value!r}')
         self.bucket: str = match.group(1)
         self.key: str = match.group(2)
-        self.last_key: str = match.group(3)
+        self.last_key: str = self.key.rstrip('/').rsplit('/', 1)[-1]
 
     def __str__(self) -> str:  # pragma: no cover
         return self.value
