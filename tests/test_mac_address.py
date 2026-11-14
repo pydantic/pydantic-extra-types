@@ -35,6 +35,8 @@ class Network(BaseModel):
             '00:00:00:00:fe:80:00:00:00:00:00:00:02:00:5e:10:00:00:00:01',
             True,
         ),
+        (' 00:00:5e:00:53:01 ', '00:00:5e:00:53:01', True),
+        ('00:00:5e:00:53:01\n', '00:00:5e:00:53:01', True),
         # Invalid MAC addresses
         ('abcdefghijklmn', None, False),
         ('0200.5e10.0000.001', None, False),
