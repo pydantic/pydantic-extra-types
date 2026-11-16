@@ -162,6 +162,12 @@ class IBAN(str):
         if not isinstance(__input_value, str):
             raise PydanticCustomError('iban_type', 'Value must be a string')
 
+        # Reject non-ASCII characters before uppercasing can turn them into ASCII.
+        if not __input_value.isascii():
+            raise PydanticCustomError(
+                'iban_invalid_characters', 'Invalid IBAN: must contain only alphanumeric characters'
+            )
+
         # Remove spaces and convert to uppercase
         iban = __input_value.replace(' ', '').upper()
 
