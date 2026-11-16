@@ -135,6 +135,16 @@ def test_iban_normalizes_spaces_and_case() -> None:
     assert isinstance(account.iban, str)
 
 
+@pytest.mark.parametrize('iban', ['FK88\u017fC123456789012', 'fk88\u017fc123456789012'])
+@pytest.mark.parametrize('json_mode', [False, True])
+def test_iban_rejects_non_ascii_case_equivalents(iban: str, json_mode: bool) -> None:
+    with pytest.raises(ValidationError, match='iban_invalid_characters'):
+        if json_mode:
+            BankAccount.model_validate_json('{"iban": "' + iban + '"}')
+        else:
+            BankAccount(iban=iban)
+
+
 @pytest.mark.parametrize('iban_value', [None, 12345, 1.5, b'bytes', [], {}])
 def test_iban_requires_string(iban_value: Any) -> None:
     with pytest.raises(ValidationError, match='Value must be a string'):
