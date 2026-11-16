@@ -357,6 +357,10 @@ class Duration(_Duration):
             if value in ('P', '-P'):
                 raise ValueError('P alone is not a valid ISO 8601 duration')
 
+            # The 'T' designator must be followed by at least one time element ('PT', 'P1DT' are invalid).
+            if value.endswith('T'):
+                raise ValueError('T must be followed by a time element in an ISO 8601 duration')
+
             # https://github.com/python-pendulum/pendulum/issues/532
             if value.startswith('-'):
                 parsed = parse(value[1:], exact=True)

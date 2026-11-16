@@ -740,3 +740,15 @@ def test_invalid_zero_duration_string():
 def test_pendulum_duration_rejects_repeated_minus(value: str) -> None:
     with pytest.raises(ValidationError):
         DurationModel(delta_t=value)
+
+
+@pytest.mark.parametrize('value', ['PT', 'P1DT', '-PT', '-P1DT'])
+def test_pendulum_duration_rejects_empty_time_designator(value: str) -> None:
+    """RFC 3339 Appendix A: `dur-time = "T" (dur-hour / dur-minute / dur-second)`, so a bare 'T' is invalid."""
+    with pytest.raises(ValidationError):
+        DurationModel(delta_t=value)
+
+
+@pytest.mark.parametrize('value', ['PT1S', 'P1DT1H', 'P1D', '-PT1S'])
+def test_pendulum_duration_accepts_time_designator_with_element(value: str) -> None:
+    assert isinstance(DurationModel(delta_t=value).delta_t, Duration)
