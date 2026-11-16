@@ -5,6 +5,7 @@ from datetime import timezone as tz
 import pendulum
 import pytest
 from pydantic import BaseModel, TypeAdapter, ValidationError
+from pydantic_core import PydanticSerializationError
 
 from pydantic_extra_types.pendulum_dt import Date, DateTime, Duration, Interval, Time
 
@@ -452,6 +453,39 @@ def test_pendulum_negative_duration_serialization_roundtrip(duration):
     deserialized = TypeAdapter.validate_json(adapter, json_serialized)
     assert deserialized == duration
     assert deserialized.total_seconds() == duration.total_seconds()
+
+
+@pytest.mark.parametrize(
+    'duration',
+    [
+        Duration(months=-1, days=1),
+        Duration(months=1, days=-1),
+        Duration(years=-1, months=1),
+        Duration(years=1, months=-1),
+        Duration(months=-1, microseconds=1),
+        Duration(months=1, microseconds=-1),
+    ],
+)
+def test_pendulum_duration_mixed_sign_serialization(duration):
+    # Preserve the components rather than guessing how to normalize opposing signs.
+    with pytest.raises(ValueError, match='mixed positive and negative components'):
+        duration.to_iso8601_string()
+
+    model = DurationModel(delta_t=duration)
+    assert model.model_dump()['delta_t'] == duration
+    with pytest.raises(PydanticSerializationError, match='mixed positive and negative components'):
+        model.model_dump_json()
+
+
+def test_pendulum_duration_serialization_does_not_reverse_a_calendar_offset():
+    start = pendulum.datetime(2025, 3, 31, tz='UTC')
+    model = DurationModel(delta_t=pendulum.duration(months=-1, days=1))
+
+    assert start + model.delta_t == pendulum.datetime(2025, 3, 1, tz='UTC')
+    # Previously JSON was '-P1M1D', moving the date to February 27 instead of March 1.
+    assert start + TypeAdapter(Duration).validate_python('-P1M1D') == pendulum.datetime(2025, 2, 27, tz='UTC')
+    with pytest.raises(PydanticSerializationError, match='mixed positive and negative components'):
+        model.model_dump_json()
 
 
 def test_pendulum_duration_iso8601_negative():
