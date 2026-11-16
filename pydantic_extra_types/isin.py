@@ -108,7 +108,7 @@ class ISIN(str):
         Raises:
             PydanticCustomError: If the ISIN is not valid.
         """
-        value = __input_value.upper()
+        value = __input_value.upper() if __input_value.isascii() else __input_value
         cls.validate_isin_format(value)
         return cls(value)
 
