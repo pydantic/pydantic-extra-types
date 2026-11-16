@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from datetime import datetime
 from typing import Any, ClassVar
 
@@ -47,6 +48,8 @@ class CronStr(str):
         'day_of_the_week',
     )
     """Expected cron expression components in the order enforced by `cron-converter`."""
+    _component_re: ClassVar[re.Pattern[str]] = re.compile(r'[0-9A-Za-z*,/-]+')
+    """Characters allowed in a crontab(5) field: ASCII digits and names, `*`, `,`, `/` and `-`."""
 
     minute: str
     hour: str
@@ -87,6 +90,14 @@ class CronStr(str):
             raise PydanticCustomError(
                 'cron_str_components',
                 f'Cron expression must contain {len(cls._component_names)} space separated components: {parts_list}',
+            )
+
+        # `cron-converter` parses numbers with `int()`, which also accepts a sign, underscores
+        # and non-ASCII digits (e.g. `+1`, `1_0`, `１`); none of these are valid in a crontab.
+        if not all(cls._component_re.fullmatch(part) for part in parts):
+            raise PydanticCustomError(
+                'cron_str_invalid',
+                'Cron expression components may only contain ASCII letters, digits and the characters * , / -',
             )
 
         try:
