@@ -334,3 +334,28 @@ def test_coordinate_tuple_rejects_out_of_range_decimal():
     ]:
         with pytest.raises(ValidationError):
             Coord(coord=coordinate)
+
+
+def test_coordinate_string_strict_json():
+    class StrictCoord(BaseModel, strict=True):
+        coord: Coordinate
+
+    coordinate = StrictCoord.model_validate_json('{"coord":"10.5,-20.25"}').coord
+    assert (coordinate.latitude, coordinate.longitude) == (10.5, -20.25)
+    assert isinstance(coordinate.latitude, float)
+    assert isinstance(coordinate.longitude, float)
+
+
+def test_coordinate_string_non_ascii_digits_stay_float():
+    model = Coord(coord='１,0')
+    assert model.coord.latitude == 1.0
+    assert isinstance(model.coord.latitude, float)
+    assert model.model_dump_json() == '{"coord":{"latitude":1.0,"longitude":0.0}}'
+    assert Coord(coord='١٠,0').coord.latitude == 10.0
+
+
+@pytest.mark.parametrize('value', ['91,0', '0,181', '1e400,0', '90.00000000000000001,0', '０,180.00000000000000001'])
+def test_coordinate_string_out_of_range_is_rejected(value):
+    with pytest.raises(ValidationError) as exc_info:
+        Coord(coord=value)
+    assert {error['type'] for error in exc_info.value.errors()} & {'less_than_equal', 'greater_than_equal'}
