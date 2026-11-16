@@ -46,7 +46,7 @@ class RGBA:
 _r_255 = r'((?:\d{1,3}(?:\.\d+)?|\.\d+)%?)'
 _r_comma = r'\s*,\s*'
 _r_alpha = r'(\d(?:\.\d+)?|\.\d+|(?:\d{1,3}(?:\.\d+)?|\.\d+)%)'
-_r_h = r'(-?\d+(?:\.\d+)?|-?\.\d+)(deg|rad|turn)?'
+_r_h = r'(-?\d+(?:\.\d+)?|-?\.\d+)(deg|grad|rad|turn)?'
 _r_sl = r'((?:\d{1,3}(?:\.\d+)?|\.\d+))%'
 r_hex_short = r'\s*(?:#|0x)?([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])?\s*'
 r_hex_long = r'\s*(?:#|0x)?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?\s*'
@@ -454,6 +454,8 @@ def parse_hsl(h: str, h_units: str, sat: str, light: str, alpha: float | None = 
         h_value = h_value % 360 / 360
     elif h_units == 'rad':
         h_value = h_value % rads / rads
+    elif h_units == 'grad':
+        h_value = h_value % 400 / 400
     else:
         # turns
         h_value %= 1

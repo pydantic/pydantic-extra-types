@@ -167,6 +167,23 @@ def test_color_fail(color):
     assert exc_info.value.type == 'color_error'
 
 
+@pytest.mark.parametrize(
+    'value, expected',
+    [
+        ('hsl(200grad, 100%, 50%)', (0, 255, 255)),
+        ('hsl(-200grad 100% 50%)', (0, 255, 255)),
+        ('hsl(800grad 100% 50%)', (255, 0, 0)),
+        ('hsla(200grad, 100%, 50%, 0.5)', (0, 255, 255, 0.5)),
+        ('hsl(200grad 100% 50% / 50%)', (0, 255, 255, 0.5)),
+    ],
+)
+def test_hsl_gradian_hues(value, expected):
+    class Model(BaseModel):
+        color: Color
+
+    assert Model(color=value).color.as_rgb_tuple() == expected
+
+
 def test_model_validation():
     class Model(BaseModel):
         color: Color
