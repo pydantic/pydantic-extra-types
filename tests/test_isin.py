@@ -68,3 +68,9 @@ def test_isin_requires_string(isin_value: Any) -> None:
 def test_isin_rejects_non_ascii_digits(isin_value: str) -> None:
     with pytest.raises(ValidationError, match='isin_invalid_characters'):
         Security(isin=isin_value)
+
+
+@pytest.mark.parametrize('isin_value', ['U\u017f0378331005', 'u\u017f0378331005'])
+def test_isin_rejects_non_ascii_case_equivalents(isin_value: str) -> None:
+    with pytest.raises(ValidationError, match='isin_invalid_characters'):
+        Security(isin=isin_value)
