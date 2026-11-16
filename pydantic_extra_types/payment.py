@@ -191,7 +191,7 @@ class PaymentCardNumber(str):
 
         # UnionPay
         if card_number[:2] in {'62', '81'}:
-            return PaymentCardBrand.unionpay, [16, 19]
+            return PaymentCardBrand.unionpay, list(range(16, 20))
 
         # JCB
         if 3528 <= int(card_number[:4]) <= 3589:
