@@ -80,6 +80,7 @@ class CountryAlpha2(str):
 
     @classmethod
     def _validate(cls, __input_value: str, /, _: core_schema.ValidationInfo) -> CountryAlpha2:
+        __input_value = __input_value.upper() if __input_value.isascii() else __input_value
         if __input_value not in _index_by_alpha2():
             raise PydanticCustomError('country_alpha2', 'Invalid country alpha2 code')
         return cls(__input_value)
@@ -90,7 +91,7 @@ class CountryAlpha2(str):
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(to_upper=True, strip_whitespace=True),
+            core_schema.str_schema(strip_whitespace=True),
         )
 
     @classmethod
@@ -139,6 +140,7 @@ class CountryAlpha3(str):
 
     @classmethod
     def _validate(cls, __input_value: str, /, _: core_schema.ValidationInfo) -> CountryAlpha3:
+        __input_value = __input_value.upper() if __input_value.isascii() else __input_value
         if __input_value not in _index_by_alpha3():
             raise PydanticCustomError('country_alpha3', 'Invalid country alpha3 code')
         return cls(__input_value)
@@ -149,7 +151,7 @@ class CountryAlpha3(str):
     ) -> core_schema.AfterValidatorFunctionSchema:
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(to_upper=True, strip_whitespace=True),
+            core_schema.str_schema(strip_whitespace=True),
             serialization=core_schema.to_string_ser_schema(),
         )
 

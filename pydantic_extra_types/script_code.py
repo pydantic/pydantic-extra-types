@@ -55,7 +55,7 @@ class ISO_15924(str):
         """
         # Script codes are written with an initial capital ("Latn"), so any other
         # letter case is accepted and normalised, as the country and language codes do
-        value = __input_value.capitalize()
+        value = __input_value.capitalize() if __input_value.isascii() else __input_value
         if value not in cls.allowed_values:
             raise PydanticCustomError(
                 'ISO_15924', 'Invalid ISO 15924 script code. See https://en.wikipedia.org/wiki/ISO_15924'

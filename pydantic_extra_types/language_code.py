@@ -100,6 +100,7 @@ class LanguageAlpha2(str):
         Returns:
             The validated language code in the ISO 639-1 alpha-2 format.
         """
+        __input_value = __input_value.lower() if __input_value.isascii() else __input_value
         if __input_value not in _index_by_alpha2():
             raise PydanticCustomError('language_alpha2', 'Invalid language alpha2 code')
         return cls(__input_value)
@@ -119,7 +120,7 @@ class LanguageAlpha2(str):
         """
         return core_schema.with_info_after_validator_function(
             cls._validate,
-            core_schema.str_schema(to_lower=True, strip_whitespace=True),
+            core_schema.str_schema(strip_whitespace=True),
         )
 
     @classmethod
