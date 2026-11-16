@@ -465,6 +465,67 @@ def test_pendulum_duration_iso8601_negative():
     assert iso2 == '-PT10S', f'Expected "-PT10S", got "{iso2}"'
 
 
+@pytest.mark.parametrize(
+    ('duration', 'expected'),
+    [
+        (Duration(months=1, days=-40), 'P1M-40D'),
+        (Duration(months=-1, days=35), 'P-1M35D'),
+        (Duration(years=1, months=-15), 'P1Y-15M'),
+        (Duration(months=1, microseconds=-1), 'P1MT-0.000001S'),
+        (Duration(months=-1, seconds=1, microseconds=1), 'P-1MT1.000001S'),
+        (Duration(months=1, days=-30), 'P1M-30D'),
+    ],
+)
+def test_pendulum_mixed_sign_duration_json_roundtrip(duration, expected):
+    adapter = TypeAdapter(Duration)
+    serialized = adapter.dump_json(duration)
+    assert serialized.decode() == f'"{expected}"'
+
+    restored = adapter.validate_json(serialized)
+    assert (restored.years, restored.months, restored._days) == (
+        duration.years,
+        duration.months,
+        duration._days,
+    )
+    assert restored.total_seconds() == duration.total_seconds()
+    start = pendulum.datetime(2024, 3, 1)
+    assert start + restored == start + duration
+
+
+def test_pendulum_mixed_sign_duration_model_roundtrip():
+    original = DurationModel(delta_t=pendulum.duration(months=1, days=-40))
+    restored = DurationModel.model_validate_json(original.model_dump_json())
+
+    assert restored.delta_t.months == original.delta_t.months == 1
+    assert restored.delta_t._days == original.delta_t._days == -40
+    start = pendulum.datetime(2024, 3, 1)
+    assert start + restored.delta_t == start + original.delta_t
+
+
+@pytest.mark.parametrize(
+    ('value', 'expected'),
+    [
+        ('P1M-2W', Duration(months=1, weeks=-2)),
+        ('-P1M-40D', Duration(months=-1, days=40)),
+        ('P-1MT-0.000001S', Duration(months=-1, microseconds=-1)),
+    ],
+)
+def test_pendulum_component_signed_duration_input(value, expected):
+    result = TypeAdapter(Duration).validate_python(value)
+    assert (result.years, result.months, result._days, result.total_seconds()) == (
+        expected.years,
+        expected.months,
+        expected._days,
+        expected.total_seconds(),
+    )
+
+
+@pytest.mark.parametrize('value', ['P1M--40D', 'P1M-40DT', 'P1MT-0.0000001S'])
+def test_pendulum_invalid_component_signed_duration(value):
+    with pytest.raises(ValidationError):
+        TypeAdapter(Duration).validate_python(value)
+
+
 def get_invalid_dt_common():
     return [
         None,

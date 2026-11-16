@@ -4,6 +4,8 @@ CoreSchema implementation. This allows Pydantic to validate the DateTime object.
 
 from __future__ import annotations
 
+import re
+
 try:
     from pendulum import Date as _Date
     from pendulum import DateTime as _DateTime
@@ -20,6 +22,13 @@ from typing import Any
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
+
+_SIGNED_DURATION_PATTERN = re.compile(
+    r'(?P<sign>-?)P(?:(?P<years>-?[0-9]+)Y)?(?:(?P<months>-?[0-9]+)M)?'
+    r'(?:(?P<weeks>-?[0-9]+)W)?(?:(?P<days>-?[0-9]+)D)?'
+    r'(?:T(?:(?P<hours>-?[0-9]+)H)?(?:(?P<minutes>-?[0-9]+)M)?'
+    r'(?:(?P<seconds>-?[0-9]+(?:\.[0-9]{1,6})?)S)?)?'
+)
 
 
 class DateTimeSettings(type):
@@ -268,11 +277,24 @@ class Duration(_Duration):
         """
         Convert a Duration object to an ISO 8601 string.
 
-        In addition to the standard ISO 8601 format, this method also supports the representation of fractions of a second and negative durations.
+        Mixed-sign components use the ISO 8601-2 component-sign form, which
+        may not be understood by parsers limited to ISO 8601-1.
 
         Returns:
             The ISO 8601 string representation of the duration.
         """
+        components = (
+            self.years,
+            self.months,
+            self._days,
+            self.hours,
+            self.minutes,
+            self.remaining_seconds,
+            self.microseconds,
+        )
+        if any(value < 0 for value in components) and any(value > 0 for value in components):
+            return self._mixed_components_to_iso8601(components)
+
         # Determine if the duration is negative
         is_negative = self.total_seconds() < 0
 
@@ -319,6 +341,17 @@ class Duration(_Duration):
 
         return iso_duration
 
+    @staticmethod
+    def _mixed_components_to_iso8601(components: tuple[int, ...]) -> str:
+        date_part = ''.join(f'{value}{unit}' for value, unit in zip(components[:3], ('Y', 'M', 'D')) if value)
+        time_part = ''.join(f'{value}{unit}' for value, unit in zip(components[3:5], ('H', 'M')) if value)
+        seconds, microseconds = components[5:]
+        if seconds or microseconds:
+            sign = '-' if seconds < 0 or microseconds < 0 else ''
+            fraction = f'.{abs(microseconds):06d}'.rstrip('0') if microseconds else ''
+            time_part += f'{sign}{abs(seconds)}{fraction}S'
+        return f'P{date_part}{"T" + time_part if time_part else ""}'
+
     @classmethod
     def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Duration:
         """Validate the Duration object and return it.
@@ -360,6 +393,26 @@ class Duration(_Duration):
             # The 'T' designator must be followed by at least one time element ('PT', 'P1DT' are invalid).
             if value.endswith('T'):
                 raise ValueError('T must be followed by a time element in an ISO 8601 duration')
+
+            # Pendulum does not parse the ISO 8601-2 component-sign form.
+            if '-' in value.lstrip('-')[1:] and (match := _SIGNED_DURATION_PATTERN.fullmatch(value)):
+                parts = match.groupdict()
+                sign = -1 if parts['sign'] else 1
+                seconds = parts['seconds'] or '0'
+                whole, _, fraction = seconds.partition('.')
+                microseconds = int(fraction.ljust(6, '0')) if fraction else 0
+                if seconds.startswith('-'):
+                    microseconds = -microseconds
+                return cls(
+                    years=sign * int(parts['years'] or 0),
+                    months=sign * int(parts['months'] or 0),
+                    weeks=sign * int(parts['weeks'] or 0),
+                    days=sign * int(parts['days'] or 0),
+                    hours=sign * int(parts['hours'] or 0),
+                    minutes=sign * int(parts['minutes'] or 0),
+                    seconds=sign * int(whole),
+                    microseconds=sign * microseconds,
+                )
 
             # https://github.com/python-pendulum/pendulum/issues/532
             if value.startswith('-'):
