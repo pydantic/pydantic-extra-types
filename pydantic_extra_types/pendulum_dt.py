@@ -272,7 +272,25 @@ class Duration(_Duration):
 
         Returns:
             The ISO 8601 string representation of the duration.
+
+        Raises:
+            ValueError: If the duration has both positive and negative components, which cannot be emitted
+                with a single ISO 8601 sign without normalizing the components.
         """
+        components = (
+            self.years,
+            self.months,
+            self._days,
+            self.hours,
+            self.minutes,
+            self.remaining_seconds,
+            self.microseconds,
+        )
+        if any(component < 0 for component in components) and any(component > 0 for component in components):
+            raise ValueError(
+                'Cannot serialize mixed positive and negative components to ISO 8601 without normalization'
+            )
+
         # Determine if the duration is negative
         is_negative = self.total_seconds() < 0
 
