@@ -74,3 +74,26 @@ def test_cron_str_preserves_explicit_slash_step() -> None:
     # Wildcard-based steps and whitespace normalisation are unaffected.
     assert str(CronModel(cron='*/5 * * * *').cron) == '*/5 * * * *'
     assert str(CronModel(cron='  30/5   *  *  *  *  ').cron) == '30/5 * * * *'
+
+
+@pytest.mark.parametrize(
+    'expression',
+    [
+        '+1 * * * *',
+        '1_0 * * * *',
+        '１ * * * *',  # fullwidth digit
+        '* ٣ * * *',  # Arabic-Indic digit
+        '* * 1_0 * *',
+        '* * * +1 *',
+        '* * * * +1',
+    ],
+)
+def test_cron_str_rejects_non_crontab_characters(expression: str) -> None:
+    with pytest.raises(ValidationError) as exc:
+        CronModel(cron=expression)
+    assert 'may only contain ASCII letters, digits' in str(exc.value)
+
+
+@pytest.mark.parametrize('expression', ['*/5 0 * * 1-5', '0 0 1 JAN,feb *', '0 12 * * mon-fri', '30/5 * * * *'])
+def test_cron_str_accepts_names_and_steps(expression: str) -> None:
+    assert str(CronModel(cron=expression).cron) == expression
