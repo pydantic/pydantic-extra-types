@@ -286,15 +286,17 @@ class Coordinate(_repr.Representation):
             return value
         components = value.split(',')
         try:
-            for component in components:
-                float(component)
+            floats = tuple(float(component) for component in components)
         except ValueError as e:
             raise PydanticCustomError(
                 'coordinate_error',
                 'value is not a valid coordinate: string is not recognized as a valid coordinate',
             ) from e
-        # Keep the original precision for Latitude/Longitude's exact bound checks.
-        return ArgsKwargs(args=tuple(components))
+        # float() rounds a value just outside the range into it, so check the raw text exactly.
+        if len(components) == 2:
+            _reject_lossy_decimal(components[0], Latitude.min, Latitude.max)
+            _reject_lossy_decimal(components[1], Longitude.min, Longitude.max)
+        return ArgsKwargs(args=floats)
 
     @classmethod
     def _parse_tuple(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
