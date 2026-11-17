@@ -301,17 +301,14 @@ print(m.db)
 ```
 """
 
-MongoDsn = Annotated[
-    MultiHostUrl,
-    UrlConstraints(
-        allowed_schemes=['mongodb', 'mongodb+srv'],
-        default_port=27017,
-    ),
-]
+MongoDsn = (
+    Annotated[MultiHostUrl, UrlConstraints(allowed_schemes=['mongodb'], default_port=27017)]
+    | Annotated[MultiHostUrl, UrlConstraints(allowed_schemes=['mongodb+srv'])]
+)
 """A type that will accept any MongoDB DSN.
 
 * User info not required
-* Port not required (defaults to 27017)
+* Port not required (defaults to 27017 for `mongodb`; omitted for `mongodb+srv`)
 * Supports multiple hosts
 * Supported schemes: `mongodb`, `mongodb+srv`
 

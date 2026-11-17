@@ -153,6 +153,24 @@ def test_mongo_dsn_valid(dsn: str) -> None:
     assert str(m.db) == dsn
 
 
+@pytest.mark.parametrize(
+    'dsn',
+    [
+        'mongodb+srv://cluster.example.com',
+        'mongodb+srv://user:pass@cluster.example.com/mydb?retryWrites=true',
+    ],
+)
+def test_mongo_dsn_srv_does_not_add_port(dsn: str) -> None:
+    model = MongoModel(db=dsn)
+    assert str(model.db) == dsn
+    assert model.model_dump(mode='json')['db'] == dsn
+    assert str(MongoModel.model_validate_json(model.model_dump_json()).db) == dsn
+
+
+def test_mongo_dsn_standard_still_adds_default_port() -> None:
+    assert str(MongoModel(db='mongodb://localhost/mydb').db) == 'mongodb://localhost:27017/mydb'
+
+
 def test_mongo_dsn_invalid_scheme() -> None:
     with pytest.raises(ValidationError):
         MongoModel(db='http://localhost:27017/mydb')
