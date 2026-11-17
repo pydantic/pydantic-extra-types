@@ -105,19 +105,11 @@ class MacAddress(str):
                     {'mac_address': raw, 'required_length': ALLOWED_CHUNK_COUNTS},
                 )
 
-            try:
-                mac_bytes: list[int] = []
-                for part in parts:
-                    for i in range(0, chunk_len, 2):
-                        octet = part[i : i + 2]
-                        # int(octet, 16) also accepts a sign or whitespace,
-                        # which are not valid MAC octets.
-                        if not all(char in string.hexdigits for char in octet):
-                            raise ValueError(octet)
-                        mac_bytes.append(int(octet, base=16))
-            except ValueError as exc:
-                raise PydanticCustomError('mac_address_format', 'Unrecognized format') from exc
+            hex_digits = ''.join(parts)
+            # bytes.fromhex() also accepts whitespace, which is not valid in a MAC octet.
+            if hex_digits.strip(string.hexdigits):
+                raise PydanticCustomError('mac_address_format', 'Unrecognized format')
 
-            return ':'.join(f'{b:02x}' for b in mac_bytes)
+            return bytes.fromhex(hex_digits).hex(':')
 
         raise PydanticCustomError('mac_address_format', 'Unrecognized format')
