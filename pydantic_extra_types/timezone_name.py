@@ -210,9 +210,11 @@ class TimeZoneName(str):
         """
         if __input_value not in cls.allowed_values:  # be fast for the most common case
             if not cls.strict:
-                upper_value = __input_value.strip().upper()
-                if upper_value in cls.allowed_values_upper_to_correct:
-                    return cls(cls.allowed_values_upper_to_correct[upper_value])
+                stripped_value = __input_value.strip()
+                if stripped_value.isascii():
+                    upper_value = stripped_value.upper()
+                    if upper_value in cls.allowed_values_upper_to_correct:
+                        return cls(cls.allowed_values_upper_to_correct[upper_value])
             raise PydanticCustomError('TimeZoneName', 'Invalid timezone name.')
         return cls(__input_value)
 

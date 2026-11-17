@@ -113,6 +113,21 @@ def test_timezone_name_validation():
         TZNonStrict._validate(invalid_tz, None)
 
 
+def test_non_strict_timezone_name_rejects_unicode_case_equivalents():
+    invalid_tz = 'america/ındiana/indianapolis'
+
+    with pytest.raises(ValidationError):
+        NonStrictTzName(timezone_name=invalid_tz)
+
+    with pytest.raises(ValidationError):
+        NonStrictTzName.model_validate_json('{"timezone_name":"america/ındiana/indianapolis"}')
+
+
+def test_non_strict_timezone_name_keeps_ascii_json_normalization():
+    result = NonStrictTzName.model_validate_json('{"timezone_name":"america/indiana/indianapolis"}')
+    assert result.timezone_name == 'America/Indiana/Indianapolis'
+
+
 def test_timezone_name_pydantic_core_schema():
     schema = TimeZoneName.__get_pydantic_core_schema__(TimeZoneName, None)
     assert isinstance(schema, dict)
