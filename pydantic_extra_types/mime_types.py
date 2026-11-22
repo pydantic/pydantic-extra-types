@@ -2514,8 +2514,10 @@ class MimeType(str):
 
     @classmethod
     def _validate(cls, __input_value: str, /, _: core_schema.ValidationInfo) -> MimeType:
-        # Store the original mime_type for retrieval
-        mime_info = _index_by_mime_type().get(__input_value.lower())
+        # Every registered MIME type is ASCII. Check before lowercasing, because
+        # str.lower() maps some non-ASCII characters to ASCII letters
+        # (e.g. the Kelvin sign U+212A becomes 'k').
+        mime_info = _index_by_mime_type().get(__input_value.lower()) if __input_value.isascii() else None
         if mime_info is None:
             raise PydanticCustomError('mime_type', 'Invalid MIME type')
         # Return the original case from the data

@@ -89,6 +89,20 @@ class TestMimeTypeValidation:
         with pytest.raises(ValidationError):
             ResponseModel(content_type='not-a-mime-type')
 
+    @pytest.mark.parametrize(
+        'value',
+        [
+            'application/pKcs10',  # KELVIN SIGN lowercases to 'k'
+            'application/KPML-request+xml',
+            'appİcation/json',  # LATIN CAPITAL LETTER I WITH DOT ABOVE
+        ],
+    )
+    def test_non_ascii_case_equivalent_rejected(self, ResponseModel, value):
+        """Non-ASCII characters must not match a MIME type through str.lower()."""
+        with pytest.raises(ValidationError) as exc_info:
+            ResponseModel(content_type=value)
+        assert exc_info.value.errors()[0]['type'] == 'mime_type'
+
     def test_empty_string(self, ResponseModel):
         """Test that empty string raises ValidationError."""
         with pytest.raises(ValidationError):
