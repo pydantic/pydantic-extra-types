@@ -29,6 +29,8 @@ invalid_domains = [
     'example.com.',  # Trailing dot
     '192.168.1.23',  # Ip address
     '192.168.1.0/23',  # CIDR
+    '\u212aaggle.com',
+    'example.co\u212a',
 ]
 
 very_long_domains = [
