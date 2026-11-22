@@ -37,7 +37,11 @@ class DomainStr(str):
         if not isinstance(v, str):
             raise PydanticCustomError('domain_type', 'Value must be a string')
 
-        v = v.strip().lower()
+        v = v.strip()
+        if not v.isascii():
+            raise PydanticCustomError('domain_format', 'Invalid domain format')
+
+        v = v.lower()
         if len(v) < 1 or len(v) > 253:
             raise PydanticCustomError('domain_length', 'Domain must be between 1 and 253 characters')
 
