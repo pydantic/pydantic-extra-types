@@ -149,17 +149,18 @@ class Time(_Time):
         if isinstance(value, (_Time, time)):
             return Time.instance(value, tz=value.tzinfo)
 
-        # otherwise, parse it.
+        # otherwise, parse it. `tz=None` keeps a naive string naive, like an existing naive
+        # instance above and like `DateTime`, so a naive `Time` survives a JSON round trip.
         try:
             try:
-                parsed = handler(value) if isinstance(value, str) else parse(value, exact=True)
+                parsed = handler(value) if isinstance(value, str) else parse(value, exact=True, tz=None)
             except ValueError:
-                parsed = parse(value, exact=True)
+                parsed = parse(value, exact=True, tz=None)
             if isinstance(parsed, _DateTime):
-                dt = DateTime.instance(parsed)
+                dt = DateTime.instance(parsed, tz=None)
                 return Time.instance(dt.timetz(), tz=dt.tzinfo)
             if isinstance(parsed, (_Time, time)):
-                return Time.instance(parsed, tz=parsed.tzinfo or 'UTC')
+                return Time.instance(parsed, tz=parsed.tzinfo)
             raise ValueError(f'value is not a valid time it is a {type(parsed)}')
         except Exception as exc:
             raise PydanticCustomError('value_error', 'value is not a valid time') from exc
