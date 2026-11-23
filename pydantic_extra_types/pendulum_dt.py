@@ -89,10 +89,13 @@ class DateTime(_DateTime, metaclass=DateTimeSettings):
         except ValueError:
             try:
                 # `parse` itself defaults a naive string to UTC before `DateTime.instance` ever
-                # sees it, so `tz=None` has to be passed here too, not just below.
-                value = parse(value, strict=cls.strict, tz=None)
+                # sees it, so `tz=None` has to be passed here too, not just below. `exact=True`
+                # stops it from completing a time-only string such as '12:00:00' with today's date.
+                value = parse(value, strict=cls.strict, tz=None, exact=True)
                 if isinstance(value, _DateTime):
                     return DateTime.instance(value, tz=None)
+                if isinstance(value, _Date):
+                    return DateTime(value.year, value.month, value.day)
                 raise ValueError(f'value is not a valid datetime it is a {type(value)}')
             except ValueError:
                 raise
@@ -214,9 +217,10 @@ class Date(_Date):
         if isinstance(value, (_Date, date)):
             return Date(value.year, value.month, value.day)
 
-        # otherwise, parse it.
+        # otherwise, parse it. `exact=True` keeps a time-only string such as '12:00:00' a Time
+        # instead of completing it with today's date.
         try:
-            parsed = parse(value)
+            parsed = parse(value, exact=True)
             if isinstance(parsed, (_DateTime, _Date)):
                 return Date(parsed.year, parsed.month, parsed.day)
             raise ValueError(f'value is not a valid date it is a {type(parsed)}')
