@@ -558,7 +558,8 @@ def test_pendulum_time_from_serialized(dt):
     """Verifies that building an instance from serialized, well-formed strings decode properly."""
     dt_actual = pendulum.parse(dt, exact=True)
     model = TimeModel(t=dt)
-    assert model.t == dt_actual.replace(tzinfo=UTC)
+    assert model.t == dt_actual
+    assert model.t.tzinfo is None
     assert type(model.t) is Time
     assert isinstance(model.t, pendulum.Time)
 
@@ -567,6 +568,18 @@ def test_pendulum_time_from_datetime_string():
     model = TimeModel(t='2024-01-01T17:53:12')
     assert type(model.t) is Time
     assert (model.t.hour, model.t.minute, model.t.second) == (17, 53, 12)
+
+
+@pytest.mark.parametrize('value', ['12:34:56.123456', '2024-01-01T12:34:56.123456', time(12, 34, 56, 123456)])
+def test_pendulum_time_naive_input_stays_naive(value):
+    """A naive time must not be defaulted to UTC, so it survives a JSON round trip."""
+    model = TimeModel(t=value)
+    assert model.t.tzinfo is None
+    assert model.t.isoformat() == '12:34:56.123456'
+
+    restored = TimeModel.model_validate_json(model.model_dump_json())
+    assert restored.t.tzinfo is None
+    assert restored.t == model.t
 
 
 @pytest.mark.parametrize('prefix', ['', '2024-01-01T'])
