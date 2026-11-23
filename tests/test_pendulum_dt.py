@@ -634,6 +634,25 @@ def test_pendulum_date_malformed(invalid_value):
         DateModel(d=invalid_value)
 
 
+@pytest.mark.parametrize('model', [DtModel, DtModelNotStrict, DateModel])
+@pytest.mark.parametrize('value', ['12:00:00', '12:00', '12:00:00.123456', '12:00:00+05:30'])
+def test_pendulum_date_and_datetime_reject_time_only_strings(model, value):
+    """A time-only string has no date, so it must not be completed with today's date."""
+    field = next(iter(model.model_fields))
+    with pytest.raises(ValidationError):
+        model(**{field: value})
+
+
+@pytest.mark.parametrize('model', [DtModel, DtModelNotStrict])
+@pytest.mark.parametrize('value, expected', [('2021-W01', (2021, 1, 4)), ('2021-032', (2021, 2, 1))])
+def test_pendulum_dt_date_only_string_is_midnight(model, value, expected):
+    """A date-only string that only pendulum can parse still becomes naive midnight of that day."""
+    dt = model(dt=value).dt
+    assert isinstance(dt, pendulum.DateTime)
+    assert dt == pendulum.datetime(*expected, tz=None)
+    assert dt.tzinfo is None
+
+
 @pytest.mark.parametrize(
     'delta_t',
     [
