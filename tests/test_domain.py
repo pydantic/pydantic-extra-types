@@ -29,6 +29,8 @@ invalid_domains = [
     'example.com.',  # Trailing dot
     '192.168.1.23',  # Ip address
     '192.168.1.0/23',  # CIDR
+    'Kaggle.com',  # Kelvin sign lowercases to ASCII k
+    'example.coK',  # Kelvin sign in TLD lowercases to ASCII k
 ]
 
 very_long_domains = [
