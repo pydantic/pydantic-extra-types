@@ -37,10 +37,17 @@ class DomainStr(str):
         if not isinstance(v, str):
             raise PydanticCustomError('domain_type', 'Value must be a string')
 
-        v = v.strip().lower()
+        v = v.strip()
         if len(v) < 1 or len(v) > 253:
             raise PydanticCustomError('domain_length', 'Domain must be between 1 and 253 characters')
 
+        # Reject non-ASCII input before case folding: Unicode characters such as
+        # the Kelvin sign lowercase to ASCII letters and would otherwise be
+        # silently converted into a different domain.
+        if not v.isascii():
+            raise PydanticCustomError('domain_format', 'Invalid domain format')
+
+        v = v.lower()
         if not re.match(cls._domain_re_pattern, v):
             raise PydanticCustomError('domain_format', 'Invalid domain format')
 
