@@ -29,11 +29,22 @@ class _Base(datetime.datetime):
     def __get_pydantic_core_schema__(
         cls, source: type[Any], handler: Callable[[Any], CoreSchema]
     ) -> core_schema.CoreSchema:
-        return core_schema.with_info_after_validator_function(
-            cls._validate,
-            cls.SCHEMA,
+        number = core_schema.with_info_after_validator_function(cls._validate, cls.SCHEMA)
+        return core_schema.json_or_python_schema(
+            json_schema=number,
+            # The validated value is an aware datetime, so Python input may hand it back (assignment
+            # validation, revalidate_instances). JSON has no datetime, it stays a number.
+            python_schema=core_schema.no_info_wrap_validator_function(cls._accept_datetime, number),
             serialization=core_schema.wrap_serializer_function_ser_schema(cls._f, return_schema=cls.SCHEMA),
         )
+
+    @staticmethod
+    def _accept_datetime(value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+        # Aware only: a naive datetime would be serialized with .timestamp(), which reads it
+        # as local time, so the number written would depend on the host timezone.
+        if isinstance(value, datetime.datetime) and value.utcoffset() is not None:
+            return value
+        return handler(value)
 
     @classmethod
     def _validate(cls, __input_value: Any, /, _: Any) -> datetime.datetime:
