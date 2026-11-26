@@ -11,7 +11,7 @@ from typing import Any
 
 from pydantic import GetCoreSchemaHandler
 from pydantic._internal import _repr
-from pydantic_core import PydanticCustomError, core_schema
+from pydantic_core import PydanticCustomError, SchemaValidator, core_schema
 
 try:
     from ulid import ULID as _ULID
@@ -21,6 +21,8 @@ except ModuleNotFoundError as e:  # pragma: no cover
     ) from e
 
 UlidType = str | bytes | int
+
+_UUID_VALIDATOR = SchemaValidator(core_schema.uuid_schema())
 
 
 @dataclass
@@ -59,7 +61,14 @@ class ULID(_repr.Representation):
                 # The ULID spec makes the Crockford base32 string case insensitive,
                 # but python-ulid only decodes the uppercase alphabet. Only ASCII is
                 # uppercased, so e.g. 'ſ' is not turned into a valid 'S'.
-                ulid = _ULID.from_str(value.upper() if value.isascii() else value)
+                try:
+                    ulid = _ULID.from_str(value.upper() if value.isascii() else value)
+                except ValueError:
+                    # The JSON schema advertises `format: uuid` strings. Parse them with
+                    # pydantic-core's UUID validator, as the uuid member of the union does:
+                    # uuid.UUID(str) is looser and takes '_', '0x', spaces and a 'uuid:' prefix.
+                    # Its ValidationError is a ValueError, so it maps to `ulid_format` below.
+                    ulid = _ULID.from_uuid(_UUID_VALIDATOR.validate_python(value))
             elif isinstance(value, uuid.UUID):
                 ulid = _ULID.from_uuid(value)
             elif isinstance(value, _ULID):
