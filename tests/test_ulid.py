@@ -35,6 +35,23 @@ class Something(BaseModel):
         # Valid ULID for UUID format
         (uuid.UUID('0196FEB3-9C99-8D8C-B3F3-4301C5E9DCE1'), '01JVZB774SHP6B7WT3072YKQ71', True),
         (uuid.UUID('0196FEB3-CD14-4B50-0015-C1E09BF7B221'), '01JVZB7K8M9D8005E1W2DZFCH1', True),
+        # Valid ULID for a UUID string: the JSON schema advertises `format: uuid`
+        ('0196FEB3-9C99-8D8C-B3F3-4301C5E9DCE1', '01JVZB774SHP6B7WT3072YKQ71', True),
+        ('0196feb3-9c99-8d8c-b3f3-4301c5e9dce1', '01JVZB774SHP6B7WT3072YKQ71', True),
+        ('0196feb39c998d8cb3f34301c5e9dce1', '01JVZB774SHP6B7WT3072YKQ71', True),
+        ('{0196feb3-9c99-8d8c-b3f3-4301c5e9dce1}', '01JVZB774SHP6B7WT3072YKQ71', True),
+        ('urn:uuid:0196feb3-9c99-8d8c-b3f3-4301c5e9dce1', '01JVZB774SHP6B7WT3072YKQ71', True),
+        # Valid ULID for the 16 raw bytes of a UUID
+        (uuid.UUID('0196FEB3-9C99-8D8C-B3F3-4301C5E9DCE1').bytes, '01JVZB774SHP6B7WT3072YKQ71', True),
+        # Invalid UUID strings
+        ('0196feb3-9c99-8d8c-b3f3-4301c5e9dce', None, False),  # short
+        ('0196feb3-9c99-8d8c-b3f3-4301c5e9dceg', None, False),  # not hexadecimal
+        ('\uff10196feb3-9c99-8d8c-b3f3-4301c5e9dce1', None, False),  # fullwidth digit
+        # int(..., 16) would take these, the second two as a different ULID
+        ('0x96feb39c998d8cb3f34301c5e9dce1', None, False),  # '0x' replaces the first two digits
+        ('0196_eb39c998d8cb3f34301c5e9dce1', None, False),  # '_' replaces a digit
+        ('uuid:0196feb3-9c99-8d8c-b3f3-4301c5e9dce1', None, False),  # prefix uuid.UUID strips
+        (' 196feb39c998d8cb3f34301c5e9dce1', None, False),  # leading space
         # Valid ULID for _ULID format
         (_ULID.from_str('01BTGNYV6HRNK8K8VKZASZCFPE'), '01BTGNYV6HRNK8K8VKZASZCFPE', True),
         (_ULID.from_str('01BTGNYV6HRNK8K8VKZASZCFPF'), '01BTGNYV6HRNK8K8VKZASZCFPF', True),
@@ -109,6 +126,20 @@ def test_json_schema():
         'title': 'Something',
         'type': 'object',
     }
+
+
+@pytest.mark.parametrize('mode', ['python', 'json'])
+def test_uuid_string_matches_json_schema(mode: str):
+    """The validation JSON schema advertises `format: uuid` strings, so they must validate."""
+    value = '0196feb3-9c99-8d8c-b3f3-4301c5e9dce1'
+    if mode == 'python':
+        something = Something(ulid=value)
+    else:
+        something = Something.model_validate_json(f'{{"ulid": "{value}"}}')
+
+    assert str(something.ulid) == '01JVZB774SHP6B7WT3072YKQ71'
+    assert something.ulid == _ULID.from_uuid(uuid.UUID(value))
+    assert {'format': 'uuid', 'type': 'string'} in Something.model_json_schema()['properties']['ulid']['anyOf']
 
 
 def test_json_serialization():
